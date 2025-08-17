@@ -410,7 +410,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="project-spine">Project spine</h2>
 <ul>
 <li><strong>Milestones:</strong> W1 repo &amp; env → W3 automated data pipeline → W6 external data → W7 CI green → W8 baselines → W9 robust eval plan → W10 PyTorch baseline → W11 tiny Transformer → W12 release candidate → W13 poster &amp; talk.</li>
-<li><strong>Tracking (minimal):</strong> log experiments to a simple CSV (<code>results/experiments.csv</code>) and keep a Quarto “lab notebook.” If you’re open to one extra tool, free <strong>Weights &amp; Biases</strong> makes ablations much easier—but the CSV+Quarto path is fine for two students.</li>
+<li><strong>Tracking (minimal):</strong> log experiments to a simple CSV (<code>results/experiments.csv</code>) and keep a Quarto “lab notebook.”</li>
 <li><strong>Data strategy:</strong> keep raw data out of Git (use <code>make get-data</code>); store processed Parquet under 100MB if you must commit; otherwise regenerate. Use Git‑LFS only for small, immutable artifacts to avoid quota pain.</li>
 <li><strong>Secrets:</strong> <code>.env</code> with <code>python‑dotenv</code> + <code>.env</code> in <code>.gitignore</code>. For Colab, use environment variables or a JSON in Drive (not committed).</li>
 </ul>
