@@ -1,0 +1,433 @@
+---
+title: "Session 9 — Cleaning, Joins, and Parquet"
+---
+
+Below is a complete lecture package for **Session 9 — Cleaning, Joins, and Parquet** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. You’ll clean & merge multi‑ticker data, standardize dtypes (including **pandas nullable ints** and **categoricals**), and write tidy **Parquet**—including a partitioned‑by‑ticker dataset.
+
+> **Assumptions:** Same Drive‑mounted repo (e.g., `unified-stocks-teamX`) as prior sessions. Your raw prices live under `data/raw/` (either a single `prices.csv` or multiple CSVs). The lab includes a safe fallback (small synthetic dataset) if raw files are missing.
+
+---
+
+## Session 9 — Cleaning, Joins, Parquet (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Use `merge`, `assign`, and `pipe` to write clean, testable data‑wrangling code.
+2. Choose **sensible dtypes** for analytics and storage: `category`, pandas **nullable integers** (`Int64`, `Int32`, …), and `string`.
+3. Write **Parquet** with compression and **read it back**; understand **partitioning by ticker** and how to filter efficiently.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: tidy schema; joins (`merge`), `assign`, `pipe` patterns
+* **(10 min)** Slides: dtypes—`category`, `string`, **nullable ints** (`Int64`), `float32` vs `float64`
+* **(10 min)** Slides: Parquet vs CSV; compression; partitioning; schema preservation
+* **(35 min)** **In‑class lab**: clean & join → set dtypes → write
+  `data/processed/prices.parquet` and **partitioned** dataset by ticker
+* **(10 min)** Wrap‑up & homework briefing
+
+---
+
+## Slides / talking points (paste these bullets into your deck)
+
+### Tidy schema for price data
+
+* **One row = one ticker‑day**.
+* Minimal columns (snake\_case):
+  `date (datetime64[ns])`, `ticker (category)`,
+  `open/high/low/close/adj_close (float32/64)`, `volume (Int64)`.
+* Optional metadata (from a separate table): `name (string)`, `sector (category)`.
+
+### Idiomatic pandas: `merge`, `assign`, `pipe`
+
+* **`merge`**: combine frames by keys (e.g., `prices` ⟵left join⟶ `tickers`).
+* **`assign`**: add/transform columns without breaking the chain:
+  `df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close']))`.
+* **`pipe`**: compose small, testable transforms:
+  `df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta))`.
+
+### Dtypes that help
+
+* **Categorical** (`category`): compact & fast for low‑cardinality strings (`ticker`, `sector`).
+* **Nullable integers** (`Int64`, `Int32`): keep **missing values** and integer semantics (`volume`).
+* **String** (`string[python]`): consistent string semantics (avoid `object`).
+* **Floats**: `float32` can halve memory, but consider numeric precision.
+
+### Parquet: why & how
+
+* **Columnar**, compressed, preserves schema better than CSV.
+* **Filters & projection**: read only needed columns/rows (esp. with **partitioned datasets**).
+* Partitioning by **`ticker/`** yields fast reads of a subset (e.g., a single ticker).
+* Typical settings: engine=`pyarrow`, compression=`zstd` or `snappy`.
+
+---
+
+## In‑class lab (35 min)
+
+> Run each block as its **own Colab cell**. Replace `REPO_NAME` to match your repo.
+
+### 0) Setup: mount Drive, cd into repo, ensure folders
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+# ✏️ Change this to your repo folder name
+REPO_NAME  = "unified-stocks-teamX"
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, sys, glob, pandas as pd, numpy as np
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found. Clone it first (Session 2/3)."
+os.chdir(REPO_DIR)
+for p in ["data/raw", "data/static", "data/processed"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Locate raw price files (CSV) or create a fallback
+
+```python
+from pathlib import Path
+import pandas as pd, numpy as np, datetime as dt
+
+raw_candidates = []
+if Path("data/raw/prices.csv").exists():
+    raw_candidates = ["data/raw/prices.csv"]
+else:
+    raw_candidates = sorted(glob.glob("data/raw/prices*.csv")) or sorted(glob.glob("data/raw/prices/*.csv"))
+
+def _make_synthetic_prices():
+    # Small 2-year synthetic daily prices for AAPL/MSFT/GOOGL
+    tickers = ["AAPL","MSFT","GOOGL"]
+    dates = pd.bdate_range("2022-01-03", periods=520, freq="B")
+    rows = []
+    rng = np.random.default_rng(0)
+    for t in tickers:
+        price = 100 + rng.normal(0, 1).cumsum()
+        price = np.maximum(price, 1.0)
+        vol = rng.integers(5e6, 2e7, size=len(dates))
+        df = pd.DataFrame({
+            "date": dates,
+            "ticker": t,
+            "open": price * (1 + rng.normal(0, 0.002, size=len(dates))),
+            "high": price * (1 + rng.normal(0.003, 0.003, size=len(dates))).clip(min=1),
+            "low":  price * (1 - np.abs(rng.normal(0.003, 0.003, size=len(dates)))),
+            "close": price,
+            "adj_close": price * (1 + rng.normal(0, 0.0005, size=len(dates))),
+            "volume": vol
+        })
+        rows.append(df)
+    out = pd.concat(rows, ignore_index=True)
+    Path("data/raw").mkdir(parents=True, exist_ok=True)
+    out.to_csv("data/raw/prices.csv", index=False)
+    return ["data/raw/prices.csv"]
+
+if not raw_candidates:
+    print("No raw prices found; creating a small synthetic dataset...")
+    raw_candidates = _make_synthetic_prices()
+
+raw_candidates
+```
+
+### 2) Optional metadata (tickers table), or create a minimal one
+
+```python
+from pathlib import Path
+meta_path = Path("data/static/tickers.csv")
+if meta_path.exists():
+    meta = pd.read_csv(meta_path)
+else:
+    # Build a minimal metadata table from raw tickers
+    tmp = pd.read_csv(raw_candidates[0])
+    tickers = sorted(pd.unique(tmp["ticker"]))
+    meta = pd.DataFrame({"ticker": tickers,
+                         "name": tickers,
+                         "sector": ["Unknown"]*len(tickers)})
+    Path("data/static").mkdir(parents=True, exist_ok=True)
+    meta.to_csv(meta_path, index=False)
+meta.head()
+```
+
+### 3) Helpers: `standardize_columns`, `clean_prices`, `join_meta` (showing `merge`/`assign`/`pipe`)
+
+```python
+import re
+
+def standardize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Lowercase snake_case; repair common price column name variants."""
+    def snake(s):
+        s = re.sub(r"[^\w\s]", "_", s)
+        s = re.sub(r"\s+", "_", s.strip().lower())
+        s = re.sub(r"_+", "_", s)
+        return s
+    out = df.copy()
+    out.columns = [snake(c) for c in out.columns]
+    # Normalize known variants
+    ren = {
+        "adjclose":"adj_close", "adj_close_":"adj_close",
+        "close_adj":"adj_close", "adj_close_close":"adj_close"
+    }
+    out = out.rename(columns={k:v for k,v in ren.items() if k in out.columns})
+    # If no adj_close but close exists, create it
+    if "adj_close" not in out and "close" in out:
+        out = out.assign(adj_close=out["close"])
+    return out
+
+def clean_prices(df: pd.DataFrame) -> pd.DataFrame:
+    """Coerce dtypes, drop dupes, basic sanity checks; add minor derived fields."""
+    cols = ["date","ticker","open","high","low","close","adj_close","volume"]
+    keep = [c for c in cols if c in df.columns]
+    out = df.loc[:, keep].copy()
+
+    # Parse date, coerce numerics
+    out["date"] = pd.to_datetime(out["date"], errors="coerce")
+    for c in ["open","high","low","close","adj_close"]:
+        if c in out: out[c] = pd.to_numeric(out[c], errors="coerce")
+    if "volume" in out: out["volume"] = pd.to_numeric(out["volume"], errors="coerce")
+
+    # Drop bad rows
+    out = out.dropna(subset=["date","ticker","adj_close"])
+    # Deduplicate by (ticker, date)
+    out = out.sort_values(["ticker","date"])
+    out = out.drop_duplicates(subset=["ticker","date"], keep="last")
+
+    # Enforce dtypes
+    if "volume" in out:
+        out["volume"] = out["volume"].round().astype("Int64")  # nullable int
+        out.loc[out["volume"] < 0, "volume"] = pd.NA
+    # Use category for low-cardinality strings
+    out["ticker"] = out["ticker"].astype("category")
+    # Use consistent float dtype
+    for c in ["open","high","low","close","adj_close"]:
+        if c in out: out[c] = out[c].astype("float32")  # ok for teaching; change to float64 if you need more precision
+
+    # Quick sanity checks
+    assert out[["ticker","date"]].duplicated().sum() == 0, "Duplicates remain"
+    assert pd.api.types.is_datetime64_any_dtype(out["date"]), "date not datetime"
+    return out.reset_index(drop=True)
+
+def join_meta(prices: pd.DataFrame, meta: pd.DataFrame) -> pd.DataFrame:
+    """Left join metadata; keep minimal meta columns; set dtypes."""
+    keep_meta = [c for c in ["ticker","name","sector"] if c in meta.columns]
+    meta2 = meta.loc[:, keep_meta].copy()
+    # Make strings consistent and compact
+    if "name" in meta2:   meta2["name"]   = meta2["name"].astype("string")
+    if "sector" in meta2: meta2["sector"] = meta2["sector"].astype("category")
+    out = prices.merge(meta2, on="ticker", how="left", validate="many_to_one")
+    return out
+```
+
+### 4) Read, clean, and join all raw files using a **pipeline**
+
+```python
+dfs = []
+for path in raw_candidates:
+    raw = pd.read_csv(path)
+    tidy = (raw
+            .pipe(standardize_columns)  # <- consistent names
+            .pipe(clean_prices))        # <- dtypes and sanity checks
+    dfs.append(tidy)
+
+prices = pd.concat(dfs, ignore_index=True)
+prices = prices.pipe(join_meta, meta=meta)
+
+print("Preview:")
+display(prices.head(3))
+print("\nInfo:")
+print(prices.info(memory_usage="deep"))
+```
+
+### 5) Save clean data to **Parquet** (single file) and **partitioned by ticker**
+
+```python
+# Single-file Parquet
+single_path = "data/processed/prices.parquet"
+prices.to_parquet(single_path, engine="pyarrow", compression="zstd", index=False)
+print("Wrote:", single_path)
+
+# Partitioned dataset by ticker (directory with /ticker=.../)
+part_dir = "data/processed/prices_by_ticker"
+# pandas to_parquet supports partition_cols with pyarrow engine
+try:
+    prices.to_parquet(part_dir, engine="pyarrow", compression="zstd",
+                      index=False, partition_cols=["ticker"])
+    print("Wrote partitioned dataset:", part_dir)
+except TypeError:
+    # Fallback via pyarrow dataset API
+    import pyarrow as pa, pyarrow.parquet as pq
+    pa_tbl = pa.Table.from_pandas(prices, preserve_index=False)
+    pq.write_to_dataset(pa_tbl, root_path=part_dir, partition_cols=["ticker"], compression="zstd")
+    print("Wrote (fallback) partitioned dataset:", part_dir)
+```
+
+### 6) Read back efficiently: projection + simple filters
+
+```python
+# 6a) Read a few columns from single-file Parquet
+cols = ["ticker","date","adj_close","volume"]
+df_small = pd.read_parquet("data/processed/prices.parquet", columns=cols)
+df_small.head()
+
+# 6b) Read one ticker from the partitioned dataset using pyarrow.dataset
+import pyarrow.dataset as ds
+dataset = ds.dataset("data/processed/prices_by_ticker", format="parquet", partitioning="hive")
+# Choose a ticker present in the data
+one_ticker = str(prices["ticker"].cat.categories[0])
+flt = (ds.field("ticker") == one_ticker)
+tbl = dataset.to_table(filter=flt, columns=["date","adj_close","volume"])
+df_one = tbl.to_pandas()
+df_one.head()
+```
+
+### 7) Persist a simple **schema record** for reproducibility
+
+```python
+import json, pathlib
+schema = {c: str(t) for c,t in prices.dtypes.items()}
+pathlib.Path("data/processed").mkdir(parents=True, exist_ok=True)
+with open("data/processed/prices_schema.json","w") as f:
+    json.dump(schema, f, indent=2)
+print("Wrote data/processed/prices_schema.json")
+```
+
+---
+
+## Wrap‑up (10 min) — points to emphasize
+
+* A **tidy schema** makes life easier downstream.
+* Prefer **`category`** for `ticker`, **nullable ints** for `volume`.
+* Use **`merge`** (left join) to attach metadata; use **`assign`** for clear column creation; compose steps with **`pipe`**.
+* **Parquet** is compact and fast; **partition by `ticker`** for selective reads.
+
+---
+
+## Homework (due before Session 10)
+
+**Deliverable:** `data/processed/returns.parquet` (and optionally partitioned by ticker) containing:
+
+* `date`, `ticker`
+* `log_return` — daily log return $\log(\frac{\text{adj\_close}_t}{\text{adj\_close}_{t-1}})$
+* `r_1d` — **next‑day** log return (lead of `log_return`)
+* `weekday` (0=Mon..6=Sun), `month` (1..12) — choose compact dtypes
+
+### Step‑by‑step code (Colab‑friendly)
+
+> Run in your repo root after finishing the in‑class lab.
+
+```python
+import pandas as pd, numpy as np, pathlib
+
+# 1) Read the single-file Parquet you wrote in class
+prices_path = "data/processed/prices.parquet"
+assert pathlib.Path(prices_path).exists(), "Missing processed/prices.parquet — finish the lab first."
+
+prices = pd.read_parquet(prices_path)
+# If ticker was written as object, you can re-cast to category:
+if prices["ticker"].dtype != "category":
+    prices["ticker"] = prices["ticker"].astype("category")
+
+# 2) Sort and compute returns per ticker (no leakage)
+prices = prices.sort_values(["ticker","date"]).reset_index(drop=True)
+
+# Daily log return: log(adj_close_t / adj_close_{t-1})
+prices["log_return"] = (prices.groupby("ticker")["adj_close"]
+                        .apply(lambda s: np.log(s / s.shift(1))).reset_index(level=0, drop=True))
+
+# Next-day return label r_1d = lead(log_return, 1)
+prices["r_1d"] = (prices.groupby("ticker")["log_return"]
+                  .shift(-1))
+
+# 3) Calendar features
+prices["weekday"] = prices["date"].dt.weekday.astype("int8")  # 0..6
+prices["month"]   = prices["date"].dt.month.astype("int8")    # 1..12
+
+# 4) Select output columns & dtypes
+out = prices[["date","ticker","log_return","r_1d","weekday","month"]].copy()
+out["ticker"] = out["ticker"].astype("category")
+
+# 5) Save to Parquet
+out_path = "data/processed/returns.parquet"
+out.to_parquet(out_path, engine="pyarrow", compression="zstd", index=False)
+print("Wrote:", out_path)
+
+# 6) (Optional) also write a partitioned dataset by ticker
+part_dir = "data/processed/returns_by_ticker"
+try:
+    out.to_parquet(part_dir, engine="pyarrow", compression="zstd",
+                   index=False, partition_cols=["ticker"])
+    print("Wrote partitioned dataset:", part_dir)
+except TypeError:
+    import pyarrow as pa, pyarrow.parquet as pq
+    pq.write_to_dataset(pa.Table.from_pandas(out, preserve_index=False),
+                        root_path=part_dir, partition_cols=["ticker"], compression="zstd")
+    print("Wrote (fallback) partitioned dataset:", part_dir)
+```
+
+### Quick self‑check (run after saving)
+
+```python
+import pandas as pd
+r = pd.read_parquet("data/processed/returns.parquet")
+assert {"date","ticker","log_return","r_1d","weekday","month"}.issubset(r.columns)
+assert r["ticker"].dtype.name in ("category","CategoricalDtype"), "ticker should be categorical"
+print("rows:", len(r), "| tickers:", r["ticker"].nunique())
+r.head()
+```
+
+### (Optional) Extra credit
+
+* Add **`year`** (Int16) and **`is_month_end`** (BooleanDtype):
+  `r["year"] = r["date"].dt.year.astype("Int16")`
+  `r["is_month_end"] = r["date"].dt.is_month_end.astype("boolean")`
+* Compare file sizes: CSV vs Parquet vs Parquet (`zstd` vs `snappy`).
+
+### Submission checklist (pass/revise)
+
+* `data/processed/returns.parquet` exists and contains the required columns.
+* `ticker` is **categorical**; `weekday`/`month` are compact ints.
+* `r_1d` is a **lead** of `log_return` (next‑day), not the same‑day return.
+* You can read it back without errors.
+
+---
+
+## Instructor notes / gotchas to watch for
+
+* **Nullable ints**: `astype("Int64")` keeps NAs; plain `int64` will fail if NAs exist.
+* **Categoricals & partitions**: When reading partitioned Parquet, `ticker` may come back as `object`. Re‑cast to `category` after read if needed.
+* **Compression choice**: `zstd` gives good ratio/speed; `snappy` is more ubiquitous.
+* **Precision**: `float32` is fine for teaching; for production finance, consider `float64` and explicit rounding.
+
+---
+
+### Optional (for your Makefile later)
+
+Add quick targets:
+
+```make
+.PHONY: prices-parquet returns-parquet
+prices-parquet:  ## Clean raw prices and save processed Parquet(s)
+\tpython - <<'PY'
+import pandas as pd, glob, pathlib, numpy as np, re, json
+from pathlib import Path
+# (Paste the functions from the lab: standardize_columns, clean_prices, join_meta)
+# Then read raw -> clean -> write parquet as in the lab
+PY
+
+returns-parquet: ## Build returns.parquet with r_1d + calendar features
+\tpython - <<'PY'
+import pandas as pd, numpy as np
+p="data/processed/prices.parquet"; r=pd.read_parquet(p).sort_values(["ticker","date"])
+r["log_return"]=r.groupby("ticker")["adj_close"].apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True)
+r["r_1d"]=r.groupby("ticker")["log_return"].shift(-1)
+r["weekday"]=r["date"].dt.weekday.astype("int8"); r["month"]=r["date"].dt.month.astype("int8")
+r[["date","ticker","log_return","r_1d","weekday","month"]].to_parquet("data/processed/returns.parquet", compression="zstd", index=False)
+print("Wrote data/processed/returns.parquet")
+PY
+```
+
+You now have a clean, tidy Parquet foundation the later sessions (evaluation & modeling) can rely on.

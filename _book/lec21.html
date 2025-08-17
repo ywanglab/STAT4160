@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.398">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 4160: Data Science Productivity Tools - 22&nbsp; Session 21 — Attention &amp; Tiny GPT on Toy Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./lec22.html" rel="next">
+<link href="./lec20.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lec21.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 4160: Data Science Productivity Tools</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Session 1 — Dev environment &amp; Colab workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Session 2 — Git essentials &amp; Git‑LFS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Session 4 — RStudio Quarto cameo + Report Hygiene</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 5 — Unix/Shell Essentials for Data Work</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> Workflows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Session 9 — Cleaning, Joins, and Parquet</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rolling Windows, Resampling, and Leakage‑Safe Features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 12 — HTML Scraping: Ethics &amp; Resilience</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">pre‑commit &amp; GitHub Actions CI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 15 — Framing &amp; Metrics (Rolling‑Origin Evaluation)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Session 17 — Feature Timing, Biases &amp; Leakage</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Session 18 — Walk‑forward + Regime Analysi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Session 19 — Tensors, Datasets, Training Loop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Session 20 — Multi‑asset training (unified model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec21.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Session 22 — Adapting GPT to Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Session 23 — Packaging &amp; CLI (Typer)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Session 24 — Reproducibility audit &amp; optional FastAPI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Session 25 — Poster + Abstract Workshop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Session 26 — In‑class Presentations &amp; Continuation Pla</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#session-21-attention-tiny-gpt-on-toy-data-75-min" id="toc-session-21-attention-tiny-gpt-on-toy-data-75-min" class="nav-link active" data-scroll-target="#session-21-attention-tiny-gpt-on-toy-data-75-min"><span class="header-section-number">22.1</span> Session 21 — Attention &amp; Tiny GPT on Toy Data (75 min)</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">22.1.1</span> Learning goals</a></li>
+  </ul></li>
+  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">22.2</span> Agenda (75 min)</a></li>
+  <li><a href="#slides-talking-points-drop-into-your-deck" id="toc-slides-talking-points-drop-into-your-deck" class="nav-link" data-scroll-target="#slides-talking-points-drop-into-your-deck"><span class="header-section-number">22.3</span> Slides / talking points (drop into your deck)</a>
+  <ul class="collapse">
+  <li><a href="#scaled-dotproduct-attention-single-head" id="toc-scaled-dotproduct-attention-single-head" class="nav-link" data-scroll-target="#scaled-dotproduct-attention-single-head"><span class="header-section-number">22.3.1</span> Scaled dot‑product attention (single head)</a></li>
+  <li><a href="#multihead-block" id="toc-multihead-block" class="nav-link" data-scroll-target="#multihead-block"><span class="header-section-number">22.3.2</span> Multi‑head + block</a></li>
+  <li><a href="#nexttoken-objective" id="toc-nexttoken-objective" class="nav-link" data-scroll-target="#nexttoken-objective"><span class="header-section-number">22.3.3</span> Next‑token objective</a></li>
+  <li><a href="#tiny-gpt-config-fits-in-colabcpu" id="toc-tiny-gpt-config-fits-in-colabcpu" class="nav-link" data-scroll-target="#tiny-gpt-config-fits-in-colabcpu"><span class="header-section-number">22.3.4</span> Tiny GPT config (fits in Colab/CPU)</a></li>
+  </ul></li>
+  <li><a href="#inclass-lab-35-min-colabfriendly" id="toc-inclass-lab-35-min-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-35-min-colabfriendly"><span class="header-section-number">22.4</span> In‑class lab (35 min, Colab‑friendly)</a>
+  <ul class="collapse">
+  <li><a href="#setup-folders" id="toc-setup-folders" class="nav-link" data-scroll-target="#setup-folders"><span class="header-section-number">22.4.1</span> 0) Setup &amp; folders</a></li>
+  <li><a href="#tiny-toy-corpus-charlevel-encoding-and-splits" id="toc-tiny-toy-corpus-charlevel-encoding-and-splits" class="nav-link" data-scroll-target="#tiny-toy-corpus-charlevel-encoding-and-splits"><span class="header-section-number">22.4.2</span> 1) Tiny toy corpus (char‑level), encoding, and splits</a></li>
+  <li><a href="#batch-generator-random-contiguous-chunks" id="toc-batch-generator-random-contiguous-chunks" class="nav-link" data-scroll-target="#batch-generator-random-contiguous-chunks"><span class="header-section-number">22.4.3</span> 2) Batch generator (random contiguous chunks)</a></li>
+  <li><a href="#tiny-gpt-model-causal-mask-multihead-attention-prenorm" id="toc-tiny-gpt-model-causal-mask-multihead-attention-prenorm" class="nav-link" data-scroll-target="#tiny-gpt-model-causal-mask-multihead-attention-prenorm"><span class="header-section-number">22.4.4</span> 3) Tiny GPT model (causal mask, multi‑head attention, pre‑norm)</a></li>
+  <li><a href="#training-loop-crossentropy-eval-and-sampling" id="toc-training-loop-crossentropy-eval-and-sampling" class="nav-link" data-scroll-target="#training-loop-crossentropy-eval-and-sampling"><span class="header-section-number">22.4.5</span> 4) Training loop (cross‑entropy), eval, and sampling</a></li>
+  </ul></li>
+  <li><a href="#wrapup-10-min-key-points-to-emphasize" id="toc-wrapup-10-min-key-points-to-emphasize" class="nav-link" data-scroll-target="#wrapup-10-min-key-points-to-emphasize"><span class="header-section-number">22.5</span> Wrap‑up (10 min) — key points to emphasize</a></li>
+  <li><a href="#homework-due-before-session-22" id="toc-homework-due-before-session-22" class="nav-link" data-scroll-target="#homework-due-before-session-22"><span class="header-section-number">22.6</span> Homework (due before Session 22)</a>
+  <ul class="collapse">
+  <li><a href="#a.-script-scriptstinygpt_train.py-configurable-tiny-gpt" id="toc-a.-script-scriptstinygpt_train.py-configurable-tiny-gpt" class="nav-link" data-scroll-target="#a.-script-scriptstinygpt_train.py-configurable-tiny-gpt"><span class="header-section-number">22.6.1</span> A. Script: <code>scripts/tinygpt_train.py</code> (configurable tiny GPT)</a></li>
+  <li><a href="#b.-summarize-runs-into-a-table-for-your-report" id="toc-b.-summarize-runs-into-a-table-for-your-report" class="nav-link" data-scroll-target="#b.-summarize-runs-into-a-table-for-your-report"><span class="header-section-number">22.6.2</span> B. Summarize runs into a table for your report</a></li>
+  <li><a href="#c.-reflection-prompts-300500-words" id="toc-c.-reflection-prompts-300500-words" class="nav-link" data-scroll-target="#c.-reflection-prompts-300500-words"><span class="header-section-number">22.6.3</span> C. Reflection prompts (≈300–500 words)</a></li>
+  <li><a href="#d.-optional-tiny-test-for-the-causal-mask" id="toc-d.-optional-tiny-test-for-the-causal-mask" class="nav-link" data-scroll-target="#d.-optional-tiny-test-for-the-causal-mask"><span class="header-section-number">22.6.4</span> D. (Optional) Tiny test for the causal mask</a></li>
+  </ul></li>
+  <li><a href="#instructor-checklist-before-class" id="toc-instructor-checklist-before-class" class="nav-link" data-scroll-target="#instructor-checklist-before-class"><span class="header-section-number">22.7</span> Instructor checklist (before class)</a></li>
+  <li><a href="#emphasize-while-teaching" id="toc-emphasize-while-teaching" class="nav-link" data-scroll-target="#emphasize-while-teaching"><span class="header-section-number">22.8</span> Emphasize while teaching</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">22.9</span> Grading (pass/revise)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Below is a complete lecture package for <strong>Session 21 — Attention &amp; Tiny GPT on Toy Data</strong> (75 minutes). It includes a timed agenda, slide talking points, a <strong>Colab‑friendly in‑class lab with copy‑paste code</strong>, and <strong>homework with copy‑paste code</strong>. In class you’ll implement a <strong>tiny GPT</strong> (token + positional embeddings → stacked Transformer blocks → LM head) and verify learning on a <strong>toy character‑level next‑token task</strong>.</p>
+<blockquote class="blockquote">
+<p><strong>Educational use only.</strong> Assumes your Drive‑mounted repo (e.g., <code>unified-stocks-teamX</code>). No finance data needed today; we train on a tiny public‑domain‑friendly toy corpus embedded in the notebook (with fallbacks).</p>
+</blockquote>
+<hr>
+<section id="session-21-attention-tiny-gpt-on-toy-data-75-min" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="session-21-attention-tiny-gpt-on-toy-data-75-min"><span class="header-section-number">22.1</span> Session 21 — Attention &amp; Tiny GPT on Toy Data (75 min)</h2>
+<section id="learning-goals" class="level3" data-number="22.1.1">
+<h3 data-number="22.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">22.1.1</span> Learning goals</h3>
+<p>By the end of class, students can:</p>
+<ol type="1">
+<li>Explain the core pieces of GPT: <strong>token embeddings</strong>, <strong>positional embeddings</strong>, <strong>multi‑head causal self‑attention</strong>, <strong>MLP</strong>, <strong>residual + LayerNorm</strong>.</li>
+<li>Implement a <strong>causal mask</strong> (no look‑ahead).</li>
+<li>Train a <strong>tiny GPT</strong> (≈100–300k parameters) on a toy corpus and monitor <strong>loss/perplexity</strong>.</li>
+<li>Generate text samples and diagnose <strong>calibration/overfit</strong> qualitatively.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="agenda-75-min" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">22.2</span> Agenda (75 min)</h2>
+<ul>
+<li><strong>(12 min)</strong> Slides: attention recap; Transformer block anatomy; causal masking</li>
+<li><strong>(8 min)</strong> Slides: next‑token objective, cross‑entropy, perplexity; weight tying; tiny configs</li>
+<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: build <code>TinyGPT</code> → train on toy corpus → plot train/val loss → sample text</li>
+<li><strong>(10 min)</strong> Wrap‑up + homework brief</li>
+<li><strong>(10 min)</strong> Buffer / Q&amp;A</li>
+</ul>
+<hr>
+</section>
+<section id="slides-talking-points-drop-into-your-deck" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="slides-talking-points-drop-into-your-deck"><span class="header-section-number">22.3</span> Slides / talking points (drop into your deck)</h2>
+<section id="scaled-dotproduct-attention-single-head" class="level3" data-number="22.3.1">
+<h3 data-number="22.3.1" class="anchored" data-anchor-id="scaled-dotproduct-attention-single-head"><span class="header-section-number">22.3.1</span> Scaled dot‑product attention (single head)</h3>
+<ul>
+<li>Queries <strong>Q</strong>, keys <strong>K</strong>, values <strong>V</strong> from input <strong>X</strong> via linear projections.</li>
+<li>Scores = <span class="math inline">\(QK^\top / \sqrt{d_k}\)</span>; apply <strong>causal mask</strong> to set future positions to <span class="math inline">\(-\infty\)</span>; softmax over last dim; output <span class="math inline">\(A = \text{softmax}(\text{masked scores})V\)</span>.</li>
+</ul>
+</section>
+<section id="multihead-block" class="level3" data-number="22.3.2">
+<h3 data-number="22.3.2" class="anchored" data-anchor-id="multihead-block"><span class="header-section-number">22.3.2</span> Multi‑head + block</h3>
+<ul>
+<li>Parallel heads capture different patterns; concat and project.</li>
+<li><strong>Pre‑norm</strong> block (LayerNorm → Attention → residual; LayerNorm → MLP → residual) is stable and common.</li>
+</ul>
+</section>
+<section id="nexttoken-objective" class="level3" data-number="22.3.3">
+<h3 data-number="22.3.3" class="anchored" data-anchor-id="nexttoken-objective"><span class="header-section-number">22.3.3</span> Next‑token objective</h3>
+<ul>
+<li>Given context of length <strong>T</strong>, predict token <span class="math inline">\(x_{t+1}\)</span> from <span class="math inline">\(x_{\le t}\)</span> using <strong>cross‑entropy</strong>.</li>
+<li>Report <strong>loss</strong> and <strong>perplexity</strong> <span class="math inline">\(=\exp(\text{loss})\)</span>.</li>
+</ul>
+</section>
+<section id="tiny-gpt-config-fits-in-colabcpu" class="level3" data-number="22.3.4">
+<h3 data-number="22.3.4" class="anchored" data-anchor-id="tiny-gpt-config-fits-in-colabcpu"><span class="header-section-number">22.3.4</span> Tiny GPT config (fits in Colab/CPU)</h3>
+<ul>
+<li><code>d_model=64</code>, <code>n_head=2</code>, <code>n_layer=2</code>, <code>ffn=128</code>, <code>ctx=64</code>, batch 64–128, ~1–3 minutes on CPU (faster on GPU).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="inclass-lab-35-min-colabfriendly" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="inclass-lab-35-min-colabfriendly"><span class="header-section-number">22.4</span> In‑class lab (35 min, Colab‑friendly)</h2>
+<blockquote class="blockquote">
+<p>Run each block as its <strong>own cell</strong>. Update <code>REPO_NAME</code> to your repo.</p>
+</blockquote>
+<section id="setup-folders" class="level3" data-number="22.4.1">
+<h3 data-number="22.4.1" class="anchored" data-anchor-id="setup-folders"><span class="header-section-number">22.4.1</span> 0) Setup &amp; folders</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>REPO_NAME <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span>  <span class="co"># &lt;- change if needed</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>BASE_DIR  <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>REPO_DIR  <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib, sys, platform, random, math, time</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pathlib.Path(REPO_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>os.chdir(REPO_DIR)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> [<span class="st">"models"</span>,<span class="st">"reports"</span>,<span class="st">"scripts"</span>,<span class="st">"tests"</span>,<span class="st">"data/raw"</span>]:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    pathlib.Path(p).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd(), <span class="st">"| Python"</span>, sys.version.split()[<span class="dv">0</span>], <span class="st">"| OS"</span>, platform.system())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="tiny-toy-corpus-charlevel-encoding-and-splits" class="level3" data-number="22.4.2">
+<h3 data-number="22.4.2" class="anchored" data-anchor-id="tiny-toy-corpus-charlevel-encoding-and-splits"><span class="header-section-number">22.4.2</span> 1) Tiny toy corpus (char‑level), encoding, and splits</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd, torch</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Try to load an existing text; else use a small public‑domain‑friendly snippet</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>txt_path <span class="op">=</span> pathlib.Path(<span class="st">"data/raw/tiny_text.txt"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> txt_path.exists():</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> txt_path.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> (</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"To be, or not to be, that is the question:</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Whether 'tis nobler in the mind to suffer</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"The slings and arrows of outrageous fortune,</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Or to take arms against a sea of troubles</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"And by opposing end them.</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">*</span> <span class="dv">50</span>  <span class="co"># repeat to make a few thousand chars</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Build vocabulary</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>chars <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">list</span>(<span class="bu">set</span>(text)))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>stoi  <span class="op">=</span> {ch:i <span class="cf">for</span> i,ch <span class="kw">in</span> <span class="bu">enumerate</span>(chars)}</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>itos  <span class="op">=</span> {i:ch <span class="cf">for</span> ch,i <span class="kw">in</span> stoi.items()}</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>vocab_size <span class="op">=</span> <span class="bu">len</span>(chars)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Vocab size:"</span>, vocab_size, <span class="st">"| Text length:"</span>, <span class="bu">len</span>(text))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode(s: <span class="bu">str</span>): <span class="cf">return</span> torch.tensor([stoi[c] <span class="cf">for</span> c <span class="kw">in</span> s], dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(t: torch.Tensor): <span class="cf">return</span> <span class="st">""</span>.join(itos[<span class="bu">int</span>(i)] <span class="cf">for</span> i <span class="kw">in</span> t)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Train/val split (90/10 by characters)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> encode(text)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>split <span class="op">=</span> <span class="bu">int</span>(<span class="fl">0.9</span> <span class="op">*</span> <span class="bu">len</span>(data))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>train_data <span class="op">=</span> data[:split]</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>val_data   <span class="op">=</span> data[split:]</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(train_data), <span class="bu">len</span>(val_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="batch-generator-random-contiguous-chunks" class="level3" data-number="22.4.3">
+<h3 data-number="22.4.3" class="anchored" data-anchor-id="batch-generator-random-contiguous-chunks"><span class="header-section-number">22.4.3</span> 2) Batch generator (random contiguous chunks)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1337</span>)<span class="op">;</span> np.random.seed(<span class="dv">1337</span>)<span class="op">;</span> random.seed(<span class="dv">1337</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>block_size <span class="op">=</span> <span class="dv">64</span>   <span class="co"># context length</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">128</span>  <span class="co"># reduce to 64 if CPU is slow</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_batch(split<span class="op">=</span><span class="st">"train"</span>):</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    src <span class="op">=</span> train_data <span class="cf">if</span> split<span class="op">==</span><span class="st">"train"</span> <span class="cf">else</span> val_data</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> torch.randint(low<span class="op">=</span><span class="dv">0</span>, high<span class="op">=</span><span class="bu">len</span>(src) <span class="op">-</span> block_size <span class="op">-</span> <span class="dv">1</span>, size<span class="op">=</span>(batch_size,))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    x  <span class="op">=</span> torch.stack([src[i:i<span class="op">+</span>block_size] <span class="cf">for</span> i <span class="kw">in</span> ix])</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    y  <span class="op">=</span> torch.stack([src[i<span class="op">+</span><span class="dv">1</span>:i<span class="op">+</span>block_size<span class="op">+</span><span class="dv">1</span>] <span class="cf">for</span> i <span class="kw">in</span> ix])</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x.to(device), y.to(device)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>xb, yb <span class="op">=</span> get_batch(<span class="st">"train"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>xb.shape, yb.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="tiny-gpt-model-causal-mask-multihead-attention-prenorm" class="level3" data-number="22.4.4">
+<h3 data-number="22.4.4" class="anchored" data-anchor-id="tiny-gpt-model-causal-mask-multihead-attention-prenorm"><span class="header-section-number">22.4.4</span> 3) Tiny GPT model (causal mask, multi‑head attention, pre‑norm)</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.nn <span class="im">import</span> functional <span class="im">as</span> F</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CausalSelfAttention(nn.Module):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model: <span class="bu">int</span>, n_head: <span class="bu">int</span>, dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> d_model <span class="op">%</span> n_head <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n_head <span class="op">=</span> n_head</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d_head <span class="op">=</span> d_model <span class="op">//</span> n_head</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.qkv <span class="op">=</span> nn.Linear(d_model, <span class="dv">3</span> <span class="op">*</span> d_model, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.proj <span class="op">=</span> nn.Linear(d_model, d_model, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.attn_drop <span class="op">=</span> nn.Dropout(dropout)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.resid_drop <span class="op">=</span> nn.Dropout(dropout)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Causal mask buffer (max at runtime = block_size we train with)</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.register_buffer(<span class="st">"mask"</span>, torch.tril(torch.ones(block_size, block_size)).unsqueeze(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        B, T, C <span class="op">=</span> x.size()</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        qkv <span class="op">=</span> <span class="va">self</span>.qkv(x)                            <span class="co"># (B,T,3C)</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        q, k, v <span class="op">=</span> qkv.split(C, dim<span class="op">=</span><span class="dv">2</span>)                <span class="co"># (B,T,C) each</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># reshape to heads</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        q <span class="op">=</span> q.view(B, T, <span class="va">self</span>.n_head, <span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)  <span class="co"># (B,H,T,d)</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        k <span class="op">=</span> k.view(B, T, <span class="va">self</span>.n_head, <span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> v.view(B, T, <span class="va">self</span>.n_head, <span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># attention scores</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        att <span class="op">=</span> (q <span class="op">@</span> k.transpose(<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>)) <span class="op">/</span> math.sqrt(<span class="va">self</span>.d_head)   <span class="co"># (B,H,T,T)</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        att <span class="op">=</span> att.masked_fill(<span class="va">self</span>.mask[:,:,:T,:T] <span class="op">==</span> <span class="dv">0</span>, <span class="bu">float</span>(<span class="st">"-inf"</span>))</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        att <span class="op">=</span> F.softmax(att, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        att <span class="op">=</span> <span class="va">self</span>.attn_drop(att)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> att <span class="op">@</span> v                                                <span class="co"># (B,H,T,d)</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> y.transpose(<span class="dv">1</span>,<span class="dv">2</span>).contiguous().view(B, T, C)            <span class="co"># (B,T,C)</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> <span class="va">self</span>.resid_drop(<span class="va">self</span>.proj(y))</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> y</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MLP(nn.Module):</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model: <span class="bu">int</span>, d_ff: <span class="bu">int</span>, dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>):</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.net <span class="op">=</span> nn.Sequential(</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>            nn.Linear(d_model, d_ff),</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            nn.GELU(),</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            nn.Dropout(dropout),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            nn.Linear(d_ff, d_model),</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>            nn.Dropout(dropout),</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x): <span class="cf">return</span> <span class="va">self</span>.net(x)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Block(nn.Module):</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model: <span class="bu">int</span>, n_head: <span class="bu">int</span>, d_ff: <span class="bu">int</span>, dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>):</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln1 <span class="op">=</span> nn.LayerNorm(d_model)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.attn <span class="op">=</span> CausalSelfAttention(d_model, n_head, dropout)</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln2 <span class="op">=</span> nn.LayerNorm(d_model)</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mlp <span class="op">=</span> MLP(d_model, d_ff, dropout)</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.attn(<span class="va">self</span>.ln1(x))</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.mlp(<span class="va">self</span>.ln2(x))</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TinyGPT(nn.Module):</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, vocab_size: <span class="bu">int</span>, d_model<span class="op">=</span><span class="dv">64</span>, n_head<span class="op">=</span><span class="dv">2</span>, n_layer<span class="op">=</span><span class="dv">2</span>, d_ff<span class="op">=</span><span class="dv">128</span>, block_size<span class="op">=</span><span class="dv">64</span>, dropout<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.block_size <span class="op">=</span> block_size</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tok_emb <span class="op">=</span> nn.Embedding(vocab_size, d_model)</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pos_emb <span class="op">=</span> nn.Embedding(block_size, d_model)</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.blocks  <span class="op">=</span> nn.ModuleList([Block(d_model, n_head, d_ff, dropout) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_layer)])</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln_f    <span class="op">=</span> nn.LayerNorm(d_model)</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lm_head <span class="op">=</span> nn.Linear(d_model, vocab_size, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Weight tying (common trick)</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lm_head.weight <span class="op">=</span> <span class="va">self</span>.tok_emb.weight</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Init</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.<span class="bu">apply</span>(<span class="va">self</span>._init_weights)</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _init_weights(<span class="va">self</span>, m):</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(m, nn.Linear):</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>            nn.init.xavier_uniform_(m.weight)</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> m.bias <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: nn.init.zeros_(m.bias)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="bu">isinstance</span>(m, nn.Embedding):</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>            nn.init.normal_(m.weight, mean<span class="op">=</span><span class="fl">0.0</span>, std<span class="op">=</span><span class="fl">0.02</span>)</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, idx, targets<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>        B, T <span class="op">=</span> idx.size()</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> T <span class="op">&lt;=</span> <span class="va">self</span>.block_size, <span class="st">"Sequence length &gt; block size"</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>        pos <span class="op">=</span> torch.arange(<span class="dv">0</span>, T, device<span class="op">=</span>idx.device)</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.tok_emb(idx) <span class="op">+</span> <span class="va">self</span>.pos_emb(pos)[<span class="va">None</span>, :, :]</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> blk <span class="kw">in</span> <span class="va">self</span>.blocks:</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> blk(x)</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.ln_f(x)</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> <span class="va">self</span>.lm_head(x)                      <span class="co"># (B,T,vocab)</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> targets <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> F.cross_entropy(logits.view(B<span class="op">*</span>T, <span class="op">-</span><span class="dv">1</span>), targets.view(B<span class="op">*</span>T))</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> logits, loss</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">@torch.no_grad</span>()</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> generate(<span class="va">self</span>, idx, max_new_tokens<span class="op">=</span><span class="dv">100</span>, temperature<span class="op">=</span><span class="fl">1.0</span>, top_k<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_new_tokens):</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>            idx_cond <span class="op">=</span> idx[:, <span class="op">-</span><span class="va">self</span>.block_size:]      <span class="co"># crop to block size</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>            logits, _ <span class="op">=</span> <span class="va">self</span>(idx_cond)</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            logits <span class="op">=</span> logits[:, <span class="op">-</span><span class="dv">1</span>, :] <span class="op">/</span> temperature   <span class="co"># last time step</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> top_k <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>                v, _ <span class="op">=</span> torch.topk(logits, top_k)</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>                logits[logits <span class="op">&lt;</span> v[:, [<span class="op">-</span><span class="dv">1</span>]]] <span class="op">=</span> <span class="op">-</span><span class="bu">float</span>(<span class="st">"inf"</span>)</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>            probs <span class="op">=</span> F.softmax(logits, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>            next_id <span class="op">=</span> torch.multinomial(probs, num_samples<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> torch.cat([idx, next_id], dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> idx</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Instantiate model</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>d_model, n_head, n_layer, d_ff <span class="op">=</span> <span class="dv">64</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">128</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> TinyGPT(vocab_size, d_model, n_head, n_layer, d_ff, block_size, dropout<span class="op">=</span><span class="fl">0.0</span>).to(device)</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())<span class="op">/</span><span class="fl">1e6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="training-loop-crossentropy-eval-and-sampling" class="level3" data-number="22.4.5">
+<h3 data-number="22.4.5" class="anchored" data-anchor-id="training-loop-crossentropy-eval-and-sampling"><span class="header-section-number">22.4.5</span> 4) Training loop (cross‑entropy), eval, and sampling</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.optim <span class="im">import</span> AdamW</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> exp</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>max_steps     <span class="op">=</span> <span class="dv">1200</span>          <span class="co"># keep small for class; ~1–3 min on CPU</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>eval_interval <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>lr            <span class="op">=</span> <span class="fl">3e-3</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">1337</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> AdamW(model.parameters(), lr<span class="op">=</span>lr, betas<span class="op">=</span>(<span class="fl">0.9</span>, <span class="fl">0.99</span>), weight_decay<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> estimate_loss(iters<span class="op">=</span><span class="dv">200</span>):</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> {}</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> split <span class="kw">in</span> [<span class="st">"train"</span>,<span class="st">"val"</span>]:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        losses <span class="op">=</span> torch.zeros(iters, device<span class="op">=</span>device)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(iters):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            xb, yb <span class="op">=</span> get_batch(split)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            _, loss <span class="op">=</span> model(xb, yb)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            losses[k] <span class="op">=</span> loss</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        out[split] <span class="op">=</span> losses.mean().item()</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>loss_history <span class="op">=</span> []</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, max_steps<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    xb, yb <span class="op">=</span> get_batch(<span class="st">"train"</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    logits, loss <span class="op">=</span> model(xb, yb)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad(set_to_none<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    loss.backward()</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    torch.nn.utils.clip_grad_norm_(model.parameters(), <span class="fl">1.0</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> step <span class="op">%</span> eval_interval <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> step <span class="op">==</span> <span class="dv">1</span> <span class="kw">or</span> step <span class="op">==</span> max_steps:</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        est <span class="op">=</span> estimate_loss(<span class="dv">50</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        loss_history.append({<span class="st">"step"</span>: step, <span class="st">"train_loss"</span>: est[<span class="st">"train"</span>], <span class="st">"val_loss"</span>: est[<span class="st">"val"</span>],</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"train_ppl"</span>: exp(est[<span class="st">"train"</span>]), <span class="st">"val_ppl"</span>: exp(est[<span class="st">"val"</span>])})</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"step </span><span class="sc">{</span>step<span class="sc">:4d}</span><span class="ss"> | train loss </span><span class="sc">{</span>est[<span class="st">'train'</span>]<span class="sc">:.3f}</span><span class="ss"> (ppl </span><span class="sc">{</span>exp(est[<span class="st">'train'</span>])<span class="sc">:.1f}</span><span class="ss">) "</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>              <span class="ss">f"| val loss </span><span class="sc">{</span>est[<span class="st">'val'</span>]<span class="sc">:.3f}</span><span class="ss"> (ppl </span><span class="sc">{</span>exp(est[<span class="st">'val'</span>])<span class="sc">:.1f}</span><span class="ss">)"</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Done in </span><span class="sc">{</span>time<span class="sc">.</span>time()<span class="op">-</span>t0<span class="sc">:.1f}</span><span class="ss">s"</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(loss_history).to_csv(<span class="st">"reports/tinygpt_train_curve.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="quick-plots-and-sampling" class="level4" data-number="22.4.5.1">
+<h4 data-number="22.4.5.1" class="anchored" data-anchor-id="quick-plots-and-sampling"><span class="header-section-number">22.4.5.1</span> Quick plots and sampling</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt, pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(loss_history)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="fl">3.5</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.plot(df[<span class="st">"step"</span>], df[<span class="st">"train_loss"</span>], marker<span class="op">=</span><span class="st">"o"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt.plot(df[<span class="st">"step"</span>], df[<span class="st">"val_loss"</span>], marker<span class="op">=</span><span class="st">"s"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Step"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Loss"</span>)<span class="op">;</span> plt.title(<span class="st">"TinyGPT train/val loss"</span>)<span class="op">;</span> plt.tight_layout()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample text</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>start_prompt <span class="op">=</span> <span class="st">"To be"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>start_ids <span class="op">=</span> encode(start_prompt)[<span class="va">None</span>, :].to(device)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>sample_ids <span class="op">=</span> model.generate(start_ids, max_new_tokens<span class="op">=</span><span class="dv">200</span>, temperature<span class="op">=</span><span class="fl">0.8</span>, top_k<span class="op">=</span><span class="dv">40</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(decode(sample_ids[<span class="dv">0</span>].tolist()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p><strong>Sanity checks:</strong> • <strong>Loss should fall</strong> and val perplexity should be reasonable (&gt;1, &lt; vocab_size). • Generated text should <strong>mimic</strong> the corpus style (not necessarily coherent).</p>
+</blockquote>
+<hr>
+</section>
+</section>
+</section>
+<section id="wrapup-10-min-key-points-to-emphasize" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="wrapup-10-min-key-points-to-emphasize"><span class="header-section-number">22.5</span> Wrap‑up (10 min) — key points to emphasize</h2>
+<ul>
+<li><strong>Causal mask</strong> prevents look‑ahead; this mirrors leakage controls from Sessions 17–18.</li>
+<li><strong>Weight tying</strong> reduces params and often helps.</li>
+<li><strong>Positional embeddings</strong> are required for order; we used simple learned absolute positions today.</li>
+<li>This tiny model is a <strong>teaching scaffold</strong>—Session 22 adapts the embedding to <strong>real‑valued features</strong> for time‑series forecasting.</li>
+</ul>
+<hr>
+</section>
+<section id="homework-due-before-session-22" class="level2" data-number="22.6">
+<h2 data-number="22.6" class="anchored" data-anchor-id="homework-due-before-session-22"><span class="header-section-number">22.6</span> Homework (due before Session 22)</h2>
+<p><strong>Goal:</strong> Explore how <strong>depth (layers)</strong>, <strong>width (heads/hidden)</strong>, and <strong>context length</strong> affect tiny GPT’s learning on the toy corpus. Produce a one‑page table and a short reflection (≈300–500 words).</p>
+<section id="a.-script-scriptstinygpt_train.py-configurable-tiny-gpt" class="level3" data-number="22.6.1">
+<h3 data-number="22.6.1" class="anchored" data-anchor-id="a.-script-scriptstinygpt_train.py-configurable-tiny-gpt"><span class="header-section-number">22.6.1</span> A. Script: <code>scripts/tinygpt_train.py</code> (configurable tiny GPT)</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> annotations</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse, time, math, random, pathlib</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, torch, torch.nn <span class="im">as</span> nn</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.nn <span class="im">import</span> functional <span class="im">as</span> F</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Model components from class (compact) ----</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CausalSelfAttention(nn.Module):</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, n_head, ctx, p<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> d_model <span class="op">%</span> n_head <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n_head <span class="op">=</span> n_head<span class="op">;</span> <span class="va">self</span>.d_head <span class="op">=</span> d_model <span class="op">//</span> n_head</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.qkv <span class="op">=</span> nn.Linear(d_model, <span class="dv">3</span><span class="op">*</span>d_model, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.proj <span class="op">=</span> nn.Linear(d_model, d_model, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.attn_drop <span class="op">=</span> nn.Dropout(p)<span class="op">;</span> <span class="va">self</span>.resid_drop <span class="op">=</span> nn.Dropout(p)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.register_buffer(<span class="st">"mask"</span>, torch.tril(torch.ones(ctx, ctx)).unsqueeze(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>))</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        B,T,C<span class="op">=</span>x.size()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        qkv<span class="op">=</span><span class="va">self</span>.qkv(x)<span class="op">;</span> q,k,v<span class="op">=</span>qkv.split(C,dim<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        q<span class="op">=</span>q.view(B,T,<span class="va">self</span>.n_head,<span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        k<span class="op">=</span>k.view(B,T,<span class="va">self</span>.n_head,<span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        v<span class="op">=</span>v.view(B,T,<span class="va">self</span>.n_head,<span class="va">self</span>.d_head).transpose(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        att<span class="op">=</span>(q <span class="op">@</span> k.transpose(<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>)) <span class="op">/</span> math.sqrt(<span class="va">self</span>.d_head)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        att<span class="op">=</span>att.masked_fill(<span class="va">self</span>.mask[:,:,:T,:T]<span class="op">==</span><span class="dv">0</span>, <span class="bu">float</span>(<span class="st">"-inf"</span>))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        att<span class="op">=</span>att.softmax(dim<span class="op">=-</span><span class="dv">1</span>)<span class="op">;</span> att<span class="op">=</span><span class="va">self</span>.attn_drop(att)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>att <span class="op">@</span> v<span class="op">;</span> y<span class="op">=</span>y.transpose(<span class="dv">1</span>,<span class="dv">2</span>).contiguous().view(B,T,C)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.resid_drop(<span class="va">self</span>.proj(y))</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Block(nn.Module):</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, d_model, n_head, d_ff, ctx, p<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln1<span class="op">=</span>nn.LayerNorm(d_model)<span class="op">;</span> <span class="va">self</span>.attn<span class="op">=</span>CausalSelfAttention(d_model,n_head,ctx,p)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln2<span class="op">=</span>nn.LayerNorm(d_model)<span class="op">;</span> <span class="va">self</span>.mlp<span class="op">=</span>nn.Sequential(nn.Linear(d_model,d_ff), nn.GELU(), nn.Dropout(p), nn.Linear(d_ff,d_model), nn.Dropout(p))</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>,x):</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>x<span class="op">+</span><span class="va">self</span>.attn(<span class="va">self</span>.ln1(x))<span class="op">;</span> x<span class="op">=</span>x<span class="op">+</span><span class="va">self</span>.mlp(<span class="va">self</span>.ln2(x))<span class="op">;</span> <span class="cf">return</span> x</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TinyGPT(nn.Module):</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, vocab, d_model<span class="op">=</span><span class="dv">64</span>, n_head<span class="op">=</span><span class="dv">2</span>, n_layer<span class="op">=</span><span class="dv">2</span>, d_ff<span class="op">=</span><span class="dv">128</span>, ctx<span class="op">=</span><span class="dv">64</span>, p<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ctx<span class="op">=</span>ctx</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.tok<span class="op">=</span>nn.Embedding(vocab,d_model)<span class="op">;</span> <span class="va">self</span>.pos<span class="op">=</span>nn.Embedding(ctx,d_model)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.blocks<span class="op">=</span>nn.ModuleList([Block(d_model,n_head,d_ff,ctx,p) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_layer)])</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ln<span class="op">=</span>nn.LayerNorm(d_model)<span class="op">;</span> <span class="va">self</span>.head<span class="op">=</span>nn.Linear(d_model,vocab,bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.head.weight <span class="op">=</span> <span class="va">self</span>.tok.weight</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.<span class="bu">apply</span>(<span class="va">self</span>._init)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _init(<span class="va">self</span>,m):</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(m, nn.Linear): nn.init.xavier_uniform_(m.weight)<span class="op">;</span> </span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(m, nn.Embedding): nn.init.normal_(m.weight, <span class="fl">0.0</span>, <span class="fl">0.02</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, idx, targets<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        B,T<span class="op">=</span>idx.size()<span class="op">;</span> pos<span class="op">=</span>torch.arange(T, device<span class="op">=</span>idx.device)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="va">self</span>.tok(idx)<span class="op">+</span><span class="va">self</span>.pos(pos)[<span class="va">None</span>,:,:]</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> b <span class="kw">in</span> <span class="va">self</span>.blocks: x<span class="op">=</span>b(x)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="va">self</span>.ln(x)<span class="op">;</span> logits<span class="op">=</span><span class="va">self</span>.head(x)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>        loss<span class="op">=</span><span class="va">None</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> targets <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: loss<span class="op">=</span>F.cross_entropy(logits.view(B<span class="op">*</span>T,<span class="op">-</span><span class="dv">1</span>), targets.view(B<span class="op">*</span>T))</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> logits, loss</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    ap<span class="op">=</span>argparse.ArgumentParser()</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--text"</span>, default<span class="op">=</span><span class="st">"data/raw/tiny_text.txt"</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--d_model"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">64</span>)</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--n_head"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--n_layer"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--d_ff"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">128</span>)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--ctx"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">64</span>)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--batch"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">128</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--steps"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">1200</span>)</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--lr"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">float</span>, default<span class="op">=</span><span class="fl">3e-3</span>)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--seed"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">1337</span>)</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--out"</span>, default<span class="op">=</span><span class="st">"reports/tinygpt_run.csv"</span>)</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>ap.parse_args()</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load or synthesize text</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    p<span class="op">=</span>pathlib.Path(args.text)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p.exists(): text<span class="op">=</span>p.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>(<span class="st">"To be, or not to be: that is the question.</span><span class="ch">\n</span><span class="st">"</span>)<span class="op">*</span><span class="dv">50</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>        pathlib.Path(p.parent).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)<span class="op">;</span> p.write_text(text)</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vocab/encode</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    chars<span class="op">=</span><span class="bu">sorted</span>(<span class="bu">list</span>(<span class="bu">set</span>(text)))<span class="op">;</span> stoi<span class="op">=</span>{c:i <span class="cf">for</span> i,c <span class="kw">in</span> <span class="bu">enumerate</span>(chars)}<span class="op">;</span> itos<span class="op">=</span>{i:c <span class="cf">for</span> c,i <span class="kw">in</span> stoi.items()}</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> enc(s): <span class="cf">return</span> torch.tensor([stoi[c] <span class="cf">for</span> c <span class="kw">in</span> s], dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>enc(text)<span class="op">;</span> split<span class="op">=</span><span class="bu">int</span>(<span class="fl">0.9</span><span class="op">*</span><span class="bu">len</span>(data))<span class="op">;</span> train, val <span class="op">=</span> data[:split], data[split:]</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Batching</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    device<span class="op">=</span>torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    random.seed(args.seed)<span class="op">;</span> np.random.seed(args.seed)<span class="op">;</span> torch.manual_seed(args.seed)</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> batch(src):</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>        ix<span class="op">=</span>torch.randint(<span class="dv">0</span>, <span class="bu">len</span>(src)<span class="op">-</span>args.ctx<span class="op">-</span><span class="dv">1</span>, (args.batch,))</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>torch.stack([src[i:i<span class="op">+</span>args.ctx] <span class="cf">for</span> i <span class="kw">in</span> ix])</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>torch.stack([src[i<span class="op">+</span><span class="dv">1</span>:i<span class="op">+</span>args.ctx<span class="op">+</span><span class="dv">1</span>] <span class="cf">for</span> i <span class="kw">in</span> ix])</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x.to(device), y.to(device)</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model/opt</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    net<span class="op">=</span>TinyGPT(vocab<span class="op">=</span><span class="bu">len</span>(chars), d_model<span class="op">=</span>args.d_model, n_head<span class="op">=</span>args.n_head, n_layer<span class="op">=</span>args.n_layer,</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>                d_ff<span class="op">=</span>args.d_ff, ctx<span class="op">=</span>args.ctx, p<span class="op">=</span><span class="fl">0.0</span>).to(device)</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    opt<span class="op">=</span>torch.optim.AdamW(net.parameters(), lr<span class="op">=</span>args.lr, betas<span class="op">=</span>(<span class="fl">0.9</span>,<span class="fl">0.99</span>), weight_decay<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    <span class="at">@torch.no_grad</span>()</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> eval_loss(iters<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>        net.<span class="bu">eval</span>()<span class="op">;</span> <span class="im">import</span> math</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> run(src):</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>            losses<span class="op">=</span>[]</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iters):</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>                xb, yb <span class="op">=</span> batch(src)</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>                _, loss <span class="op">=</span> net(xb, yb)<span class="op">;</span> losses.append(loss.item())</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>            m<span class="op">=</span>np.mean(losses)<span class="op">;</span> <span class="cf">return</span> m, math.exp(m)</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>        tr, trp <span class="op">=</span> run(train)<span class="op">;</span> va, vap <span class="op">=</span> run(val)<span class="op">;</span> net.train()</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tr, trp, va, vap</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>    hist<span class="op">=</span>[]</span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, args.steps<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        xb,yb <span class="op">=</span> batch(train)</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        _,loss <span class="op">=</span> net(xb,yb)</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        opt.zero_grad(set_to_none<span class="op">=</span><span class="va">True</span>)<span class="op">;</span> loss.backward()</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        torch.nn.utils.clip_grad_norm_(net.parameters(), <span class="fl">1.0</span>)</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        opt.step()</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> step<span class="op">%</span><span class="dv">100</span><span class="op">==</span><span class="dv">0</span> <span class="kw">or</span> step<span class="op">==</span><span class="dv">1</span> <span class="kw">or</span> step<span class="op">==</span>args.steps:</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>            tr,trp,va,vap <span class="op">=</span> eval_loss(<span class="dv">50</span>)</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>            hist.append({<span class="st">"step"</span>:step,<span class="st">"train_loss"</span>:tr,<span class="st">"train_ppl"</span>:trp,<span class="st">"val_loss"</span>:va,<span class="st">"val_ppl"</span>:vap,</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"d_model"</span>:args.d_model,<span class="st">"n_head"</span>:args.n_head,<span class="st">"n_layer"</span>:args.n_layer,</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"ctx"</span>:args.ctx})</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"step </span><span class="sc">{</span>step<span class="sc">:4d}</span><span class="ss">  train </span><span class="sc">{</span>tr<span class="sc">:.3f}</span><span class="ss"> (ppl </span><span class="sc">{</span>trp<span class="sc">:.1f}</span><span class="ss">) | val </span><span class="sc">{</span>va<span class="sc">:.3f}</span><span class="ss"> (ppl </span><span class="sc">{</span>vap<span class="sc">:.1f}</span><span class="ss">)"</span>)</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>    pd.DataFrame(hist).to_csv(args.out, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Wrote"</span>, args.out)</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Run examples:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/tinygpt_train.py</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/tinygpt_train.py <span class="at">--n_head</span> 1 <span class="at">--n_layer</span> 1 <span class="at">--ctx</span> 32  <span class="at">--steps</span> 600  <span class="at">--out</span> reports/tinygpt_run_a.csv</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/tinygpt_train.py <span class="at">--n_head</span> 2 <span class="at">--n_layer</span> 2 <span class="at">--ctx</span> 64  <span class="at">--steps</span> 1200 <span class="at">--out</span> reports/tinygpt_run_b.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="b.-summarize-runs-into-a-table-for-your-report" class="level3" data-number="22.6.2">
+<h3 data-number="22.6.2" class="anchored" data-anchor-id="b.-summarize-runs-into-a-table-for-your-report"><span class="header-section-number">22.6.2</span> B. Summarize runs into a table for your report</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>runs <span class="op">=</span> []</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> [<span class="st">"reports/tinygpt_run_a.csv"</span>,<span class="st">"reports/tinygpt_run_b.csv"</span>]:</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_csv(f)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        last <span class="op">=</span> df.sort_values(<span class="st">"step"</span>).iloc[<span class="op">-</span><span class="dv">1</span>].to_dict()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        last[<span class="st">"run"</span>] <span class="op">=</span> f</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        runs.append(last)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Skip"</span>, f, e)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(runs).to_csv(<span class="st">"reports/tinygpt_ablation_summary.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">"reports/tinygpt_ablation_summary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="c.-reflection-prompts-300500-words" class="level3" data-number="22.6.3">
+<h3 data-number="22.6.3" class="anchored" data-anchor-id="c.-reflection-prompts-300500-words"><span class="header-section-number">22.6.3</span> C. Reflection prompts (≈300–500 words)</h3>
+<ul>
+<li>How did <strong>context length</strong> (32 → 64) affect <strong>val perplexity</strong>?</li>
+<li>Did additional <strong>heads</strong> or <strong>layers</strong> help consistently? Where did <strong>overfitting</strong> show up?</li>
+<li>What happened to <strong>training speed</strong> and <strong>stability</strong> as you increased model size?</li>
+<li>One paragraph on how you expect to <strong>adapt embeddings</strong> for <strong>time‑series</strong> in Session 22 (hint: replace token embedding with a linear projection of features; keep positional encodings and causal mask).</li>
+</ul>
+<blockquote class="blockquote">
+<p>Submit <code>reports/tinygpt_ablation_summary.csv</code> and a short Quarto section with your table + reflection.</p>
+</blockquote>
+</section>
+<section id="d.-optional-tiny-test-for-the-causal-mask" class="level3" data-number="22.6.4">
+<h3 data-number="22.6.4" class="anchored" data-anchor-id="d.-optional-tiny-test-for-the-causal-mask"><span class="header-section-number">22.6.4</span> D. (Optional) Tiny test for the causal mask</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_causal_mask.py</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scripts.tinygpt_train <span class="im">import</span> TinyGPT</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_mask_is_causal():</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> TinyGPT(vocab<span class="op">=</span><span class="dv">10</span>, ctx<span class="op">=</span><span class="dv">16</span>, d_model<span class="op">=</span><span class="dv">32</span>, n_head<span class="op">=</span><span class="dv">2</span>, n_layer<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find an attention module and check its mask upper triangle is zero</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    att <span class="op">=</span> [mod.attn <span class="cf">for</span> mod <span class="kw">in</span> m.blocks][:<span class="dv">1</span>][<span class="dv">0</span>]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> att.mask[<span class="dv">0</span>,<span class="dv">0</span>]  <span class="co"># (T,T)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> torch.<span class="bu">all</span>(M.triu(diagonal<span class="op">=</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Run:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> causal_mask</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="instructor-checklist-before-class" class="level2" data-number="22.7">
+<h2 data-number="22.7" class="anchored" data-anchor-id="instructor-checklist-before-class"><span class="header-section-number">22.7</span> Instructor checklist (before class)</h2>
+<ul>
+<li>Dry‑run the in‑class script on CPU; confirm loss decreases within ~1–3 minutes.</li>
+<li>Prepare a slide showing <strong>attention mask</strong> visually (upper‑triangle masked).</li>
+<li>(Optional) Show a single head’s attention weights on a short prompt for intuition.</li>
+</ul>
+</section>
+<section id="emphasize-while-teaching" class="level2" data-number="22.8">
+<h2 data-number="22.8" class="anchored" data-anchor-id="emphasize-while-teaching"><span class="header-section-number">22.8</span> Emphasize while teaching</h2>
+<ul>
+<li><strong>Causal masking</strong> is the Transformer’s built‑in “no leakage” rule—maps directly to Sessions 17–18.</li>
+<li><strong>Smaller is fine</strong>: We use tiny configs to teach mechanics and keep run times short.</li>
+<li><strong>Next session</strong> swaps token embeddings for <strong>real‑valued feature projections</strong> and a regression head.</li>
+</ul>
+</section>
+<section id="grading-passrevise" class="level2" data-number="22.9">
+<h2 data-number="22.9" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">22.9</span> Grading (pass/revise)</h2>
+<ul>
+<li>TinyGPT trains; <code>reports/tinygpt_train_curve.csv</code> exists; curve shows decreasing val loss.</li>
+<li>Student ran at least <strong>two configurations</strong> via <code>scripts/tinygpt_train.py</code> and produced <code>reports/tinygpt_ablation_summary.csv</code>.</li>
+<li>Reflection answers the prompts with evidence from the runs.</li>
+</ul>
+<p>You now have a working <strong>Tiny GPT</strong> on toy data. In <strong>Session 22</strong>, you’ll adapt this architecture to <strong>time‑series returns</strong> by replacing the token embedding with a linear projection of features and keeping the causal machinery.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lec20.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Session 20 — Multi‑asset training (unified model</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lec22.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Session 22 — Adapting GPT to Time Series</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

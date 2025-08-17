@@ -1,0 +1,439 @@
+---
+title: "Session 13"
+---
+
+Below is a complete lecture package for **Session 13 — pytest + Data Validation** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. You’ll add **high‑value tests** around your features and a **Pandera** (optional) schema, practice **logging**, and wire everything so tests run fast and deterministically.
+
+> **Assumptions:** You completed Session 9–12 and have `data/processed/features_v1.parquet` (or `features_v1_ext.parquet`). If a file is missing, the lab provides a small synthetic fallback so tests still run.
+> **Goal today:** Make it **hard to ship bad data** by adding precise, fast tests.
+
+---
+
+## Session 13 — pytest + Data Validation (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Write **fast, high‑signal tests** for data pipelines (shapes, dtypes, nulls, **no look‑ahead**).
+2. Validate a DataFrame with **Pandera** (schema + value checks) or **custom checks** only.
+3. Use **logging** effectively and capture logs in tests.
+4. Run tests in Colab / locally and prepare for CI in Session 14.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: What to test (and not), “data tests” vs unit tests, speed budget
+* **(10 min)** Slides: Pandera schemas & custom checks; tolerance and stability
+* **(10 min)** Slides: Logging basics (`logging`, levels, handlers); testing logs with `caplog`
+* **(35 min)** **In‑class lab**: add `tests/test_features.py` (+ optional Pandera test), fixtures, config; run & fix
+* **(10 min)** Wrap‑up + homework briefing
+
+---
+
+## Slides / talking points (drop into your deck)
+
+### What to test (fast, crisp)
+
+* **Contract tests** for data:
+
+  * **Schema**: required columns exist; dtypes sane (`ticker` categorical, calendar ints).
+  * **Nulls**: no NAs in training‑critical cols.
+  * **Semantics**: `r_1d` is **lead** of `log_return`; rolling features computed from **past only**.
+  * **Keys**: no duplicate `(ticker, date)`; dates strictly increasing within ticker.
+* Keep tests **under \~5s total** (CI budget). Avoid long recomputations; sample/take head.
+
+### Pandera vs custom checks
+
+* **Pandera**: declarative schema; optional dependency; good for **column existence + ranges**.
+* **Custom**: essential for **domain logic** (look‑ahead bans, exact rolling formulas).
+
+### Logging basics
+
+* Use `logging.getLogger(__name__)`; set level via env (`LOGLEVEL=INFO`).
+* Log **counts, ranges, and any data drops** inside build scripts.
+* In tests: use `caplog` to assert a warning is emitted for suspicious conditions.
+
+---
+
+## In‑class lab (35 min)
+
+> Run each block as its **own Colab cell**. Adjust `REPO_NAME` as needed.
+
+### 0) Setup: mount & folders
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME  = "unified-stocks-teamX"  # <- change if needed
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in ["data/processed","tests","scripts","reports"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd())
+```
+
+### 1) (Optional) Install test‑time helpers (Pandera)
+
+```python
+!pip -q install pytest pandera pyarrow
+```
+
+### 2) Put a tiny **logging helper** in your repo (used by build scripts & tests)
+
+```python
+# scripts/logsetup.py
+from __future__ import annotations
+import logging, os
+
+def setup_logging(name: str = "dspt"):
+    level = os.getenv("LOGLEVEL", "INFO").upper()
+    logger = logging.getLogger(name)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        fmt = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+        handler.setFormatter(logging.Formatter(fmt))
+        logger.addHandler(handler)
+    logger.setLevel(level)
+    return logger
+```
+
+### 3) Create **pytest config** and a fixture (with safe fallback data)
+
+```python
+# pytest.ini
+from pathlib import Path
+Path("pytest.ini").write_text("""[pytest]
+addopts = -q
+testpaths = tests
+filterwarnings =
+    ignore::FutureWarning
+""")
+
+# tests/conftest.py
+from pathlib import Path
+import pandas as pd, numpy as np, pytest
+
+def _synth_features():
+    # minimal synthetic features for 3 tickers, 60 days
+    rng = np.random.default_rng(0)
+    dates = pd.bdate_range("2023-01-02", periods=60)
+    frames=[]
+    for t in ["AAPL","MSFT","GOOGL"]:
+        ret = rng.normal(0, 0.01, size=len(dates)).astype("float32")
+        adj = 100 * np.exp(np.cumsum(ret))
+        df = pd.DataFrame({
+            "date": dates,
+            "ticker": t,
+            "adj_close": adj.astype("float32"),
+            "log_return": np.r_[np.nan, np.diff(np.log(adj))].astype("float32")
+        })
+        # next-day label
+        df["r_1d"] = df["log_return"].shift(-1)
+        # rolling
+        df["roll_mean_20"] = df["log_return"].rolling(20, min_periods=20).mean()
+        df["roll_std_20"]  = df["log_return"].rolling(20, min_periods=20).std()
+        df["zscore_20"]    = (df["log_return"]-df["roll_mean_20"])/(df["roll_std_20"]+1e-8)
+        df["weekday"] = df["date"].dt.weekday.astype("int8")
+        df["month"]   = df["date"].dt.month.astype("int8")
+        frames.append(df)
+    out = pd.concat(frames, ignore_index=True).dropna().reset_index(drop=True)
+    out["ticker"] = out["ticker"].astype("category")
+    return out
+
+@pytest.fixture(scope="session")
+def features_df():
+    p = Path("data/processed/features_v1.parquet")
+    if p.exists():
+        df = pd.read_parquet(p)
+        # Ensure expected minimal cols exist (compute light ones if missing)
+        if "weekday" not in df: df["weekday"] = pd.to_datetime(df["date"]).dt.weekday.astype("int8")
+        if "month" not in df:   df["month"] = pd.to_datetime(df["date"]).dt.month.astype("int8")
+        return df.sort_values(["ticker","date"]).reset_index(drop=True)
+    # fallback
+    return _synth_features().sort_values(["ticker","date"]).reset_index(drop=True)
+```
+
+### 4) **High‑value tests**: shapes, nulls, look‑ahead ban (as requested)
+
+```python
+# tests/test_features.py
+import numpy as np, pandas as pd
+import pytest
+
+REQUIRED_COLS = ["date","ticker","log_return","r_1d","weekday","month"]
+
+def test_required_columns_present(features_df):
+    missing = [c for c in REQUIRED_COLS if c not in features_df.columns]
+    assert not missing, f"Missing required columns: {missing}"
+
+def test_key_no_duplicates(features_df):
+    dup = features_df[["ticker","date"]].duplicated().sum()
+    assert dup == 0, f"Found {dup} duplicate (ticker,date) rows"
+
+def test_sorted_within_ticker(features_df):
+    for tkr, g in features_df.groupby("ticker"):
+        assert g["date"].is_monotonic_increasing, f"Dates not sorted for {tkr}"
+
+def test_nulls_in_critical_columns(features_df):
+    crit = ["log_return","r_1d"]
+    na = features_df[crit].isna().sum().to_dict()
+    assert all(v == 0 for v in na.values()), f"NAs in critical cols: {na}"
+
+def test_calendar_dtypes(features_df):
+    assert str(features_df["weekday"].dtype) in ("int8","Int8"), "weekday should be compact int"
+    assert str(features_df["month"].dtype)   in ("int8","Int8"), "month should be compact int"
+
+def test_ticker_is_categorical(features_df):
+    # allow object if reading from some parquet engines, but prefer category
+    assert features_df["ticker"].dtype.name in ("category","CategoricalDtype","object")
+
+def test_r1d_is_lead_of_log_return(features_df):
+    for tkr, g in features_df.groupby("ticker"):
+        # r_1d at t equals log_return at t+1
+        assert g["r_1d"].iloc[:-1].equals(g["log_return"].iloc[1:]), f"Lead/lag mismatch for {tkr}"
+
+@pytest.mark.parametrize("W", [20])
+def test_rolling_mean_matches_definition(features_df, W):
+    if f"roll_mean_{W}" not in features_df.columns:
+        pytest.skip(f"roll_mean_{W} not present")
+    for tkr, g in features_df.groupby("ticker"):
+        s = g["log_return"]
+        rm = s.rolling(W, min_periods=W).mean()
+        # compare only where defined
+        mask = ~rm.isna()
+        diff = (g[f"roll_mean_{W}"][mask] - rm[mask]).abs().max()
+        assert float(diff) <= 1e-7, f"roll_mean_{W} mismatch for {tkr} (max diff {diff})"
+```
+
+### 5) **Optional** Pandera schema test (declarative)
+
+```python
+# tests/test_schema_pandera.py
+import pytest, pandas as pd, numpy as np
+try:
+    import pandera as pa
+    from pandera import Column, Check, DataFrameSchema
+except Exception:
+    pytest.skip("pandera not installed", allow_module_level=True)
+
+schema = pa.DataFrameSchema({
+    "date":    Column(pa.DateTime, nullable=False),
+    "ticker":  Column(pa.String, nullable=False, coerce=True, checks=Check.str_length(1, 12)),
+    "log_return": Column(pa.Float, nullable=False, checks=Check.is_finite()),
+    "r_1d":       Column(pa.Float, nullable=False, checks=Check.is_finite()),
+    "weekday":    Column(pa.Int8,  checks=Check.in_range(0, 6)),
+    "month":      Column(pa.Int8,  checks=Check.in_range(1, 12)),
+}, coerce=True, strict=False)
+
+def test_schema_validate(features_df):
+    # Cast ticker to string for schema validation; categorical is ok → string
+    df = features_df.copy()
+    df["ticker"] = df["ticker"].astype(str)
+    schema.validate(df[["date","ticker","log_return","r_1d","weekday","month"]])
+```
+
+### 6) **Logging** test: assert a warning is emitted on duplicates (toy demo)
+
+```python
+# tests/test_logging.py
+import logging, pandas as pd, numpy as np, pytest
+from scripts.logsetup import setup_logging
+
+def check_for_duplicates(df, logger=None):
+    logger = logger or setup_logging("dspt")
+    dups = df[["ticker","date"]].duplicated().sum()
+    if dups > 0:
+        logger.warning("Found %d duplicate (ticker,date) rows", dups)
+    return dups
+
+def test_duplicate_warning(caplog):
+    caplog.set_level(logging.WARNING)
+    df = pd.DataFrame({"ticker":["AAPL","AAPL"], "date":pd.to_datetime(["2024-01-02","2024-01-02"])})
+    dups = check_for_duplicates(df)
+    assert dups == 1
+    assert any("duplicate" in rec.message for rec in caplog.records)
+```
+
+### 7) Run tests now
+
+```python
+!pytest -q
+```
+
+> If a test fails on your real data, fix your pipeline (e.g., regenerate `features_v1.parquet`) and re‑run. **Do not** relax the test without understanding the failure.
+
+---
+
+## Wrap‑up (10 min)
+
+* You now have **tests that fail loudly** if labels leak, required columns/keys break, or schemas drift.
+* Pandera provides a declarative baseline; custom tests encode your **domain logic**.
+* Logging helps you **debug data issues**; you can assert on log messages in tests.
+
+---
+
+## Homework (due before Session 14)
+
+**Goal:** Create a **Health Check** notebook that prints key diagnostics and is easy to include in your Quarto report.
+
+### Part A — Build a reusable **health** module
+
+```python
+# scripts/health.py
+from __future__ import annotations
+import pandas as pd, numpy as np, json
+from pathlib import Path
+
+def df_health(df: pd.DataFrame) -> dict:
+    out = {}
+    out["rows"] = int(len(df))
+    out["cols"] = int(df.shape[1])
+    out["date_min"] = str(pd.to_datetime(df["date"]).min().date())
+    out["date_max"] = str(pd.to_datetime(df["date"]).max().date())
+    out["tickers"]  = int(df["ticker"].nunique())
+    # Null counts (top 10)
+    na = df.isna().sum().sort_values(ascending=False)
+    out["nulls"] = na[na>0].head(10).to_dict()
+    # Duplicates
+    out["dup_key_rows"] = int(df[["ticker","date"]].duplicated().sum())
+    # Example numeric ranges for core cols
+    for c in [x for x in ["log_return","r_1d","roll_std_20"] if x in df.columns]:
+        s = pd.to_numeric(df[c], errors="coerce")
+        out[f"{c}_min"] = float(np.nanmin(s))
+        out[f"{c}_max"] = float(np.nanmax(s))
+    return out
+
+def write_health_report(in_parquet="data/processed/features_v1.parquet",
+                        out_json="reports/health.json", out_md="reports/health.md"):
+    p = Path(in_parquet)
+    if not p.exists():
+        raise SystemExit(f"Missing {in_parquet}.")
+    df = pd.read_parquet(p)
+    h = df_health(df)
+    Path(out_json).write_text(json.dumps(h, indent=2))
+    # Render a small Markdown summary
+    lines = [
+        "# Data Health Summary",
+        "",
+        f"- Rows: **{h['rows']}**; Cols: **{h['cols']}**; Tickers: **{h['tickers']}**",
+        f"- Date range: **{h['date_min']} → {h['date_max']}**",
+        f"- Duplicate (ticker,date) rows: **{h['dup_key_rows']}**",
+    ]
+    if h.get("nulls"):
+        lines += ["", "## Top Null Counts", ""]
+        lines += [f"- **{k}**: {v}" for k,v in h["nulls"].items()]
+    Path(out_md).write_text("\n".join(lines))
+    print("Wrote", out_json, "and", out_md)
+```
+
+Run once to generate the files:
+
+```python
+!python scripts/health.py
+```
+
+### Part B — **Health Check notebook** (`reports/health.ipynb`)
+
+Create a new notebook `reports/health.ipynb` with **two cells**:
+
+**Cell 1 (setup):**
+
+```python
+%load_ext autoreload
+%autoreload 2
+from scripts.health import write_health_report
+write_health_report()  # writes reports/health.json and reports/health.md
+```
+
+**Cell 2 (display in notebook):**
+
+```python
+from pathlib import Path
+print(Path("reports/health.md").read_text())
+```
+
+> Commit the notebook. It will be light and re‑usable. You’ll include its output in Quarto below.
+
+### Part C — Include health output in your **Quarto report**
+
+In `reports/eda.qmd`, add a section:
+
+````markdown
+## Data Health (auto-generated)
+
+```{python}
+from pathlib import Path
+print(Path("reports/health.md").read_text())
+````
+
+````
+
+Render EDA:
+```bash
+quarto render reports/eda.qmd
+````
+
+### Part D — Add a **Makefile** target and a quick test
+
+**Makefile append:**
+
+```make
+.PHONY: health test
+health: ## Generate health.json and health.md from the current features parquet
+\tpython scripts/health.py
+
+test: ## Run fast tests
+\tpytest -q
+```
+
+**Test that health files exist:**
+
+```python
+# tests/test_health_outputs.py
+import os, json
+
+def test_health_files_exist():
+    assert os.path.exists("reports/health.json")
+    assert os.path.exists("reports/health.md")
+    # json is valid
+    import json
+    json.load(open("reports/health.json"))
+```
+
+Run:
+
+```bash
+%%bash
+make health
+pytest -q -k health
+```
+
+---
+
+## Instructor checklist (before class)
+
+* Ensure `features_v1.parquet` exists or the fixture’s synthetic fallback works.
+* Dry‑run `pytest -q` in a fresh runtime; keep total time < 5s.
+* Prepare 2–3 “expected failures” you can toggle (e.g., edit one feature column to NaN) to show tests catching bugs.
+
+## Emphasize while teaching
+
+* **Fast tests only** for CI; keep heavy, long recomputations out.
+* **No look‑ahead** and **unique (ticker,date)** are non‑negotiable contracts.
+* Logging is a first‑class tool—tests can assert on **warnings** you emit.
+
+## Grading (pass/revise)
+
+* `tests/test_features.py` present with **shapes, nulls, look‑ahead ban** (and rolling check).
+* Tests pass locally (`pytest -q`).
+* `reports/health.ipynb` and `reports/health.md/.json` exist and integrate into `eda.qmd`.
+* Makefile `health` and `test` targets work.
+
+You now have a **safety net** around your data. In **Session 14**, we’ll enforce style with **pre‑commit** and bring your tests to **GitHub Actions CI**.

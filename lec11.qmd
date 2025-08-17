@@ -1,0 +1,296 @@
+---
+title: "Session 11 — APIs with `requests`: Secrets, Retries, and Caching"
+---
+
+# **Session 11 — APIs with `requests`: Secrets, Retries, and Caching (75 min)**
+
+### Learning goals
+
+Students will be able to:
+
+1. Call a REST API with `requests` + robust retry/backoff.
+2. Manage secrets with `.env` and **never** commit keys.
+3. Cache responses (file or SQLite) and align external series by date.
+4. Save enriched data to SQLite and Parquet.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: anatomy of a GET; query params; JSON; status codes
+* **(10 min)** Slides: secrets (`python-dotenv`), file layout (`.env`, `.env.template`), `.gitignore`
+* **(10 min)** Slides: retries and caching patterns; idempotent design
+* **(35 min)** **In‑class lab**: fetch **FRED VIX (VIXCLS)** + optional **FEDFUNDS** → cache → store in SQLite → join to daily features
+* **(10 min)** Wrap‑up + homework
+
+---
+
+## Slide talking points
+
+**Requests pattern**
+
+* `Session` + `HTTPAdapter` + `Retry` → robust.
+* Validate: status code, content type; guard against partial data.
+
+**Secrets**
+
+* `.env.template` committed; `.env` untracked.
+* Load with `dotenv.load_dotenv()`. Access via `os.getenv("FRED_API_KEY")`.
+
+**Caching**
+
+* **File cache**: key by URL+params hash.
+* **DB cache**: `cache (key TEXT PRIMARY KEY, value BLOB, fetched_at)`.
+
+**Alignment**
+
+* After download, **normalize to `date`** and join on date.
+* Store to SQLite table with a composite key `(series_id, date)`.
+
+---
+
+## In‑class lab
+
+### 0) Setup, folders, and templates
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME  = "unified-stocks-teamX"
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, json, hashlib, time, sqlite3, pandas as pd, numpy as np
+from pathlib import Path
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in [".cache/api","data","data/processed","data/raw"]:
+    Path(p).mkdir(parents=True, exist_ok=True)
+
+# .env template for secrets
+Path(".env.template").write_text("FRED_API_KEY=\n")
+# Ensure .gitignore has secrets & cache
+gi = Path(".gitignore")
+if gi.exists():
+    gi_txt = gi.read_text()
+else:
+    gi_txt = ""
+for line in [".env", ".cache/", "__pycache__/"]:
+    if line not in gi_txt:
+        gi_txt += ("\n" if not gi_txt.endswith("\n") else "") + line
+gi.write_text(gi_txt)
+print("Ready. Fill your FRED key in a local .env (do not commit).")
+```
+
+### 1) Robust GET with retry + file cache
+
+```python
+import os, requests
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+from dotenv import load_dotenv
+
+load_dotenv()  # reads .env if present
+
+def session_with_retry(total=3, backoff=0.5):
+    s = requests.Session()
+    retry = Retry(total=total, backoff_factor=backoff, status_forcelist=[429,500,502,503,504])
+    s.mount("https://", HTTPAdapter(max_retries=retry))
+    s.headers.update({"User-Agent": "dspt-class/1.0 (+edu)"})
+    return s
+
+def cache_key(url, params):
+    raw = url + "?" + "&".join(f"{k}={params[k]}" for k in sorted(params))
+    return hashlib.sha1(raw.encode()).hexdigest()
+
+def cached_get(url, params, ttl_hours=24):
+    key = cache_key(url, params)
+    path = Path(f".cache/api/{key}.json")
+    if path.exists() and (time.time() - path.stat().st_mtime < ttl_hours*3600):
+        return json.loads(path.read_text())
+    s = session_with_retry()
+    r = s.get(url, params=params, timeout=20)
+    r.raise_for_status()
+    data = r.json()
+    path.write_text(json.dumps(data))
+    return data
+```
+
+### 2) Fetch **VIX (VIXCLS)** and **FEDFUNDS** from FRED; store to SQLite
+
+```python
+API_KEY = os.getenv("FRED_API_KEY", "").strip()
+if not API_KEY:
+    print("WARNING: No FRED_API_KEY in .env; continuing with unauthenticated request may fail on FRED. Add your key to use in class.")
+
+FRED_SERIES_URL = "https://api.stlouisfed.org/fred/series/observations"
+
+def fred_series(series_id, start="2010-01-01", end=None):
+    p = {"series_id":series_id, "api_key":API_KEY, "file_type":"json",
+         "observation_start":start}
+    if end is not None: p["observation_end"]=end
+    data = cached_get(FRED_SERIES_URL, p, ttl_hours=24)
+    obs = data.get("observations", [])
+    df = pd.DataFrame(obs)[["date","value"]]
+    df["date"] = pd.to_datetime(df["date"])
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df["series_id"] = series_id
+    return df.dropna()
+
+vix = fred_series("VIXCLS", start="2015-01-01")       # CBOE VIX
+fed = fred_series("FEDFUNDS", start="2015-01-01")     # Effective Fed Funds
+
+# Write to SQLite
+db = sqlite3.connect("data/prices.db")
+db.execute("""CREATE TABLE IF NOT EXISTS macro_series(
+    series_id TEXT NOT NULL, date TEXT NOT NULL, value REAL NOT NULL,
+    PRIMARY KEY(series_id, date))""")
+for df in [vix, fed]:
+    df.to_sql("macro_series", db, if_exists="append", index=False)
+db.commit(); db.close()
+
+vix.head(), fed.head()
+```
+
+### 3) Join macro series to daily returns/features by `date`
+
+```python
+# Load features (build if missing)
+from pathlib import Path
+fvpath = Path("data/processed/features_v1.parquet")
+if not fvpath.exists():
+    raise SystemExit("Missing features_v1.parquet — run Session 10 lab or homework.")
+
+fv1 = pd.read_parquet(fvpath).sort_values(["ticker","date"])
+macro = pd.concat([vix.rename(columns={"value":"vix"}).drop(columns="series_id"),
+                   fed.rename(columns={"value":"fedfunds"}).drop(columns="series_id")], axis=0)
+# Pivot macro wide
+macro_wide = (pd.concat([
+    vix.assign(var="vix").rename(columns={"value":"val"}),
+    fed.assign(var="fedfunds").rename(columns={"value":"val"})
+]) .pivot_table(index="date", columns="var", values="val").reset_index())
+
+enriched = fv1.merge(macro_wide, on="date", how="left")
+enriched[["vix","fedfunds"]] = enriched[["vix","fedfunds"]].astype("float32")
+enriched.to_parquet("data/processed/features_v1_ext.parquet", compression="zstd", index=False)
+print("Wrote data/processed/features_v1_ext.parquet", enriched.shape)
+enriched.head(5)
+```
+
+---
+
+## Wrap‑up
+
+* You built a **retrying, cached** API client, stored macro data in **SQLite**, and aligned it by date.
+* Secrets live in **`.env`** (never committed).
+* Enriched features are saved for modeling later.
+
+---
+
+## Homework (due before Session 12)
+
+**Goal:** Add **one more external series** (your choice) via FRED and keep everything cached and reproducible.
+
+### A. Script: `scripts/get_macro.py`
+
+```python
+#!/usr/bin/env python
+import os, json, time, hashlib, pandas as pd, sqlite3
+from pathlib import Path
+import requests
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.getenv("FRED_API_KEY","").strip()
+BASE = "https://api.stlouisfed.org/fred/series/observations"
+
+def sess():
+    s = requests.Session()
+    s.headers.update({"User-Agent":"dspt-class/1.0"})
+    s.mount("https://", HTTPAdapter(max_retries=Retry(total=3, backoff_factor=0.5,
+                                                      status_forcelist=[429,500,502,503,504])))
+    return s
+
+def ckey(url, params):
+    raw = url + "?" + "&".join(f"{k}={params[k]}" for k in sorted(params))
+    return hashlib.sha1(raw.encode()).hexdigest()
+
+def cached_get(url, params, ttl=86400):
+    key = ckey(url, params); p = Path(f".cache/api/{key}.json")
+    if p.exists() and (time.time() - p.stat().st_mtime < ttl):
+        return json.loads(p.read_text())
+    r = sess().get(url, params=params, timeout=20); r.raise_for_status()
+    data = r.json(); p.write_text(json.dumps(data)); return data
+
+def fetch_series(series_id, start="2015-01-01"):
+    if not API_KEY: raise SystemExit("Set FRED_API_KEY in .env")
+    params = {"series_id":series_id, "api_key":API_KEY, "file_type":"json", "observation_start":start}
+    data = cached_get(BASE, params)
+    df = pd.DataFrame(data["observations"])[["date","value"]]
+    df["date"] = pd.to_datetime(df["date"])
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df["series_id"] = series_id
+    return df.dropna()
+
+def main(series_id):
+    df = fetch_series(series_id)
+    con = sqlite3.connect("data/prices.db")
+    con.execute("""CREATE TABLE IF NOT EXISTS macro_series(
+        series_id TEXT, date TEXT, value REAL, PRIMARY KEY(series_id,date))""")
+    df.to_sql("macro_series", con, if_exists="append", index=False)
+    con.commit(); con.close()
+    print(f"Stored {series_id}: {len(df)} rows")
+
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--series-id", required=True)
+    ap.add_argument("--start", default="2015-01-01")
+    args = ap.parse_args()
+    main(args.series_id)
+```
+
+Run example:
+
+```bash
+%%bash
+chmod +x scripts/get_macro.py
+python scripts/get_macro.py --series-id DGS10   # 10‑Year Treasury Constant Maturity Rate
+```
+
+### B. Enrich features with your new series
+
+```python
+import pandas as pd, sqlite3
+fv = pd.read_parquet("data/processed/features_v1.parquet")
+con = sqlite3.connect("data/prices.db")
+macro = pd.read_sql_query("SELECT series_id, date, value FROM macro_series", con, parse_dates=["date"])
+con.close()
+wide = macro.pivot_table(index="date", columns="series_id", values="value").reset_index()
+out = fv.merge(wide, on="date", how="left")
+out.to_parquet("data/processed/features_v1_ext.parquet", compression="zstd", index=False)
+print("Wrote features_v1_ext.parquet with extra series:", out.shape)
+```
+
+### C. Short test: `tests/test_macro_join.py`
+
+```python
+import pandas as pd
+def test_enriched_has_macro():
+    df = pd.read_parquet("data/processed/features_v1_ext.parquet")
+    assert "date" in df and "ticker" in df
+    assert df.filter(regex="^(VIXCLS|DGS10|FEDFUNDS)$").shape[1] >= 1
+```
+
+Run:
+
+```bash
+%%bash
+pytest -q
+```
+
+---
+

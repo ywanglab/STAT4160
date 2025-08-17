@@ -1,0 +1,527 @@
+---
+title: "Session 26 — In‑class Presentations & Continuation Pla"
+---
+Below is a complete lecture package for **Session 26 — In‑class Presentations & Continuation Plan** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code** (presentation checklists, peer‑feedback forms, automated backlog builder, issue templates, and a hand‑off zip), plus **homework with code** to tag `v1.0`, publish a continuation backlog, and prepare for Spring symposium work.
+
+> **Assumptions**
+> • You have the repo mounted in Drive (e.g., `unified-stocks-teamX`).
+> • Poster draft and abstract exist from Session 25 (or will be created today).
+> • This is **educational**; nothing here is trading advice.
+
+---
+
+## Session 26 — In‑class Presentations & Continuation Plan (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Deliver a focused **10‑minute talk** that communicates problem, methods, results, and limits.
+2. Provide / receive **actionable peer feedback**.
+3. Convert results into a **prioritized backlog** (issues + milestones) to continue toward the symposium.
+4. Produce a **handoff bundle** (poster, abstract, artifacts, manifest, backlog) and finalize `v1.0`.
+
+---
+
+## Agenda (75 min)
+
+* **(5 min)** Setup & expectations (timing, feedback rules, rubric).
+* **(30–40 min)** **Talks** (≈10 min per team + 5 min Q\&A — adapt to class size).
+* **(20 min)** **In‑class lab**: feedback capture → automated backlog + issues → handoff zip.
+* **(10 min)** Wrap‑up: commit plan, roles, milestones; homework brief.
+
+*If you have a single team, do a 15–20 min talk and deeper Q\&A; then use all remaining time for backlog + handoff.*
+
+---
+
+## Slides — talking points (drop into your deck)
+
+### Presentation structure (10 minutes)
+
+* **Title & claim (30s):** One sentence problem + one sentence result.
+* **Setup (1–2 min):** Data (tickers/dates), leakage controls (rolling origin + embargo), metrics (MAE, sMAPE).
+* **Methods (2–3 min):** Baselines, GRU/TS‑GPT, any ablations.
+* **Results (3–4 min):** Show 3 figures (model comparison, regime breakdown, ablation). Give **one takeaway each**.
+* **Limits & ethics (1 min):** Non‑stationarity, survivorship bias; not trading advice.
+* **Next steps (30–60s):** 3 prioritized items and why.
+
+### Q\&A best practices
+
+* Repeat the question; answer with evidence; admit unknowns; propose next test.
+* Avoid “we might” without a concrete follow‑up; anchor to a metric, data slice, or ablation.
+
+### Reproducibility handoff (what the next team needs)
+
+* **Exact commands** (fresh‑clone steps), **versions** (lockfile), **manifests**, **data checksums**, and **known deviations**.
+* A backlog labeled by **Data / Features / Modeling / Evaluation / Ops / Docs**.
+
+---
+
+## In‑class lab (20 min, Colab‑friendly)
+
+> Run each block as its **own cell**. Update `REPO_NAME` if needed.
+
+### 0) Mount Drive & cd into your repo
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME = "unified-stocks-teamX"  # <- change
+BASE_DIR  = "/content/drive/MyDrive/dspt25"
+REPO_DIR  = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, sys, platform, time
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in ["reports","docs/figs","scripts","tests",".github/ISSUE_TEMPLATE"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd(), "| Python:", sys.version.split()[0], "| OS:", platform.system())
+```
+
+### 1) Presentation checklist & peer‑feedback forms
+
+Create a presenter checklist and a peer feedback form you can fill post‑talk.
+
+```bash
+%%bash
+cat > docs/present_checklist.md << 'MD'
+# Presentation Checklist (10 minutes total)
+- [ ] Title & one‑sentence claim (≤ 30s)
+- [ ] Data & leakage controls (1–2 min): static universe, rolling origin, embargo
+- [ ] Methods (2–3 min): baselines; GRU/TS‑GPT; ablations
+- [ ] Results (3–4 min): 3 figures with one takeaway each
+- [ ] Limits & ethics (1 min)
+- [ ] Next steps (3 bullets; priority + rationale)
+MD
+
+cat > docs/peer_feedback_template.md << 'MD'
+# Peer Feedback (fill one per talk)
+**One insight:**  
+**One question:**  
+**One suggestion:**  
+**Clarity (1–5):**  
+**Rigor (1–5):**  
+**Reproducibility (1–5):**  
+**Top risk:**  
+MD
+echo "Wrote docs/present_checklist.md and docs/peer_feedback_template.md"
+```
+
+### 2) Automated **continuation backlog** builder
+
+This script looks at your saved outputs (model comparison, regime breakdown, ablation summaries, predictions) and **generates**:
+• `NEXT_STEPS.md` (prioritized checklists),
+• `reports/issue_backlog.csv` (ready to paste into GitHub as issues),
+• `docs/figs/opportunity_by_ticker.png` (where to focus),
+• `reports/roadmap_milestones.md` (3‑milestone mini‑roadmap).
+
+```bash
+%%bash
+cat > scripts/make_continuation_backlog.py << 'PY'
+#!/usr/bin/env python
+from __future__ import annotations
+import os, math, json
+from pathlib import Path
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+
+FIGDIR = Path("docs/figs"); FIGDIR.mkdir(parents=True, exist_ok=True)
+REPDIR = Path("reports"); REPDIR.mkdir(parents=True, exist_ok=True)
+
+def _safe_read_csv(p): 
+    p=Path(p); 
+    return pd.read_csv(p) if p.exists() else None
+def _safe_read_parquet(p):
+    p=Path(p)
+    if p.exists():
+        try: return pd.read_parquet(p)
+        except Exception: return None
+    return None
+def _mae(a,b): 
+    a=np.asarray(a); b=np.asarray(b); 
+    return float(np.mean(np.abs(a-b)))
+
+def load_artifacts():
+    comp = _safe_read_csv("reports/model_compare.csv")
+    regime = _safe_read_csv("reports/regime_breakdown.csv")
+    ab = _safe_read_csv("reports/ablation_clean.csv")
+    lin = _safe_read_csv("reports/cli_linlags.csv")      # per-row predictions if available
+    tsgpt_pred = _safe_read_csv("reports/tsgpt_preds_split1.csv")
+    feats = None
+    for p in ["data/processed/features_v1.parquet","data/processed/returns.parquet"]:
+        feats = _safe_read_parquet(p) or feats
+    return comp, regime, ab, lin, tsgpt_pred, feats
+
+def opportunity_by_ticker(lin, tsgpt_pred):
+    """
+    Compute per-ticker 'opportunity' = MAE_lin - MAE_model.
+    If TS-GPT preds unavailable, returns lin MAE only.
+    """
+    if lin is None or not {"ticker","y_true","yhat"}.issubset(lin.columns):
+        return pd.DataFrame(columns=["ticker","mae_lin","mae_model","opportunity"])
+    lin_mae = lin.groupby("ticker").apply(lambda g: _mae(g["y_true"], g["yhat"])).rename("mae_lin").reset_index()
+    if tsgpt_pred is not None and {"ticker","y_true","yhat"}.issubset(tsgpt_pred.columns):
+        mod_mae = tsgpt_pred.groupby("ticker").apply(lambda g: _mae(g["y_true"], g["yhat"])).rename("mae_model").reset_index()
+        out = lin_mae.merge(mod_mae, on="ticker", how="left")
+        out["opportunity"] = out["mae_lin"] - out["mae_model"]
+    else:
+        out = lin_mae
+        out["mae_model"] = np.nan
+        out["opportunity"] = np.nan
+    return out.sort_values("opportunity", ascending=False)
+
+def infer_actions(comp, regime, ab, opp):
+    actions = {"Data":[], "Features":[], "Modeling":[], "Evaluation":[], "Ops":[], "Docs":[]}
+    # Baseline vs model
+    if comp is not None and "val_mae" in comp.columns:
+        comp_sorted = comp.sort_values("val_mae")
+        best = comp_sorted.iloc[0]["model"]
+        actions["Modeling"].append(f"Promote `{best}` as current champion; lock its config in config/config.yaml")
+    # Regime pain points
+    if regime is not None and "regime" in regime.columns:
+        worst = regime.sort_values("mae", ascending=False).iloc[0]["regime"]
+        actions["Features"].append(f"Add regime-aware features or losses (worst regime: **{worst}**); try quantile loss")
+        actions["Evaluation"].append("Report metrics **by regime** in the Quarto report (not only aggregate)")
+    # Ablation hints
+    if ab is not None and {"ctx","n_head","val_mae"}.issubset(ab.columns):
+        best_row = ab.sort_values("val_mae").iloc[0]
+        actions["Modeling"].append(f"Use context={int(best_row['ctx'])}, heads={int(best_row['n_head'])} as starting point; test +/- 50% context")
+    else:
+        actions["Modeling"].append("Run minimal ablation (context {32,64,96}, heads {2,4}) with fixed seed")
+    # Opportunity by ticker
+    if len(opp):
+        tops = opp.head(5)["ticker"].tolist()
+        actions["Data"].append(f"Deep-dive top underperformers or highest-opportunity tickers: {', '.join(map(str,tops))}")
+        actions["Modeling"].append("Consider per-ticker adapters or fine-tuning on worst tickers")
+    # Ops & Docs
+    actions["Ops"] += [
+        "Schedule CI task to rebuild features weekly (dry run only)",
+        "Cache data checksums and fail CI if changed unexpectedly"
+    ]
+    actions["Docs"] += [
+        "Expand Model Card with training data dates and static universe rationale",
+        "Add 'How to reproduce' section with exact CLI commands"
+    ]
+    return actions
+
+def write_next_steps(actions):
+    md = ["# NEXT_STEPS (Symposium Continuation Backlog)\n"]
+    md.append("_Prioritize P0 (this week), P1 (this month), P2 (nice-to-have)._ \n")
+    for cat in ["Data","Features","Modeling","Evaluation","Ops","Docs"]:
+        md.append(f"\n## {cat}\n")
+        for a in actions.get(cat, []):
+            md.append(f"- [ ] {a}  \n  - Priority: P1  \n  - Owner: TBA  \n  - Evidence: link to figure/result")
+    Path("NEXT_STEPS.md").write_text("\n".join(md))
+    return "NEXT_STEPS.md"
+
+def write_issue_csv(actions):
+    rows=[]
+    for cat, items in actions.items():
+        for a in items:
+            rows.append({
+                "title": f"[{cat}] {a[:80]}",
+                "body": a + "\n\nSee NEXT_STEPS.md",
+                "labels": f"{cat.lower()},backlog",
+                "milestone": "Symposium"
+            })
+    df = pd.DataFrame(rows)
+    out = REPDIR/"issue_backlog.csv"
+    df.to_csv(out, index=False)
+    return out
+
+def plot_opportunity(opp):
+    if not len(opp): return None
+    opp2 = opp.copy()
+    opp2["label"] = opp2["ticker"].astype(str)
+    plt.figure(figsize=(7.2,3.4))
+    x = np.arange(len(opp2))
+    vals = opp2["opportunity"].values
+    plt.bar(x, vals)
+    plt.xticks(x, opp2["label"].tolist(), rotation=45, ha="right")
+    plt.axhline(0, lw=1)
+    plt.ylabel("MAE_baseline - MAE_model")
+    plt.title("Opportunity by ticker (positive = model beats baseline)")
+    plt.tight_layout()
+    fn = FIGDIR/"opportunity_by_ticker.png"
+    plt.savefig(fn, dpi=160); plt.close()
+    return fn
+
+def write_roadmap():
+    text = """# Mini Roadmap (to Spring Symposium)
+
+## Milestone M1 (2–3 weeks): Stabilize champion model & metrics
+- [ ] Lock config; re‑run split1 with seeds; freeze artifacts
+- [ ] Regime‑wise reporting in Quarto
+- [ ] Draft updated poster figures
+
+## Milestone M2 (2–3 weeks): Targeted improvements
+- [ ] Focus on top 3 tickers/regimes with worst performance
+- [ ] Small ablation: context ±50%, heads {2,4}, dropout {0.0,0.1}
+- [ ] Optional: add one macro series (rates or volatility)
+
+## Milestone M3 (1–2 weeks): Packaging & rehearsal
+- [ ] Update NEXT_STEPS and close P0 tasks
+- [ ] Rehearse 10‑min talk; finalize poster
+"""
+    p = REPDIR/"roadmap_milestones.md"
+    p.write_text(text); return p
+
+def main():
+    comp, regime, ab, lin, tsgpt_pred, feats = load_artifacts()
+    opp = opportunity_by_ticker(lin, tsgpt_pred)
+    fn = plot_opportunity(opp)
+    actions = infer_actions(comp, regime, ab, opp)
+    ns = write_next_steps(actions)
+    csv = write_issue_csv(actions)
+    rm = write_roadmap()
+    print("Wrote", ns, csv, rm, "and figure:", fn)
+
+if __name__ == "__main__":
+    main()
+PY
+chmod +x scripts/make_continuation_backlog.py
+python scripts/make_continuation_backlog.py
+ls -1 NEXT_STEPS.md reports/issue_backlog.csv reports/roadmap_milestones.md || true
+```
+
+### 3) Create **GitHub issue templates** and **PR template**
+
+These help structure work after today.
+
+```bash
+%%bash
+cat > .github/ISSUE_TEMPLATE/feature_request.md << 'MD'
+---
+name: "Feature request / Research task"
+about: Propose a new feature or experiment
+labels: "features,backlog"
+---
+**What & why**
+- 
+
+**Definition of done**
+- 
+
+**Evidence / figure link**
+- 
+
+**Risks / leakage concerns**
+- 
+MD
+
+cat > .github/ISSUE_TEMPLATE/bug_report.md << 'MD'
+---
+name: Bug report
+about: Report a reproducibility or CI failure
+labels: "bug,ops"
+---
+**What happened**
+- 
+
+**Repro steps**
+- 
+
+**Expected vs actual**
+- 
+
+**Logs / manifest snippet**
+- 
+MD
+
+cat > .github/PULL_REQUEST_TEMPLATE.md << 'MD'
+## What does this PR change?
+-
+
+## How to reproduce the results (exact commands)
+-
+
+## Checklist
+- [ ] CI green
+- [ ] Updated report/figures if metrics changed
+- [ ] No leakage introduced; tests still pass
+- [ ] Linked issues closed
+MD
+echo "Wrote issue and PR templates."
+```
+
+### 4) Handoff bundle (zip)
+
+Package poster, abstract, manifest, backlog, figures, and key reports into a single zip to share.
+
+```bash
+%%bash
+cat > scripts/make_handoff_zip.py << 'PY'
+#!/usr/bin/env python
+from pathlib import Path
+import zipfile, time
+
+INCLUDE = [
+  "README.md",
+  "CHANGELOG.md",
+  "NEXT_STEPS.md",
+  "reports/poster.html",
+  "reports/abstract.md",
+  "reports/manifest.json",
+  "reports/model_compare.csv",
+  "reports/regime_breakdown.csv",
+  "reports/ablation_clean.csv",
+  "reports/tsgpt_split1_metrics.csv",
+  "reports/cli_linlags.csv",
+  "reports/roadmap_milestones.md",
+  "docs/figs/model_compare.png",
+  "docs/figs/regime_breakdown.png",
+  "docs/figs/ablation_dropout_0_0.png",
+  "docs/figs/ablation_dropout_0_1.png",
+  "docs/figs/opportunity_by_ticker.png"
+]
+
+def main():
+  Path("dist").mkdir(exist_ok=True)
+  stamp = time.strftime("%Y%m%d_%H%M%S")
+  out = Path("dist")/f"handoff_session26_{stamp}.zip"
+  with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+    for p in INCLUDE:
+      fp = Path(p)
+      if fp.exists():
+        z.write(fp, arcname=str(fp))
+  print("Wrote", out)
+
+if __name__ == "__main__":
+  main()
+PY
+chmod +x scripts/make_handoff_zip.py
+python scripts/make_handoff_zip.py
+ls -l dist | head -n 3
+```
+
+### 5) Makefile additions (quality of life)
+
+```make
+# Append to Makefile
+.PHONY: backlog handoff
+backlog: ## Generate NEXT_STEPS and issue_backlog.csv
+\tpython scripts/make_continuation_backlog.py
+
+handoff: ## Build a zip with poster, abstract, manifest, backlog, figures
+\tpython scripts/make_handoff_zip.py
+```
+
+### 6) Tiny test: ensure backlog artifacts exist
+
+```bash
+%%bash
+cat > tests/test_backlog_exists.py << 'PY'
+from pathlib import Path
+def test_backlog_artifacts():
+    assert Path("NEXT_STEPS.md").exists(), "Run: make backlog"
+    assert Path("reports/issue_backlog.csv").exists(), "Missing reports/issue_backlog.csv"
+PY
+pytest -q -k backlog_exists || true
+```
+
+---
+
+## Wrap‑up (10 min)
+
+* Show `NEXT_STEPS.md` highlights (3 P0 tasks). Assign **owners** and tentative **dates**.
+* Confirm your **handoff zip** exists in `dist/`.
+* Agree on **communication cadence** (weekly check‑in, single source of truth is the repo).
+
+---
+
+## Homework (final)
+
+**Deliverables (push before tagging):**
+
+1. **Tag `v1.0`** (final poster & abstract committed).
+2. **Continuation backlog** present: `NEXT_STEPS.md` + `reports/issue_backlog.csv`.
+3. **Handoff zip** built in `dist/` (commit the manifest of its contents; the zip itself can be attached to a GitHub Release).
+4. Open **3–5 GitHub issues** from the CSV (copy/paste), assign labels & owners, and add them to a **Project board** (optional via GitHub UI).
+
+### A. Commands to finalize and tag `v1.0`
+
+```bash
+%%bash
+# Ensure poster & abstract render and backlog exists
+make poster || echo "Render poster locally if Quarto missing."
+make backlog
+git add NEXT_STEPS.md reports/issue_backlog.csv
+git commit -m "docs: NEXT_STEPS and backlog for continuation"
+git tag -a v1.0 -m "Final course release (poster, abstract, backlog)"
+git push origin v1.0
+```
+
+### B. (Optional) Create issues automatically if GitHub CLI (`gh`) is available
+
+```bash
+%%bash
+# Requires: gh auth login (once)
+python - <<'PY'
+import csv, os, subprocess
+path = "reports/issue_backlog.csv"
+if not os.path.exists(path):
+    raise SystemExit("Missing reports/issue_backlog.csv")
+with open(path) as f:
+    rows = list(csv.DictReader(f))
+for r in rows[:5]:  # open first 5 to avoid spam
+    title = r["title"]; body = r["body"]; labels = r["labels"]
+    cmd = ["gh","issue","create","--title",title,"--body",body,"--label",labels]
+    print(" ".join(cmd))
+    try:
+        subprocess.check_call(cmd)
+    except Exception as e:
+        print("Skipping (gh not configured):", e)
+PY
+```
+
+### C. (Optional) Project board starter (manual UI or `gh project`)
+
+* Columns: **Backlog**, **In progress**, **Review**, **Done**.
+* Add automation: close issue → moves to **Done**.
+
+### D. Handoff verification script
+
+Run once to confirm the bundle:
+
+```bash
+%%bash
+make handoff
+python - <<'PY'
+from zipfile import ZipFile; import glob
+z = sorted(glob.glob("dist/handoff_session26_*.zip"))[-1]
+with ZipFile(z) as f:
+    print("ZIP entries:", len(f.infolist()))
+PY
+```
+
+---
+
+## Instructor facilitation tips
+
+* Timebox talks strictly; use a soft chime at 9 minutes.
+* For feedback, enforce “one insight, one question, one suggestion”.
+* Push teams to **prioritize** (P0 vs P1 vs P2); avoid “we will do everything.”
+* If results are weak, frame a **credible plan**: fix leakage risks, add robust baseline, improve regime analysis.
+
+---
+
+## Grading (pass / revise)
+
+* **Talk delivered** within 10 minutes; Q\&A handled professionally.
+* **Backlog artifacts** exist and are sensible (`NEXT_STEPS.md`, `issue_backlog.csv`, roadmap).
+* **Handoff zip** produced and contains poster, abstract, figures, and manifest.
+* Repo **tags `v1.0`**; README includes a short **“Next Steps”** section (can link to `NEXT_STEPS.md`).
+
+---
+
+### Appendix — 1‑slide talk template (you can paste into your deck)
+
+* **Title & claim**
+* **Data & controls** (static tickers; rolling origin + embargo)
+* **Method** (lin\_lags vs GRU vs TS‑GPT; loss)
+* **Results** (3 figs; bold takeaways)
+* **Limits & ethics**
+* **Next steps (3 bullets)**
+
+This completes Session 26 and hands off a clean, reproducible project with a realistic continuation plan for the Spring symposium.

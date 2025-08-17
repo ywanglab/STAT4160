@@ -1,0 +1,310 @@
+---
+title: "Rolling Windows, Resampling, and Leakage‑Safe Features"
+---
+
+Fantastic—thanks for pasting the full course plan. Below are **three complete 75‑minute lecture packages** for **Sessions 10, 11, and 12**, each with: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. They assume you completed Session 9 and have `data/processed/prices.parquet` and `data/processed/returns.parquet`. Every lab includes fallbacks so you can run them even if files are missing.
+
+> **Educational use only — not trading advice.**
+> Python‑only. Colab + Drive assumed. If you don’t already have the repo and folders used below, the first cells create them.
+
+---
+
+# **Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)**
+
+### Learning goals
+
+By the end of class students can:
+
+1. Use `groupby('ticker')` with `shift`, `rolling`, `expanding`, and `ewm` to engineer features **without leakage**.
+2. Resample safely (daily → weekly/monthly) and understand how to aggregate OHLC + volume.
+3. Produce a tidy `features_v1.parquet` with sensible dtypes.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: leakage‑free features; lags vs rolling; resampling patterns
+* **(10 min)** Slides: common pitfalls (min\_periods, alignment, mixed frequencies)
+* **(35 min)** **In‑class lab**: load returns → build features → (optional) weekly aggregates → write `features_v1.parquet`
+* **(10 min)** Wrap‑up + homework brief
+* **(10 min)** Buffer
+
+---
+
+## Slide talking points
+
+**Feature timing = everything**
+
+* Predict $r_{t+1}$ using info up to and including **time t**.
+* **Rule:** compute any rolling stat at $t$ from data $\le t$, then **shift by 1** if that stat includes the current target variable.
+
+**Core pandas patterns**
+
+* **Lags:** `s.shift(k)` (past), never negative shifts.
+* **Rolling:** `s.rolling(W, min_periods=W).agg(...)` and then **no extra shift** if the rolling window ends at $t$.
+* **Expanding:** long‑memory features (e.g., expanding mean).
+* **EWM:** `s.ewm(span=W, adjust=False).mean()` for decayed memory.
+
+**Resampling safely**
+
+* Use `groupby('ticker').resample('W-FRI', on='date')` then aggregate:
+
+  * OHLC: `first/open`, `max/high`, `min/low`, `last/adj_close`
+  * Volume: `sum`
+  * Returns: compound via `np.log(prod(1+r))` or sum of log returns.
+
+**Dtypes**
+
+* `ticker` = `category`; calendar ints `int8`; features `float32` (fine for class).
+
+---
+
+## In‑class lab (Colab‑friendly)
+
+> Run each block as its own cell. Adjust `REPO_NAME` as needed.
+
+### 0) Setup
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME  = "unified-stocks-teamX"   # <- change if needed
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, numpy as np, pandas as pd
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in ["data/raw","data/processed","reports","scripts","tests"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Load inputs or build small fallbacks
+
+```python
+from pathlib import Path
+rng = np.random.default_rng(0)
+
+# Fallback synthetic if missing
+def make_synth_prices():
+    dates = pd.bdate_range("2022-01-03", periods=300)
+    frames=[]
+    for tkr in ["AAPL","MSFT","GOOGL","AMZN","NVDA"]:
+        base = 100 + rng.normal(0,1, size=len(dates)).cumsum()
+        d = pd.DataFrame({
+            "date": dates, "ticker": tkr,
+            "adj_close": np.maximum(base, 1.0).astype("float32"),
+            "volume": rng.integers(1e6, 5e6, size=len(dates)).astype("int64")
+        })
+        frames.append(d)
+    prices = pd.concat(frames, ignore_index=True)
+    prices["ticker"] = prices["ticker"].astype("category")
+    prices.to_parquet("data/processed/prices.parquet", index=False)
+    return prices
+
+ppath = Path("data/processed/prices.parquet")
+rpath = Path("data/processed/returns.parquet")
+
+if ppath.exists():
+    prices = pd.read_parquet(ppath)
+else:
+    prices = make_synth_prices()
+
+# Build returns if missing (from Session 9 logic)
+if rpath.exists():
+    returns = pd.read_parquet(rpath)
+else:
+    df = prices.sort_values(["ticker","date"]).copy()
+    df["log_return"] = (df.groupby("ticker")["adj_close"]
+                        .apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True))
+    df["r_1d"] = df.groupby("ticker")["log_return"].shift(-1)
+    df["weekday"] = df["date"].dt.weekday.astype("int8")
+    df["month"]   = df["date"].dt.month.astype("int8")
+    returns = df[["date","ticker","log_return","r_1d","weekday","month"]].copy()
+    returns["ticker"] = returns["ticker"].astype("category")
+    returns.to_parquet("data/processed/returns.parquet", index=False)
+
+prices.head(3), returns.head(3)
+```
+
+### 2) Rolling, lag, expanding, ewm features (no leakage)
+
+```python
+def build_features(ret: pd.DataFrame, windows=(5,10,20), add_rsi=True):
+    g = ret.sort_values(["ticker","date"]).groupby("ticker", group_keys=False)
+    out = ret.copy()
+
+    # Lags of log_return (past info)
+    for k in [1,2,3]:
+        out[f"lag{k}"] = g["log_return"].shift(k)
+
+    # Rolling mean/std and z-score of returns using past W days **including today**,
+    # which is fine because target is r_{t+1}. No extra shift needed.
+    for W in windows:
+        rm = g["log_return"].rolling(W, min_periods=W).mean()
+        rsd= g["log_return"].rolling(W, min_periods=W).std()
+        out[f"roll_mean_{W}"] = rm.reset_index(level=0, drop=True)
+        out[f"roll_std_{W}"]  = rsd.reset_index(level=0, drop=True)
+        out[f"zscore_{W}"]    = (out["log_return"] - out[f"roll_mean_{W}"]) / (out[f"roll_std_{W}"] + 1e-8)
+
+    # Expanding stats (from start to t): long-memory
+    out["exp_mean"] = g["log_return"].expanding(min_periods=20).mean().reset_index(level=0, drop=True)
+    out["exp_std"]  = g["log_return"].expanding(min_periods=20).std().reset_index(level=0, drop=True)
+
+    # Exponential weighted (decayed memory)
+    for W in [10,20]:
+        out[f"ewm_mean_{W}"] = g["log_return"].apply(lambda s: s.ewm(span=W, adjust=False).mean())
+        out[f"ewm_std_{W}"]  = g["log_return"].apply(lambda s: s.ewm(span=W, adjust=False).std())
+
+    # Optional RSI(14) using returns sign proxy (toy version)
+    if add_rsi:
+        def rsi14(s):
+            delta = s.diff()
+            up = delta.clip(lower=0).ewm(alpha=1/14, adjust=False).mean()
+            dn = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False).mean()
+            rs = up / (dn + 1e-12)
+            return 100 - (100 / (1 + rs))
+        out["rsi_14"] = g["adj_close"].apply(rsi14) if "adj_close" in out else g["log_return"].apply(rsi14)
+
+    # Cast dtypes
+    for c in out.columns:
+        if c not in ["date","ticker","weekday","month"] and pd.api.types.is_float_dtype(out[c]):
+            out[c] = out[c].astype("float32")
+    out["ticker"] = out["ticker"].astype("category")
+    return out
+
+# Merge adj_close and volume into returns (if not already)
+ret2 = returns.merge(prices[["ticker","date","adj_close","volume"]], on=["ticker","date"], how="left")
+features = build_features(ret2, windows=(5,10,20), add_rsi=True)
+features.head(5)
+```
+
+### 3) (Optional) Weekly resampling demo (OHLCV + returns)
+
+```python
+# Safe weekly resample per ticker, aggregating OHLCV and log returns
+def weekly_ohlcv(df):
+    df = df.sort_values(["ticker","date"]).copy()
+    df["date"] = pd.to_datetime(df["date"])
+    res=[]
+    for tkr, g in df.groupby("ticker"):
+        wk = (g.resample("W-FRI", on="date")
+              .agg({"adj_close":"last","volume":"sum"}).dropna().reset_index())
+        wk["ticker"] = tkr
+        # Weekly log return = log(adj_close_t / adj_close_{t-1})
+        wk = wk.sort_values("date")
+        wk["wk_log_return"] = np.log(wk["adj_close"]/wk["adj_close"].shift(1))
+        res.append(wk)
+    return pd.concat(res, ignore_index=True)
+
+weekly = weekly_ohlcv(prices[["ticker","date","adj_close","volume"]])
+weekly.head(5)
+```
+
+### 4) Save `features_v1.parquet` (+ optional partition by ticker)
+
+```python
+# Select a compact set to start with
+keep = ["date","ticker","log_return","r_1d","weekday","month",
+        "lag1","lag2","lag3",
+        "roll_mean_5","roll_std_5","zscore_5",
+        "roll_mean_10","roll_std_10","zscore_10",
+        "roll_mean_20","roll_std_20","zscore_20",
+        "ewm_mean_10","ewm_std_10","ewm_mean_20","ewm_std_20",
+        "exp_mean","exp_std","rsi_14","adj_close","volume"]
+
+keep = [c for c in keep if c in features.columns]
+fv1 = features.loc[:, keep].dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+fv1["weekday"] = fv1["weekday"].astype("int8")
+fv1["month"]   = fv1["month"].astype("int8")
+fv1["ticker"]  = fv1["ticker"].astype("category")
+
+fv1_path = "data/processed/features_v1.parquet"
+fv1.to_parquet(fv1_path, compression="zstd", index=False)
+print("Wrote:", fv1_path, "| rows:", len(fv1), "| cols:", len(fv1.columns))
+
+# Optional partition
+part_dir = "data/processed/features_v1_by_ticker"
+try:
+    fv1.to_parquet(part_dir, compression="zstd", index=False, engine="pyarrow", partition_cols=["ticker"])
+    print("Wrote partitioned:", part_dir)
+except TypeError:
+    print("Partition writing skipped (engine missing).")
+```
+
+---
+
+## Wrap‑up (what to emphasize)
+
+* For **next‑day** targets $r_{t+1}$, rolling stats up to **t** are fine; never use future rows.
+* Be explicit about **`min_periods`** to avoid unstable early rows.
+* Keep features small and typed; document your cookbook in the repo.
+
+---
+
+## Homework (due before Session 11)
+
+**Goal:** Add an **automated leakage check** and re‑run feature build.
+
+### A. Script: `scripts/build_features_v1.py`
+
+```python
+#!/usr/bin/env python
+import numpy as np, pandas as pd, pathlib
+def build():
+    p = pathlib.Path("data/processed/returns.parquet")
+    if not p.exists(): raise SystemExit("Missing returns.parquet — finish Session 9.")
+    prices = pd.read_parquet("data/processed/prices.parquet")
+    ret = pd.read_parquet(p)
+    ret2 = ret.merge(prices[["ticker","date","adj_close","volume"]], on=["ticker","date"], how="left")
+    # (Paste the build_features() from class)
+    # ...
+    fv1 = build_features(ret2)
+    keep = ["date","ticker","log_return","r_1d","weekday","month",
+            "lag1","lag2","lag3","roll_mean_20","roll_std_20","zscore_20",
+            "ewm_mean_20","ewm_std_20","exp_mean","exp_std","adj_close","volume"]
+    keep = [c for c in keep if c in fv1.columns]
+    fv1 = fv1[keep].dropna().sort_values(["ticker","date"])
+    fv1.to_parquet("data/processed/features_v1.parquet", compression="zstd", index=False)
+    print("Wrote data/processed/features_v1.parquet", fv1.shape)
+if __name__ == "__main__":
+    build()
+```
+
+Make executable:
+
+```bash
+%%bash
+chmod +x scripts/build_features_v1.py
+python scripts/build_features_v1.py
+```
+
+### B. Test: `tests/test_no_lookahead.py`
+
+```python
+import pandas as pd, numpy as np
+
+def test_features_no_lookahead():
+    df = pd.read_parquet("data/processed/features_v1.parquet").sort_values(["ticker","date"])
+    # For each ticker, recompute roll_mean_20 with an independent method and compare
+    for tkr, g in df.groupby("ticker"):
+        s = g["log_return"]
+        rm = s.rolling(20, min_periods=20).mean()
+        # Our feature should equal this rolling mean (within tol)
+        if "roll_mean_20" in g:
+            assert np.allclose(g["roll_mean_20"].values, rm.values, equal_nan=True, atol=1e-7)
+        # r_1d must be the **lead** of log_return
+        assert g["r_1d"].shift(1).iloc[21:].equals(g["log_return"].iloc[21:])
+```
+
+Run:
+
+```bash
+%%bash
+pytest -q
+```
+
+---
+

@@ -1,0 +1,734 @@
+---
+title: "Session 2 — Git essentials & Git‑LFS"
+---
+
+> **Security note:** Today we'll push from Colab using a **short‑lived GitHub personal access token (PAT)** entered interactively. **Never** hard‑code or commit tokens.
+
+------------------------------------------------------------------------
+
+## Session 2 --- Git essentials & Git‑LFS (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1.  Explain Git's mental model: working directory → staging → commit; branches and remotes.
+2.  Create a feature branch, commit changes, and push to GitHub from Colab safely.
+3.  Use **.gitignore** to avoid committing generated artifacts and secrets.
+4.  Install and configure **Git‑LFS**, track large/binary files, and verify tracking.
+5.  Open a **pull request (PR)** and follow review etiquette.
+
+------------------------------------------------------------------------
+
+## Agenda (75 minutes)
+
+-   **(8 min)** Recap & goals; overview of today's workflow
+-   **(12 min)** Slides: Git mental model; branches; remotes; commit hygiene
+-   **(10 min)** Slides: `.gitignore` must‑haves; Git‑LFS (when/why); LFS quotas & pitfalls
+-   **(35 min)** **In‑class lab**: clone → config → branch → `.gitignore` → LFS → sample Parquet → push → PR
+-   **(10 min)** Wrap‑up; troubleshooting; homework briefing
+
+------------------------------------------------------------------------
+
+## Slides
+
+### Git mental model
+
+-   **Working directory** (your files) → `git add` → **staging** → `git commit` → **local history**
+-   **Remote**: GitHub hosts a copy. `git push` publishes commits; `git pull` brings others' changes.
+-   **Branch**: a movable pointer to a chain of commits. Default is `main`. Create **feature branches** for each change.
+
+In Git, a **branch** is essentially just a **movable pointer** to a commit.
+
+------------------------------------------------------------------------
+
+## **1. The simple definition**
+
+-   A branch has a **name** (e.g., `main`, `feature/login`).
+-   That name points to a **specific commit** in your repository.
+-   As you make new commits on that branch, the pointer moves forward.
+
+------------------------------------------------------------------------
+
+## **2. Visual example**
+
+Let’s say your repo looks like this:
+
+```         
+A --- B --- C   ← main
+```
+
+Here:
+
+-   `main` is the branch name.
+-   It points to commit `C`.
+
+If you make a new branch:
+
+``` bash
+git branch feature
+```
+
+Now you have:
+
+```         
+A --- B --- C   ← main, feature
+```
+
+If you **checkout** `feature` and make a commit:
+
+```         
+A --- B --- C   ← main
+             \
+              D   ← feature
+```
+
+-   `feature` moves forward to `D` (new commit).
+-   `main` stays at `C`.
+
+------------------------------------------------------------------------
+
+## **3. HEAD and active branch**
+
+-   `HEAD` is your *current position* — it points to the branch you’re working on.
+-   When you commit, Git moves that branch forward.
+
+------------------------------------------------------------------------
+
+## **4. Why branches matter**
+
+-   Let you work on new features, bug fixes, or experiments **without touching** the main codebase.
+-   Cheap to create and delete — Git branching is just updating a tiny file.
+-   Enable parallel development.
+
+------------------------------------------------------------------------
+
+## **5. Branches vs tags**
+
+-   **Branch** → moves as you commit.
+-   **Tag** → fixed pointer to a commit (used for marking releases).
+
+------------------------------------------------------------------------
+
+💡 Inside `.git/refs/heads/`, each branch is just a plain text file storing a commit hash.
+
+## In `git checkout -b`, the **`-b`** means **“create a new branch”** before checking it out.
+
+### Without `-b`
+
+``` bash
+git checkout branchname
+```
+
+-   Switches to an **existing** branch.
+-   Fails if the branch does not exist.
+
+------------------------------------------------------------------------
+
+### With `-b`
+
+``` bash
+git checkout -b branchname
+```
+
+-   Tells Git: “**make** a branch called `branchname` pointing to the current commit, and then switch to it.”
+-   Fails if the branch **already exists**.
+
+------------------------------------------------------------------------
+
+### Example
+
+If you’re on `main`:
+
+``` bash
+git checkout -b feature-x
+```
+
+Steps Git takes:
+
+1.  Create a new branch pointer `feature-x` → same commit as `main`.
+2.  Move HEAD to `feature-x` (you’re now “on” that branch).
+
+------------------------------------------------------------------------
+
+💡 In newer Git versions, the same idea is expressed with:
+
+``` bash
+git switch -c feature-x   # -c means create
+```
+
+`-b` in `checkout` and `-c` in `switch` both mean **create**.
+
+------------------------------------------------------------------------
+
+### Branch & PR etiquette
+
+-   One feature/change per branch (small, reviewable diffs).
+
+-   Commit messages: *imperative mood*, short subject line (≤ 72 chars), details in body if needed:
+
+    -   `feat: add git-lfs tracking for parquet`
+    -   `docs: add README section on setup`
+    -   `chore: ignore raw data directory`
+
+-   PR description: what/why, testing notes, checklist. Tag your teammate for review.
+
+### `.gitignore` must‑haves
+
+-   **Secrets**: `.env`, API keys (never commit).
+-   **Large/derived artifacts**: raw/interim data, logs, cache, compiled assets.
+-   **Notebooks' checkpoints**: `.ipynb_checkpoints/`.
+-   OS/editor cruft: `.DS_Store` (for Mac), `Thumbs.db` (for Windows), `.vscode/`.
+
+### Git‑LFS
+
+-   Git‑LFS = Large File Storage. Keeps **pointers** in Git; binaries in LFS storage.
+-   Track only what's necessary to version (e.g., *small* processed Parquet samples, posters/PDFs, small models).
+-   **Do not** LFS huge raw data you can re‑download (`make get-data`).
+-   Quotas apply on Git hosting---be selective.
+
+### Safe pushes from Colab
+
+-   Use a **fine‑grained PAT** limited to a single repo with **Contents: Read/Write** + **Pull requests: Read/Write**.
+-   Enter token via `getpass` (not stored). Push using a **temporary URL** (token not saved in `git config`).
+-   After push, **clear cell output**.
+
+------------------------------------------------------------------------
+
+## In‑class lab (35 min)
+
+> **Instructor tip:** Students should have created a repo on GitHub before this lab (e.g., `unified-stocks-teamX`). If not, give them 3 minutes to do so and add their partner as a collaborator.
+
+We'll:
+
+1.  Mount Drive & clone the repo.
+2.  Configure Git identity.
+3.  Create a feature branch.
+4.  Add `.gitignore`.
+5.  Install and configure **Git‑LFS**.
+6.  Track Parquet & DB files; generate a **sample Parquet**.
+7.  Commit & **push from Colab** using a short‑lived PAT.
+8.  Open a PR (via web UI, optional API snippet included).
+
+### 0) Mount Google Drive and set variables
+
+``` python
+# Colab cell
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+# Adjust these two for YOUR repo
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"
+REPO_NAME  = "unified-stocks-teamX"   # e.g., unified-stocks-team1
+
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+CLONE_DIR  = f"{BASE_DIR}/{REPO_NAME}"
+REPO_URL   = f"https://github.com/{REPO_OWNER}/{REPO_NAME}.git"
+
+import os, pathlib
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+```
+
+### 1) Clone the repo (or pull latest if already cloned)
+
+``` python
+import os, subprocess, shutil, pathlib
+
+if not pathlib.Path(CLONE_DIR).exists():
+    !git clone {REPO_URL} {CLONE_DIR}
+else:
+    # If the folder exists, just ensure it's a git repo and pull latest
+    os.chdir(CLONE_DIR)
+    !git status
+    !git pull --ff-only  # ff to avoid diverged branches
+os.chdir(CLONE_DIR)
+print("Working dir:", os.getcwd())
+```
+
+### 2) Configure Git identity (local to this repo)
+
+``` python
+# Replace with your name and school email
+!git config user.name "Your Name"
+!git config user.email "you@example.edu"
+
+!git config --get user.name
+!git config --get user.email
+```
+
+### 3) Create and switch to a feature branch
+
+``` python
+BRANCH = "setup/git-lfs"
+!git checkout -b {BRANCH}
+!git branch --show-current
+```
+
+### 4) Add a robust `.gitignore`
+
+``` python
+gitignore = """\
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Environments & secrets
+.env
+.env.*
+.venv/
+*.pem
+*.key
+
+# Data (raw & interim never committed)
+data/raw/
+data/interim/
+
+# Logs & caches
+logs/
+.cache/
+"""
+open(".gitignore", "w").write(gitignore)
+print(open(".gitignore").read())
+```
+
+### 5) Install and initialize Git‑LFS (Colab)
+
+``` python
+# Install git-lfs on the Colab VM (one-time per runtime): apt-get: advanced package tool(manager)
+!apt-get -y update >/dev/null # refresh vailable packages from the repositories
+!apt-get -y install git-lfs >/dev/null
+!git lfs install
+!git lfs version
+```
+
+### 6) Track Parquet/DB/PDF/model binaries with LFS
+
+``` python
+# Add .gitattributes entries via git lfs track
+!git lfs track "data/processed/*.parquet"
+!git lfs track "data/*.db"
+!git lfs track "models/*.pt"
+!git lfs track "reports/*.pdf"
+
+# Show what LFS is tracking and verify .gitattributes created
+!git lfs track
+print("\n.gitattributes:")
+print(open(".gitattributes").read())
+```
+
+> **Why not LFS for raw?** Raw data should be **re‑downloadable** with `make get-data` later; don't burn LFS quota.
+
+### 7) Create a small Parquet file to test LFS
+
+``` python
+import pandas as pd, numpy as np, os, pathlib
+
+pathlib.Path("data/processed").mkdir(parents=True, exist_ok=True)
+
+tickers = pd.read_csv("tickers_25.csv")["ticker"].tolist() if os.path.exists("tickers_25.csv") else [
+    "AAPL","MSFT","AMZN","GOOGL","META","NVDA","TSLA","JPM","JNJ","V",
+    "PG","HD","BAC","XOM","CVX","PFE","KO","DIS","NFLX","INTC","CSCO","ORCL","T","VZ","WMT"
+]
+
+# 1000 business days x up to 25 tickers ~ 25k rows; a few MB as Parquet
+dates = pd.bdate_range("2018-01-01", periods=1000)
+df = (pd.MultiIndex.from_product([tickers, dates], names=["ticker","date"])
+      .to_frame(index=False))
+rng = np.random.default_rng(42)
+df["r_1d"] = rng.normal(0, 0.01, size=len(df))  # synthetic daily returns
+df.to_parquet("data/processed/sample_returns.parquet", index=False)
+df.head()
+```
+
+### 8) Stage and commit changes
+
+``` python
+!git add .gitignore .gitattributes data/processed/sample_returns.parquet
+!git status
+
+!git commit -m "feat: add .gitignore and git-lfs tracking; add sample Parquet"
+!git log --oneline -n 2  # limit to the most recent 2 commits
+```
+
+If see error "`error: cannot run .git/hooks/post-commit: No such file or directory`", it means the post-commit hook is not executable or missing. \### Troubleshooting post-commit hook error 1. See what Git is trying to run
+
+``` bash
+ls -l .git/hooks/post-commit
+```
+
+-   If you see `-rw-r--r--`, it’s **not** executable.
+
+2.  Make it executable
+
+``` bash
+chmod +x .git/hooks/post-commit
+```
+
+3.  Ensure it has a valid shebang (first line) Open it and confirm the first line is one of:
+
+``` bash
+head -n 1 .git/hooks/post-commit
+```
+
+``` bash
+#!/bin/sh
+# or
+#!/usr/bin/env bash
+# or (if it’s Node)
+#!/usr/bin/env node
+```
+
+Save if you needed to fix that.
+
+4.  Test the hook manually
+
+``` bash
+.git/hooks/post-commit
+# or explicitly with the interpreter you expect, e.g.:
+bash .git/hooks/post-commit
+```
+### 9) **Push from Colab with a short‑lived token (safe method)**
+
+> Create a **fine‑grained PAT** at GitHub → Settings → Developer settings → **Fine‑grained tokens**
+>
+> -   Resource owner: your username/org
+> -   Repositories: **only select repositories**
+> -   Permissions: **Contents (Read/Write)**, **Pull requests (Read/Write)**
+> -   Expiration: short (e.g., 7 days)
+
+``` python
+# Colab cell: push using a temporary URL with token (not saved to git config)
+from getpass import getpass
+token = getpass("Enter your GitHub token (input hidden; not stored): ")
+
+push_url = f"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git"
+!git push {push_url} {BRANCH}:{BRANCH}
+
+# Optional: immediately clear the token variable
+del token
+```
+
+If error occurs, check:
+
+### 1. Check permissions
+
+``` bash
+ls -l .git/hooks/pre-push
+```
+
+If it looks like `-rw-r--r--`, then it’s missing the **executable bit**. Fix:
+
+``` bash
+chmod +x .git/hooks/pre-push
+```
+
+### 2. Check the first line (shebang)
+
+Open it:
+
+``` bash
+head -n 1 .git/hooks/pre-push
+```
+
+You should see something like:
+
+``` bash
+#!/bin/sh
+```
+
+or
+
+``` bash
+#!/usr/bin/env bash
+```
+
+If it’s missing, add a valid shebang.
+
+### 3. Test the hook manually
+
+``` bash
+.git/hooks/pre-push
+# or explicitly:
+bash .git/hooks/pre-push
+```
+
+> If the command prints the URL, **clear this cell's output** after a successful push (Colab: "⋮" → "Clear output").
+
+### 10) Open a Pull Request
+
+The name **“pull request”** can be confusing at first — it sounds like you are “pushing” your code, but really you’re asking someone else to **pull** it.
+
+## Origin of the term
+
+-   The phrase comes from **distributed version control** (like Git before GitHub’s UI popularized it).
+
+-   If you had changes in your branch/repo and wanted them in the upstream project, you’d contact the maintainer and say:
+
+    > “Please **pull** these changes from my branch into yours.”
+
+-   So a *pull request* is literally a **request for someone else to pull** your commits.
+
+## How it works (e.g., on GitHub, GitLab, Bitbucket)
+
+1.  You push your branch to your fork or to the remote repository.
+2.  You open a *pull request* against the target branch (usually `main` or `develop`).
+3.  The repository maintainers review your code.
+4.  If accepted, they “pull” your commits into their branch (though under the hood it’s often implemented as a **merge** or **rebase**).
+
+## Contrast with “push”
+
+-   **Push**: You directly upload commits to a remote branch you have permission to write to.
+-   **Pull request**: You don’t merge directly — instead, you ask maintainers to **pull** your changes, review them, and integrate them.
+
+**Summary**: It’s called a **pull request** because you’re not pushing your changes into the target branch; you’re asking the project owner/maintainer to **pull** your branch into theirs.
+
+-   **Recommended (web UI):** Navigate to your repo on GitHub → Compare & pull request → base: `main`, compare: `setup/git-lfs`. Fill title/description, tag your partner, and create the PR.
+
+-   **Optional (API):** open a PR programmatically from Colab:
+
+``` python
+# OPTIONAL: Create PR via GitHub API (requires token again)
+from getpass import getpass
+import requests, json
+
+token = getpass("GitHub token (again, not stored): ")
+headers = {"Authorization": f"Bearer {token}",
+           "Accept": "application/vnd.github+json"}
+payload = {
+    "title": "Setup: .gitignore + Git-LFS + sample Parquet",
+    "head": BRANCH,
+    "base": "main",
+    "body": "Adds .gitignore, configures Git-LFS for parquet/db/pdf/model files, and commits a sample Parquet for verification."
+}
+r = requests.post(f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/pulls",
+                  headers=headers, data=json.dumps(payload))
+print("PR status:", r.status_code)
+try:
+    pr_url = r.json()["html_url"]
+    print("PR URL:", pr_url)
+except Exception as e:
+    print("Response:", r.text)
+del token
+```
+
+### 11) Quick verification checklist
+
+-   `git lfs ls-files` shows `data/processed/sample_returns.parquet`:
+
+``` python
+!git lfs ls-files
+```
+
+-   PR diff shows a small **pointer** for the Parquet, not raw binary content.
+-   `.gitignore` present; no secrets or raw data committed.
+
+------------------------------------------------------------------------
+
+## Wrap‑up
+
+-   Keep PRs small and focused; write helpful titles and descriptions.
+-   Don't commit secrets or large data. Use `.env` + `.env.example`.
+-   Use LFS *selectively*---version only small, important binaries (e.g., sample processed sets, posters).
+-   Next time: **Quarto** polish (already started) and **Unix** automation to fetch raw data reproducibly.
+
+------------------------------------------------------------------------
+
+## Homework (due before Session 3)
+
+**Goal:** Cement branch/PR hygiene, add review scaffolding, and add a small guard against large files accidentally committed outside LFS.
+
+### Part A --- Add a PR template and CODEOWNERS
+
+Create a PR template so every PR includes key info.
+
+``` python
+# Run in your repo root
+import os, pathlib, textwrap
+pathlib.Path(".github").mkdir(exist_ok=True)
+tpl = textwrap.dedent("""\
+    ## Summary
+    What does this PR do and why?
+
+    ## Changes
+    - 
+
+    ## How to test
+    - From a fresh clone: steps to run
+
+    ## Checklist
+    - [ ] Runs from a fresh clone (README steps)
+    - [ ] No secrets committed; `.env` only (and `.env.example` updated if needed)
+    - [ ] Large artifacts tracked by LFS (`git lfs ls-files` shows expected files)
+    - [ ] Clear, small diff; comments where useful
+""")
+open(".github/pull_request_template.md","w").write(tpl)
+print("Wrote .github/pull_request_template.md")
+```
+
+(Optional) Require both teammates to review by setting **CODEOWNERS** (edit handles):
+
+``` python
+owners = """\
+# Replace with your GitHub handles
+* @teammate1 @teammate2
+"""
+open(".github/CODEOWNERS","w").write(owners)
+print("Wrote .github/CODEOWNERS (edit handles!)")
+```
+
+Commit and push on a new branch (example: `chore/pr-template`), open a PR, and merge after review.
+If working on G-Drive: execute the following before git operations:
+``` chmod +x .git/hooks/*```
+
+
+### Part B --- Add a large‑file guard (simple Python script)
+
+Create a small tool that **fails** if files \> 10 MB are found **and** aren't tracked by LFS. This will be used manually for now (automation later in CI).
+
+``` python
+# tools/guard_large_files.py
+import os, subprocess, sys
+
+LIMIT_MB = 10
+ROOT = os.getcwd()
+
+def lfs_tracked_paths(): #find all files tracked by lfs
+    try:
+        out = subprocess.check_output(["git", "lfs", "ls-files"], text=True)
+        tracked = set()
+        for line in out.strip().splitlines():
+            # line format: "<oid> <path>"
+            p = line.split(None, 1)[-1].strip()
+            tracked.add(os.path.normpath(p))
+        return tracked
+    except Exception:
+        return set()
+
+def humanize(bytes_):
+    return f"{bytes_/(1024*1024):.2f} MB"
+
+lfs_set = lfs_tracked_paths()
+bad = []
+for dirpath, dirnames, filenames in os.walk(ROOT):
+    # skip .git directory
+    if ".git" in dirpath.split(os.sep):
+        continue
+    for fn in filenames:
+        path = os.path.normpath(os.path.join(dirpath, fn))
+        try:
+            size = os.path.getsize(path)
+        except FileNotFoundError:
+            continue
+        if size >= LIMIT_MB * 1024 * 1024:
+            rel = os.path.relpath(path, ROOT)
+            if rel not in lfs_set:
+                bad.append((rel, size))
+
+if bad:
+    print("ERROR: Large non-LFS files found:")
+    for rel, size in bad:
+        print(f" - {rel} ({humanize(size)})")
+    sys.exit(1)
+else:
+    print("OK: No large non-LFS files detected.")
+```
+
+Add a Makefile target to run it. Let's generate the `tools` directory and the script:
+```python
+# Define the path to the tools directory
+tools_dir = Path("tools")
+
+# Create it if it doesn't exist (including any parents)
+tools_dir.mkdir(parents=True, exist_ok=True)
+
+print(f"Directory '{tools_dir}' is ready.")
+```
+
+``` python
+# Create/append Makefile target
+from pathlib import Path
+text = "\n\nguard:\n\tpython tools/guard_large_files.py\n" # guard: Makefile target. \t: tab required. 
+p = Path("Makefile") # point to the Makefile
+# p.write_text(p.read_text() + text if p.exists() else text) # if p exists, read exising content and append text and overwrites. 
+# the above code will append text everytime, casue error if repeatedly excute. 
+if p.exists():
+    content = p.read_text()
+    if "guard:" not in content:
+        p.write_text(content + text)
+else:
+    p.write_text(text)
+
+print("Added 'guard' target to Makefile")
+```
+After running the snippet:
+Your repo has a Makefile with a guard target.
+Running:
+
+```bash
+make guard
+```
+
+will execute your Python script:
+
+```python tools/guard_large_files.py```
+
+Run locally/Colab:
+
+``` python
+!python tools/guard_large_files.py
+```
+
+Commit on a new branch (e.g., `chore/large-file-guard`), push, open PR, and merge after review.
+
+### Part C --- Branch/PR practice (each student)
+
+1.  Each student creates **their own** branch (e.g., `docs/readme-username`) and:
+
+    -   Adds a **"Development workflow"** section in `README.md` (1--2 paragraphs): how to clone, mount Drive in Colab, install requirements, and where outputs go.
+    -   Adds themselves to `README.md` "Contributors" section with a GitHub handle link.
+
+2.  Push branch and open a PR.
+
+3.  Partner reviews the PR:
+
+    -   Leave at least **2 useful comments** (nits vs blockers).
+    -   Approve when ready; the author merges.
+
+**Expected files touched:** `README.md`, `.github/pull_request_template.md`, optional `.github/CODEOWNERS`, `tools/guard_large_files.py`, `Makefile`.
+
+### Part D --- Prove LFS is working
+
+-   On `main`, run:
+
+``` python
+!git lfs ls-files
+```
+
+-   You should see `data/processed/sample_returns.parquet` (and any other tracked binaries).
+-   In the GitHub web UI, click the file to confirm it's an **LFS pointer**, not full binary contents.
+
+### Submission checklist (pass/revise)
+
+-   Two merged PRs (template + guard) with clear titles and descriptions.
+-   README updated with development workflow and contributors.
+-   `git lfs ls-files` shows expected files.
+-   `tools/guard_large_files.py` present and passes (`OK`) on `main`.
+
+------------------------------------------------------------------------
+
+## What to Emphasize
+
+-   **Small PRs win.** Short diffs → fast, focused reviews.
+-   **Don't commit secrets.** `.env` only; keep `.env.example` up to date.
+-   **Use LFS sparingly** and purposefully---prefer regenerating big raw data.
+-   **Colab pushes:** use a **short‑lived token**, and clear outputs after use.
+
+Next session: **Quarto reporting** polish and pipeline hooks; soon after, **Unix automation** so `make get-data` can reproducibly fetch raw data for the unified‑stocks project.

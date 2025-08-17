@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.398">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 4160: Data Science Productivity Tools - 7&nbsp; Session 6 — Make/Automation + rsync + ssh/tmux (survey)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./lec7.html" rel="next">
+<link href="./lec5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lec6.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 4160: Data Science Productivity Tools</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Session 1 — Dev environment &amp; Colab workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Session 2 — Git essentials &amp; Git‑LFS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Session 4 — RStudio Quarto cameo + Report Hygiene</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 5 — Unix/Shell Essentials for Data Work</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> Workflows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Session 9 — Cleaning, Joins, and Parquet</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rolling Windows, Resampling, and Leakage‑Safe Features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 12 — HTML Scraping: Ethics &amp; Resilience</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">pre‑commit &amp; GitHub Actions CI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 15 — Framing &amp; Metrics (Rolling‑Origin Evaluation)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Session 17 — Feature Timing, Biases &amp; Leakage</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Session 18 — Walk‑forward + Regime Analysi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Session 19 — Tensors, Datasets, Training Loop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Session 20 — Multi‑asset training (unified model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec21.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Session 22 — Adapting GPT to Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Session 23 — Packaging &amp; CLI (Typer)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Session 24 — Reproducibility audit &amp; optional FastAPI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Session 25 — Poster + Abstract Workshop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Session 26 — In‑class Presentations &amp; Continuation Pla</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#session-6-makeautomation-rsync-sshtmux-75-min" id="toc-session-6-makeautomation-rsync-sshtmux-75-min" class="nav-link active" data-scroll-target="#session-6-makeautomation-rsync-sshtmux-75-min"><span class="header-section-number">7.1</span> Session 6 — Make/Automation + rsync + ssh/tmux (75 min)</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">7.1.1</span> Learning goals</a></li>
+  </ul></li>
+  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">7.2</span> Agenda (75 min)</a></li>
+  <li><a href="#slides-talking-points-drop-these-bullets-into-your-deck" id="toc-slides-talking-points-drop-these-bullets-into-your-deck" class="nav-link" data-scroll-target="#slides-talking-points-drop-these-bullets-into-your-deck"><span class="header-section-number">7.3</span> Slides / talking points (drop these bullets into your deck)</a>
+  <ul class="collapse">
+  <li><a href="#why-make-for-ds-pipelines" id="toc-why-make-for-ds-pipelines" class="nav-link" data-scroll-target="#why-make-for-ds-pipelines"><span class="header-section-number">7.3.1</span> Why Make for DS pipelines?</a></li>
+  <li><a href="#rsync-basics" id="toc-rsync-basics" class="nav-link" data-scroll-target="#rsync-basics"><span class="header-section-number">7.3.2</span> rsync basics</a></li>
+  <li><a href="#ssh-keys-tmux-survey" id="toc-ssh-keys-tmux-survey" class="nav-link" data-scroll-target="#ssh-keys-tmux-survey"><span class="header-section-number">7.3.3</span> ssh keys &amp; tmux (survey)</a></li>
+  </ul></li>
+  <li><a href="#inclass-lab-33-min" id="toc-inclass-lab-33-min" class="nav-link" data-scroll-target="#inclass-lab-33-min"><span class="header-section-number">7.4</span> In‑class lab (33 min)</a>
+  <ul class="collapse">
+  <li><a href="#mount-drive-and-set-repo-path" id="toc-mount-drive-and-set-repo-path" class="nav-link" data-scroll-target="#mount-drive-and-set-repo-path"><span class="header-section-number">7.4.1</span> 0) Mount Drive and set repo path</a></li>
+  <li><a href="#quick-tool-checks-make-rsync-quarto" id="toc-quick-tool-checks-make-rsync-quarto" class="nav-link" data-scroll-target="#quick-tool-checks-make-rsync-quarto"><span class="header-section-number">7.4.2</span> 1) Quick tool checks (Make, rsync, Quarto)</a></li>
+  <li><a href="#script-scriptsget_prices.py" id="toc-script-scriptsget_prices.py" class="nav-link" data-scroll-target="#script-scriptsget_prices.py"><span class="header-section-number">7.4.3</span> 2) Script: <code>scripts/get_prices.py</code></a></li>
+  <li><a href="#script-scriptsbuild_features.py" id="toc-script-scriptsbuild_features.py" class="nav-link" data-scroll-target="#script-scriptsbuild_features.py"><span class="header-section-number">7.4.4</span> 3) Script: <code>scripts/build_features.py</code></a></li>
+  <li><a href="#script-scriptsbackup.sh-rsync" id="toc-script-scriptsbackup.sh-rsync" class="nav-link" data-scroll-target="#script-scriptsbackup.sh-rsync"><span class="header-section-number">7.4.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</a></li>
+  <li><a href="#makefile-robust-with-variables-and-help" id="toc-makefile-robust-with-variables-and-help" class="nav-link" data-scroll-target="#makefile-robust-with-variables-and-help"><span class="header-section-number">7.4.6</span> 5) Makefile (robust, with variables and <code>help</code>)</a></li>
+  <li><a href="#try-the-pipeline" id="toc-try-the-pipeline" class="nav-link" data-scroll-target="#try-the-pipeline"><span class="header-section-number">7.4.7</span> 6) Try the pipeline</a></li>
+  <li><a href="#optional-just-commandrunner" id="toc-optional-just-commandrunner" class="nav-link" data-scroll-target="#optional-just-commandrunner"><span class="header-section-number">7.4.8</span> 7) (Optional) <code>just</code> command‑runner</a></li>
+  <li><a href="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab" id="toc-ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="nav-link" data-scroll-target="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">7.4.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</a></li>
+  </ul></li>
+  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">7.5</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#homework-due-before-session-7" id="toc-homework-due-before-session-7" class="nav-link" data-scroll-target="#homework-due-before-session-7"><span class="header-section-number">7.6</span> Homework (due before Session 7)</a>
+  <ul class="collapse">
+  <li><a href="#part-a-add-a-minimal-baseline-trainer" id="toc-part-a-add-a-minimal-baseline-trainer" class="nav-link" data-scroll-target="#part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">7.6.1</span> Part A — Add a minimal baseline trainer</a></li>
+  <li><a href="#part-b-extend-your-makefile-with-train-and-all" id="toc-part-b-extend-your-makefile-with-train-and-all" class="nav-link" data-scroll-target="#part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">7.6.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></a></li>
+  <li><a href="#part-c-add-a-help-description-to-every-target-and-verify-make-help" id="toc-part-c-add-a-help-description-to-every-target-and-verify-make-help" class="nav-link" data-scroll-target="#part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">7.6.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></a></li>
+  <li><a href="#part-d-optional-track-small-modelsmetrics-with-gitlfs" id="toc-part-d-optional-track-small-modelsmetrics-with-gitlfs" class="nav-link" data-scroll-target="#part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">7.6.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</a></li>
+  <li><a href="#part-e-commit-push" id="toc-part-e-commit-push" class="nav-link" data-scroll-target="#part-e-commit-push"><span class="header-section-number">7.6.5</span> Part E — Commit &amp; push</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">7.6.6</span> Grading (pass/revise)</a></li>
+  </ul></li>
+  <li><a href="#instructor-checklist-before-class" id="toc-instructor-checklist-before-class" class="nav-link" data-scroll-target="#instructor-checklist-before-class"><span class="header-section-number">7.7</span> Instructor checklist (before class)</a></li>
+  <li><a href="#emphasize-while-teaching" id="toc-emphasize-while-teaching" class="nav-link" data-scroll-target="#emphasize-while-teaching"><span class="header-section-number">7.8</span> Emphasize while teaching</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Below is a complete lecture package for <strong>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</strong> (75 minutes). It includes: a timed agenda, slide talking points, a <strong>Colab‑friendly in‑class lab with copy‑paste code</strong>, and <strong>homework with copy‑paste code</strong>. By the end, students will have a <strong>one‑command pipeline</strong> (<code>make all</code>) to fetch data, build features, render the Quarto EDA, and back up artifacts—plus practical notes on <code>rsync</code>, <code>ssh</code>, and <code>tmux</code>.</p>
+<blockquote class="blockquote">
+<p><strong>Assumptions:</strong> You’re using the same Drive‑mounted repo from prior sessions (e.g., <code>unified-stocks-teamX</code>). The course remains Python‑first, Colab‑first. No trading advice—this is educational.</p>
+</blockquote>
+<hr>
+<section id="session-6-makeautomation-rsync-sshtmux-75-min" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="session-6-makeautomation-rsync-sshtmux-75-min"><span class="header-section-number">7.1</span> Session 6 — Make/Automation + rsync + ssh/tmux (75 min)</h2>
+<section id="learning-goals" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">7.1.1</span> Learning goals</h3>
+<p>Students will be able to:</p>
+<ol type="1">
+<li>Explain how <strong>Make</strong> turns scripts into a <strong>reproducible pipeline</strong> via <strong>targets, dependencies,</strong> and <strong>incremental builds</strong>.</li>
+<li>Create and use a <strong>Makefile</strong> with helpful defaults, variables, and a <code>help</code> target.</li>
+<li>Use <strong>rsync</strong> to back up project artifacts and understand <code>--delete</code> and exclude patterns.</li>
+<li>Understand the <strong>ssh</strong> key flow and a <strong>tmux</strong> workflow for long‑running jobs (survey).</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="agenda-75-min" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">7.2</span> Agenda (75 min)</h2>
+<ul>
+<li><strong>(12 min)</strong> Slides: Why automation? How Make models dependencies &amp; incremental builds; best practices</li>
+<li><strong>(10 min)</strong> Slides: rsync fundamentals; <code>ssh</code> keys &amp; config; <code>tmux</code> workflow (survey)</li>
+<li><strong>(33 min)</strong> <strong>In‑class lab</strong> (Colab): create scripts → author Makefile → run <code>make all</code> → rsync backup</li>
+<li><strong>(10 min)</strong> Wrap‑up &amp; troubleshooting</li>
+<li><strong>(10 min)</strong> Buffer</li>
+</ul>
+<hr>
+</section>
+<section id="slides-talking-points-drop-these-bullets-into-your-deck" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="slides-talking-points-drop-these-bullets-into-your-deck"><span class="header-section-number">7.3</span> Slides / talking points (drop these bullets into your deck)</h2>
+<section id="why-make-for-ds-pipelines" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="why-make-for-ds-pipelines"><span class="header-section-number">7.3.1</span> Why Make for DS pipelines?</h3>
+<ul>
+<li>Encodes your workflow as <strong>targets</strong> that depend on <strong>files</strong> or other targets.</li>
+<li><strong>Incremental</strong>: only rebuilds what changed.</li>
+<li>Plays nicely with CI (<code>make all</code> from a clean clone).</li>
+<li>Stable across OSes; no new runtime to learn.</li>
+</ul>
+<p><strong>Core syntax</strong></p>
+<pre><code>target: dependencies
+&lt;TAB&gt; recipe commands</code></pre>
+<ul>
+<li>Use variables: <code>PY := python</code>, <code>QUARTO := quarto</code>.</li>
+<li>Use <strong>PHONY</strong> for meta‑targets that don’t produce files.</li>
+<li>Prefer <strong>deterministic</strong> outputs: fixed seeds, pinned versions, stable paths.</li>
+</ul>
+</section>
+<section id="rsync-basics" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="rsync-basics"><span class="header-section-number">7.3.2</span> rsync basics</h3>
+<ul>
+<li><code>rsync -avh SRC/ DST/</code> → syncs directory trees, preserving metadata.</li>
+<li><code>--delete</code> makes DST exactly match SRC (removes files not in SRC).</li>
+<li><code>--exclude</code> to skip folders (<code>--exclude 'raw/'</code>).</li>
+<li>Remote with SSH: <code>rsync -avz -e ssh SRC/ user@host:/path/</code>.</li>
+</ul>
+</section>
+<section id="ssh-keys-tmux-survey" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="ssh-keys-tmux-survey"><span class="header-section-number">7.3.3</span> ssh keys &amp; tmux (survey)</h3>
+<ul>
+<li><strong>Keys</strong>: <code>ssh-keygen -t ed25519 -C "you@school.edu"</code>; add the <strong>public</strong> key to servers/GitHub; keep private key private.</li>
+<li><code>~/.ssh/config</code> holds named hosts; <code>ssh myhpc</code> uses that stanza.</li>
+<li><strong>tmux</strong>: start <code>tmux new -s train</code>; detach (<code>Ctrl-b d</code>); list (<code>tmux ls</code>); reattach (<code>tmux attach -t train</code>). Keeps jobs alive on remote shells.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="inclass-lab-33-min" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="inclass-lab-33-min"><span class="header-section-number">7.4</span> In‑class lab (33 min)</h2>
+<p>We’ll create <strong>three tiny scripts</strong> and a <strong>Makefile</strong> that ties them together:</p>
+<ul>
+<li><code>scripts/get_prices.py</code> → <code>data/raw/prices.csv</code> (Yahoo via <code>yfinance</code>, with synthetic fallback)</li>
+<li><code>scripts/build_features.py</code> → <code>data/processed/features.parquet</code></li>
+<li><code>scripts/backup.sh</code> → rsync your artifacts to <code>backups/&lt;timestamp&gt;/</code></li>
+<li><code>Makefile</code> → <code>make all</code> runs end‑to‑end; <code>make report</code> renders Quarto; <code>make backup</code> syncs artifacts.</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Instructor tip:</strong> Have everyone run each block as a separate Colab cell.</p>
+</blockquote>
+<section id="mount-drive-and-set-repo-path" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="mount-drive-and-set-repo-path"><span class="header-section-number">7.4.1</span> 0) Mount Drive and set repo path</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"YOUR_GITHUB_USERNAME_OR_ORG"</span>  <span class="co"># &lt;- change</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span>         <span class="co"># &lt;- change</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>BASE_DIR   <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>REPO_DIR   <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib, os, subprocess</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(REPO_DIR).exists():</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"Repo not found in Drive. Clone it first (see Session 2/3)."</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>os.chdir(REPO_DIR)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="quick-tool-checks-make-rsync-quarto" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="quick-tool-checks-make-rsync-quarto"><span class="header-section-number">7.4.2</span> 1) Quick tool checks (Make, rsync, Quarto)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, shutil</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(cmd):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> subprocess.check_output(cmd, text<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(cmd[<span class="dv">0</span>], <span class="st">"OK"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(cmd[<span class="dv">0</span>], <span class="st">"NOT FOUND"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>check([<span class="st">"make"</span>, <span class="st">"--version"</span>])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>check([<span class="st">"rsync"</span>, <span class="st">"--version"</span>])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>check([<span class="st">"quarto"</span>, <span class="st">"--version"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If Quarto is missing, re-run the installer from Session 3 before <code>make report</code>.</p>
+</section>
+<section id="script-scriptsget_prices.py" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="script-scriptsget_prices.py"><span class="header-section-number">7.4.3</span> 2) Script: <code>scripts/get_prices.py</code></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"scripts"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>get_py <span class="op">=</span> <span class="vs">r"""#!/usr/bin/env python</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="vs">import argparse, sys, time</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd, numpy as np</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="vs">def fetch_yf(ticker, start, end):</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="vs">    import yfinance as yf</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = yf.download(ticker, start=start, end=end, auto_adjust=True, progress=False)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="vs">    if df is None or df.empty:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="vs">        raise RuntimeError("empty")</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = df.rename(columns=str.lower)[["close","volume"]]</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="vs">    df.index.name = "date"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = df.reset_index()</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="vs">    df["ticker"] = ticker</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="vs">    return df[["ticker","date","close","volume"]]</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="vs">def main():</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap = argparse.ArgumentParser()</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--tickers", default="tickers_25.csv")</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--start", default="2020-01-01")</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--end", default="")</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--out", default="data/raw/prices.csv")</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="vs">    args = ap.parse_args()</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="vs">    out = Path(args.out)</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="vs">    out.parent.mkdir(parents=True, exist_ok=True)</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="vs">    tickers = pd.read_csv(args.tickers)["ticker"].dropna().unique().tolist()</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="vs">    rows = []</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="vs">    for t in tickers:</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="vs">        try:</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="vs">            df = fetch_yf(t, args.start, args.end or None)</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="vs">        except Exception:</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="vs">            # synthetic fallback</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="vs">            idx = pd.bdate_range(args.start, args.end or pd.Timestamp.today().date())</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="vs">            rng = np.random.default_rng(42 + hash(t)%1000)</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="vs">            r = rng.normal(0, 0.01, len(idx))</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="vs">            price = 100*np.exp(np.cumsum(r))</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="vs">            vol = rng.integers(1e5, 5e6, len(idx))</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="vs">            df = pd.DataFrame({"ticker": t, "date": idx, "close": price, "volume": vol})</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="vs">        df["date"] = pd.to_datetime(df["date"]).dt.date</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="vs">        df["adj_close"] = df["close"]</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="vs">        df = df.drop(columns=["close"])</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="vs">        df["log_return"] = np.log(df["adj_close"]).diff().fillna(0.0)</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="vs">        rows.append(df)</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="vs">    allp = pd.concat(rows, ignore_index=True)</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="vs">    allp = allp[["ticker","date","adj_close","volume","log_return"]]</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="vs">    allp.to_csv(out, index=False)</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="vs">    print("Wrote", out, "rows:", len(allp))</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="vs">if __name__ == "__main__":</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="vs">    sys.exit(main())</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"scripts/get_prices.py"</span>,<span class="st">"w"</span>).write(get_py)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, stat</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/get_prices.py"</span>, os.stat(<span class="st">"scripts/get_prices.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/get_prices.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="script-scriptsbuild_features.py" class="level3" data-number="7.4.4">
+<h3 data-number="7.4.4" class="anchored" data-anchor-id="script-scriptsbuild_features.py"><span class="header-section-number">7.4.4</span> 3) Script: <code>scripts/build_features.py</code></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>feat_py <span class="op">=</span> <span class="vs">r"""#!/usr/bin/env python</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="vs">import argparse</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd, numpy as np</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="vs">def main():</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap = argparse.ArgumentParser()</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--input", default="data/raw/prices.csv")</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--out", default="data/processed/features.parquet")</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--roll", type=int, default=20)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="vs">    args = ap.parse_args()</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = pd.read_csv(args.input, parse_dates=["date"])</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = df.sort_values(["ticker","date"])</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="vs">    # groupwise lags</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="vs">    df["r_1d"] = df["log_return"]</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="vs">    for k in (1,2,3):</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="vs">        df[f"lag</span><span class="sc">{k}</span><span class="vs">"] = df.groupby("ticker")["r_1d"].shift(k)</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="vs">    df["roll_mean"] = (df.groupby("ticker")["r_1d"]</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="vs">                         .rolling(args.roll, min_periods=args.roll//2).mean()</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="vs">                         .reset_index(level=0, drop=True))</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="vs">    df["roll_std"]  = (df.groupby("ticker")["r_1d"]</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="vs">                         .rolling(args.roll, min_periods=args.roll//2).std()</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="vs">                         .reset_index(level=0, drop=True))</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="vs">    out = Path(args.out)</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="vs">    out.parent.mkdir(parents=True, exist_ok=True)</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="vs">    # Save compactly</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="vs">    df.to_parquet(out, index=False)</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="vs">    print("Wrote", out, "rows:", len(df))</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="vs">if __name__ == "__main__":</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="vs">    main()</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"scripts/build_features.py"</span>,<span class="st">"w"</span>).write(feat_py)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, stat</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/build_features.py"</span>, os.stat(<span class="st">"scripts/build_features.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/build_features.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="script-scriptsbackup.sh-rsync" class="level3" data-number="7.4.5">
+<h3 data-number="7.4.5" class="anchored" data-anchor-id="script-scriptsbackup.sh-rsync"><span class="header-section-number">7.4.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>backup_sh <span class="op">=</span> <span class="vs">r"""#!/usr/bin/env bash</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="vs"># Sync selected artifacts to backups/&lt;timestamp&gt; using rsync.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="vs"># Usage: scripts/backup.sh [DEST_ROOT]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="vs">set -euo pipefail</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="vs">ROOT="${1:-backups}"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="vs">STAMP="$(date +%Y%m</span><span class="sc">%d</span><span class="vs">-%H%M%S)"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="vs">DEST="$</span><span class="sc">{ROOT}</span><span class="vs">/run-$</span><span class="sc">{STAMP}</span><span class="vs">"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="vs">mkdir -p "$DEST"</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="vs"># What to back up (adjust as needed)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="vs">INCLUDE=("data/processed" "reports" "docs")</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="vs">for src in "$</span><span class="sc">{INCLUDE[@]}</span><span class="vs">"; do</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="vs">  if [[ -d "$src" ]]; then</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="vs">    echo "Syncing $src -&gt; $DEST/$src"</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="vs">    rsync -avh --delete --exclude 'raw/' --exclude 'interim/' "$src"/ "$DEST/$src"/</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="vs">  fi</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="vs">done</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="vs">echo "Backup complete at $DEST"</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"scripts/backup.sh"</span>,<span class="st">"w"</span>).write(backup_sh)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, stat</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/backup.sh"</span>, os.stat(<span class="st">"scripts/backup.sh"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/backup.sh"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefile-robust-with-variables-and-help" class="level3" data-number="7.4.6">
+<h3 data-number="7.4.6" class="anchored" data-anchor-id="makefile-robust-with-variables-and-help"><span class="header-section-number">7.4.6</span> 5) Makefile (robust, with variables and <code>help</code>)</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>makefile <span class="op">=</span> <span class="vs">r"""# Makefile — unified-stocks</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="vs">SHELL := /bin/bash</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="vs">.SHELLFLAGS := -eu -o pipefail -c</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="vs">PY := python</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="vs">QUARTO := quarto</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="vs">START ?= 2020-01-01</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="vs">END   ?= 2025-08-01</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="vs">ROLL  ?= 30</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="vs">DATA_RAW := data/raw/prices.csv</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="vs">FEATS    := data/processed/features.parquet</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="vs">REPORT   := docs/reports/eda.html</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="vs"># Default target</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="vs">.DEFAULT_GOAL := help</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="vs">.PHONY: help all clean clobber qa report backup</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="vs">help: ## Show help for each target</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="vs">    @awk 'BEGIN {FS = ":.*##"; printf "Available targets:\n"} /^[a-zA-Z0-9_\-]+:.*##/ {printf "  \033[36m</span><span class="sc">%-18s</span><span class="vs">\033[0m </span><span class="sc">%s</span><span class="vs">\n", $$1, $$2}' $(MAKEFILE_LIST)</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="vs">all: $(DATA_RAW) $(FEATS) report backup ## Run the full pipeline and back up artifacts</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="vs">$(DATA_RAW): scripts/get_prices.py tickers_25.csv</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="vs">    $(PY) scripts/get_prices.py --tickers tickers_25.csv --start $(START) --end $(END) --out $(DATA_RAW)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="vs">$(FEATS): scripts/build_features.py $(DATA_RAW) scripts/qa_csv.sh</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="vs">    # Basic QA first</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="vs">    scripts/qa_csv.sh $(DATA_RAW)</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="vs">    $(PY) scripts/build_features.py --input $(DATA_RAW) --out $(FEATS) --roll $(ROLL)</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="vs">report: $(REPORT) ## Render Quarto EDA to docs/</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="vs">$(REPORT): reports/eda.qmd _quarto.yml docs/style.css</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="vs">    $(QUARTO) render reports/eda.qmd -P symbol:AAPL -P start_date=$(START) -P end_date=$(END) -P rolling=$(ROLL) --output-dir docs/</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="vs">    @test -f $(REPORT) || (echo "Report not generated." &amp;&amp; exit 1)</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="vs">backup: ## Rsync selected artifacts to backups/&lt;timestamp&gt;/</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="vs">    ./scripts/backup.sh</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="vs">clean: ## Remove intermediate artifacts (safe)</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="vs">    rm -rf data/interim</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="vs">    rm -rf data/processed/*.parquet || true</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="vs">clobber: clean ## Remove generated reports and backups (dangerous)</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="vs">    rm -rf docs/reports || true</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="vs">    rm -rf backups || true</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"Makefile"</span>,<span class="st">"w"</span>).write(makefile)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"Makefile"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p>Note: The Makefile expects <code>scripts/qa_csv.sh</code> from Session 5. If a student missed it, set <code>scripts/qa_csv.sh</code> to a no‑op or remove that dependency temporarily.</p>
+</blockquote>
+</section>
+<section id="try-the-pipeline" class="level3" data-number="7.4.7">
+<h3 data-number="7.4.7" class="anchored" data-anchor-id="try-the-pipeline"><span class="header-section-number">7.4.7</span> 6) Try the pipeline</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, os, textwrap, sys</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(subprocess.check_output([<span class="st">"make"</span>, <span class="st">"help"</span>], text<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch raw, build features, render report, back up artifacts</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(subprocess.check_output([<span class="st">"make"</span>, <span class="st">"all"</span>], text<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Confirm:</p>
+<ul>
+<li><code>data/raw/prices.csv</code> exists</li>
+<li><code>data/processed/features.parquet</code> exists</li>
+<li><code>docs/reports/eda.html</code> renders</li>
+<li><code>backups/run-&lt;timestamp&gt;/</code> contains synced folders</li>
+</ul>
+</section>
+<section id="optional-just-commandrunner" class="level3" data-number="7.4.8">
+<h3 data-number="7.4.8" class="anchored" data-anchor-id="optional-just-commandrunner"><span class="header-section-number">7.4.8</span> 7) (Optional) <code>just</code> command‑runner</h3>
+<blockquote class="blockquote">
+<p><strong>Optional</strong>: If <code>just</code> is available on your system, create a <code>justfile</code> that mirrors common Make targets. On Colab, installation may or may not be available; this is just for reference.</p>
+</blockquote>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="bu">command</span> <span class="at">-v</span> just <span class="op">&gt;</span>/dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"just not found; skipping optional step."</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 0</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> justfile <span class="op">&lt;&lt; 'EOF'</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st"># justfile — optional convenience recipes</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">set shell := ["bash", "-eu", "-o", "pipefail", "-c"]</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="st">start := "2020-01-01"</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">end   := "2025-08-01"</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="st">roll  := "30"</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="st">help:</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="st">\t@echo "Recipes: get-data, features, report, all, backup"</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="st">get-data:</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="st">\tpython scripts/get_prices.py --tickers tickers_25.csv --start {{start}} --end {{end}} --out data/raw/prices.csv</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="st">features:</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="st">\tbash -lc 'scripts/qa_csv.sh data/raw/prices.csv'</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="st">\tpython scripts/build_features.py --input data/raw/prices.csv --out data/processed/features.parquet --roll {{roll}}</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="st">report:</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="st">\tquarto render reports/eda.qmd -P symbol:AAPL -P start_date={{start}} -P end_date={{end}} -P rolling:{{roll}} --output-dir docs/</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="st">all: get-data features report</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="st">backup:</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="st">\t./scripts/backup.sh</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Wrote justfile (optional)."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="level3" data-number="7.4.9">
+<h3 data-number="7.4.9" class="anchored" data-anchor-id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">7.4.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</h3>
+<p><strong>ssh key generation (local terminal):</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"you@school.edu"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Press enter to accept default path (~/.ssh/id_ed25519), set a passphrase (recommended)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub   <span class="co"># copy this PUBLIC key where needed (GitHub/servers)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>SSH config (<code>~/.ssh/config</code>, local):</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Host</span> github</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">HostName</span> github.com</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">User</span> git</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">AddKeysToAgent</span> yes</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">IdentitiesOnly</span> yes</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Host</span> myhpc</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="ex">HostName</span> login.hpc.university.edu</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">User</span> your_netid</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Test GitHub SSH (local):</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>tmux essentials (remote or local):</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> new <span class="at">-s</span> train              <span class="co"># start session "train"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ... run your long job ...</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># detach: press Ctrl-b then d</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> ls                        <span class="co"># list sessions</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> attach <span class="at">-t</span> train           <span class="co"># reattach</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> kill-session <span class="at">-t</span> train     <span class="co"># end session</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="wrapup-10-min" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">7.5</span> Wrap‑up (10 min)</h2>
+<ul>
+<li><strong>Make</strong> codifies your pipeline; the file graph serves as your dependency DAG.</li>
+<li><strong>Incremental</strong> builds save time: edit one script → only downstream targets rebuild.</li>
+<li><strong>rsync</strong> is your friend for backups/snapshots; be deliberate with <code>--delete</code>.</li>
+<li><strong>ssh/tmux</strong>: you don’t need them in Colab, but you will on campus servers/HPC.</li>
+</ul>
+<hr>
+</section>
+<section id="homework-due-before-session-7" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="homework-due-before-session-7"><span class="header-section-number">7.6</span> Homework (due before Session 7)</h2>
+<p><strong>Goal:</strong> Extend your automation with a tiny baseline training &amp; evaluation step and polish your Makefile.</p>
+<section id="part-a-add-a-minimal-baseline-trainer" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">7.6.1</span> Part A — Add a minimal baseline trainer</h3>
+<p>Create <code>scripts/train_baseline.py</code> that learns a <strong>linear regression</strong> on lagged returns (toy baseline) and writes metrics.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>train_py <span class="op">=</span> <span class="vs">r"""#!/usr/bin/env python</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="vs">import argparse, json</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="vs">from sklearn.linear_model import LinearRegression</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="vs">from sklearn.metrics import mean_absolute_error</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="vs">def main():</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap = argparse.ArgumentParser()</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--features", default="data/processed/features.parquet")</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="vs">    ap.add_argument("--out-metrics", default="reports/baseline_metrics.json")</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="vs">    args = ap.parse_args()</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = pd.read_parquet(args.features)</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="vs">    # Train/test split by date (last 20</span><span class="sc">% f</span><span class="vs">or test)</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="vs">    df = df.dropna(subset=["lag1","lag2","lag3","r_1d"])</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="vs">    n = len(df)</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="vs">    split = int(n*0.8)</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="vs">    Xtr = df[["lag1","lag2","lag3"]].iloc[:split].values</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="vs">    ytr = df["r_1d"].iloc[:split].values</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="vs">    Xte = df[["lag1","lag2","lag3"]].iloc[split:].values</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="vs">    yte = df["r_1d"].iloc[split:].values</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="vs">    model = LinearRegression().fit(Xtr, ytr)</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="vs">    pred = model.predict(Xte)</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="vs">    mae = float(mean_absolute_error(yte, pred))</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="vs">    Path("reports").mkdir(exist_ok=True)</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="vs">    with open(args.out_metrics, "w") as f:</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="vs">        json.dump({"model":"linear(lag1,lag2,lag3)","test_mae":mae,"n_test":len(yte)}, f, indent=2)</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="vs">    print("Wrote", args.out_metrics, "MAE:", mae)</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="vs">if __name__ == "__main__":</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="vs">    main()</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"scripts/train_baseline.py"</span>,<span class="st">"w"</span>).write(train_py)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, stat</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/train_baseline.py"</span>, os.stat(<span class="st">"scripts/train_baseline.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/train_baseline.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-b-extend-your-makefile-with-train-and-all" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">7.6.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></h3>
+<p>Append these to your <code>Makefile</code>:</p>
+<pre class="make"><code># --- add after FEATS definition, near other targets ---
+
+TRAIN_METRICS := reports/baseline_metrics.json
+
+.PHONY: train
+train: $(TRAIN_METRICS) ## Train toy baseline and write metrics
+
+$(TRAIN_METRICS): scripts/train_baseline.py $(FEATS)
+    $(PY) scripts/train_baseline.py --features $(FEATS) --out-metrics $(TRAIN_METRICS)
+
+# Update 'all' to include 'train'
+# all: $(DATA_RAW) $(FEATS) report backup   # OLD
+# Replace with:
+# all: $(DATA_RAW) $(FEATS) report train backup</code></pre>
+<p>Run:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> train</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> reports/baseline_metrics.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-c-add-a-help-description-to-every-target-and-verify-make-help" class="level3" data-number="7.6.3">
+<h3 data-number="7.6.3" class="anchored" data-anchor-id="part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">7.6.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></h3>
+<p>Ensure each target in your <code>Makefile</code> has a <code>##</code> comment. Run:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> help</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-d-optional-track-small-modelsmetrics-with-gitlfs" class="level3" data-number="7.6.4">
+<h3 data-number="7.6.4" class="anchored" data-anchor-id="part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">7.6.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</h3>
+<p>If you decide to save model artifacts (e.g., <code>models/baseline.pkl</code>), track them:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> lfs track <span class="st">"models/*.pkl"</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .gitattributes</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"chore: track small model files via LFS"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>(You can extend <code>train_baseline.py</code> to save <code>models/baseline.pkl</code> using <code>joblib</code>.)</em></p>
+</section>
+<section id="part-e-commit-push" class="level3" data-number="7.6.5">
+<h3 data-number="7.6.5" class="anchored" data-anchor-id="part-e-commit-push"><span class="header-section-number">7.6.5</span> Part E — Commit &amp; push</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/<span class="pp">*</span>.py scripts/backup.sh Makefile reports/baseline_metrics.json</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: automated pipeline with Make (data-&gt;features-&gt;report-&gt;train) and rsync backup"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (not stored): "</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"YOUR_GITHUB_USERNAME_OR_ORG"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>subprocess.run([<span class="st">"git"</span>, <span class="st">"push"</span>, push_url, <span class="st">"HEAD:main"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="grading-passrevise" class="level3" data-number="7.6.6">
+<h3 data-number="7.6.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">7.6.6</span> Grading (pass/revise)</h3>
+<ul>
+<li><code>make all</code> runs from a fresh clone (with minimal edits for tokens/Quarto install) and produces: <code>data/raw/prices.csv</code>, <code>data/processed/features.parquet</code>, <code>docs/reports/eda.html</code>, <code>reports/baseline_metrics.json</code>, and a <code>backups/run-*/</code> snapshot.</li>
+<li><code>Makefile</code> has <strong>helpful <code>help</code> output</strong> and <strong>variables</strong> (<code>START</code>, <code>END</code>, <code>ROLL</code>).</li>
+<li><code>scripts/backup.sh</code> uses <code>rsync -avh --delete</code> and excludes <code>raw/</code> &amp; <code>interim/</code>.</li>
+<li>(Optional) LFS tracking updated for models.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="instructor-checklist-before-class" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="instructor-checklist-before-class"><span class="header-section-number">7.7</span> Instructor checklist (before class)</h2>
+<ul>
+<li>Test the full lab in a fresh Colab runtime (data fetch, feature build, report render, backup).</li>
+<li>Have one slide that visually shows the <strong>dependency graph</strong>: <code>prices.csv → features.parquet → report/train</code>.</li>
+<li>Prepare a one‑pager cheat sheet for <code>rsync</code> flags and <code>tmux</code> keystrokes.</li>
+</ul>
+</section>
+<section id="emphasize-while-teaching" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="emphasize-while-teaching"><span class="header-section-number">7.8</span> Emphasize while teaching</h2>
+<ul>
+<li><strong>Make</strong> is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.</li>
+<li>Keep targets <strong>idempotent</strong>: running twice shouldn’t break; only rebuild on changes.</li>
+<li>Use <code>rsync</code> with care: <code>--delete</code> is powerful—double‑check DEST paths.</li>
+<li><strong>ssh/tmux</strong>: you’ll want this the first time you run a long model on a remote machine.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lec5.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 5 — Unix/Shell Essentials for Data Work</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lec7.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

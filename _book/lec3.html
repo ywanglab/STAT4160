@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.398">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STAT 4160: Data Science Productivity Tools - 4&nbsp; Session 3 — Quarto Reports (Python)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./lec4.html" rel="next">
+<link href="./lec2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lec3.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 4160: Data Science Productivity Tools</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Session 1 — Dev environment &amp; Colab workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Session 2 — Git essentials &amp; Git‑LFS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Session 4 — RStudio Quarto cameo + Report Hygiene</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 5 — Unix/Shell Essentials for Data Work</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> Workflows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Session 9 — Cleaning, Joins, and Parquet</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rolling Windows, Resampling, and Leakage‑Safe Features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 12 — HTML Scraping: Ethics &amp; Resilience</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">pre‑commit &amp; GitHub Actions CI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 15 — Framing &amp; Metrics (Rolling‑Origin Evaluation)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Session 17 — Feature Timing, Biases &amp; Leakage</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Session 18 — Walk‑forward + Regime Analysi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Session 19 — Tensors, Datasets, Training Loop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Session 20 — Multi‑asset training (unified model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec21.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Session 22 — Adapting GPT to Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Session 23 — Packaging &amp; CLI (Typer)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Session 24 — Reproducibility audit &amp; optional FastAPI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Session 25 — Poster + Abstract Workshop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Session 26 — In‑class Presentations &amp; Continuation Pla</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#session-3-quarto-reports-python-75-minutes" id="toc-session-3-quarto-reports-python-75-minutes" class="nav-link active" data-scroll-target="#session-3-quarto-reports-python-75-minutes"><span class="header-section-number">4.1</span> Session 3 — Quarto Reports (Python) — 75 minutes</a>
+  <ul class="collapse">
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">4.1.1</span> Learning goals</a></li>
+  </ul></li>
+  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">4.2</span> Agenda (75 min)</a></li>
+  <li><a href="#talking-points-for-your-slides" id="toc-talking-points-for-your-slides" class="nav-link" data-scroll-target="#talking-points-for-your-slides"><span class="header-section-number">4.3</span> Talking points (for your slides)</a></li>
+  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">4.4</span> In‑class lab (35 min)</a>
+  <ul class="collapse">
+  <li><a href="#mount-drive-and-set-repo-paths" id="toc-mount-drive-and-set-repo-paths" class="nav-link" data-scroll-target="#mount-drive-and-set-repo-paths"><span class="header-section-number">4.4.1</span> 0) Mount Drive and set repo paths</a></li>
+  <li><a href="#install-quarto-cli-on-colab-and-verify" id="toc-install-quarto-cli-on-colab-and-verify" class="nav-link" data-scroll-target="#install-quarto-cli-on-colab-and-verify"><span class="header-section-number">4.4.2</span> 1) Install Quarto CLI on Colab and verify</a></li>
+  <li><a href="#minimal-project-config-_quarto.yml-website-to-docs" id="toc-minimal-project-config-_quarto.yml-website-to-docs" class="nav-link" data-scroll-target="#minimal-project-config-_quarto.yml-website-to-docs"><span class="header-section-number">4.4.3</span> 2) Minimal project config: <code>_quarto.yml</code> (website to <code>docs/</code>)</a></li>
+  <li><a href="#create-the-parameterized-eda-report-reportseda.qmd" id="toc-create-the-parameterized-eda-report-reportseda.qmd" class="nav-link" data-scroll-target="#create-the-parameterized-eda-report-reportseda.qmd"><span class="header-section-number">4.4.4</span> 3) Create the parameterized EDA report: <code>reports/eda.qmd</code></a></li>
+  <li><a href="#render-the-report-for-one-ticker-aapl-and-put-outputs-in-docs" id="toc-render-the-report-for-one-ticker-aapl-and-put-outputs-in-docs" class="nav-link" data-scroll-target="#render-the-report-for-one-ticker-aapl-and-put-outputs-in-docs"><span class="header-section-number">4.4.5</span> 4) Render the report for one ticker (AAPL) and put outputs in <code>docs/</code></a></li>
+  <li><a href="#render-for-multiple-tickers-by-passing-parameters" id="toc-render-for-multiple-tickers-by-passing-parameters" class="nav-link" data-scroll-target="#render-for-multiple-tickers-by-passing-parameters"><span class="header-section-number">4.4.6</span> 5) Render for multiple tickers by passing parameters</a></li>
+  <li><a href="#add-nav-links-to-specific-ticker-pages-optional" id="toc-add-nav-links-to-specific-ticker-pages-optional" class="nav-link" data-scroll-target="#add-nav-links-to-specific-ticker-pages-optional"><span class="header-section-number">4.4.7</span> 6) Add nav links to specific ticker pages (optional)</a></li>
+  <li><a href="#commit-and-push-site-to-github-so-pages-can-serve-docs" id="toc-commit-and-push-site-to-github-so-pages-can-serve-docs" class="nav-link" data-scroll-target="#commit-and-push-site-to-github-so-pages-can-serve-docs"><span class="header-section-number">4.4.8</span> 7) Commit and push site to GitHub (so Pages can serve <code>docs/</code>)</a></li>
+  <li><a href="#enable-github-pages-one-time-ui" id="toc-enable-github-pages-one-time-ui" class="nav-link" data-scroll-target="#enable-github-pages-one-time-ui"><span class="header-section-number">4.4.9</span> 8) Enable GitHub Pages (one-time, UI)</a></li>
+  </ul></li>
+  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">4.5</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#homework-due-before-session-4" id="toc-homework-due-before-session-4" class="nav-link" data-scroll-target="#homework-due-before-session-4"><span class="header-section-number">4.6</span> Homework (due before Session 4)</a>
+  <ul class="collapse">
+  <li><a href="#part-a-add-drawdown-simple-regime-shading" id="toc-part-a-add-drawdown-simple-regime-shading" class="nav-link" data-scroll-target="#part-a-add-drawdown-simple-regime-shading"><span class="header-section-number">4.6.1</span> Part A — Add drawdown &amp; simple regime shading</a></li>
+  <li><a href="#part-b-render-three-separate-pages-and-link-them-in-the-navbar" id="toc-part-b-render-three-separate-pages-and-link-them-in-the-navbar" class="nav-link" data-scroll-target="#part-b-render-three-separate-pages-and-link-them-in-the-navbar"><span class="header-section-number">4.6.2</span> Part B — Render three separate pages and link them in the navbar</a></li>
+  <li><a href="#part-c-makefile-convenience-targets" id="toc-part-c-makefile-convenience-targets" class="nav-link" data-scroll-target="#part-c-makefile-convenience-targets"><span class="header-section-number">4.6.3</span> Part C — Makefile convenience targets</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">4.6.4</span> Grading (pass/revise)</a></li>
+  </ul></li>
+  <li><a href="#instructor-checklist-before-class" id="toc-instructor-checklist-before-class" class="nav-link" data-scroll-target="#instructor-checklist-before-class"><span class="header-section-number">4.7</span> Instructor checklist (before class)</a></li>
+  <li><a href="#emphasize-while-teaching" id="toc-emphasize-while-teaching" class="nav-link" data-scroll-target="#emphasize-while-teaching"><span class="header-section-number">4.8</span> Emphasize while teaching</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Below is a complete lecture package for <strong>Session 3 — Quarto Reports (Python)</strong> (75 minutes). It includes: timed agenda, key talking points, an <strong>in‑class lab with copy‑paste code cells (Colab‑friendly)</strong>, and <strong>homework with copy‑paste code</strong>. This session produces a <strong>parameterized EDA report</strong> for multiple tickers and publishes it to <strong>GitHub Pages</strong>.</p>
+<blockquote class="blockquote">
+<p>Assumptions: Students already have (from Sessions 1–2) a repo like <code>unified-stocks-teamX</code> in Drive (or they can create it now) and basic Git push workflow with a short‑lived token. Today focuses on Quarto.</p>
+</blockquote>
+<hr>
+<section id="session-3-quarto-reports-python-75-minutes" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="session-3-quarto-reports-python-75-minutes"><span class="header-section-number">4.1</span> Session 3 — Quarto Reports (Python) — 75 minutes</h2>
+<section id="learning-goals" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">4.1.1</span> Learning goals</h3>
+<p>By the end of class, students can:</p>
+<ol type="1">
+<li>Create a <strong>parameterized</strong> Quarto report (<code>.qmd</code>) that runs Python code.</li>
+<li>Render a report from <strong>Colab</strong> using the <strong>Quarto CLI</strong> (with caching).</li>
+<li>Pass parameters on the command line to re‑render for different tickers/date ranges.</li>
+<li>Configure a minimal Quarto <strong>website</strong> that builds to <code>docs/</code> and publish it via <strong>GitHub Pages</strong>.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="agenda-75-min" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">4.2</span> Agenda (75 min)</h2>
+<ul>
+<li><strong>(8 min)</strong> Why Quarto for DS: literate programming, parameters, caching, publishing</li>
+<li><strong>(12 min)</strong> Anatomy of a <code>.qmd</code>: YAML front matter, <code>params:</code>, code chunks, <code>execute:</code> options, figures</li>
+<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: install Quarto in Colab → create <code>_quarto.yml</code> → write <code>reports/eda.qmd</code> → render for AAPL/MSFT → output to <code>docs/</code></li>
+<li><strong>(10 min)</strong> GitHub Pages walkthrough + troubleshooting + homework briefing</li>
+<li><strong>(10 min)</strong> Buffer for hiccups (first Quarto install/render often needs a minute)</li>
+</ul>
+<hr>
+</section>
+<section id="talking-points-for-your-slides" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="talking-points-for-your-slides"><span class="header-section-number">4.3</span> Talking points (for your slides)</h2>
+<p><strong>Why Quarto</strong></p>
+<ul>
+<li>One source of truth for code + prose + figures → reproducibility and explainability.</li>
+<li>Parameterization = fast re‑runs with different inputs (ticker/horizon).</li>
+<li>Publishing to GitHub Pages gives a permanent, shareable artifact.</li>
+</ul>
+<p><strong>Key concepts</strong></p>
+<ul>
+<li><p><strong>Front matter</strong>:</p>
+<ul>
+<li><code>format:</code> controls HTML/PDF/RevealJS (we’ll use HTML).</li>
+<li><code>execute:</code> controls caching, echo, warnings.</li>
+<li><code>params:</code> defines inputs; accessed as <code>params</code> dict in Python cells.</li>
+</ul></li>
+<li><p><strong>Performance</strong>: enable <code>execute.cache: true</code> to avoid refetching/recomputing.</p></li>
+<li><p><strong>Publishing</strong>: write to <code>docs/</code> then enable GitHub Pages (Settings → Pages → “Deploy from a branch” → <code>main</code> / <code>/docs</code>).</p></li>
+</ul>
+<p><strong>Ethics/footnote</strong></p>
+<ul>
+<li>Financial data EDA here is <strong>educational</strong> only; not trading advice.</li>
+</ul>
+<hr>
+</section>
+<section id="inclass-lab-35-min" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">4.4</span> In‑class lab (35 min)</h2>
+<blockquote class="blockquote">
+<p><strong>Instructor tip</strong>: Ask students to follow step‑by‑step. If they didn’t complete Session 2’s clone, they can create a fresh folder under Drive and initialize a new GitHub repo afterward.</p>
+</blockquote>
+<section id="mount-drive-and-set-repo-paths" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="mount-drive-and-set-repo-paths"><span class="header-section-number">4.4.1</span> 0) Mount Drive and set repo paths</h3>
+<p>Run each block as a separate Colab cell.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"YOUR_GITHUB_USERNAME_OR_ORG"</span>  <span class="co"># &lt;- change</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span>         <span class="co"># &lt;- change</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>BASE_DIR   <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>REPO_DIR   <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>REPO_URL   <span class="op">=</span> <span class="ss">f"https://github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib, os, subprocess</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(REPO_DIR).exists():</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git clone {REPO_URL} {REPO_DIR}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">%</span>cd {REPO_DIR}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git pull <span class="op">--</span>ff<span class="op">-</span>only</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>cd {REPO_DIR}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="install-quarto-cli-on-colab-and-verify" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="install-quarto-cli-on-colab-and-verify"><span class="header-section-number">4.4.2</span> 1) Install Quarto CLI on Colab and verify</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Quarto CLI (one-time per Colab runtime)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q https:<span class="op">//</span>quarto.org<span class="op">/</span>download<span class="op">/</span>latest<span class="op">/</span>quarto<span class="op">-</span>linux<span class="op">-</span>amd64.deb <span class="op">-</span>O <span class="op">/</span>tmp<span class="op">/</span>quarto.deb</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>dpkg <span class="op">-</span>i <span class="op">/</span>tmp<span class="op">/</span>quarto.deb <span class="op">||</span> apt<span class="op">-</span>get <span class="op">-</span>y <span class="op">-</span>f install <span class="op">&gt;/</span>dev<span class="op">/</span>null <span class="op">&amp;&amp;</span> dpkg <span class="op">-</span>i <span class="op">/</span>tmp<span class="op">/</span>quarto.deb</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto <span class="op">--</span>version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="minimal-project-config-_quarto.yml-website-to-docs" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="minimal-project-config-_quarto.yml-website-to-docs"><span class="header-section-number">4.4.3</span> 2) Minimal project config: <code>_quarto.yml</code> (website to <code>docs/</code>)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>qproj <span class="op">=</span> dedent(<span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">project:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">  type: website</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">  output-dir: docs</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">website:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">  title: "Unified Stocks — EDA"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">  navbar:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    left:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">      - href: index.qmd</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">        text: Home</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">      - href: reports/eda.qmd</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="st">        text: EDA (parametrized)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="st">format:</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="st">  html:</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">    theme: cosmo</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">    toc: true</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">    code-fold: false</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">execute:</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="st">  echo: true</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="st">  warning: false</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">  cache: true</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>).write(qproj)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create a simple homepage:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">title: "Unified Stocks Project"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">Welcome! Use the navigation to view the EDA report.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">- **Stock set**: see `tickers_25.csv`</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">- **Note**: Educational use only — no trading advice.</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"index.qmd"</span>,<span class="st">"w"</span>).write(index)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"index.qmd"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="create-the-parameterized-eda-report-reportseda.qmd" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="create-the-parameterized-eda-report-reportseda.qmd"><span class="header-section-number">4.4.4</span> 3) Create the parameterized EDA report: <code>reports/eda.qmd</code></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"reports/figs"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>eda_qmd <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">title: "Stock EDA"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">format:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">  html:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">    toc: true</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">    number-sections: false</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">execute:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">  echo: true</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">  warning: false</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">  cache: true</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">params:</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="st">  symbol: "AAPL"</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="st">  start_date: "2018-01-01"</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">  end_date: ""</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">  rolling: 20</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="st">::: callout-note</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="st">This report is parameterized. To change inputs without editing code, pass</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="st">`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`.</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="st">## Setup</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="st">## Download and prepare data</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="st">## Price over time</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="st">## Daily log returns — histogram</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="st">## Rolling mean &amp; volatility (window = </span><span class="sc">{params.rolling}</span><span class="st">)</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="st">## Summary table</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.cell}</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; **Note**: Educational use only. This is not trading advice.</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; """</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">open</span>(<span class="st">"reports/eda.qmd"</span>,<span class="st">"w"</span>).write(eda\_qmd)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="bu">print</span>(<span class="st">"Wrote reports/eda.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="render-the-report-for-one-ticker-aapl-and-put-outputs-in-docs" class="level3" data-number="4.4.5">
+<h3 data-number="4.4.5" class="anchored" data-anchor-id="render-the-report-for-one-ticker-aapl-and-put-outputs-in-docs"><span class="header-section-number">4.4.5</span> 4) Render the report for one ticker (AAPL) and put outputs in <code>docs/</code></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single render with defaults (AAPL)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Open the produced HTML (Colab file browser → <code>docs/reports/eda.html</code>). If the HTML is under <code>docs/reports/eda.html</code>, that’s expected (Quarto keeps layout mirroring source folders).</p>
+</section>
+<section id="render-for-multiple-tickers-by-passing-parameters" class="level3" data-number="4.4.6">
+<h3 data-number="4.4.6" class="anchored" data-anchor-id="render-for-multiple-tickers-by-passing-parameters"><span class="header-section-number">4.4.6</span> 5) Render for multiple tickers by passing parameters</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Render for MSFT with custom dates and rolling window</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">-</span>P symbol:MSFT <span class="op">-</span>P start_date:<span class="dv">2019</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Render for NVDA with a different window</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">-</span>P symbol:NVDA <span class="op">-</span>P start_date:<span class="dv">2018</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">60</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create <code>docs/reports/eda.html</code> for the last render (Quarto overwrites the same output path by default). If you want <strong>separate pages per ticker</strong>, render to different filenames:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: write MSFT to docs/reports/eda-MSFT.html via project copy</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil, os</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-MSFT.qmd"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>MSFT.qmd <span class="op">-</span>P symbol:MSFT <span class="op">-</span>P start_date:<span class="dv">2019</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="add-nav-links-to-specific-ticker-pages-optional" class="level3" data-number="4.4.7">
+<h3 data-number="4.4.7" class="anchored" data-anchor-id="add-nav-links-to-specific-ticker-pages-optional"><span class="header-section-number">4.4.7</span> 6) Add nav links to specific ticker pages (optional)</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Append MSFT page to navbar</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ruamel.yaml <span class="im">import</span> YAML</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>yaml <span class="op">=</span> YAML()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>cfg <span class="op">=</span> yaml.load(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"website"</span>][<span class="st">"navbar"</span>][<span class="st">"left"</span>].append({<span class="st">"href"</span>: <span class="st">"reports/eda-MSFT.qmd"</span>, <span class="st">"text"</span>: <span class="st">"MSFT EDA"</span>})</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    yaml.dump(cfg, f)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="commit-and-push-site-to-github-so-pages-can-serve-docs" class="level3" data-number="4.4.8">
+<h3 data-number="4.4.8" class="anchored" data-anchor-id="commit-and-push-site-to-github-so-pages-can-serve-docs"><span class="header-section-number">4.4.8</span> 7) Commit and push site to GitHub (so Pages can serve <code>docs/</code>)</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add _quarto.yml index.qmd reports<span class="op">/</span>eda<span class="op">*</span>.qmd reports<span class="op">/</span>figs docs</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"feat: add parameterized Quarto EDA and publish to docs/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Push using a short-lived fine-grained token (as in Session 2)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (not stored): "</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} HEAD:main</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="enable-github-pages-one-time-ui" class="level3" data-number="4.4.9">
+<h3 data-number="4.4.9" class="anchored" data-anchor-id="enable-github-pages-one-time-ui"><span class="header-section-number">4.4.9</span> 8) Enable GitHub Pages (one-time, UI)</h3>
+<ul>
+<li><p>On GitHub: <strong>Settings → Pages</strong></p>
+<ul>
+<li>Source: <strong>Deploy from a branch</strong></li>
+<li>Branch: <code>main</code></li>
+<li>Folder: <code>/docs</code></li>
+</ul></li>
+<li><p>Save. Wait ~1–3 minutes. Your site will be live at the URL GitHub shows (usually <code>https://&lt;owner&gt;.github.io/&lt;repo&gt;/</code>).</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="wrapup-10-min" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">4.5</span> Wrap‑up (10 min)</h2>
+<ul>
+<li>Re‑rendering with <code>-P</code> lets you build many variants quickly.</li>
+<li>Keep <strong>data fetches cached</strong> and/or saved to files to speed up renders.</li>
+<li>Your team can add more pages (e.g., <em>Methodology</em>, <em>Results</em>, <em>Model Card</em>) and link them via <code>_quarto.yml</code>.</li>
+</ul>
+<hr>
+</section>
+<section id="homework-due-before-session-4" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="homework-due-before-session-4"><span class="header-section-number">4.6</span> Homework (due before Session 4)</h2>
+<p><strong>Goal:</strong> Enhance the EDA report with two features and publish distinct pages for <strong>three</strong> tickers from <code>tickers_25.csv</code>.</p>
+<section id="part-a-add-drawdown-simple-regime-shading" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="part-a-add-drawdown-simple-regime-shading"><span class="header-section-number">4.6.1</span> Part A — Add drawdown &amp; simple regime shading</h3>
+<ol type="1">
+<li><p>Edit <code>reports/eda.qmd</code>. After computing <code>df["log_return"]</code>, compute:</p>
+<ul>
+<li><code>cum_return</code> and <strong>drawdown</strong></li>
+<li>A simple <strong>volatility regime</strong> indicator (e.g., rolling std quantiles)</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add to the "Tidy &amp; features" section in eda.qmd</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"cum_return"</span>] <span class="op">=</span> df[<span class="st">"log_return"</span>].cumsum().fillna(<span class="fl">0.0</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>peak <span class="op">=</span> df[<span class="st">"cum_return"</span>].cummax()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"drawdown"</span>] <span class="op">=</span> df[<span class="st">"cum_return"</span>] <span class="op">-</span> peak</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Regime via rolling volatility terciles</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>vol <span class="op">=</span> df[<span class="st">"log_return"</span>].rolling(ROLL, min_periods<span class="op">=</span>ROLL<span class="op">//</span><span class="dv">2</span>).std()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>q1, q2 <span class="op">=</span> vol.quantile([<span class="fl">0.33</span>, <span class="fl">0.66</span>])</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> regime(v):</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.isnan(v): <span class="cf">return</span> <span class="st">"mid"</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"low"</span> <span class="cf">if</span> v <span class="op">&lt;</span> q1 <span class="cf">else</span> (<span class="st">"high"</span> <span class="cf">if</span> v <span class="op">&gt;</span> q2 <span class="cf">else</span> <span class="st">"mid"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"regime"</span>] <span class="op">=</span> [regime(v) <span class="cf">for</span> v <span class="kw">in</span> vol]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"regime"</span>].value_counts().to_frame(<span class="st">"days"</span>).T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Add a <strong>drawdown plot</strong> and shade high‑volatility regimes:</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drawdown plot</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">3</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>ax.plot(df.index, df[<span class="st">"drawdown"</span>])</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss"> — Drawdown (log-return cumulative)"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Date"</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">"drawdown"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>figpath <span class="op">=</span> Path(<span class="st">"reports/figs"</span>)<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss">_drawdown.png"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>fig.savefig(figpath, dpi<span class="op">=</span><span class="dv">144</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>figpath</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Price with regime shading (simple)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">3</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ax.plot(df.index, df[<span class="st">"close"</span>])</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss"> — Price with High-Volatility Shading"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Date"</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">"Price"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Shade where regime == 'high'</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> (df[<span class="st">"regime"</span>] <span class="op">==</span> <span class="st">"high"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># merge contiguous regions</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>in_region <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (ts, is_high) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(df.index, mask)):</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_high <span class="kw">and</span> <span class="kw">not</span> in_region:</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        in_region <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        start <span class="op">=</span> ts</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> in_region <span class="kw">and</span> (<span class="kw">not</span> is_high <span class="kw">or</span> i <span class="op">==</span> <span class="bu">len</span>(df)<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        end <span class="op">=</span> df.index[i<span class="op">-</span><span class="dv">1</span>] <span class="cf">if</span> <span class="kw">not</span> is_high <span class="cf">else</span> ts</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>        ax.axvspan(start, end, alpha<span class="op">=</span><span class="fl">0.15</span>)  <span class="co"># shaded band</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        in_region <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>figpath <span class="op">=</span> Path(<span class="st">"reports/figs"</span>)<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss">_price_regimes.png"</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>fig.savefig(figpath, dpi<span class="op">=</span><span class="dv">144</span>)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>figpath</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="part-b-render-three-separate-pages-and-link-them-in-the-navbar" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="part-b-render-three-separate-pages-and-link-them-in-the-navbar"><span class="header-section-number">4.6.2</span> Part B — Render three separate pages and link them in the navbar</h3>
+<ol type="1">
+<li>Make copies of the report source so each produces its own page:</li>
+</ol>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-AAPL.qmd"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-MSFT.qmd"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-NVDA.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Render each with different parameters:</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>AAPL.qmd <span class="op">-</span>P symbol:AAPL <span class="op">-</span>P start_date:<span class="dv">2018</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>MSFT.qmd <span class="op">-</span>P symbol:MSFT <span class="op">-</span>P start_date:<span class="dv">2018</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>NVDA.qmd <span class="op">-</span>P symbol:NVDA <span class="op">-</span>P start_date:<span class="dv">2018</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Add to the navbar in <code>_quarto.yml</code> and rebuild site:</li>
+</ol>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ruamel.yaml <span class="im">import</span> YAML</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>yaml <span class="op">=</span> YAML()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>cfg <span class="op">=</span> yaml.load(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"website"</span>][<span class="st">"navbar"</span>][<span class="st">"left"</span>].extend([</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  {<span class="st">"href"</span>: <span class="st">"reports/eda-AAPL.qmd"</span>, <span class="st">"text"</span>: <span class="st">"AAPL"</span>},</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  {<span class="st">"href"</span>: <span class="st">"reports/eda-MSFT.qmd"</span>, <span class="st">"text"</span>: <span class="st">"MSFT"</span>},</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  {<span class="st">"href"</span>: <span class="st">"reports/eda-NVDA.qmd"</span>, <span class="st">"text"</span>: <span class="st">"NVDA"</span>},</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    yaml.dump(cfg, f)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="4" type="1">
+<li>Commit &amp; push (use your short‑lived token as before):</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add reports<span class="op">/</span>eda<span class="op">-*</span>.qmd reports<span class="op">/</span>figs _quarto.yml docs</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"feat: EDA enhancements (drawdown/regimes) and pages for AAPL/MSFT/NVDA"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (not stored): "</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} HEAD:main</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li>Verify <strong>GitHub Pages</strong> shows navbar links and pages load.</li>
+</ol>
+</section>
+<section id="part-c-makefile-convenience-targets" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="part-c-makefile-convenience-targets"><span class="header-section-number">4.6.3</span> Part C — Makefile convenience targets</h3>
+<p>Append these to your project <code>Makefile</code>:</p>
+<pre class="make"><code>report:
+\tquarto render reports/eda.qmd --output-dir docs/
+
+reports-trio:
+\tquarto render reports/eda-AAPL.qmd -P symbol:AAPL -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/
+\tquarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/
+\tquarto render reports/eda-NVDA.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/</code></pre>
+<blockquote class="blockquote">
+<p>On Colab, running <code>make</code> requires <code>make</code> to be available (it is). Otherwise, keep using <code>quarto render</code> commands.</p>
+</blockquote>
+</section>
+<section id="grading-passrevise" class="level3" data-number="4.6.4">
+<h3 data-number="4.6.4" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">4.6.4</span> Grading (pass/revise)</h3>
+<ul>
+<li><code>reports/eda.qmd</code> renders with parameters and caching enabled.</li>
+<li>At least <strong>three</strong> ticker pages rendered and linked in navbar.</li>
+<li>Drawdown and simple regime shading working on the EDA page(s).</li>
+<li>Site published via GitHub Pages (<code>docs/</code> present on <code>main</code> and live).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="instructor-checklist-before-class" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="instructor-checklist-before-class"><span class="header-section-number">4.7</span> Instructor checklist (before class)</h2>
+<ul>
+<li>Test the Quarto install/render flow once in a fresh Colab runtime.</li>
+<li>Have a screenshot of: <code>_quarto.yml</code>, rendered <code>docs/</code> tree, GitHub Pages settings.</li>
+<li>Remind students: if <code>yfinance</code> rate‑limits, re‑run or wait; the synthetic fallback ensures the page renders.</li>
+</ul>
+</section>
+<section id="emphasize-while-teaching" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="emphasize-while-teaching"><span class="header-section-number">4.8</span> Emphasize while teaching</h2>
+<ul>
+<li><strong>Parameters</strong> make reports reusable; don’t copy‑paste notebooks for each ticker.</li>
+<li><strong>Cache</strong> for speed; <strong>docs/</strong> for Pages.</li>
+<li>Keep figures saved under <code>reports/figs/</code> and referenced in the report.</li>
+<li>Keep secrets out of the repo; EDA uses public data only.</li>
+</ul>
+<p>Next time (Session 4): a quick <strong>RStudio Quarto cameo</strong> and more <strong>report hygiene</strong> (citations, figure captions, alt text), then into <strong>Unix automation</strong>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lec2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Session 2 — Git essentials &amp; Git‑LFS</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./lec4.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Session 4 — RStudio Quarto cameo + Report Hygiene</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

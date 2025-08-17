@@ -1,0 +1,708 @@
+---
+title: "Session 13 — Packaging, Reproducibility & a Quarto Model Card"
+---
+Below is a complete lecture package for **Session 13 — Packaging, Reproducibility & a Quarto Model Card** (75 minutes). It includes: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. By the end, your repo will (1) install as a small Python package, (2) generate **poster‑ready figures/tables**, and (3) render a **Quarto model card** that summarizes the unified tiny‑GPT results.
+
+> **Assumptions:** Same Drive‑mounted repo (e.g., `unified-stocks-teamX`), with artifacts from Sessions 8–12 (e.g., `reports/gpt_walkforward_metrics.csv`). If any file is missing, the lab creates safe fallbacks.
+
+---
+
+## Session 13 — Packaging, Reproducibility & a Quarto Model Card (75 min)
+
+### Learning goals
+
+Students will be able to:
+
+1. Package their project as an **installable module** (`src/` layout, `pyproject.toml`) and import it (`pip install -e .`).
+2. Capture a **reproducibility manifest** (commit, Python/pkg versions) and add **CI smoke tests**.
+3. Generate **poster‑ready assets** (CSV summary + PNG figures) from prior reports.
+4. Render a **Quarto model card** (`docs/model_card.html`) that cites data, methods, metrics, and limitations.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: why package? why model cards? what “reproducibility” means in practice
+* **(10 min)** Slides: `src/` layout, `pyproject.toml`, `pip install -e .`, CI basics
+* **(35 min)** **In‑class lab** (Colab): package skeleton → install → poster assets → Quarto model card → Makefile targets
+* **(10 min)** Wrap‑up & homework briefing
+* **(10 min)** Buffer
+
+---
+
+## Slides / talking points (for your deck)
+
+**Why package your project?**
+
+* Enables `import projectname` in notebooks, scripts, and CI.
+* Encourages **clean interfaces** (`src/` modules), **tests**, and **versioning**.
+* Supports **reproducibility**: install exact version and rerun pipelines.
+
+**Reproducibility Levels**
+
+* **Code**: versioned scripts, minimal package.
+* **Environment**: `pyproject.toml` deps, optional `requirements-lock.txt`.
+* **Data/Artifacts**: deterministic scripts, **Makefile** targets, CSV/Parquet saved with timestamps.
+* **Reports**: Quarto documents with **params** and sources of truth (CSV metrics).
+
+**Model cards (why)**
+
+* Communicate **intended use**, **data**, **evaluation**, **limitations**, **ethical considerations**—and make posters/papers faster.
+
+---
+
+## In‑class Lab (35 min, Colab‑friendly)
+
+> Run each block as its **own cell**. Adjust `REPO_OWNER/REPO_NAME` first.
+
+### 0) Mount Drive & cd into repo
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, sys, pandas as pd, numpy as np
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found. Clone it in Sessions 2–3."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Create a minimal **package skeleton** (`src/` layout)
+
+This wraps the reusable bits you’ve built: `datasets`, `models`, `splits`, `metrics`, `sqlio`.
+
+```python
+from pathlib import Path
+import textwrap, os, stat, json
+
+# Create package dirs
+Path("src/projectname/models").mkdir(parents=True, exist_ok=True)
+
+# __init__.py and version
+(Path("src/projectname/__init__.py")
+ .write_text('from .version import __version__\n'))
+(Path("src/projectname/version.py")
+ .write_text('__version__ = "0.1.0"\n'))
+
+# datasets.py (adapted from Session 10)
+(Path("src/projectname/datasets.py")
+ .write_text(textwrap.dedent("""
+from __future__ import annotations
+import numpy as np, pandas as pd, torch
+from typing import List, Optional, Tuple
+
+class WindowedTS(torch.utils.data.Dataset):
+    def __init__(self, frame: pd.DataFrame, feature_cols: List[str], context: int = 32,
+                 horizon: int = 1, norm_stats: Optional[Tuple[np.ndarray,np.ndarray]] = None):
+        self.feature_cols = feature_cols; self.context=int(context); self.horizon=int(horizon)
+        rows=[]
+        for tkr, g in frame.groupby("ticker"):
+            g = g.sort_values("date").reset_index(drop=True)
+            T = len(g)
+            for i in range(0, T - self.context - self.horizon + 1):
+                j = i + self.context - 1
+                y_idx = j + self.horizon
+                X = g.loc[i:j, self.feature_cols].values.astype("float32")
+                y = float(g.loc[y_idx, "r_1d"])
+                rows.append((tkr, X, y))
+        self.rows = np.array(rows, dtype=object)
+        self.mu = self.sigma = None
+        if norm_stats is not None:
+            self.mu = np.asarray(norm_stats[0], dtype="float32")
+            self.sigma = np.asarray(norm_stats[1], dtype="float32")
+    def __len__(self): return len(self.rows)
+    def __getitem__(self, idx: int):
+        tkr, X, y = self.rows[idx]
+        X = (X - self.mu) / (self.sigma + 1e-8) if self.mu is not None else X
+        return torch.from_numpy(X), torch.tensor([y], dtype=torch.float32), tkr
+
+def compute_norm_stats(train_df: pd.DataFrame, feature_cols: List[str]):
+    mu = train_df[feature_cols].mean().values.astype("float32")
+    sg = train_df[feature_cols].std(ddof=0).replace(0, np.nan).fillna(1.0).values.astype("float32")
+    return mu, sg
+""")))
+
+# models/lstm.py (Session 10)
+(Path("src/projectname/models/lstm.py")
+ .write_text(textwrap.dedent("""
+from __future__ import annotations
+import torch
+from torch import nn
+
+class LSTMRegressor(nn.Module):
+    def __init__(self, in_dim: int, hidden: int = 64, layers: int = 2, dropout: float = 0.1):
+        super().__init__()
+        self.lstm = nn.LSTM(in_dim, hidden, num_layers=layers, batch_first=True,
+                            dropout=(dropout if layers>1 else 0.0))
+        self.head = nn.Sequential(nn.Linear(hidden,64), nn.ReLU(), nn.Linear(64,1))
+    def forward(self, x):
+        out,_ = self.lstm(x)
+        return self.head(out[:, -1, :])
+""")))
+
+# splits.py & metrics.py (Session 9)
+(Path("src/projectname/splits.py")
+ .write_text(textwrap.dedent("""
+from __future__ import annotations
+import numpy as np, pandas as pd
+
+def make_walkforward_splits(dates: pd.Series, train_min: int, val_size: int, step: int, embargo: int):
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    n = len(u); i = train_min - 1; splits=[]
+    while True:
+        if i >= n: break
+        tr_start, tr_end = u[0], u[i]
+        vs = i + embargo + 1
+        ve = vs + val_size - 1
+        if ve >= n: break
+        splits.append((tr_start, tr_end, u[vs], u[ve]))
+        i += step
+    return splits
+
+def check_no_overlap(splits):
+    for j,(a,b,c,d) in enumerate(splits):
+        if not (b < c):
+            raise AssertionError(f"Temporal overlap in split {j}: train_end {b} >= val_start {c}")
+""")))
+(Path("src/projectname/metrics.py")
+ .write_text(textwrap.dedent("""
+from __future__ import annotations
+import numpy as np
+from sklearn.metrics import mean_absolute_error
+
+def smape(y_true, y_pred, eps=1e-8):
+    y_true = np.asarray(y_true); y_pred = np.asarray(y_pred)
+    return float(np.mean(2.0*np.abs(y_pred - y_true) / (np.abs(y_true)+np.abs(y_pred)+eps)))
+
+def directional_accuracy(y_true, y_pred):
+    yt = np.asarray(y_true); yp = np.asarray(y_pred)
+    return float(np.mean(np.sign(yt) == np.sign(yp)))
+
+def aggregate_micro(y, yhat):
+    return {"n": len(y),
+            "mae": float(mean_absolute_error(y,yhat)),
+            "smape": smape(y,yhat),
+            "dir_acc": directional_accuracy(y,yhat)}
+""")))
+
+# sqlio.py (Session 7–8 helper)
+(Path("src/projectname/sqlio.py")
+ .write_text(textwrap.dedent("""
+from __future__ import annotations
+import sqlite3
+import pandas as pd
+from contextlib import contextmanager
+from pathlib import Path
+
+DB_PATH = Path("data/prices.db")
+
+@contextmanager
+def connect(db_path: str | Path = DB_PATH):
+    con = sqlite3.connect(str(db_path))
+    con.execute("PRAGMA foreign_keys = ON;")
+    try: yield con
+    finally: con.close()
+
+def query_df(sql: str, params=None, db_path: str | Path = DB_PATH) -> pd.DataFrame:
+    with connect(db_path) as con:
+        return pd.read_sql_query(sql, con, params=params)
+""")))
+
+print("Package skeleton created under src/projectname/")
+```
+
+Create `pyproject.toml` (modern packaging with **setuptools**), a minimal README, and MIT **LICENSE**:
+
+````python
+Path("pyproject.toml").write_text(textwrap.dedent("""
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "projectname"
+version = "0.1.0"
+description = "Unified stock forecasting tools for DS Productivity (teaching repo)"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name="Your Name", email="you@school.edu"}]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.23",
+  "pandas>=1.5",
+  "pyarrow>=13",
+  "scikit-learn>=1.2",
+  "torch>=2.0",
+  "matplotlib>=3.7",
+  "yfinance>=0.2"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+"""))
+
+Path("README.md").write_text(textwrap.dedent("""
+# projectname
+
+Utilities for the **Unified Stocks** course project.
+
+## Install (editable)
+```bash
+pip install -e .
+````
+
+## Use
+
+```python
+import projectname
+from projectname.datasets import WindowedTS, compute_norm_stats
+```
+
+"""))
+
+Path("LICENSE").write\_text(textwrap.dedent("""
+MIT License
+
+Copyright (c) 2025 ...
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+... (shortened for class; replace with full MIT text in your repo) ...
+"""))
+print("pyproject, README, LICENSE written.")
+
+````
+
+Install the package **editable** and quick‑test imports:
+
+```python
+!pip install -e . -q
+import projectname, importlib
+from projectname.datasets import WindowedTS, compute_norm_stats
+from projectname.models.lstm import LSTMRegressor
+print("Imported projectname", projectname.__version__)
+````
+
+### 2) **Poster‑ready assets** from previous reports
+
+We’ll (a) load `reports/gpt_walkforward_metrics.csv` (Session 12), (b) compute a small summary table, (c) draw two figures.
+
+```python
+import pandas as pd, numpy as np, pathlib, matplotlib.pyplot as plt
+pathlib.Path("reports").mkdir(exist_ok=True)
+pathlib.Path("docs/figs").mkdir(parents=True, exist_ok=True)
+
+# Fallback: synthesize a tiny walkforward file if missing
+wf_path = pathlib.Path("reports/gpt_walkforward_metrics.csv")
+if not wf_path.exists():
+    df_fake = pd.DataFrame({
+        "split":[1,2,3],
+        "gpt_mae":[0.012,0.011,0.013],
+        "lag1_mae":[0.013,0.012,0.014],
+        "gpt_diracc":[0.52,0.51,0.53],
+        "lag1_diracc":[0.51,0.50,0.51],
+        "train_range":["2022-01-03→2022-12-30"]*3,
+        "val_range":["2023-01-03→2023-04-03","2023-04-04→2023-07-06","2023-07-07→2023-10-06"]
+    })
+    df_fake.to_csv(wf_path, index=False)
+
+wf = pd.read_csv(wf_path)
+summary = pd.DataFrame({
+    "metric":["MAE (↓)", "Directional Accuracy (↑)"],
+    "GPT (mean)":[wf["gpt_mae"].mean(), wf["gpt_diracc"].mean()],
+    "Lag‑1 (mean)":[wf["lag1_mae"].mean(), wf["lag1_diracc"].mean()],
+    "Δ (GPT − Lag‑1)":[wf["gpt_mae"].mean()-wf["lag1_mae"].mean(),
+                       wf["gpt_diracc"].mean()-wf["lag1_diracc"].mean()]
+})
+summary.to_csv("reports/poster_table.csv", index=False)
+summary
+```
+
+**Figure 1: MAE per split (GPT vs Lag‑1)**
+
+```python
+plt.figure(figsize=(6,3.5))
+x = np.arange(len(wf))
+w = 0.35
+plt.bar(x-w/2, wf["gpt_mae"], width=w, label="Tiny‑GPT")
+plt.bar(x+w/2, wf["lag1_mae"], width=w, label="Lag‑1")
+plt.xticks(x, [f"S{n}" for n in wf["split"]])
+plt.ylabel("MAE"); plt.title("Validation MAE per split")
+plt.legend()
+plt.tight_layout()
+plt.savefig("docs/figs/mae_per_split.png", dpi=200)
+"Saved docs/figs/mae_per_split.png"
+```
+
+**Figure 2 (optional): Heads×Context sweep (if available)**
+
+```python
+import os
+sweep_path = pathlib.Path("reports/gpt_sweep_heads_context.csv")
+if sweep_path.exists():
+    sw = pd.read_csv(sweep_path)
+    plt.figure(figsize=(6,3.5))
+    for ctx in sorted(sw["context"].unique()):
+        sub = sw[sw["context"]==ctx].sort_values("heads")
+        plt.plot(sub["heads"], sub["gpt_mae"], marker="o", label=f"context={ctx}")
+    plt.xlabel("heads"); plt.ylabel("MAE")
+    plt.title("Tiny‑GPT sweep on split 1")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("docs/figs/sweep_heads_context.png", dpi=200)
+    print("Saved docs/figs/sweep_heads_context.png")
+else:
+    print("No sweep file found; skipping second figure.")
+```
+
+### 3) **Quarto model card** (`docs/model_card.qmd`)
+
+We’ll create a one‑page model card that reads the CSVs, embeds tables/figures, and cites limitations.
+
+````python
+from pathlib import Path
+Path("docs").mkdir(exist_ok=True)
+Path("docs/style.css").write_text("""
+body{font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
+.small{font-size: 0.9em; color:#444}
+""")
+
+Path("docs/model_card.qmd").write_text("""---
+title: "Model Card — Unified Tiny‑GPT (Next‑Day Return)"
+format:
+  html:
+    toc: true
+    theme: cosmo
+    css: style.css
+    code-fold: false
+params:
+  project_name: "Unified Stocks"
+  author: "Your Name"
+  repo: "YOUR_GITHUB_USERNAME_OR_ORG/unified-stocks-teamX"
+---
+
+> **Educational use only — not trading advice.** This model forecasts **next‑day log return** for a unified set of U.S. equities.
+
+## Overview
+
+**Model.** Tiny decoder‑only Transformer ("Tiny‑GPT") trained on sliding windows of numeric features (lags, rolling stats), predicting \\(r_{t+1}\\).
+
+**Data.** Daily adjusted close and volume for a fixed set of tickers (see repo). Features computed via SQL windows (Session 8).  
+**Splits.** Walk‑forward, expanding windows with a 5‑day embargo (Sessions 9 & 12).  
+**Baselines.** Lag‑1 return.  
+**Package.** Installable via `pip install -e .` (Session 13).
+
+## Training & Evaluation
+
+- Normalization from **train window only**; leakage‑safe lags.
+- Early stopping on validation loss.
+- Metrics: **MAE** (↓), **Directional Accuracy** (↑).
+- See `reports/gpt_walkforward_metrics.csv`.
+
+### Summary table
+
+```{{r}}
+#| label: tbl-summary
+#| echo: false
+#| tbl-cap: "Walk‑forward summary (means across splits)."
+import pandas as pd
+df = pd.read_csv("reports/poster_table.csv")
+df
+````
+
+### Validation MAE per split
+
+![](figs/mae_per_split.png)
+
+### (Optional) Heads × Context sweep
+
+```{{r}}
+#| echo: false
+import os
+print("Found sweep plot:", os.path.exists("docs/figs/sweep_heads_context.png"))
+```
+
+![](figs/sweep_heads_context.png){.small}
+
+## Risks, Limitations & Ethics
+
+* Sensitive to **regime shifts** (performance degrades at high volatility).
+* Uses **survivorship‑biased** ticker set unless historical membership is tracked.
+* Not suitable for trading; output is noisy and uncalibrated.
+* Potential misuse: treating predictions as investment advice.
+
+## Reproducibility Manifest
+
+```{{r}}
+#| echo: false
+import json, platform, subprocess
+from datetime import datetime
+def git(cmd):
+  try: 
+    return subprocess.check_output(cmd, text=True).strip()
+  except Exception:
+    return "n/a"
+manifest = {
+  "generated": datetime.utcnow().isoformat() + "Z",
+  "python": platform.python_version(),
+  "platform": platform.platform(),
+  "git_commit": git(["git","rev-parse","--short","HEAD"]),
+}
+manifest
+```
+
+## How to Reproduce
+
+1. `pip install -e .`
+2. `make features-sql` (Session 8)
+3. `make eval-gpt` (Session 12)
+4. `make model-card` (Session 13)
+
+""")
+
+# Quarto project file (if missing): render docs/\*.qmd to docs/
+
+qproj = Path("\_quarto.yml")
+if not qproj.exists():
+qproj.write\_text("""project:
+type: website
+output-dir: docs
+format:
+html:
+theme: cosmo
+""")
+print("Wrote docs/model\_card.qmd and updated \_quarto.yml (if missing).")
+
+````
+
+Render the model card (ensure **Quarto** is available; see Session 3 for installing if needed):
+
+```python
+import shutil, subprocess, os, sys
+if shutil.which("quarto"):
+    print(subprocess.check_output(["quarto","render","docs/model_card.qmd"], text=True))
+    print("Rendered docs/model_card.html")
+else:
+    print("Quarto not found. Re-run the Session 3 installer or render locally.")
+````
+
+### 4) **Reproducibility manifest** (JSON) + **CI smoke test**
+
+Create a lightweight manifest and a tiny CI workflow.
+
+```python
+from datetime import datetime
+import platform, subprocess, json, pathlib
+
+pathlib.Path("repro").mkdir(exist_ok=True)
+def git(cmd):
+    try: return subprocess.check_output(cmd, text=True).strip()
+    except Exception: return "n/a"
+
+manifest = {
+    "generated_utc": datetime.utcnow().isoformat()+"Z",
+    "python": platform.python_version(),
+    "platform": platform.platform(),
+    "git_commit": git(["git","rev-parse","--short","HEAD"]),
+}
+pathlib.Path("repro/manifest.json").write_text(json.dumps(manifest, indent=2))
+manifest
+```
+
+Minimal **pytest** to ensure package imports & files exist:
+
+```python
+from pathlib import Path
+Path("tests").mkdir(exist_ok=True)
+Path("tests/test_imports.py").write_text("""
+def test_imports():
+    import projectname
+    from projectname.datasets import WindowedTS, compute_norm_stats
+    assert hasattr(projectname, "__version__")
+""")
+print("Wrote tests/test_imports.py")
+```
+
+**GitHub Actions** workflow (runs tests on pushes/PRs):
+
+```python
+from pathlib import Path
+Path(".github/workflows").mkdir(parents=True, exist_ok=True)
+Path(".github/workflows/ci.yml").write_text("""name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . pytest
+      - name: Test
+        run: pytest -q
+""")
+print("Wrote .github/workflows/ci.yml")
+```
+
+### 5) **Makefile** targets for packaging, figures & model card
+
+Append (or create) the following targets:
+
+```bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+
+# Create Makefile if missing
+test -f Makefile || echo -e "help:\n\t@echo 'See make help in prior sessions.'" > Makefile
+
+# Append Session 13 targets (idempotent)
+cat >> Makefile <<'MAKEEOF'
+
+.PHONY: install pkg-figs model-card ci-local
+install: ## Editable install of the package
+\tpip install -e .
+
+pkg-figs: ## Build poster-ready figures and summary table
+\tpython - <<'PY'
+import pandas as pd, numpy as np, matplotlib.pyplot as plt, pathlib
+pathlib.Path("docs/figs").mkdir(parents=True, exist_ok=True)
+wf = pd.read_csv("reports/gpt_walkforward_metrics.csv")
+summary = pd.DataFrame({"metric":["MAE (↓)","Directional Accuracy (↑)"],
+                        "GPT (mean)":[wf["gpt_mae"].mean(), wf["gpt_diracc"].mean()],
+                        "Lag‑1 (mean)":[wf["lag1_mae"].mean(), wf["lag1_diracc"].mean()],
+                        "Δ (GPT − Lag‑1)":[wf["gpt_mae"].mean()-wf["lag1_mae"].mean(),
+                                           wf["gpt_diracc"].mean()-wf["lag1_diracc"].mean()]})
+summary.to_csv("reports/poster_table.csv", index=False)
+import numpy as np
+plt.figure(figsize=(6,3.5))
+x = np.arange(len(wf)); w=0.35
+plt.bar(x-w/2, wf["gpt_mae"], width=w, label="Tiny‑GPT")
+plt.bar(x+w/2, wf["lag1_mae"], width=w, label="Lag‑1")
+plt.xticks(x, [f"S{n}" for n in wf["split"]]); plt.ylabel("MAE"); plt.title("Validation MAE per split"); plt.legend(); plt.tight_layout()
+plt.savefig("docs/figs/mae_per_split.png", dpi=200)
+print("Generated poster assets.")
+PY
+
+model-card: pkg-figs ## Render docs/model_card.html with Quarto
+\tquarto render docs/model_card.qmd
+
+ci-local: ## Run unit tests locally
+\tpytest -q
+MAKEEOF
+
+echo "Appended Session 13 targets to Makefile."
+```
+
+---
+
+## Wrap‑up (10 min)
+
+* Your project is now **installable**, has a **minimal CI**, and produces **poster‑ready** figures & a **model card**.
+* Keep results **data‑driven**: the card reads `reports/*.csv`; rerun pipelines to refresh the card.
+* You’re ready to finalize the semester project and continue toward the spring **Undergraduate Research Symposium**.
+
+---
+
+## Homework (due before Session 14)
+
+**Goal:** Polish, document, and freeze a “v1” of your project.
+
+### Part A — Finish the model card narrative
+
+* Open `docs/model_card.qmd` and edit the prose:
+
+  * **Intended use**, **out‑of‑scope** uses
+  * **Data description**: tickers, date range, sources
+  * **Evaluation protocol** with embargo & splits
+  * **Limitations** and future work
+* Re‑render:
+
+  ```bash
+  quarto render docs/model_card.qmd
+  ```
+
+### Part B — Strengthen packaging & metadata
+
+1. Add **`CHANGELOG.md`** with entries for Sessions 10–13.
+2. Add **`CITATION.cff`** (minimal):
+
+   ```yaml
+   cff-version: 1.2.0
+   title: Unified Tiny‑GPT for Stock Returns (Teaching Repo)
+   message: If you use this project, please cite it as below.
+   authors:
+     - family-names: YourLast
+       given-names: YourFirst
+   version: 0.1.0
+   date-released: 2025-08-13
+   repository-code: https://github.com/YOUR_GITHUB_USERNAME_OR_ORG/unified-stocks-teamX
+   ```
+3. Bump the package version in `src/projectname/version.py` to `0.1.1` after completing the homework.
+
+### Part C — Publish docs to GitHub Pages (optional but recommended)
+
+* In GitHub, set **Pages** to serve from the `docs/` folder on `main`.
+* Commit and push, then verify `docs/model_card.html` is live.
+
+### Part D — Add one more **test**
+
+Create `tests/test_reports_exist.py`:
+
+```python
+import os, pandas as pd
+def test_reports_exist():
+    assert os.path.exists("reports/gpt_walkforward_metrics.csv")
+    df = pd.read_csv("reports/gpt_walkforward_metrics.csv")
+    assert {"gpt_mae","lag1_mae"}.issubset(df.columns)
+```
+
+Run locally:
+
+```bash
+pytest -q
+```
+
+### Part E — Freeze a v1 release
+
+* Run:
+
+  ```bash
+  make pkg-figs
+  make model-card
+  ```
+* Commit `docs/`, `reports/`, `repro/manifest.json`, updated `pyproject.toml`, `CHANGELOG.md`, `CITATION.cff`.
+* Push to GitHub. Tag a release `v0.1.1`.
+
+**Grading (pass/revise)**
+
+* `pip install -e .` works; `import projectname` succeeds.
+* `reports/poster_table.csv` & `docs/figs/mae_per_split.png` generated.
+* `docs/model_card.html` renders without errors.
+* CI workflow present and green on GitHub (or `make ci-local` passes).
+* Tests include `test_imports.py` and `test_reports_exist.py`.
+
+---
+
+## Instructor checklist (before class)
+
+* Dry‑run: new Colab runtime → run lab end‑to‑end until `docs/model_card.html` exists.
+* Have a slide showing the **data flow** (CSV → poster assets → model card).
+* Clarify that **Quarto** must be installed (Session 3 installer) to render in Colab; otherwise render locally.
+
+## Emphasize while teaching
+
+* Packaging & docs are **part of the research product**, not an afterthought.
+* Keep **reports as the source of truth**; never hardcode metric numbers in prose.
+* Minimal CI/tests go a long way to prevent regressions as the project evolves.
+
+**Next (Session 14 — capstone)**: presentation rehearsal checklist, final repo hygiene, and “what to do next” for symposium prep.

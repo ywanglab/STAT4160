@@ -1,0 +1,784 @@
+---
+title: "Session 11 — Tiny GPT (Causal Self‑Attention) for Time‑Series"
+---
+
+Below is a complete lecture package for **Session 11 --- Tiny GPT (Causal Self‑Attention) for Time‑Series** (75 minutes). It includes: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. We'll (1) verify causal masking on a tiny synthetic sequence task, then (2) train a compact **decoder‑only Transformer** (a "tiny GPT") to predict **next‑day log return** from a sliding window of past features for multiple tickers.
+
+> **Educational use only --- not trading advice.** Assumes the Drive‑mounted repo from prior sessions (e.g., `unified-stocks-teamX`). If a required file is missing, the lab provides a safe fallback.
+
+------------------------------------------------------------------------
+
+## Session 11 --- Tiny GPT for Time‑Series (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1.  Explain **queries/keys/values** and **causal masking** ("no peeking right").
+2.  Implement a compact **decoder‑only Transformer** with **learned positional embeddings** and **pre‑norm** blocks.
+3.  Prepare a **leakage‑free** windowed dataset for numeric sequences; normalize from **train‑only** stats.
+4.  Train, validate, and save a **tiny GPT** baseline for next‑day returns; compare to a **lag‑1** baseline.
+
+------------------------------------------------------------------------
+
+## Agenda (75 min)
+
+-   **(8 min)** Why attention for time‑series; GPT vs LSTM; complexity & inductive bias
+-   **(12 min)** Anatomy of a tiny GPT: Q/K/V, scaled dot‑product, **causal mask**, positional embeddings, pre‑norm Transformer block
+-   **(35 min)** **In‑class lab** (Colab): synthetic AR(2) warm‑up → tiny GPT for stocks → eval vs lag‑1 → save artifacts
+-   **(10 min)** Wrap‑up & troubleshooting
+-   **(10 min)** Buffer
+
+------------------------------------------------------------------------
+
+## Slides / talking points (for your deck)
+
+**Why attention now?**
+
+-   Learns **longer‑range dependencies** than small CNN/LSTM at similar parameter counts (but O(T²) cost).
+-   **Causal self‑attention** = each time step attends to **itself and the past**, never the future.
+
+**Core math (one head)**
+
+-   $Q = XW_Q, K = XW_K, V = XW_V$; $\text{Attn}(Q,K,V) = \text{softmax}\big((QK^\top)/\sqrt{d_h} + M\big)\,V$ where $M$ is **−∞** above the diagonal (causal mask).
+
+**Design we'll implement**
+
+-   **Input projection**: numeric features $\to d_\text{model}$
+-   **Learned positional embeddings** (length = context window)
+-   **Blocks (×L)**: LayerNorm → Self‑Attention → residual; LayerNorm → MLP(GELU) → residual
+-   **Head**: use **last token** representation to regress $r_{t+1}$
+
+**No‑leakage checklist**
+
+-   Input window covers **t−L+1 ... t**; label is **r(t+1)**.
+-   **Normalize with train stats only**.
+-   **Causal mask** blocks future attention.
+-   Compare to **lag‑1** baseline.
+
+------------------------------------------------------------------------
+
+## In‑class lab (35 min)
+
+> Run each block as its own Colab cell. Adjust `REPO_OWNER/REPO_NAME` first.
+
+### 0) Mount Drive, set path, seed, device
+
+``` python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, random, time, math, json
+import numpy as np, pandas as pd
+import torch
+from torch import nn
+
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found; clone it (Session 2/3)."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+
+def set_seed(seed=2025, deterministic=True):
+    random.seed(seed); np.random.seed(seed)
+    torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
+    if deterministic:
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        try: torch.use_deterministic_algorithms(True)
+        except Exception: pass
+
+set_seed(2025)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device
+```
+
+### 1) Warm‑up: verify causal masking on a synthetic AR(2) sequence
+
+We'll train on sequences $y_t = 0.6\, y_{t-1} - 0.2\, y_{t-2} + \epsilon_t$ and predict $y_{t+1}$.
+
+``` python
+# Build a tiny synthetic dataset of AR(2) sequences
+def make_ar2(n_series=512, length=128, noise=0.05, seed=0):
+    rng = np.random.default_rng(seed)
+    ys = []
+    for _ in range(n_series):
+        y = np.zeros(length, dtype=np.float32)
+        y[:2] = rng.normal(0, 1, size=2)
+        for t in range(2, length):
+            y[t] = 0.6*y[t-1] - 0.2*y[t-2] + rng.normal(0, noise)
+        ys.append(y)
+    return np.stack(ys)  # [N, T]
+
+ar = make_ar2()
+ar.shape
+```
+
+``` python
+# Windowed dataset for 1D sequences
+class ARWindowDS(torch.utils.data.Dataset):
+    def __init__(self, seqs, context=16, horizon=1):
+        self.X, self.y = [], []
+        T = seqs.shape[1]
+        for s in seqs:
+            for i in range(0, T - context - horizon + 1):
+                j = i + context - 1
+                self.X.append(s[i:j+1][:, None])     # [context, 1]
+                self.y.append(s[j+horizon])          # scalar next value
+        self.X = torch.tensor(np.stack(self.X), dtype=torch.float32)
+        self.y = torch.tensor(self.y, dtype=torch.float32)[:, None]
+    def __len__(self): return len(self.y)
+    def __getitem__(self, idx): return self.X[idx], self.y[idx]
+
+# split series (not windows) to avoid leakage
+train_seqs, val_seqs = ar[:384], ar[384:]
+train_ds = ARWindowDS(train_seqs, context=16, horizon=1)
+val_ds   = ARWindowDS(val_seqs,   context=16, horizon=1)
+train_ld = torch.utils.data.DataLoader(train_ds, batch_size=256, shuffle=True, drop_last=True)
+val_ld   = torch.utils.data.DataLoader(val_ds,   batch_size=256, shuffle=False)
+
+len(train_ds), len(val_ds)
+```
+
+#### Tiny causal self‑attention block (used later too)
+
+``` python
+def build_causal_mask(T, device):
+    # 0 on and below diagonal (allowed), -inf above diagonal (disallowed)
+    m = torch.full((T, T), float('-inf'), device=device)
+    m = torch.triu(m, diagonal=1)
+    return m  # [T, T]
+
+class CausalSelfAttention(nn.Module):
+    def __init__(self, d_model, n_heads=4, attn_drop=0.0, proj_drop=0.0):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.n_heads = n_heads
+        self.d_head = d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3*d_model, bias=False)
+        self.attn_drop = nn.Dropout(attn_drop)
+        self.proj = nn.Linear(d_model, d_model)
+        self.proj_drop = nn.Dropout(proj_drop)
+    def forward(self, x, causal_mask):
+        # x: [B, T, C]; mask: [T, T]
+        B, T, C = x.shape
+        qkv = self.qkv(x)               # [B, T, 3C]
+        q, k, v = qkv.chunk(3, dim=-1)
+        # reshape to heads
+        def reshape(z):  # [B, T, C] -> [B, h, T, d]
+            return z.view(B, T, self.n_heads, self.d_head).transpose(1, 2)
+        q, k, v = map(reshape, (q, k, v))
+        # scaled dot‑product attention
+        scores = (q @ k.transpose(-2, -1)) / math.sqrt(self.d_head)   # [B, h, T, T]
+        scores = scores + causal_mask  # broadcast over batch/heads
+        attn = scores.softmax(dim=-1)
+        attn = self.attn_drop(attn)
+        y = attn @ v                   # [B, h, T, d]
+        y = y.transpose(1, 2).contiguous().view(B, T, C)  # concat heads
+        y = self.proj_drop(self.proj(y))
+        return y
+
+class TransformerBlock(nn.Module):
+    def __init__(self, d_model, n_heads, mlp_ratio=4.0, attn_drop=0.0, drop=0.0):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(d_model)
+        self.attn = CausalSelfAttention(d_model, n_heads, attn_drop, drop)
+        self.ln2 = nn.LayerNorm(d_model)
+        self.mlp = nn.Sequential(
+            nn.Linear(d_model, int(mlp_ratio*d_model)),
+            nn.GELU(),
+            nn.Linear(int(mlp_ratio*d_model), d_model),
+            nn.Dropout(drop),
+        )
+    def forward(self, x, mask):
+        x = x + self.attn(self.ln1(x), mask)
+        x = x + self.mlp(self.ln2(x))
+        return x
+```
+
+#### Tiny GPT for 1D sequence (warm‑up)
+
+``` python
+class TinyGPT1D(nn.Module):
+    def __init__(self, d_model=64, n_heads=4, n_layers=2, context=16, drop=0.1):
+        super().__init__()
+        self.context = context
+        self.inp = nn.Linear(1, d_model)                      # numeric -> embedding
+        self.pos = nn.Parameter(torch.zeros(1, context, d_model))  # learned positions
+        self.blocks = nn.ModuleList([TransformerBlock(d_model, n_heads, drop=drop) for _ in range(n_layers)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, 1)                     # regress next value
+        # init
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_uniform_(m.weight)
+                if m.bias is not None: nn.init.zeros_(m.bias)
+    def forward(self, x):
+        # x: [B, T, 1], T == context
+        B, T, _ = x.shape
+        assert T == self.context, "fixed context for simplicity"
+        h = self.inp(x) + self.pos[:, :T, :]
+        mask = build_causal_mask(T, x.device)                 # [T, T]
+        for blk in self.blocks:
+            h = blk(h, mask)
+        h = self.ln_f(h)
+        return self.head(h[:, -1, :])                         # predict next value
+
+model_ar = TinyGPT1D(d_model=64, n_heads=4, n_layers=2, context=16, drop=0.1).to(device)
+opt = torch.optim.AdamW(model_ar.parameters(), lr=2e-3, weight_decay=1e-4)
+loss_fn = nn.SmoothL1Loss()
+```
+
+Train quickly:
+
+``` python
+def run_epoch(ld, train=True):
+    model_ar.train(mode=train)
+    total = n = 0
+    for X, y in ld:
+        X, y = X.to(device), y.to(device)
+        if train: opt.zero_grad(set_to_none=True)
+        yhat = model_ar(X)
+        loss = loss_fn(yhat, y)
+        if train:
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model_ar.parameters(), 1.0)
+            opt.step()
+        total += float(loss.item()) * X.size(0); n += X.size(0)
+    return total / max(n, 1)
+
+for ep in range(1, 6):
+    tr = run_epoch(train_ld, True)
+    va = run_epoch(val_ld, False)
+    print(f"Epoch {ep:02d} | train {tr:.5f} | val {va:.5f}")
+```
+
+> If the **val loss decreases**, your causal mask and attention wiring are correct. If it diverges, check the mask shape (`build_causal_mask`) and that the **last token** is used to predict the next step.
+
+------------------------------------------------------------------------
+
+### 2) Tiny GPT for stocks: load features, window dataset, normalize (train‑only)
+
+``` python
+from pathlib import Path
+
+feats_path = Path("data/processed/features_sql.parquet")
+raw_path   = Path("data/raw/prices.csv")
+
+if feats_path.exists():
+    df = pd.read_parquet(feats_path)
+else:
+    assert raw_path.exists(), "Missing features and raw. Build in Sessions 6–8."
+    raw = pd.read_csv(raw_path, parse_dates=["date"]).sort_values(["ticker","date"])
+    raw["r_1d"] = raw.groupby("ticker")["log_return"].shift(-1)   # label (t+1)
+    raw["lag1"] = raw.groupby("ticker")["log_return"].shift(1)
+    raw["lag2"] = raw.groupby("ticker")["log_return"].shift(2)
+    raw["lag3"] = raw.groupby("ticker")["log_return"].shift(3)
+    raw["roll_std_20"] = (raw.groupby("ticker")["log_return"]
+                          .rolling(20, min_periods=10).std()
+                          .reset_index(level=0, drop=True))
+    df = raw[["ticker","date","r_1d","lag1","lag2","lag3","roll_std_20"]]
+
+df["date"] = pd.to_datetime(df["date"])
+df = df.dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+
+FEATURES = [c for c in ["r_1d","roll_mean_20","roll_std_20","zscore_20","lag1","lag2","lag3"] if c in df.columns]
+if "r_1d" not in FEATURES: FEATURES.insert(0, "r_1d")  # ensure past returns included
+FEATURES
+```
+
+Define train/val by **dates**, and compute **train‑only** normalization:
+
+``` python
+# Date split: last ~63 business days = validation
+u_dates = np.array(sorted(df["date"].unique()))
+val_days = 63 if len(u_dates) > 120 else max(20, len(u_dates)//5)
+train_end = u_dates[-val_days-1]
+train_mask = df["date"] <= train_end
+val_mask   = df["date"] >  train_end
+
+def norm_stats(train_df, cols):
+    mu = train_df[cols].mean().values.astype("float32")
+    sg = train_df[cols].std(ddof=0).replace(0, np.nan).fillna(1.0).values.astype("float32")
+    return mu, sg
+
+mu, sg = norm_stats(df[train_mask], FEATURES)
+```
+
+Windowed dataset (multi‑ticker, causal) reusing the normalizer:
+
+``` python
+class TSWindowDS(torch.utils.data.Dataset):
+    def __init__(self, frame: pd.DataFrame, feature_cols, context=32, horizon=1, mu=None, sg=None):
+        self.context = int(context); self.horizon = int(horizon)
+        self.cols = list(feature_cols)
+        self.mu = torch.tensor(mu, dtype=torch.float32) if mu is not None else None
+        self.sg = torch.tensor(sg, dtype=torch.float32) if sg is not None else None
+        rows = []
+        for tkr, g in frame.groupby("ticker"):
+            g = g.sort_values("date").reset_index(drop=True)
+            T = len(g)
+            if T < self.context + self.horizon: continue
+            Xmat = g[self.cols].values.astype("float32")
+            yvec = g["r_1d"].values.astype("float32")  # label at t+1
+            for i in range(0, T - self.context - self.horizon + 1):
+                j = i + self.context - 1
+                y_idx = j + self.horizon
+                rows.append((Xmat[i:j+1], yvec[y_idx], tkr))
+        self.rows = rows
+        self.r1d_idx = self.cols.index("r_1d")  # for lag-1 baseline
+    def __len__(self): return len(self.rows)
+    def __getitem__(self, idx):
+        X, y, tkr = self.rows[idx]                 # X: [T, F]
+        X = torch.tensor(X, dtype=torch.float32)
+        if (self.mu is not None) and (self.sg is not None):
+            X = (X - self.mu) / (self.sg + 1e-8)
+        y = torch.tensor([y], dtype=torch.float32)
+        return X, y, tkr
+
+CONTEXT = 32
+train_ds = TSWindowDS(df[train_mask], FEATURES, context=CONTEXT, horizon=1, mu=mu, sg=sg)
+val_ds   = TSWindowDS(df[val_mask],   FEATURES, context=CONTEXT, horizon=1, mu=mu, sg=sg)
+BATCH = 256
+train_ld = torch.utils.data.DataLoader(train_ds, batch_size=BATCH, shuffle=True, drop_last=True)
+val_ld   = torch.utils.data.DataLoader(val_ds,   batch_size=BATCH, shuffle=False)
+
+len(train_ds), len(val_ds), len(FEATURES)
+```
+
+### 3) Tiny GPT model for multivariate inputs
+
+``` python
+class TinyGPT_TS(nn.Module):
+    def __init__(self, in_dim, d_model=64, n_heads=4, n_layers=2, context=32, drop=0.1, mlp_ratio=4.0):
+        super().__init__()
+        self.context = context
+        self.embed = nn.Linear(in_dim, d_model)           # features -> d_model
+        self.pos   = nn.Parameter(torch.zeros(1, context, d_model))  # learned positions
+        self.blocks = nn.ModuleList([TransformerBlock(d_model, n_heads, mlp_ratio=mlp_ratio, drop=drop) 
+                                     for _ in range(n_layers)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, 1)
+        # init
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_uniform_(m.weight)
+                if m.bias is not None: nn.init.zeros_(m.bias)
+    def forward(self, x):
+        # x: [B, T, F]
+        B, T, F = x.shape
+        assert T == self.context, "Use fixed context for this lecture model."
+        h = self.embed(x) + self.pos[:, :T, :]
+        mask = build_causal_mask(T, x.device)
+        for blk in self.blocks:
+            h = blk(h, mask)
+        h = self.ln_f(h)
+        return self.head(h[:, -1, :])  # predict r_{t+1}
+```
+
+Training loop with early stopping:
+
+``` python
+model = TinyGPT_TS(in_dim=len(FEATURES), d_model=64, n_heads=4, n_layers=2, context=CONTEXT, drop=0.1).to(device)
+opt = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+loss_fn = nn.SmoothL1Loss()
+
+@torch.no_grad()
+def eval_loss(loader):
+    model.eval(); total = n = 0
+    for X, y, _ in loader:
+        X, y = X.to(device), y.to(device)
+        yhat = model(X)
+        loss = loss_fn(yhat, y)
+        total += float(loss.item()) * X.size(0); n += X.size(0)
+    return total / max(n,1)
+
+def train_epoch(loader):
+    model.train(); total = n = 0
+    for X, y, _ in loader:
+        X, y = X.to(device), y.to(device)
+        opt.zero_grad(set_to_none=True)
+        yhat = model(X)
+        loss = loss_fn(yhat, y)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        opt.step()
+        total += float(loss.item()) * X.size(0); n += X.size(0)
+    return total / max(n,1)
+
+best = {"epoch":0, "val":float("inf"), "state":None}
+history = []
+for ep in range(1, 16):  # ≤ 15 epochs for class
+    tr = train_epoch(train_ld)
+    va = eval_loss(val_ld)
+    history.append({"epoch":ep, "train_loss":tr, "val_loss":va})
+    if va < best["val"] - 1e-9:
+        best = {"epoch":ep, "val":va, "state":{k:v.detach().cpu().clone() for k,v in model.state_dict().items()}}
+    print(f"Epoch {ep:02d} | train {tr:.6f} | val {va:.6f} | best {best['val']:.6f} (ep {best['epoch']})")
+    if ep - best["epoch"] >= 3:
+        print("Early stopping."); break
+if best["state"] is not None:
+    model.load_state_dict(best["state"])
+```
+
+### 4) Evaluate: MAE, sMAPE, directional accuracy; compare to **lag‑1** baseline
+
+``` python
+from sklearn.metrics import mean_absolute_error
+
+def smape(y_true, y_pred, eps=1e-8):
+    y_true = np.asarray(y_true); y_pred = np.asarray(y_pred)
+    return float(np.mean(2*np.abs(y_pred - y_true)/(np.abs(y_true)+np.abs(y_pred)+eps)))
+
+def diracc(y_true, y_pred):
+    yt = np.asarray(y_true); yp = np.asarray(y_pred)
+    return float(np.mean(np.sign(yt) == np.sign(yp)))
+
+@torch.no_grad()
+def preds_from_loader(loader):
+    model.eval(); Y=[]; YH=[]; TK=[]
+    for X, y, tkr in loader:
+        X = X.to(device)
+        yhat = model(X).cpu().numpy().reshape(-1)
+        Y.append(y.numpy().reshape(-1)); YH.append(yhat); TK += list(tkr)
+    return np.concatenate(Y), np.concatenate(YH), TK
+
+y_val, yhat_val, tk = preds_from_loader(val_ld)
+metrics = {
+    "val_mae": float(mean_absolute_error(y_val, yhat_val)),
+    "val_smape": smape(y_val, yhat_val),
+    "val_diracc": diracc(y_val, yhat_val),
+    "n": int(len(y_val)),
+}
+metrics
+```
+
+Lag‑1 baseline using the **last observed `r_1d` in the window**:
+
+``` python
+# Compute baseline from data loader (uses original, unnormalized X for clarity)
+# We re-create a loader that yields raw X for baseline extraction.
+raw_val_ds = TSWindowDS(df[val_mask], FEATURES, context=CONTEXT, horizon=1, mu=None, sg=None)
+raw_val_ld = torch.utils.data.DataLoader(raw_val_ds, batch_size=BATCH, shuffle=False)
+
+# index of 'r_1d' in FEATURES:
+r1d_idx = FEATURES.index("r_1d")
+
+lag1_Y=[]; lag1_YH=[]
+for X, y, _ in raw_val_ld:
+    # baseline = last observed r_1d in the window (time t)
+    yhat = X[:, -1, r1d_idx].numpy()
+    lag1_YH.append(yhat)
+    lag1_Y.append(y.numpy().reshape(-1))
+lag1_Y = np.concatenate(lag1_Y); lag1_YH = np.concatenate(lag1_YH)
+
+baseline_metrics = {
+    "lag1_mae": float(mean_absolute_error(lag1_Y, lag1_YH)),
+    "lag1_smape": smape(lag1_Y, lag1_YH),
+    "lag1_diracc": diracc(lag1_Y, lag1_YH),
+    "n": int(len(lag1_Y)),
+}
+baseline_metrics
+```
+
+Save artifacts (preds, training curve, checkpoint):
+
+``` python
+import pathlib, json
+pathlib.Path("reports").mkdir(exist_ok=True)
+pathlib.Path("models").mkdir(exist_ok=True)
+
+pd.DataFrame(history).to_csv("reports/tiny_gpt_training_curve.csv", index=False)
+pd.DataFrame({"y":y_val, "yhat":yhat_val, "ticker":tk}).to_csv("reports/tiny_gpt_val_preds.csv", index=False)
+artifacts = {
+    "model":"TinyGPT_TS",
+    "context": CONTEXT,
+    "d_model": 64, "n_heads": 4, "n_layers": 2, "dropout": 0.1,
+    "features": FEATURES,
+    "train_end": str(pd.to_datetime(train_end).date()),
+    "metrics": metrics,
+    "baseline": baseline_metrics
+}
+with open("reports/tiny_gpt_metrics.json","w") as f: json.dump(artifacts, f, indent=2)
+
+# Save a compact torch checkpoint
+torch.save({"state_dict": model.state_dict(),
+            "config": {"in_dim": len(FEATURES), "context": CONTEXT, "d_model":64, "n_heads":4, "n_layers":2},
+            "norm_mu": mu, "norm_sigma": sg},
+           "models/tiny_gpt_ts.pt")
+
+print("Wrote reports/tiny_gpt_training_curve.csv, reports/tiny_gpt_val_preds.csv, reports/tiny_gpt_metrics.json, models/tiny_gpt_ts.pt")
+```
+
+------------------------------------------------------------------------
+
+## Wrap‑up (10 min)
+
+-   You implemented a **decoder‑only Transformer** with a strict **causal mask**, trained it on **windows** of numeric features, and compared it to a **lag‑1** baseline.
+-   Keep the model **small and regularized** (dropout, weight decay) and stick to **train‑only** normalization to avoid leakage.
+-   Next session we'll push toward a **unified tiny GPT** for all tickers with **walk‑forward evaluation** and simple hyper‑parameter sweeps.
+
+------------------------------------------------------------------------
+
+## Homework (due before Session 12)
+
+**Goal:** Productionize the tiny GPT and run a concise ablation. You will create:
+
+-   a training CLI script,
+-   a Makefile target,
+-   two unit tests,
+-   a **heads/context** ablation, and
+-   (stretch) a **walk‑forward GPT** evaluator mirroring Session 9.
+
+### Part A --- Script: `scripts/train_tiny_gpt.py`
+
+``` python
+# scripts/train_tiny_gpt.py
+#!/usr/bin/env python
+import argparse, json, math, time, numpy as np, pandas as pd, torch
+from torch import nn
+from pathlib import Path
+
+# --- (Paste classes from lecture): build_causal_mask, CausalSelfAttention, TransformerBlock, TinyGPT_TS, TSWindowDS, smape, diracc ---
+
+def set_seed(seed=2025, deterministic=True):
+    import random
+    random.seed(seed); np.random.seed(seed)
+    torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
+    if deterministic:
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        try: torch.use_deterministic_algorithms(True)
+        except Exception: pass
+
+def norm_stats(train_df, cols):
+    mu = train_df[cols].mean().values.astype("float32")
+    sg = train_df[cols].std(ddof=0).replace(0, np.nan).fillna(1.0).values.astype("float32")
+    return mu, sg
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--features", default="data/processed/features_sql.parquet")
+    ap.add_argument("--context", type=int, default=32)
+    ap.add_argument("--d-model", type=int, default=64)
+    ap.add_argument("--heads", type=int, default=4)
+    ap.add_argument("--layers", type=int, default=2)
+    ap.add_argument("--dropout", type=float, default=0.1)
+    ap.add_argument("--batch", type=int, default=256)
+    ap.add_argument("--epochs", type=int, default=15)
+    ap.add_argument("--patience", type=int, default=3)
+    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--weight-decay", type=float, default=1e-4)
+    ap.add_argument("--val-days", type=int, default=63)
+    ap.add_argument("--out-metrics", default="reports/tiny_gpt_metrics.json")
+    ap.add_argument("--out-preds",   default="reports/tiny_gpt_val_preds.csv")
+    ap.add_argument("--out-ckpt",    default="models/tiny_gpt_ts.pt")
+    args = ap.parse_args()
+
+    set_seed(2025)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    df = pd.read_parquet(args.features).dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+    df["date"] = pd.to_datetime(df["date"])
+    FEATURES = [c for c in ["r_1d","roll_mean_20","roll_std_20","zscore_20","lag1","lag2","lag3"] if c in df.columns]
+    if "r_1d" not in FEATURES: FEATURES.insert(0, "r_1d")
+
+    u = np.array(sorted(df["date"].unique()))
+    val_days = min(args.val_days, max(20, len(u)//5))
+    train_end = u[-val_days-1]
+    tr, va = df[df["date"] <= train_end], df[df["date"] > train_end]
+    mu, sg = norm_stats(tr, FEATURES)
+
+    tr_ds = TSWindowDS(tr, FEATURES, context=args.context, horizon=1, mu=mu, sg=sg)
+    va_ds = TSWindowDS(va, FEATURES, context=args.context, horizon=1, mu=mu, sg=sg)
+    tr_ld = torch.utils.data.DataLoader(tr_ds, batch_size=args.batch, shuffle=True, drop_last=True)
+    va_ld = torch.utils.data.DataLoader(va_ds, batch_size=args.batch, shuffle=False)
+
+    model = TinyGPT_TS(in_dim=len(FEATURES), d_model=args.d_model, n_heads=args.heads,
+                       n_layers=args.layers, context=args.context, drop=args.dropout).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    loss_fn = nn.SmoothL1Loss()
+
+    @torch.no_grad()
+    def eval_loss():
+        model.eval(); tot=n=0
+        for X,y,_ in va_ld:
+            X,y = X.to(device), y.to(device)
+            tot += float(loss_fn(model(X), y).item()) * X.size(0); n+=X.size(0)
+        return tot/max(n,1)
+
+    def train_epoch():
+        model.train(); tot=n=0
+        for X,y,_ in tr_ld:
+            X,y = X.to(device), y.to(device)
+            opt.zero_grad(set_to_none=True)
+            loss = loss_fn(model(X), y)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            opt.step()
+            tot += float(loss.item()) * X.size(0); n+=X.size(0)
+        return tot/max(n,1)
+
+    best={"epoch":0,"val":float("inf"),"state":None}
+    hist=[]
+    for ep in range(1, args.epochs+1):
+        tr = train_epoch(); va = eval_loss()
+        hist.append({"epoch":ep,"train_loss":tr,"val_loss":va})
+        if va < best["val"]-1e-12:
+            best={"epoch":ep,"val":va,"state":{k:v.detach().cpu() for k,v in model.state_dict().items()}}
+        print(f"Epoch {ep:02d} | train {tr:.6f} | val {va:.6f} | best {best['val']:.6f} (ep {best['epoch']})")
+        if ep - best["epoch"] >= args.patience: print("Early stopping."); break
+    if best["state"] is not None: model.load_state_dict(best["state"])
+
+    # predictions and metrics
+    model.eval(); Y=[]; YH=[]; TK=[]
+    with torch.no_grad():
+        for X,y,tkr in va_ld:
+            Y.append(y.numpy().reshape(-1))
+            YH.append(model(X.to(device)).cpu().numpy().reshape(-1))
+            TK += list(tkr)
+    y = np.concatenate(Y); yh = np.concatenate(YH)
+    from sklearn.metrics import mean_absolute_error
+    metrics = {"val_mae": float(mean_absolute_error(y,yh)),
+               "val_smape": float(np.mean(2*np.abs(yh-y)/(np.abs(yh)+np.abs(y)+1e-8))),
+               "val_diracc": float(np.mean(np.sign(y)==np.sign(yh))),
+               "n": int(len(y)), "best_epoch": int(best["epoch"]), "best_val_loss": float(best["val"]),
+               "train_end": str(pd.to_datetime(train_end).date()),
+               "features": FEATURES}
+
+    Path("reports").mkdir(exist_ok=True); Path("models").mkdir(exist_ok=True)
+    pd.DataFrame({"y":y,"yhat":yh,"ticker":TK}).to_csv(args.out_preds, index=False)
+    with open(args.out_metrics,"w") as f: json.dump(metrics, f, indent=2)
+    torch.save({"state_dict": model.state_dict(), "config":{
+                    "in_dim": len(FEATURES),"context": args.context,"d_model": args.d_model,
+                    "n_heads": args.heads,"n_layers": args.layers,"dropout": args.dropout},
+                "norm_mu": mu, "norm_sigma": sg}, args.out_ckpt)
+    print("Saved:", args.out_preds, args.out_metrics, args.out_ckpt)
+
+if __name__ == "__main__":
+    main()
+```
+
+Make it executable:
+
+``` python
+import os, stat, pathlib
+p = pathlib.Path("scripts/train_tiny_gpt.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part B --- Makefile target
+
+Append to your `Makefile`:
+
+``` make
+.PHONY: train-gpt
+train-gpt: ## Train tiny GPT (decoder-only) and save metrics/preds/checkpoint
+\tpython scripts/train_tiny_gpt.py --features data/processed/features_sql.parquet --context 32 --d-model 64 --heads 4 --layers 2 --epochs 12 --patience 3
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+make train-gpt
+head -n 5 reports/tiny_gpt_val_preds.csv
+cat reports/tiny_gpt_metrics.json
+```
+
+### Part C --- Tests (sanity)
+
+**`tests/test_causal_mask.py`**
+
+``` python
+import torch
+from scripts.train_tiny_gpt import build_causal_mask
+def test_mask_strict_upper_inf():
+    T=8; m = build_causal_mask(T, device=torch.device("cpu"))
+    assert m.shape==(T,T)
+    assert torch.isinf(torch.triu(m,1)).all()
+    assert torch.allclose(torch.tril(m), torch.zeros_like(m.tril()))
+```
+
+**`tests/test_transformer_forward.py`**
+
+``` python
+import torch
+from scripts.train_tiny_gpt import TinyGPT_TS
+def test_forward_shape():
+    model = TinyGPT_TS(in_dim=5, d_model=32, n_heads=4, n_layers=2, context=16, drop=0.0)
+    x = torch.randn(7, 16, 5)
+    y = model(x)
+    assert y.shape == (7,1)
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+pytest -q
+```
+
+### Part D --- Ablation: heads × context
+
+Train 3×2 settings and collect metrics.
+
+``` python
+import subprocess, json, pandas as pd, pathlib
+pathlib.Path("reports").mkdir(exist_ok=True)
+rows=[]
+for ctx in [16, 32]:
+    for heads in [1, 4, 8]:
+        cmd = ["python","scripts/train_tiny_gpt.py","--context",str(ctx),"--heads",str(heads),
+               "--d-model",str(64),"--layers","2","--epochs","10","--patience","2"]
+        print("Running:", " ".join(cmd))
+        subprocess.run(cmd, check=True)
+        metrics = json.load(open("reports/tiny_gpt_metrics.json"))
+        rows.append({"context":ctx,"heads":heads, **metrics})
+pd.DataFrame(rows).to_csv("reports/tiny_gpt_ablation.csv", index=False)
+print("Wrote reports/tiny_gpt_ablation.csv")
+```
+
+### Part E --- (Stretch) Walk‑forward GPT (2 splits)
+
+Replicate Session 9's `make_walkforward_splits` and train **fresh** tiny GPT models per split with fewer epochs (e.g., 6) to log `MAE/sMAPE/diracc` per split. Save `reports/gpt_walkforward.csv`. *Hint:* reuse the dataset/normalizer here; **fit stats on the training window only** each time.
+
+------------------------------------------------------------------------
+
+### Submission checklist (pass/revise)
+
+-   `scripts/train_tiny_gpt.py` runs and writes:
+
+    -   `reports/tiny_gpt_val_preds.csv`, `reports/tiny_gpt_metrics.json`, and `models/tiny_gpt_ts.pt`.
+
+-   **Two tests** pass.
+
+-   `make train-gpt` works.
+
+-   **Ablation** CSV present (`reports/tiny_gpt_ablation.csv`) with at least 6 rows.
+
+-   (Stretch) Walk‑forward GPT file (`reports/gpt_walkforward.csv`).
+
+------------------------------------------------------------------------
+
+## Instructor checklist (before class)
+
+-   Dry‑run the lab in a fresh Colab runtime; ensure it trains in \~5--10 minutes (CPU is fine; GPU faster).
+-   Keep a slide with shapes: **\[B, T, F\] → embed → blocks → last token → scalar**.
+-   Have a "mask debug" slide showing the **upper triangle = −∞**.
+
+## Emphasize while teaching
+
+-   **Causal mask** and **train‑only** normalization prevent leakage.
+-   The **last token representation** is the standard way to regress the next step in decoder‑only models.
+-   Keep models compact and training short; compare against simple baselines (lag‑1).
+-   Save configs & seeds for reproducibility; make ablations small but systematic.

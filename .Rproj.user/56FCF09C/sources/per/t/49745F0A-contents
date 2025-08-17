@@ -1,0 +1,751 @@
+------------------------------------------------------------------------
+
+## Course dataset & repo scaffold
+
+**Stock set ("Stocks25")** -- include this CSV in the repo and use it throughout:
+
+```         
+ticker
+AAPL
+MSFT
+AMZN
+GOOGL
+META
+NVDA
+TSLA
+JPM
+JNJ
+V
+PG
+HD
+BAC
+XOM
+CVX
+PFE
+KO
+DIS
+NFLX
+INTC
+CSCO
+ORCL
+T
+VZ
+WMT
+```
+
+**Project structure (starter repo)**
+
+```         
+project/
+  data/{raw,interim,processed}/
+  notebooks/
+  reports/
+  src/projectname/
+  tests/
+  .github/workflows/ci.yml
+  .pre-commit-config.yaml
+  Makefile
+  pyproject.toml
+  requirements.txt
+  tickers_25.csv
+  .env.example
+  README.md
+```
+
+**Core requirements (keep small):** `pandas numpy pyarrow matplotlib scikit-learn statsmodels SQLAlchemy sqlite3 requests beautifulsoup4 python-dotenv yfinance torch pandera typer` (Optional later: `fastapi uvicorn ruff black pre-commit`)
+
+> **Labels:** target = 1‑day ahead **log return** (or choose horizon H). Use **Adj Close** to avoid split/dividend leakage. **This course is educational---no trading advice.**
+
+------------------------------------------------------------------------
+
+# WEEK 1 --- Setup, Git/GitHub, Colab
+
+### Session 1 --- Dev environment & Colab workflow
+
+**Objectives**
+
+-   Set up local Python + VS Code; understand Colab pros/cons and persistence.
+-   Pin, install, and verify dependencies.
+-   Clone/pull/push from Colab.
+
+**Slides**
+
+-   Python envs: pip vs conda/mamba vs Colab; `requirements.txt` vs `pyproject.toml`.
+-   Reproducibility: seeds, `pip freeze`, deterministic flags.
+-   Colab tips: GPU toggle, Drive mount, file layout.
+
+**In‑class lab**
+
+-   Mount Drive; `git clone` the starter repo into Drive; run a sanity notebook that prints versions and GPU availability.
+-   Add `requirements.txt`; install; verify `import torch, pandas`.
+
+**Homework**
+
+-   Update README with setup steps and a short "Works on my machine" section.
+-   Commit a "hello‑colab.ipynb" that reproduces the env check.
+
+------------------------------------------------------------------------
+
+### Session 2 --- Git essentials & Git‑LFS
+
+**Objectives**
+
+-   Use branches, commits, PRs; write good messages.
+-   Configure Git‑LFS for large artifacts.
+
+**Slides**
+
+-   Branching model (feature branches), PR etiquette, code reviews.
+-   `.gitignore` patterns; LFS vs non‑LFS files.
+-   Minimal PR template.
+
+**In‑class lab**
+
+-   Create a branch, add `tickers_25.csv`, open a PR, request review, merge.
+
+**Homework**
+
+-   Add a basic **Makefile** with `env`, `get-data`, `report` targets (stubs).
+-   One PR per student; use reviews before merging.
+
+------------------------------------------------------------------------
+
+# WEEK 2 --- Quarto for Python (+ RStudio cameo)
+
+### Session 3 --- Quarto reports (Python)
+
+**Objectives**
+
+-   Author parameterized Quarto reports in Python.
+-   Publish to GitHub Pages.
+
+**Slides**
+
+-   Quarto basics: params, code‑folding, caching, cross‑refs, bibliographies.
+-   Report structure for DS projects (abstract → methods → results).
+
+**In‑class lab**
+
+-   Create `reports/eda.qmd` with params: `symbol`, `start_date`, `end_date`.
+-   Render locally and in Colab.
+
+**Homework**
+
+-   Publish `reports/eda.html` via Pages.
+-   Include plots for at least two tickers using params.
+
+------------------------------------------------------------------------
+
+### Session 4 --- RStudio cameo + report hygiene
+
+**Objectives**
+
+-   Learn how to render Quarto in RStudio (for future compatibility).
+-   Adopt a clean report pipeline (inputs/outputs versioning).
+
+**Slides**
+
+-   RStudio Quarto render, PDF vs HTML.
+-   "One‑click" report via `make report`.
+
+**In‑class lab**
+
+-   Show RStudio rendering once (short), then back to Python.
+-   Wire `make report` to render `eda.qmd` with defaults.
+
+**Homework**
+
+-   Add a section on "Data sources & license."
+-   Lint the report (headings, captions, alt text for figs).
+
+------------------------------------------------------------------------
+
+# WEEK 3 --- Unix & Automation
+
+### Session 5 --- Shell essentials for data work
+
+**Objectives**
+
+-   Use pipes, redirects, grep/sed/awk, find/xargs.
+-   Apply regex for quick QA of CSVs.
+
+**Slides**
+
+-   Common patterns: counting, filtering, sampling.
+-   Safe destructive ops; quoting gotchas.
+
+**In‑class lab**
+
+-   Validate `tickers_25.csv` with grep/awk; check for dupes.
+-   Create shell script `scripts/bootstrap.sh` to set up the repo.
+
+**Homework**
+
+-   Add a script to verify raw data presence and sizes; log to `reports/health.txt`.
+
+------------------------------------------------------------------------
+
+### Session 6 --- Make/just, rsync, ssh/tmux (survey)
+
+**Objectives**
+
+-   Automate repetitive steps with Make.
+-   Understand remote‑friendly habits (even if not used yet).
+
+**Slides**
+
+-   Make targets and dependencies; phony targets.
+-   Brief ssh/tmux/rsync demo.
+
+**In‑class lab**
+
+-   Fill `make get-data` (stub for next week).
+-   Add `make clean` to remove intermediates.
+
+**Homework**
+
+-   Write a short "automation" section in README with the commands.
+
+------------------------------------------------------------------------
+
+# WEEK 4 --- SQL I
+
+### Session 7 --- SQLite schemas, joins
+
+**Objectives**
+
+-   Design a simple schema for prices & metadata.
+-   Load CSVs/Parquet into SQLite.
+
+**Slides**
+
+-   Tables: `prices (ticker, date, open, high, low, close, adj_close, volume)`, `meta (ticker, sector)`.
+-   Primary keys, indices, foreign keys.
+
+**In‑class lab**
+
+-   Create `data/prices.db`; write a loader notebook to create tables.
+
+**Homework**
+
+-   A query notebook: top volumes; longest histories; missing days per ticker.
+
+------------------------------------------------------------------------
+
+### Session 8 --- Window functions & pandas.read_sql
+
+**Objectives**
+
+-   Use window functions for rolling features in SQL.
+-   Pull query results directly into pandas.
+
+**Slides**
+
+-   `ROW_NUMBER`, `LAG`, `LEAD`, moving averages with window frames.
+-   Indexing & performance basics.
+
+**In‑class lab**
+
+-   Create a view `daily_returns` with `log_return = ln(adj_close/lag(adj_close))`.
+
+**Homework**
+
+-   Build `src/.../sqlio.py` with helpers to run parameterized queries safely.
+
+------------------------------------------------------------------------
+
+# WEEK 5 --- pandas for Time Series
+
+### Session 9 --- Cleaning, joins, Parquet
+
+**Objectives**
+
+-   Clean and merge multi‑ticker data.
+-   Write/read Parquet with sensible dtypes.
+
+**Slides**
+
+-   `merge`, `assign`, `pipe`, categories, nullable ints.
+-   Parquet advantages; partitioning by ticker.
+
+**In‑class lab**
+
+-   Construct `processed/prices.parquet` with a tidy schema.
+
+**Homework**
+
+-   Produce `processed/returns.parquet` with `r_1d` and calendar features (weekday, month).
+
+------------------------------------------------------------------------
+
+### Session 10 --- Rolling windows, resampling, features
+
+**Objectives**
+
+-   Engineer rolling stats and lags without leakage.
+-   Resample to different frequencies safely.
+
+**Slides**
+
+-   `shift`, `rolling`, `expanding`, `groupby('ticker')`.
+-   Feature cookbook: rolling mean/vol, z‑scores, RSI (optional).
+
+**In‑class lab**
+
+-   Create `features_v1.parquet` (per‑ticker rolling features; no look‑ahead).
+
+**Homework**
+
+-   Write a **feature check** that asserts no feature uses future data (pytest).
+
+------------------------------------------------------------------------
+
+# WEEK 6 --- APIs & Scraping
+
+### Session 11 --- APIs with requests; secrets; caching
+
+**Objectives**
+
+-   Pull data from a REST API with pagination and rate limiting.
+-   Manage secrets safely; cache responses.
+
+**Slides**
+
+-   `requests` patterns, `Retry`/backoff, `python-dotenv`.
+-   File vs SQLite caching.
+
+**In‑class lab**
+
+-   Add optional fundamentals (e.g., FRED macro series) via API; store to SQLite.
+
+**Homework**
+
+-   Enrich features with one external series (e.g., VIX or SPY) aligned by date.
+
+------------------------------------------------------------------------
+
+### Session 12 --- HTML scraping (ethics + resilience)
+
+**Objectives**
+
+-   Extract structured data from HTML with BeautifulSoup.
+-   Respect robots.txt and add throttling.
+
+**Slides**
+
+-   CSS selectors, pagination, content stability.
+-   Caching every request.
+
+**In‑class lab**
+
+-   Scrape one static table (e.g., sector mapping) if API not available.
+
+**Homework**
+
+-   Document data provenance and update the `data dictionary` in `reports/`.
+
+------------------------------------------------------------------------
+
+# WEEK 7 --- Quality: Tests, Lint, Minimal CI
+
+### Session 13 --- pytest + data validation
+
+**Objectives**
+
+-   Write a few high‑value tests.
+-   Validate data frames with Pandera or custom checks.
+
+**Slides**
+
+-   Unit vs "data tests"; fast tests only.
+-   Logging basics.
+
+**In‑class lab**
+
+-   Add `tests/test_features.py` covering shapes, nulls, and look‑ahead ban.
+
+**Homework**
+
+-   Add a "health check" notebook that prints key diagnostics into the Quarto report.
+
+------------------------------------------------------------------------
+
+### Session 14 --- pre‑commit & GitHub Actions CI
+
+**Objectives**
+
+-   Enforce style automatically; run CI on PRs.
+-   Keep CI fast (\<3--4 min).
+
+**Slides**
+
+-   `black`, `ruff`, `nbstripout`.
+-   Actions workflow YAML.
+
+**In‑class lab**
+
+-   Configure pre‑commit; add `.github/workflows/ci.yml` to run lint+tests.
+
+**Homework**
+
+-   Open a PR that turns CI green from a clean clone.
+
+------------------------------------------------------------------------
+
+# WEEK 8 --- Baselines & Backtesting
+
+### Session 15 --- Framing & metrics
+
+**Objectives**
+
+-   Define horizon, step, and rolling‑origin evaluation.
+-   Choose metrics (MAE, sMAPE, MASE).
+
+**Slides**
+
+-   Train/val/test as **time splits**; expanding vs sliding windows.
+-   Aggregating across tickers: macro vs weighted.
+
+**In‑class lab**
+
+-   Implement rolling‑origin splitter that yields (train_idx, val_idx) by date.
+
+**Homework**
+
+-   Build **naive** and **seasonal‑naive** baselines and report metrics per ticker and aggregate.
+
+------------------------------------------------------------------------
+
+### Session 16 --- Classical baselines
+
+**Objectives**
+
+-   Try ARIMA/ETS or a simple sklearn regressor with lags.
+-   Log results consistently.
+
+**Slides**
+
+-   Quick ARIMA pitfalls; cross‑sectional regressors.
+-   Results table schema.
+
+**In‑class lab**
+
+-   Train a lags‑only linear regressor per ticker; compare to naive.
+
+**Homework**
+
+-   Write the first **model card** (inputs, assumptions, metrics, failure modes).
+
+------------------------------------------------------------------------
+
+# WEEK 9 --- Finance‑Specific Evaluation & Leakage Control (extra week)
+
+### Session 17 --- Feature timing, biases, leakage
+
+**Objectives**
+
+-   Avoid look‑ahead and survivorship bias.
+-   Define labels carefully (t+1 log return vs multi‑step).
+
+**Slides**
+
+-   What not to do: using today's close to predict today's close.
+-   Survivorship bias from today's index membership; set your static list explicitly.
+
+**In‑class lab**
+
+-   Add a **leakage test** that fails if any feature at time *t* uses target *t* or later.
+
+**Homework**
+
+-   Write a short memo describing the evaluation protocol and why it's credible.
+
+------------------------------------------------------------------------
+
+### Session 18 --- Walk‑forward + regime analysis
+
+**Objectives**
+
+-   Do embargoed splits; analyze errors by volatility regimes.
+-   Plot calibration and error by regime.
+
+**Slides**
+
+-   Expanding window diagram; embargo between train and val.
+-   Regime labels from rolling volatility.
+
+**In‑class lab**
+
+-   Create regime buckets (low/med/high vol) and recompute metrics.
+
+**Homework**
+
+-   Update the Quarto report with regime‑aware results and discussion.
+
+------------------------------------------------------------------------
+
+# WEEK 10 --- PyTorch Fundamentals
+
+### Session 19 --- Tensors, datasets, training loop
+
+**Objectives**
+
+-   Build a windowed dataset for multi‑ticker sequences.
+-   Write a minimal training loop with early stopping.
+
+**Slides**
+
+-   `Dataset`/`DataLoader`; pinning memory; seeds; mixed precision basics.
+-   Saving and loading checkpoints.
+
+**In‑class lab**
+
+-   Implement `WindowedDataset(ticker, X, y, context_len)` and a trainer that works on CPU/GPU.
+
+**Homework**
+
+-   Train an **LSTM** or **TCN** baseline on a subset (e.g., 5--10 tickers); log metrics.
+
+------------------------------------------------------------------------
+
+### Session 20 --- Multi‑asset training (unified model)
+
+**Objectives**
+
+-   Combine all tickers into a single model.
+-   Encode ticker ID and optional sector as features.
+
+**Slides**
+
+-   Cross‑sectional vs per‑asset models; embedding ticker IDs.
+-   Batching mixed tickers; caution on leakage across splits.
+
+**In‑class lab**
+
+-   Add a `ticker_id` embedding (size 8--16) concatenated to inputs.
+
+**Homework**
+
+-   Compare unified vs per‑ticker models on the held‑out split.
+
+------------------------------------------------------------------------
+
+# WEEK 11 --- Transformers for Sequences (Tiny GPT)
+
+### Session 21 --- Attention & tiny GPT on toy data
+
+**Objectives**
+
+-   Implement a tiny GPT (char‑level) to learn attention mechanics.
+-   Verify learning on a toy sequence task.
+
+**Slides**
+
+-   Token/positional embeddings; single‑head → multi‑head; causal mask.
+-   Overfit a tiny corpus for sanity.
+
+**In‑class lab**
+
+-   Build **TinyGPT**: d_model≈64, n_head=2, n_layer=2, context=64, MLP≈128; train for a few minutes.
+
+**Homework**
+
+-   Write a short reflection: what changed when adding heads/layers/context?
+
+------------------------------------------------------------------------
+
+### Session 22 --- Adapting GPT to time series
+
+**Objectives**
+
+-   Convert windows of returns to a sequence model input.
+-   Output regression targets with causal masking.
+
+**Slides**
+
+-   From tokens to real‑valued features; scaling/normalization.
+-   Loss choices; forecasting vs next‑step return prediction.
+
+**In‑class lab**
+
+-   Replace the char embedding with linear projection of features; keep positional encodings; predict next‑step return.
+
+**Homework**
+
+-   Run a small ablation: context length (32 vs 64), dropout (0.0 vs 0.1), heads (2 vs 4). Summarize in a 1‑page table.
+
+------------------------------------------------------------------------
+
+# WEEK 12 --- Packaging, CLI, Reproducibility (lightweight deploy optional)
+
+### Session 23 --- Packaging & CLI (Typer)
+
+**Objectives**
+
+-   Package project code for import; create a simple CLI for scoring.
+-   Centralize config in YAML.
+
+**Slides**
+
+-   `src/` layout; `pyproject.toml`; editable installs.
+-   Typer CLI patterns; config loading.
+
+**In‑class lab**
+
+-   Add `projectname/` package with `data`, `features`, `models` modules.
+-   Implement `cli.py` with `score --start --end --model <name>`.
+
+**Homework**
+
+-   Fresh‑clone test: `make env && make get-data && make report && python -m projectname.cli score ...` must run clean.
+
+------------------------------------------------------------------------
+
+### Session 24 --- Reproducibility audit & optional FastAPI
+
+**Objectives**
+
+-   Verify end‑to‑end reproducibility from a clean environment.
+-   (Optional) Expose a small inference endpoint locally.
+
+**Slides**
+
+-   Seeds, lockfiles, fixed data pulls, deterministic notes.
+-   FastAPI "hello world" (optional).
+
+**In‑class lab**
+
+-   Pair‑audit each other's repos with a checklist; open issues for any non‑repro steps.
+
+**Homework**
+
+-   Tag release `v1.0-rc` with changelog; close or triage audit issues.
+
+------------------------------------------------------------------------
+
+# WEEK 13 --- Communication & Showcase (combined)
+
+### Session 25 --- Poster + abstract workshop
+
+**Objectives**
+
+-   Build a concise narrative: problem → method → results → limits.
+-   Polish figures and tables for non‑experts.
+
+**Slides**
+
+-   Poster anatomy; model card essentials; ethical caveats.
+
+**In‑class lab**
+
+-   Draft poster outline in Quarto or slides tool; assemble 3 key figures (baseline vs LSTM vs tiny‑Transformer; regime breakdown; ablation).
+
+**Homework**
+
+-   Write a 250‑word abstract and push a PDF poster draft.
+
+------------------------------------------------------------------------
+
+### Session 26 --- In‑class presentations & continuation plan
+
+**Objectives**
+
+-   Present results succinctly; receive actionable feedback.
+-   Set a backlog for Spring symposium continuation.
+
+**Slides**
+
+-   Common Q&A traps; reproducibility handoff.
+
+**In‑class lab**
+
+-   10‑minute talk per team; peer feedback.
+-   Make a backlog: next features, larger context length, multi‑horizon forecasting, adapter tuning, more assets.
+
+**Homework (final)**
+
+-   Tag `v1.0`; archive `reports/` outputs; write a "Next Steps" section in README for continued work.
+
+------------------------------------------------------------------------
+
+## Milestones & grading (lightweight, two students)
+
+-   **M0 (W1):** Repo + env + Pages live (5%)
+-   **M1 (W3):** Automation & health checks (5%)
+-   **M2 (W6):** External data integrated (10%)
+-   **M3 (W7):** CI green + tests (10%)
+-   **M4 (W8--9):** Robust backtesting & leakage controls (20%)
+-   **M5 (W10--11):** PyTorch baseline + tiny Transformer + ablation (30%)
+-   **M6 (W12--13):** Reproducible release + poster & talk (20%)
+
+Pass/Revise rubric per deliverable:
+
+-   Reproducible from fresh clone
+-   Tests present and green
+-   Report updated with results & discussion
+-   Code readable and reviewed (PR merged)
+
+------------------------------------------------------------------------
+
+## Implementation notes you can drop into the starter repo
+
+**Makefile (sketch)**
+
+``` make
+.PHONY: env get-data features report test clean
+env:
+\tpip install -r requirements.txt
+
+get-data:
+\tpython -m projectname.data.get_prices --tickers tickers_25.csv --out data/raw
+
+features:
+\tpython -m projectname.features.build --in data/raw --out data/processed
+
+report:
+\tquarto render reports/eda.qmd
+
+test:
+\tpytest -q
+
+clean:
+\trm -rf data/interim data/processed/*.parquet reports/*.html
+```
+
+**CI (sketch `.github/workflows/ci.yml`)**
+
+``` yaml
+name: ci
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+```
+
+**Data contract test ideas**
+
+-   No NaNs in `adj_close` after forward‑fill limited to 1 day.
+-   No feature at time *t* depends on *t*+k.
+-   Train/val/test splits have no overlap; embargo applied.
+
+**Tiny GPT budget (Colab)**
+
+-   `d_model=64`, `n_head=2`, `n_layer=2`, `ffn=128`, `ctx=64`, batch 256, epochs ≈ 5--10 on a subset of tickers. Keep training under \~10 minutes.
+
+------------------------------------------------------------------------
+
+## Continuing toward the symposium
+
+-   Add macro features (rates, CPI, unemployment), sector/industry embeddings.
+-   Multi‑horizon heads (H=1,5,20).
+-   Confidence intervals via quantile loss.
+-   More assets (extend `tickers_25.csv`), ensure evaluation scales.
+-   Optional: experiment tracker (Weights & Biases) if you decide to add one tool.
+
+------------------------------------------------------------------------

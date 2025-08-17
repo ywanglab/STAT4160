@@ -1,0 +1,286 @@
+---
+title: "Session 12 — HTML Scraping: Ethics & Resilience"
+---
+
+# **Session 12 — HTML Scraping: Ethics & Resilience (75 min)**
+
+### Learning goals
+
+Students will be able to:
+
+1. Respect robots.txt and basic site etiquette (throttling, user‑agent, caching).
+2. Extract structured tables with **BeautifulSoup** and fall back to `pandas.read_html`.
+3. Normalize scraped data (clean headers, dtypes, categories).
+4. Save provenance and update a **data dictionary** for the repo.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: ethics, robots, terms; caching, rate limits
+* **(10 min)** Slides: stable selectors (ids, table headers), text cleanup, date parsing
+* **(35 min)** **In‑class lab**: scrape a static sector table (Wikipedia S\&P 500 components), map to your tickers, save `data/static/sector_map.csv`; merge into `prices.parquet` if missing
+* **(10 min)** Wrap‑up + homework brief
+* **(10 min)** Buffer
+
+---
+
+## Slide talking points
+
+**Ethics + resilience**
+
+* **Check robots.txt**; identify disallow rules.
+* Set a clear **User‑Agent** and **sleep** between requests.
+* Cache HTML locally; **don’t hammer** sites.
+* Expect structure to change; write **defensive** code.
+
+**Parsing patterns**
+
+* Prefer table selectors; use `read_html` for well‑formed tables.
+* Clean headers → snake\_case; drop footnotes; trim whitespace.
+* Normalize keys (e.g., ticker symbols: map `.` ↔ `-` if needed).
+
+**Provenance**
+
+* Save `source_url`, `fetched_at`, and a checksum alongside the CSV.
+
+---
+
+## In‑class lab
+
+> We’ll scrape **Wikipedia: List of S\&P 500 companies** (static table). If blocked, we fall back to `pandas.read_html` or a small local stub.
+
+### 0) Setup + robots check + HTML caching
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME  = "unified-stocks-teamX"
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, requests, time, hashlib, pandas as pd, numpy as np
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+from datetime import datetime
+
+os.chdir(REPO_DIR)
+for p in [".cache/html","data/static","reports"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+
+UA = {"User-Agent": "dspt-class/1.0 (+edu)"}
+WIKI_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+
+def allowed_by_robots(base, path="/wiki/"):
+    r = requests.get(urljoin(base, "/robots.txt"), headers=UA, timeout=20)
+    if r.status_code != 200: return True
+    lines = r.text.splitlines()
+    disallows = [ln.split(":")[1].strip() for ln in lines if ln.lower().startswith("disallow:")]
+    return all(not path.startswith(d) for d in disallows)
+
+print("Robots allows /wiki/?", allowed_by_robots("https://en.wikipedia.org"))
+```
+
+### 1) Download (with cache) and parse the first big table
+
+```python
+def get_html_cached(url, ttl_hours=24):
+    key = hashlib.sha1(url.encode()).hexdigest()
+    path = pathlib.Path(f".cache/html/{key}.html")
+    if path.exists() and (time.time() - path.stat().st_mtime < ttl_hours * 3600):
+        return path.read_text()
+    r = requests.get(url, headers=UA, timeout=30)
+    r.raise_for_status()
+    path.write_text(r.text)
+    time.sleep(1.0)  # be polite
+    return r.text
+
+html = get_html_cached(WIKI_URL)
+soup = BeautifulSoup(html, "html.parser")
+
+# Try soup table first; fallback to pandas.read_html
+table = soup.find("table", {"id":"constituents"}) or soup.find("table", {"class":"wikitable"})
+if table is not None:
+    rows = []
+    headers = [th.get_text(strip=True) for th in table.find("tr").find_all("th")]
+    for tr in table.find_all("tr")[1:]:
+        tds = [td.get_text(strip=True) for td in tr.find_all(["td","th"])]
+        if len(tds) == len(headers):
+            rows.append(dict(zip(headers, tds)))
+    sp = pd.DataFrame(rows)
+else:
+    sp = pd.read_html(html)[0]
+
+sp.head(3), sp.columns.tolist()
+```
+
+### 2) Clean + normalize + keep only ticker ↔ sector
+
+```python
+import re
+def snake(s): 
+    s = re.sub(r"[^\w\s]", "_", s)
+    s = re.sub(r"\s+", "_", s.strip().lower())
+    return re.sub(r"_+", "_", s)
+
+sp.columns = [snake(c) for c in sp.columns]
+cand_cols = [c for c in sp.columns if "symbol" in c or "security" in c or "sector" in c]
+sp = sp.rename(columns={c:"symbol" for c in sp.columns if "symbol" in c or c=="ticker"})
+sp = sp.rename(columns={c:"sector" for c in sp.columns if "sector" in c})
+keep = [c for c in ["symbol","sector"] if c in sp.columns]
+sp = sp[keep].dropna().drop_duplicates()
+sp = sp.rename(columns={"symbol":"ticker"})
+sp["ticker"] = sp["ticker"].str.strip()
+sp["sector"] = sp["sector"].astype("category")
+
+# Save with provenance
+src = {"source_url": WIKI_URL, "fetched_at_utc": datetime.utcnow().isoformat()+"Z"}
+sp.to_csv("data/static/sector_map.csv", index=False)
+with open("data/static/sector_map.provenance.json","w") as f:
+    import json; json.dump(src, f, indent=2)
+print("Wrote data/static/sector_map.csv", sp.shape)
+sp.head(5)
+```
+
+### 3) Merge sector mapping into prices if missing sector
+
+```python
+from pathlib import Path
+pp = Path("data/processed/prices.parquet")
+if not pp.exists():
+    raise SystemExit("Need prices.parquet (Session 9).")
+
+prices = pd.read_parquet(pp)
+if "sector" not in prices.columns or prices["sector"].isna().all():
+    prices2 = prices.merge(sp, on="ticker", how="left")
+    prices2["sector"] = prices2["sector"].astype("category")
+    prices2.to_parquet("data/processed/prices.parquet", compression="zstd", index=False)
+    print("Updated prices.parquet with sector column.")
+else:
+    print("Sector already present; no merge needed.")
+```
+
+---
+
+## Wrap‑up
+
+* You scraped a static table **politely** (robots, throttle, cache) and extracted a tidy map.
+* You persisted **provenance** and used it to enrich your dataset.
+* Keep scrapers **small, cached, and resilient**.
+
+---
+
+## Homework (due next week)
+
+**Goal:** Document your web data provenance and generate a minimal **data dictionary** for the project.
+
+### A. Provenance section (script that composes a Markdown file)
+
+```python
+# scripts/write_provenance.py
+#!/usr/bin/env python
+import json, pandas as pd
+from pathlib import Path
+Path("reports").mkdir(exist_ok=True)
+
+provenance = []
+if Path("data/static/sector_map.provenance.json").exists():
+    provenance.append(json.loads(Path("data/static/sector_map.provenance.json").read_text()))
+else:
+    provenance.append({"source_url":"(none)","fetched_at_utc":"(n/a)"})
+
+md = ["# Data provenance",
+      "",
+      "## Web sources",
+      "",
+      "| Source | Fetched at |",
+      "|---|---|"]
+for p in provenance:
+    md.append(f"| {p['source_url']} | {p['fetched_at_utc']} |")
+
+Path("reports/provenance.md").write_text("\n".join(md))
+print("Wrote reports/provenance.md")
+```
+
+Run:
+
+```bash
+%%bash
+chmod +x scripts/write_provenance.py
+python scripts/write_provenance.py
+```
+
+### B. Data dictionary generator
+
+```python
+# scripts/data_dictionary.py
+#!/usr/bin/env python
+import pandas as pd
+from pathlib import Path
+
+def describe_parquet(path):
+    df = pd.read_parquet(path)
+    dtypes = df.dtypes.astype(str).to_dict()
+    return pd.DataFrame({"column": list(dtypes.keys()), "dtype": list(dtypes.values())})
+
+def main():
+    rows=[]
+    for path in ["data/processed/prices.parquet",
+                 "data/processed/returns.parquet",
+                 "data/processed/features_v1.parquet",
+                 "data/processed/features_v1_ext.parquet"]:
+        p = Path(path)
+        if p.exists():
+            df = describe_parquet(p)
+            df.insert(0, "dataset", p.name)
+            rows.append(df)
+    out = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=["dataset","column","dtype"])
+    Path("reports").mkdir(exist_ok=True)
+    out.to_csv("reports/data_dictionary.csv", index=False)
+    print("Wrote reports/data_dictionary.csv")
+
+if __name__ == "__main__":
+    main()
+```
+
+Run:
+
+```bash
+%%bash
+chmod +x scripts/data_dictionary.py
+python scripts/data_dictionary.py
+```
+
+### C. (Optional) Add a short **Quarto** page that includes both files
+
+Create `reports/data_overview.qmd` and render in your next report.
+
+### D. Quick tests
+
+```python
+# tests/test_dictionary_provenance.py
+import os, pandas as pd
+def test_provenance_and_dict():
+    assert os.path.exists("reports/provenance.md")
+    assert os.path.exists("reports/data_dictionary.csv")
+    df = pd.read_csv("reports/data_dictionary.csv")
+    assert {"dataset","column","dtype"}.issubset(df.columns)
+```
+
+Run:
+
+```bash
+%%bash
+pytest -q
+```
+
+---
+
+## Instructor tips (for all three sessions)
+
+* Keep a one‑page “**no leakage**” checklist handy and point to it often.
+* For Session 11, have a prepared `.env` with a working FRED key to avoid classroom delays.
+* For Session 12, if Wikipedia blocks requests, switch to `pandas.read_html` (shown) or use a small pre‑saved HTML in `data/static/` to demonstrate parsing.
+
+These three sessions carry you from solid **feature engineering** → **external data integration** → **web scraping with ethics**, setting up a strong foundation for the testing/CI weeks that follow.

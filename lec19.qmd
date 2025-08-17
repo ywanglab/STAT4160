@@ -1,0 +1,661 @@
+---
+title: "Session 19 — Tensors, Datasets, Training Loop"
+---
+Below is a complete lecture package for **Session 19 — Tensors, Datasets, Training Loop** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. You will build a **windowed multi‑ticker dataset** for next‑day return prediction, write a **minimal PyTorch training loop** with **early stopping**, and **save/load checkpoints**. We’ll keep it CPU‑friendly and optionally accelerate with GPU/Mixed Precision on Colab.
+
+> **Educational use only — not trading advice.**
+> Assumes your Drive‑mounted repo (e.g., `unified-stocks-teamX`) and `data/processed/features_v1.parquet` (or `features_v1_static.parquet`) with columns like: `ticker`, `date`, `log_return`, `r_1d` (label), and some features (`lag1..lag3`, `roll_std_20`, `zscore_20`, …). Cells include **safe fallbacks** if files are missing.
+
+---
+
+## Session 19 — Tensors, Datasets, Training Loop (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Create a **windowed sequence dataset** across **multiple tickers** with shape `(B, T, F)` → predict `r_1d` at time `t+1`.
+2. Use `Dataset`/`DataLoader` correctly: **pin memory**, worker seeding, and efficient slicing.
+3. Write a **minimal training loop** with **early stopping**, **AMP** (mixed precision on GPU), and **checkpoint save/load**.
+4. Produce a tidy **validation metrics CSV** to compare later models.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: tensors & batching; `Dataset`/`DataLoader`; pinning memory; reproducibility with seeds
+* **(10 min)** Slides: training loop anatomy; early stopping; AMP; checkpoints
+* **(35 min)** **In‑class lab**: build `WindowedDataset` → DataLoaders → tiny GRU regressor → train w/ early stopping → save best checkpoint; evaluate
+* **(10 min)** Wrap‑up + homework brief
+* **(10 min)** Buffer
+
+---
+
+## Slides / talking points (drop into your deck)
+
+### Tensors & batching
+
+* Tensors are N‑D arrays on **CPU** or **GPU** (`.to(device)`); keep everything `float32` unless using AMP.
+* For sequences: **batch** × **time** × **features** ⇒ `(B, T, F)`. Predict a scalar per sequence end (`r_1d` at time `t+1`).
+
+### `Dataset`/`DataLoader` patterns
+
+* **Precompute an index** of windows: for each ticker, sliding windows end at `i` with context `T`; target is `r_1d[i]`.
+* `DataLoader` tips:
+
+  * `pin_memory=True` and `non_blocking=True` on `.to(device)` speed H2D copies (when using GPU).
+  * Seed workers for reproducibility; keep `num_workers=2` (Colab stable).
+
+### Seeds & determinism
+
+* Set `python`, `numpy`, `torch` seeds; disable CuDNN benchmarking for reproducibility; prefer small batch sizes that fit CPU/GPU.
+
+### Training loop w/ early stopping
+
+* Loop: `train_step` (model in `train()`), `val_step` (model in `eval()` + `no_grad()`).
+* Track **best val loss**; stop after `patience` epochs without improvement.
+* Save **checkpoint**: `state_dict`, optimizer state, epoch, metrics. Load with `load_state_dict`.
+
+### AMP & checkpoints
+
+* On CUDA, wrap forward in `torch.cuda.amp.autocast()` and use `GradScaler` to scale loss.
+* Save the best checkpoint to `models/…pt`; log a CSV under `reports/`.
+
+---
+
+## In‑class lab (35 min, Colab‑friendly)
+
+> Run each block as its own **separate cell** in Colab. Replace `REPO_NAME` as needed.
+
+### 0) Setup, mount, and check device
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME  = "unified-stocks-teamX"   # <-- change to your repo
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, sys
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in ["data/processed","models","reports","scripts","tests"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd())
+
+import torch, platform
+print("Torch:", torch.__version__, "| CUDA available:", torch.cuda.is_available(), "| Python:", sys.version.split()[0], "| OS:", platform.system())
+```
+
+### 1) Load features and pick columns (with fallbacks)
+
+```python
+import pandas as pd, numpy as np
+from pathlib import Path
+
+# Prefer static universe file if present (from Session 17)
+f_static = Path("data/processed/features_v1_static.parquet")
+f_base   = Path("data/processed/features_v1.parquet")
+
+if f_static.exists():
+    df = pd.read_parquet(f_static)
+elif f_base.exists():
+    df = pd.read_parquet(f_base)
+else:
+    # Minimal fallback from returns
+    rpath = Path("data/processed/returns.parquet")
+    if not rpath.exists():
+        # synthesize small dataset
+        rng = np.random.default_rng(0)
+        dates = pd.bdate_range("2022-01-03", periods=320)
+        frames=[]
+        for t in ["AAPL","MSFT","GOOGL","AMZN","NVDA"]:
+            eps = rng.normal(0, 0.012, size=len(dates)).astype("float32")
+            adj = 100*np.exp(np.cumsum(eps))
+            g = pd.DataFrame({
+                "date": dates, "ticker": t,
+                "adj_close": adj.astype("float32"),
+                "log_return": np.r_[np.nan, np.diff(np.log(adj))].astype("float32")
+            })
+            g["r_1d"] = g["log_return"].shift(-1)
+            frames.append(g)
+        df = pd.concat(frames, ignore_index=True).dropna().reset_index(drop=True)
+        df["ticker"] = df["ticker"].astype("category")
+    else:
+        df = pd.read_parquet(rpath)
+        df = df.sort_values(["ticker","date"]).reset_index(drop=True)
+        # add minimal lags
+        for k in [1,2,3]:
+            df[f"lag{k}"] = df.groupby("ticker")["log_return"].shift(k)
+        df = df.dropna().reset_index(drop=True)
+
+# Ensure minimal features exist
+cand_feats = ["log_return","lag1","lag2","lag3","zscore_20","roll_std_20"]
+FEATS = [c for c in cand_feats if c in df.columns]
+assert "r_1d" in df.columns, "Label r_1d missing; rebuild returns/features pipeline."
+assert "log_return" in df.columns, "log_return missing."
+
+# Keep a small subset of tickers for speed (5–10 tickers)
+subset = df["ticker"].astype(str).unique().tolist()[:8]
+df = df[df["ticker"].astype(str).isin(subset)].copy()
+
+# Harmonize types & sort
+df["date"] = pd.to_datetime(df["date"])
+df["ticker"] = df["ticker"].astype("category")
+df = df.sort_values(["ticker","date"]).reset_index(drop=True)
+
+print("Using features:", FEATS, "| tickers:", df["ticker"].nunique(), "| rows:", len(df))
+df.head()
+```
+
+### 2) Time‑based split (first rolling‑origin split with embargo)
+
+```python
+def make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):
+    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))
+    i = train_min - 1; out=[]
+    while True:
+        if i >= len(u): break
+        a,b = u[0], u[i]
+        vs = i + embargo + 1
+        ve = vs + val_size - 1
+        if ve >= len(u): break
+        out.append((a,b,u[vs],u[ve]))
+        i += step
+    return out
+
+splits = make_rolling_origin_splits(df["date"], 252, 63, 63, 5)
+assert splits, "Not enough history for a first split."
+a,b,c,d = splits[0]
+train_df = df[(df["date"]>=a)&(df["date"]<=b)].copy()
+val_df   = df[(df["date"]>=c)&(df["date"]<=d)].copy()
+print("Split 1 - Train:", a.date(), "→", b.date(), "| Val:", c.date(), "→", d.date(), 
+      "| train rows:", len(train_df), "| val rows:", len(val_df))
+```
+
+### 3) Reproducibility helpers, `FeatureScaler`, and `WindowedDataset`
+
+```python
+import random, math, json
+
+def seed_everything(seed=1337):
+    random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = True
+seed_everything(1337)
+
+class FeatureScaler:
+    """Train-only mean/std scaler for numpy arrays."""
+    def __init__(self): self.mean_=None; self.std_=None
+    def fit(self, X: np.ndarray):
+        self.mean_ = X.mean(axis=0, dtype=np.float64)
+        self.std_  = X.std(axis=0, dtype=np.float64) + 1e-8
+        return self
+    def transform(self, X: np.ndarray) -> np.ndarray:
+        return (X - self.mean_) / self.std_
+    def state_dict(self): 
+        return {"mean": self.mean_.tolist(), "std": self.std_.tolist()}
+    def load_state_dict(self, d): 
+        self.mean_ = np.array(d["mean"], dtype=np.float64)
+        self.std_  = np.array(d["std"],  dtype=np.float64)
+
+from torch.utils.data import Dataset, DataLoader
+
+class WindowedDataset(Dataset):
+    """
+    Sliding windows over time per ticker (multi-ticker, fixed context_len).
+    Each item: X in shape (T, F), y scalar: r_1d at window end.
+    """
+    def __init__(self, frame: pd.DataFrame, feature_cols, context_len=64, scaler: FeatureScaler|None=None):
+        assert "ticker" in frame and "date" in frame and "r_1d" in frame
+        self.feature_cols = feature_cols
+        self.T = int(context_len)
+        self.groups = {}   # ticker -> dict('X': np.ndarray [N,F], 'y': np.ndarray [N])
+        self.index  = []   # list of (ticker, end_idx)
+        # Build groups (per ticker)
+        for tkr, g in frame.groupby("ticker"):
+            g = g.sort_values("date").reset_index(drop=True)
+            X = g[feature_cols].to_numpy(dtype=np.float32)
+            y = g["r_1d"].to_numpy(dtype=np.float32)
+            # valid windows end where we have T steps and y is finite
+            for end in range(self.T-1, len(g)):
+                if not np.isfinite(y[end]): 
+                    continue
+                self.index.append((tkr, end))
+            self.groups[tkr] = {"X": X, "y": y}
+        # Fit scaler on all TRAIN rows (only when building train dataset)
+        self.scaler = scaler or FeatureScaler().fit(
+            np.concatenate([self.groups[t]["X"] for t in self.groups], axis=0)
+        )
+    def __len__(self): return len(self.index)
+    def __getitem__(self, i):
+        tkr, end = self.index[i]
+        g = self.groups[tkr]
+        xs = g["X"][end-self.T+1:end+1]        # (T, F) context
+        xs = self.scaler.transform(xs)         # scale using train stats
+        y  = g["y"][end]                       # scalar target
+        return torch.from_numpy(xs), torch.tensor(y), str(tkr)
+
+def make_loaders(train_df, val_df, feature_cols, context_len=64, batch_size=256, num_workers=2):
+    # Train dataset fits scaler; Val shares it
+    train_ds = WindowedDataset(train_df, feature_cols, context_len=context_len, scaler=None)
+    val_ds   = WindowedDataset(val_df,   feature_cols, context_len=context_len, scaler=train_ds.scaler)
+    # Persist scaler for reuse
+    Path("models").mkdir(exist_ok=True)
+    Path("models/scaler_split1.json").write_text(json.dumps(train_ds.scaler.state_dict()))
+    pin = torch.cuda.is_available()
+    g = torch.Generator()
+    g.manual_seed(42)
+    def _seed_worker(_):
+        worker_seed = torch.initial_seed() % (2**32)
+        np.random.seed(worker_seed); random.seed(worker_seed)
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, drop_last=True,
+                              num_workers=num_workers, pin_memory=pin, persistent_workers=(num_workers>0),
+                              worker_init_fn=_seed_worker, generator=g)
+    val_loader   = DataLoader(val_ds, batch_size=batch_size, shuffle=False, drop_last=False,
+                              num_workers=num_workers, pin_memory=pin, persistent_workers=(num_workers>0),
+                              worker_init_fn=_seed_worker)
+    return train_ds, val_ds, train_loader, val_loader
+
+train_ds, val_ds, train_loader, val_loader = make_loaders(train_df, val_df, FEATS, context_len=64, batch_size=256)
+len(train_ds), len(val_ds), next(iter(train_loader))[0].shape
+```
+
+### 4) Define a tiny GRU regressor
+
+```python
+import torch.nn as nn, torch
+
+class GRURegressor(nn.Module):
+    def __init__(self, in_features: int, hidden: int = 64, num_layers: int = 2, dropout: float = 0.1):
+        super().__init__()
+        self.gru = nn.GRU(input_size=in_features, hidden_size=hidden, num_layers=num_layers,
+                          batch_first=True, dropout=dropout if num_layers>1 else 0.0)
+        self.head = nn.Sequential(
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden, 1)
+        )
+    def forward(self, x):        # x: (B, T, F)
+        _, hN = self.gru(x)      # hN: (num_layers, B, H); take last layer
+        h = hN[-1]               # (B, H)
+        return self.head(h).squeeze(-1)  # (B,)
+
+def make_model():
+    return GRURegressor(in_features=len(FEATS), hidden=64, num_layers=2, dropout=0.1)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = make_model().to(device)
+sum(p.numel() for p in model.parameters())/1e6, device
+```
+
+### 5) Training loop with AMP, early stopping, checkpointing
+
+```python
+from torch.optim import AdamW
+from torch.cuda.amp import autocast, GradScaler
+import math, time
+
+def mae_t(y_true, y_pred): return torch.mean(torch.abs(y_true - y_pred))
+def smape_t(y_true, y_pred, eps=1e-8):
+    return torch.mean(2.0*torch.abs(y_true - y_pred)/(torch.abs(y_true)+torch.abs(y_pred)+eps))
+
+def train_one_epoch(model, loader, optimizer, scaler, device, use_amp=True):
+    model.train(); total=0.0; n=0
+    for xb, yb, _ in loader:
+        xb = xb.to(device, non_blocking=True).float()
+        yb = yb.to(device, non_blocking=True).float()
+        optimizer.zero_grad(set_to_none=True)
+        if use_amp and device.type=="cuda":
+            with autocast(dtype=torch.float16):
+                pred = model(xb)
+                loss = mae_t(yb, pred)  # train with MAE (robust)
+            scaler.scale(loss).backward()
+            scaler.step(optimizer); scaler.update()
+        else:
+            pred = model(xb); loss = mae_t(yb, pred)
+            loss.backward(); optimizer.step()
+        bs = xb.size(0); total += loss.item()*bs; n += bs
+    return total/max(n,1)
+
+@torch.no_grad()
+def evaluate(model, loader, device):
+    model.eval(); tot_mae=tot_smape=0.0; n=0
+    for xb, yb, _ in loader:
+        xb = xb.to(device, non_blocking=True).float()
+        yb = yb.to(device, non_blocking=True).float()
+        pred = model(xb)
+        bs = xb.size(0)
+        tot_mae   += mae_t(yb, pred).item()*bs
+        tot_smape += smape_t(yb, pred).item()*bs
+        n += bs
+    return {"mae": tot_mae/max(n,1), "smape": tot_smape/max(n,1)}
+
+def fit(model, train_loader, val_loader, epochs=12, lr=1e-3, wd=1e-5, patience=3, use_amp=True):
+    opt = AdamW(model.parameters(), lr=lr, weight_decay=wd)
+    scaler = GradScaler(enabled=use_amp and (device.type=="cuda"))
+    best = math.inf; best_metrics=None; best_epoch=-1
+    ckpt_path = Path("models/gru_split1.pt")
+    history=[]
+    for epoch in range(1, epochs+1):
+        t0=time.time()
+        tr_loss = train_one_epoch(model, train_loader, opt, scaler, device, use_amp)
+        val = evaluate(model, val_loader, device)
+        dt=time.time()-t0
+        history.append({"epoch":epoch,"train_mae":tr_loss,"val_mae":val["mae"],"val_smape":val["smape"],"seconds":dt})
+        print(f"Epoch {epoch:02d}  train_mae={tr_loss:.5f}  val_mae={val['mae']:.5f}  val_sMAPE={val['smape']:.5f}  ({dt:.1f}s)")
+        # early stopping on val mae
+        if val["mae"] < best - 1e-6:
+            best = val["mae"]; best_metrics=val; best_epoch=epoch
+            torch.save({
+                "model_state": model.state_dict(),
+                "optimizer_state": opt.state_dict(),
+                "epoch": epoch,
+                "val": val,
+                "config": {"lr":lr,"wd":wd,"epochs":epochs,"context_len":train_loader.dataset.T,"feats":FEATS}
+            }, ckpt_path)
+        elif epoch - best_epoch >= patience:
+            print(f"Early stopping at epoch {epoch} (best {best:.5f} @ {best_epoch})")
+            break
+    return history, best, best_epoch, ckpt_path
+
+history, best, best_epoch, ckpt_path = fit(model, train_loader, val_loader,
+                                           epochs=10, lr=1e-3, wd=1e-5, patience=3, use_amp=True)
+print("Best val_mae:", best, "at epoch", best_epoch, "| saved:", ckpt_path.exists())
+```
+
+### 6) Evaluate best checkpoint & write a small report
+
+```python
+# Reload best checkpoint and compute final validation metrics + save CSV
+ckpt = torch.load("models/gru_split1.pt", map_location="cpu")
+model.load_state_dict(ckpt["model_state"])
+model.to(device)
+final = evaluate(model, val_loader, device)
+import pandas as pd
+rep = pd.DataFrame([{
+    "split": 1,
+    "context_len": train_loader.dataset.T,
+    "feats": ",".join(FEATS),
+    "val_mae": final["mae"],
+    "val_smape": final["smape"],
+    "best_epoch": ckpt.get("epoch", None),
+    "params_M": round(sum(p.numel() for p in model.parameters())/1e6, 3)
+}])
+rep.to_csv("reports/gru_split1_metrics.csv", index=False)
+rep
+```
+
+> **Time check:** With \~5–8 tickers, `T=64`, and 10 epochs, this should finish in a couple of minutes on Colab CPU; faster on GPU.
+
+---
+
+## Wrap‑up (10 min) — emphasize these points
+
+* **WindowedDataset** emits causal windows `(≤ t)` and targets `r_1d[t]` (i.e., `t+1` return).
+* Use **train‑fit scaler** and **reuse it** on validation to avoid leakage.
+* Keep the training loop **simple**: MAE training objective, AMP on CUDA, **early stopping** on validation MAE, and save a **checkpoint**.
+* Produce a **CSV** with validation metrics to track progress and compare future models.
+
+---
+
+## Homework (due before Session 20)
+
+**Goal:** Train a stronger **sequence baseline** (choose **LSTM** or **TCN**) on a subset (5–10 tickers). Log metrics and push your checkpoint + report.
+
+### Part A — Script `scripts/train_seq.py` (LSTM or TCN)
+
+```python
+#!/usr/bin/env python
+from __future__ import annotations
+import argparse, json, math
+from pathlib import Path
+import numpy as np, pandas as pd, torch, torch.nn as nn
+from torch.utils.data import DataLoader, Dataset
+from torch.cuda.amp import autocast, GradScaler
+
+# --- (reuse minimal dataset/scaler from class; compact copy here) ---
+class FeatureScaler:
+    def __init__(self): self.mean_=None; self.std_=None
+    def fit(self, X): self.mean_=X.mean(0); self.std_=X.std(0)+1e-8; return self
+    def transform(self, X): return (X-self.mean_)/self.std_
+    def state_dict(self): return {"mean": self.mean_.tolist(), "std": self.std_.tolist()}
+    def load_state_dict(self, d): import numpy as np; self.mean_=np.array(d["mean"]); self.std_=np.array(d["std"])
+class WindowedDataset(Dataset):
+    def __init__(self, df, feats, T=64, scaler=None):
+        self.feats=feats; self.T=T; self.idx=[]; self.g={}
+        for tkr,g in df.groupby("ticker"):
+            g=g.sort_values("date").reset_index(drop=True)
+            X=g[feats].to_numpy("float32"); y=g["r_1d"].to_numpy("float32")
+            for end in range(T-1,len(g)):
+                if np.isfinite(y[end]): self.idx.append((tkr,end))
+            self.g[tkr]={"X":X,"y":y}
+        self.scaler = scaler or FeatureScaler().fit(np.concatenate([self.g[t]["X"] for t in self.g],0))
+    def __len__(self): return len(self.idx)
+    def __getitem__(self,i):
+        tkr,end=self.idx[i]; g=self.g[tkr]
+        X=g["X"][end-self.T+1:end+1]; X=self.scaler.transform(X)
+        y=g["y"][end]
+        return torch.from_numpy(X), torch.tensor(y)
+
+def make_splits(dates, train_min=252, val_size=63, step=63, embargo=5):
+    u=np.array(sorted(pd.to_datetime(pd.Series(dates).unique()))); i=train_min-1; out=[]
+    while True:
+        if i>=len(u): break
+        a,b=u[0],u[i]; vs=i+embargo+1; ve=vs+val_size-1
+        if ve>=len(u): break
+        out.append((a,b,u[vs],u[ve])); i+=step
+    return out
+
+# --- Models ---
+class LSTMReg(nn.Module):
+    def __init__(self, in_f, hidden=64, layers=2, dropout=0.1):
+        super().__init__()
+        self.lstm = nn.LSTM(in_f, hidden, num_layers=layers, batch_first=True, dropout=dropout if layers>1 else 0.)
+        self.head = nn.Sequential(nn.Linear(hidden, hidden), nn.ReLU(), nn.Dropout(dropout), nn.Linear(hidden,1))
+    def forward(self, x):
+        out,_ = self.lstm(x)
+        h = out[:,-1,:]
+        return self.head(h).squeeze(-1)
+
+class TCNBlock(nn.Module):
+    def __init__(self, in_c, out_c, k=3, d=1, dropout=0.1):
+        super().__init__()
+        pad = (k-1)*d
+        self.net = nn.Sequential(
+            nn.Conv1d(in_c, out_c, k, padding=pad, dilation=d),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Conv1d(out_c, out_c, k, padding=pad, dilation=d),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+        self.down = nn.Conv1d(in_c, out_c, 1) if in_c!=out_c else nn.Identity()
+    def forward(self, x):        # x: (B, F, T)
+        y = self.net(x)
+        # Causal crop to ensure output aligns with last time step
+        crop = y.shape[-1]-x.shape[-1]
+        if crop>0: y = y[..., :-crop]
+        return y + self.down(x)
+
+class TCNReg(nn.Module):
+    def __init__(self, in_f, ch=64, blocks=3, k=3, dropout=0.1):
+        super().__init__()
+        layers=[]; c=in_f
+        for b in range(blocks):
+            layers.append(TCNBlock(c, ch, k=k, d=2**b, dropout=dropout)); c=ch
+        self.tcn = nn.Sequential(*layers)
+        self.head = nn.Sequential(nn.AdaptiveAvgPool1d(1), nn.Flatten(), nn.Linear(ch,1))
+    def forward(self, x):
+        # x: (B,T,F) -> (B,F,T) for Conv1d
+        x = x.transpose(1,2)
+        y = self.tcn(x)              # (B, C, T)
+        return self.head(y).squeeze(-1)
+
+def mae_t(y,yhat): return torch.mean(torch.abs(y - yhat))
+def smape_t(y,yhat,eps=1e-8): return torch.mean(2*torch.abs(y-yhat)/(torch.abs(y)+torch.abs(yhat)+eps))
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--features", default="data/processed/features_v1.parquet")
+    ap.add_argument("--context", type=int, default=64)
+    ap.add_argument("--model", choices=["lstm","tcn"], default="lstm")
+    ap.add_argument("--epochs", type=int, default=12)
+    ap.add_argument("--batch", type=int, default=256)
+    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--patience", type=int, default=3)
+    ap.add_argument("--tickers", type=int, default=8)
+    args=ap.parse_args()
+
+    df = pd.read_parquet("data/processed/features_v1_static.parquet") if Path("data/processed/features_v1_static.parquet").exists() else pd.read_parquet(args.features)
+    df = df.sort_values(["ticker","date"]).reset_index(drop=True)
+    cand = ["log_return","lag1","lag2","lag3","zscore_20","roll_std_20"]
+    feats = [c for c in cand if c in df.columns]
+    assert "r_1d" in df.columns
+    # subset tickers
+    keep = df["ticker"].astype(str).unique().tolist()[:args.tickers]
+    df = df[df["ticker"].astype(str).isin(keep)].copy()
+
+    splits = make_splits(df["date"])
+    a,b,c,d = splits[0]
+    tr = df[(df["date"]>=a)&(df["date"]<=b)]
+    va = df[(df["date"]>=c)&(df["date"]<=d)]
+
+    train_ds = WindowedDataset(tr, feats, T=args.context, scaler=None)
+    val_ds   = WindowedDataset(va, feats, T=args.context, scaler=train_ds.scaler)
+
+    pin = torch.cuda.is_available()
+    g = torch.Generator(); g.manual_seed(42)
+    def _seed_worker(_): import numpy as np, random, torch; ws=torch.initial_seed()%2**32; np.random.seed(ws); random.seed(ws)
+    train_ld = DataLoader(train_ds, batch_size=args.batch, shuffle=True, drop_last=True,
+                          num_workers=2, pin_memory=pin, worker_init_fn=_seed_worker, generator=g)
+    val_ld   = DataLoader(val_ds, batch_size=args.batch, shuffle=False, drop_last=False,
+                          num_workers=2, pin_memory=pin, worker_init_fn=_seed_worker)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    net = (LSTMReg(len(feats)) if args.model=="lstm" else TCNReg(len(feats))).to(device)
+    opt = torch.optim.AdamW(net.parameters(), lr=args.lr, weight_decay=1e-5)
+    scaler = GradScaler(enabled=(device.type=="cuda"))
+    best = 1e9; best_epoch=0
+    ckpt = Path(f"models/{args.model}_split1.pt")
+
+    for epoch in range(1, args.epochs+1):
+        net.train(); tmae=0; n=0
+        for xb,yb in train_ld:
+            xb=xb.to(device).float(); yb=yb.to(device).float()
+            opt.zero_grad(set_to_none=True)
+            with autocast(enabled=(device.type=="cuda"), dtype=torch.float16):
+                yhat = net(xb)
+                loss = mae_t(yb, yhat)
+            scaler.scale(loss).backward(); scaler.step(opt); scaler.update()
+            bs=xb.size(0); tmae += loss.item()*bs; n+=bs
+        tr_mae=tmae/n
+        # val
+        net.eval(); vmae=vsm=0; n=0
+        with torch.no_grad():
+            for xb,yb in val_ld:
+                xb=xb.to(device).float(); yb=yb.to(device).float()
+                yhat = net(xb)
+                bs=xb.size(0); vmae += mae_t(yb,yhat).item()*bs; vsm += smape_t(yb,yhat).item()*bs; n+=bs
+        vmae/=n; vsm/=n
+        print(f"Epoch {epoch:02d}  tr_mae={tr_mae:.5f}  val_mae={vmae:.5f}  val_sMAPE={vsm:.5f}")
+        if vmae < best-1e-6:
+            best=vmae; best_epoch=epoch
+            torch.save({"model": net.state_dict(), "epoch": epoch, "feats": feats, "context": args.context}, ckpt)
+        elif epoch - best_epoch >= args.patience:
+            print("Early stopping.")
+            break
+
+    Path("reports").mkdir(exist_ok=True)
+    pd.DataFrame([{"model":args.model,"context":args.context,"val_mae":best,"best_epoch":best_epoch,"feats":",".join(feats)}]).to_csv(
+        f"reports/{args.model}_split1_metrics.csv", index=False)
+
+if __name__ == "__main__":
+    main()
+```
+
+Run (from repo root):
+
+```bash
+%%bash
+chmod +x scripts/train_seq.py
+python scripts/train_seq.py --model lstm --context 64 --tickers 8 --epochs 12
+```
+
+### Part B — Add a quick **Makefile** target and a tiny test
+
+**Append to `Makefile`:**
+
+```make
+.PHONY: train-lstm
+train-lstm: ## Train LSTM baseline on split 1 (subset of tickers)
+\tpython scripts/train_seq.py --model lstm --context 64 --tickers 8 --epochs 12
+```
+
+**Basic shape test for dataset windows:**
+
+```python
+# tests/test_windowed_dataset.py
+import pandas as pd, numpy as np, os
+def test_window_shapes():
+    import scripts.train_seq as T
+    df = pd.read_parquet("data/processed/features_v1.parquet").sort_values(["ticker","date"]).reset_index(drop=True)
+    feats = [c for c in ["log_return","lag1","lag2","lag3"] if c in df.columns]
+    splits = T.make_splits(df["date"])
+    a,b,c,d = splits[0]
+    ds = T.WindowedDataset(df[(df["date"]>=a)&(df["date"]<=b)], feats, T=32, scaler=None)
+    X,y = ds[0]
+    assert X.shape == (32, len(feats))
+    assert np.isfinite(y.item())
+```
+
+Run:
+
+```bash
+%%bash
+pytest -q -k windowed_dataset
+```
+
+### Part C — Report
+
+Add to your Quarto report (e.g., `reports/eda.qmd`):
+
+````markdown
+## PyTorch Baselines
+
+```{python}
+import pandas as pd
+print(pd.read_csv("reports/gru_split1_metrics.csv"))
+try:
+    print(pd.read_csv("reports/lstm_split1_metrics.csv"))
+except Exception as e:
+    print("lstm metrics not found yet")
+````
+
+```
+
+---
+
+## Instructor checklist (before class)
+- Confirm `features_v1.parquet` exists with `r_1d`. If not, ensure the fallback creates minimal lags and `r_1d`.  
+- Dry‑run the GRU training in a fresh Colab (~2–5 min).  
+- Prepare a slide on **why** we use **MAE** for training (robust to outliers) and **sMAPE** for reporting.
+
+## Emphasize while teaching
+- **Causality:** windows contain only information up to time `t`; the label is `t+1`.  
+- **No leakage:** scaler fit on **train only**; reuse for val/test.  
+- **Reproducibility:** seeds, deterministic flags, and saving checkpoints.  
+- **Efficiency:** pin memory, small batch size, AMP on CUDA.
+
+## Grading (pass/revise)
+- `WindowedDataset` works and yields `(B, T, F)` batches.  
+- Training loop runs with **early stopping** and writes `models/gru_split1.pt`.  
+- `reports/gru_split1_metrics.csv` exists with `val_mae` and `val_smape`.  
+- Homework script `scripts/train_seq.py` runs and writes its metrics CSV; optional test passes.
+
+You now have a **clean PyTorch scaffold**: deterministic dataset windows, a minimal training loop with early stopping, and saved checkpoints—ready for **Session 20**, where you’ll build a **unified multi‑asset model** (ticker embeddings, mixed batches) on the same pipeline.
+```

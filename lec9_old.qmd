@@ -1,0 +1,592 @@
+---
+title: "Session 9"
+---
+
+Below is a complete lecture package for **Session 9 --- Finance‑Specific Evaluation & Leakage Control** (75 minutes). It includes: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. Today you'll implement **walk‑forward (expanding‑window) backtests with an embargo**, define **labels correctly** (t→t+1), run **regime‑aware error analysis**, and add **leakage checks**---all on the **unified multi‑stock** dataset.
+
+> **Educational use only --- not trading advice.** Assumes you have this repo in Drive (e.g., `unified-stocks-teamX`) with data from prior sessions. If a file is missing, the lab includes safe fallbacks.
+
+------------------------------------------------------------------------
+
+## Session 9 --- Finance‑Specific Evaluation & Leakage Control (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1.  Define **labels** for 1‑step (and multi‑step) forecasting and align features without leakage.
+2.  Run **walk‑forward (expanding‑window) backtests** with a configurable **embargo gap**.
+3.  Compute **robust metrics** (MAE, sMAPE, directional accuracy) aggregated **micro** and **macro** across tickers.
+4.  Perform **regime‑aware** evaluation using **rolling volatility** derived **from training only**.
+5.  Write **sanity checks** that detect common leakage: overlapping splits, scaling on full data, and future‑info features.
+
+------------------------------------------------------------------------
+
+## Agenda (75 min)
+
+-   **(10 min)** Slides: leakage/bias taxonomy; label alignment; walk‑forward vs random splits; embargo; regime evaluation
+-   **(10 min)** Slides: metrics & aggregation (micro vs macro); pitfalls (survivorship bias; scaling leakage; data snooping)
+-   **(35 min)** **In‑class lab**: build splitters → evaluate baselines (zero, lag1, linear regression) → regime analysis → save reports
+-   **(10 min)** Wrap‑up & homework briefing
+-   **(10 min)** Buffer
+
+------------------------------------------------------------------------
+
+## Slides / talking points (add these bullets to your deck)
+
+### Leakage & biases (what to avoid)
+
+-   **Temporal leakage**: using info from *t+1...* to predict *t+1*. Examples:
+
+    -   Fitting scalers on the **entire dataset** before splitting.
+    -   Rolling stats computed over a window that includes validation dates.
+    -   Label misalignment (using today's close to predict today's close).
+
+-   **Cross‑set leakage**: **overlap** between train/val windows; reusing the **same dates** (or adjacent labels) without an **embargo**.
+
+-   **Survivorship bias**: using today's index constituents historically. Fix: use a **static ticker list** (we use `tickers_25.csv`) or capture historical membership explicitly.
+
+-   **Data snooping**: iterating on features/hyperparams while reusing the same validation period. Mitigate with **multiple splits** and a final untouched test.
+
+### Correct label definition
+
+-   For 1‑step ahead returns, **features at time *t*** predict **`r(t+1)`**.
+-   In our pipeline, we'll predict `r_1d` at the **current row** while ensuring features (lags) only use **≤ t** information (via `LAG` features).
+
+### Walk‑forward with embargo
+
+-   **Expanding window**: train `[t0, …, T]`, validate `(T+gap, …, T+gap+V]`.
+-   **Embargo gap** (e.g., 5 business days) reduces label overlap bleed‑through and market microstructure dependencies.
+
+### Metrics & aggregation
+
+-   **MAE**, **sMAPE** (robust to scale), **Directional Accuracy** (sign correctness).
+-   **Micro** (across all rows) vs **Macro** (average per‑ticker). Report both.
+
+### Regime‑aware evaluation
+
+-   Use **rolling volatility** (computed from **training only** to set thresholds) to label **low / mid / high** regimes.
+-   Compare errors across regimes; models often degrade in **high‑volatility** periods.
+
+------------------------------------------------------------------------
+
+## In‑class lab (35 min)
+
+> Run each block as its own Colab cell. Adjust `REPO_OWNER/REPO_NAME` first.
+
+### 0) Mount Drive & enter repo
+
+``` python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, pandas as pd, numpy as np
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found in Drive. Clone it first."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Load features (SQL‑built) or create a minimal fallback
+
+``` python
+import pandas as pd, numpy as np, pathlib
+
+feats_path = pathlib.Path("data/processed/features_sql.parquet")
+raw_path   = pathlib.Path("data/raw/prices.csv")
+
+if feats_path.exists():
+    df = pd.read_parquet(feats_path)
+else:
+    # Fallback: build minimal features from raw
+    if not raw_path.exists():
+        raise SystemExit("Missing data/raw/prices.csv and features_sql.parquet. Run Sessions 6–8.")
+    raw = pd.read_csv(raw_path, parse_dates=["date"]).sort_values(["ticker","date"])
+    raw["r_1d"] = raw.groupby("ticker")["log_return"].shift(-1)  # label (t+1)
+    raw["lag1"] = raw.groupby("ticker")["log_return"].shift(1)
+    raw["lag2"] = raw.groupby("ticker")["log_return"].shift(2)
+    raw["lag3"] = raw.groupby("ticker")["log_return"].shift(3)
+    # rolling vol (for regimes)
+    roll = raw.groupby("ticker")["log_return"].rolling(20, min_periods=10).std().reset_index(level=0, drop=True)
+    raw["roll_std_20"] = roll
+    df = raw[["ticker","date","r_1d","lag1","lag2","lag3","roll_std_20"]].dropna()
+
+# Ensure types
+df["date"] = pd.to_datetime(df["date"])
+df = df.dropna(subset=["r_1d"]).sort_values(["ticker","date"])
+df.head()
+```
+
+### 2) Build **walk‑forward (expanding) splits** with **embargo**
+
+``` python
+import numpy as np, pandas as pd
+
+def make_walkforward_splits(dates: pd.Series,
+                            train_min: int = 252,   # business days ~ 1 trading year
+                            val_size: int = 63,     # ~ 1 quarter
+                            step: int = 63,         # slide by a quarter
+                            embargo: int = 5):      # gap days between train end and val start
+    """Return a list of (train_start, train_end, val_start, val_end) date tuples."""
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    n = len(u)
+    splits = []
+    i = train_min - 1
+    while True:
+        if i >= n: break
+        train_start = u[0]
+        train_end   = u[i]
+        val_start_idx = i + embargo + 1
+        val_end_idx   = val_start_idx + val_size - 1
+        if val_end_idx >= n:
+            break
+        val_start = u[val_start_idx]
+        val_end   = u[val_end_idx]
+        splits.append((train_start, train_end, val_start, val_end))
+        i += step
+    return splits
+
+splits = make_walkforward_splits(df["date"], train_min=252, val_size=63, step=63, embargo=5)
+len(splits), splits[:2]
+```
+
+**Leakage sanity check (no date overlap)**
+
+``` python
+def check_no_overlap(splits):
+    for j,(a,b,c,d) in enumerate(splits):
+        assert b < c, f"Leakage: split {j} has train_end >= val_start"
+check_no_overlap(splits)
+print("No temporal overlap between train and validation windows.")
+```
+
+### 3) Metrics & evaluators (micro / macro / regime)
+
+``` python
+from sklearn.metrics import mean_absolute_error
+import numpy as np, pandas as pd
+
+def smape(y_true, y_pred, eps=1e-8):
+    y_true = np.asarray(y_true); y_pred = np.asarray(y_pred)
+    return float(np.mean(2.0*np.abs(y_pred - y_true) / (np.abs(y_true)+np.abs(y_pred)+eps)))
+
+def directional_accuracy(y_true, y_pred):
+    yt = np.asarray(y_true); yp = np.asarray(y_pred)
+    return float(np.mean(np.sign(yt) == np.sign(yp)))
+
+def aggregate_metrics(df_pred, by="micro"):
+    """df_pred columns: ticker,date,y,yhat,regime"""
+    if by == "micro":
+        return {
+            "n": len(df_pred),
+            "mae": mean_absolute_error(df_pred["y"], df_pred["yhat"]),
+            "smape": smape(df_pred["y"], df_pred["yhat"]),
+            "dir_acc": directional_accuracy(df_pred["y"], df_pred["yhat"]),
+        }
+    elif by == "macro":
+        grp = df_pred.groupby("ticker").apply(
+            lambda g: pd.Series({
+                "mae": mean_absolute_error(g["y"], g["yhat"]),
+                "smape": smape(g["y"], g["yhat"]),
+                "dir_acc": directional_accuracy(g["y"], g["yhat"]),
+                "n": len(g)
+            })
+        )
+        return {"n": int(grp["n"].sum()), "mae": float(grp["mae"].mean()),
+                "smape": float(grp["smape"].mean()), "dir_acc": float(grp["dir_acc"].mean())}
+    else:
+        raise ValueError("by must be 'micro' or 'macro'")
+```
+
+### 4) Models: zero, lag1, linear regression (properly fit on **train only**)
+
+``` python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+
+FEATURES = ["lag1","lag2","lag3"]  # simple, safe features; add roll_std_20 if desired
+
+def fit_predict(model_name, train_df, val_df):
+    y_tr = train_df["r_1d"].values
+    y_va = val_df["r_1d"].values
+    if model_name == "zero":
+        yhat_va = np.zeros_like(y_va)
+    elif model_name == "lag1":
+        yhat_va = val_df["lag1"].fillna(0).values
+    elif model_name == "linreg":
+        Xtr = train_df[FEATURES].fillna(0).values
+        Xva = val_df[FEATURES].fillna(0).values
+        pipe = Pipeline([("scaler", StandardScaler()), ("lr", LinearRegression())])
+        pipe.fit(Xtr, y_tr)
+        yhat_va = pipe.predict(Xva)
+    else:
+        raise ValueError("unknown model")
+    out = val_df[["ticker","date"]].copy()
+    out["y"] = y_va
+    out["yhat"] = yhat_va
+    return out
+```
+
+### 5) Regime labeling (thresholds from **training** only)
+
+``` python
+def label_regimes(train_df, val_df, col="roll_std_20"):
+    # Use training distribution to avoid leakage
+    q1, q2 = train_df[col].dropna().quantile([0.33, 0.66])
+    def rbin(x):
+        if pd.isna(x): return "mid"
+        return "low" if x < q1 else ("high" if x > q2 else "mid")
+    val_df = val_df.copy()
+    val_df["regime"] = val_df[col].apply(rbin)
+    return val_df
+```
+
+### 6) Run the walk‑forward backtest for 3 models; save reports
+
+``` python
+import pathlib, pandas as pd
+pathlib.Path("reports").mkdir(exist_ok=True)
+
+results_rows = []
+preds_all = []
+
+for split_id, (tr_start, tr_end, va_start, va_end) in enumerate(splits, start=1):
+    tr = df[(df["date"] >= tr_start) & (df["date"] <= tr_end)].copy()
+    va = df[(df["date"] >= va_start) & (df["date"] <= va_end)].copy()
+    # regime labels on validation computed from training distribution
+    if "roll_std_20" in tr.columns and "roll_std_20" in va.columns:
+        va_r = label_regimes(tr, va, col="roll_std_20")
+    else:
+        va_r = va.assign(regime="mid")
+
+    for model in ["zero","lag1","linreg"]:
+        pred = fit_predict(model, tr, va_r)
+        pred["split"] = split_id
+        pred["model"] = model
+        # attach regime for regime-aware metrics
+        pred = pred.merge(va_r[["ticker","date","regime"]], on=["ticker","date"], how="left")
+        preds_all.append(pred)
+
+        mic = aggregate_metrics(pred, by="micro")
+        mac = aggregate_metrics(pred, by="macro")
+        results_rows.append({
+            "split": split_id, "model": model, "agg":"micro", **mic,
+            "train_range": f"{tr_start.date()}→{tr_end.date()}",
+            "val_range": f"{va_start.date()}→{va_end.date()}"
+        })
+        results_rows.append({
+            "split": split_id, "model": model, "agg":"macro", **mac,
+            "train_range": f"{tr_start.date()}→{tr_end.date()}",
+            "val_range": f"{va_start.date()}→{va_end.date()}"
+        })
+
+preds_all = pd.concat(preds_all, ignore_index=True)
+walk = pd.DataFrame(results_rows).sort_values(["model","split","agg"])
+walk.head()
+```
+
+**Regime‑aware summary**
+
+``` python
+reg_rows = []
+for (model, split_id), g in preds_all.groupby(["model","split"]):
+    for regime, h in g.groupby("regime"):
+        reg_rows.append({
+            "model": model, "split": int(split_id), "regime": regime,
+            "n": len(h),
+            "mae": mean_absolute_error(h["y"], h["yhat"]),
+            "smape": smape(h["y"], h["yhat"]),
+            "dir_acc": directional_accuracy(h["y"], h["yhat"])
+        })
+by_regime = pd.DataFrame(reg_rows).sort_values(["model","split","regime"])
+by_regime.head()
+```
+
+**Save reports**
+
+``` python
+walk.to_csv("reports/walkforward_results.csv", index=False)
+by_regime.to_csv("reports/regime_metrics.csv", index=False)
+preds_all.to_csv("reports/preds_by_split.csv", index=False)
+print("Wrote: reports/walkforward_results.csv, regime_metrics.csv, preds_by_split.csv")
+```
+
+### 7) Quick plots (optional; Matplotlib)
+
+``` python
+import matplotlib.pyplot as plt
+for model in walk["model"].unique():
+    w = walk[(walk["model"]==model) & (walk["agg"]=="micro")].sort_values("split")
+    plt.figure(figsize=(6,3))
+    plt.plot(w["split"], w["mae"], marker="o")
+    plt.title(f"Micro MAE per split — {model}")
+    plt.xlabel("split"); plt.ylabel("MAE"); plt.grid(True)
+    plt.show()
+```
+
+### 8) Extra leakage checks to keep in your repo
+
+``` python
+# 1) Overlap check already done (train_end < val_start)
+# 2) Feature timing: ensure no NaN lags in validation (first few rows per ticker are dropped in features_sql)
+bad = []
+for t,g in df.groupby("ticker"):
+    v = g[g["date"].between(splits[0][2], splits[-1][3])]
+    if v["lag1"].isna().any():
+        bad.append(t)
+print("Tickers with NaN lag1 in evaluation window:", bad or "None")
+
+# 3) Scaling leakage demo: DON'T do this!
+# Wrong: scaler fit on all data (includes validation)
+# Right: pipeline.fit(train) already handles it correctly in fit_predict()
+```
+
+------------------------------------------------------------------------
+
+## Wrap‑up (10 min)
+
+-   Use **expanding** walk‑forward splits with an **embargo** to avoid overlap.
+-   Define labels carefully (e.g., `r_1d` at t+1); ensure features at *t* never use *t+1*.
+-   Report **micro & macro** metrics and **by‑regime** performance.
+-   Add **checks** for overlaps and future info.
+-   Today's outputs live under `reports/` for your poster/report.
+
+------------------------------------------------------------------------
+
+## Homework (due before Session 10)
+
+**Goal:** Productionize your evaluation. You'll create reusable modules, a CLI script, tests, and a Makefile target.
+
+### Part A --- Create reusable splitters & metrics
+
+**`src/projectname/splits.py`**
+
+``` python
+# src/projectname/splits.py
+from __future__ import annotations
+import numpy as np, pandas as pd
+
+def make_walkforward_splits(dates: pd.Series, train_min: int, val_size: int, step: int, embargo: int):
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    n = len(u); i = train_min - 1; splits=[]
+    while True:
+        if i >= n: break
+        tr_start, tr_end = u[0], u[i]
+        va_start_idx = i + embargo + 1
+        va_end_idx   = va_start_idx + val_size - 1
+        if va_end_idx >= n: break
+        splits.append((tr_start, tr_end, u[va_start_idx], u[va_end_idx]))
+        i += step
+    return splits
+
+def check_no_overlap(splits):
+    for j,(a,b,c,d) in enumerate(splits):
+        if not (b < c):
+            raise AssertionError(f"Temporal overlap in split {j}: train_end {b} >= val_start {c}")
+```
+
+**`src/projectname/metrics.py`**
+
+``` python
+# src/projectname/metrics.py
+from __future__ import annotations
+import numpy as np
+from sklearn.metrics import mean_absolute_error
+
+def smape(y_true, y_pred, eps=1e-8):
+    y_true = np.asarray(y_true); y_pred = np.asarray(y_pred)
+    return float(np.mean(2.0*np.abs(y_pred - y_true) / (np.abs(y_true)+np.abs(y_pred)+eps)))
+
+def directional_accuracy(y_true, y_pred):
+    yt = np.asarray(y_true); yp = np.asarray(y_pred)
+    return float(np.mean(np.sign(yt) == np.sign(yp)))
+
+def aggregate_micro(y, yhat):
+    from sklearn.metrics import mean_absolute_error
+    return {"n": len(y), "mae": float(mean_absolute_error(y,yhat)), "smape": smape(y,yhat), "dir_acc": directional_accuracy(y,yhat)}
+```
+
+### Part B --- CLI evaluator script
+
+**`scripts/walkforward_eval.py`**
+
+``` python
+#!/usr/bin/env python
+import argparse, pandas as pd, numpy as np, pathlib
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from src.projectname.splits import make_walkforward_splits, check_no_overlap
+from src.projectname.metrics import smape, directional_accuracy
+
+FEATURES = ["lag1","lag2","lag3"]
+
+def fit_predict(model_name, tr, va):
+    if model_name == "zero":
+        return np.zeros(len(va))
+    if model_name == "lag1":
+        return va["lag1"].fillna(0).values
+    if model_name == "linreg":
+        Xtr, ytr = tr[FEATURES].fillna(0).values, tr["r_1d"].values
+        Xva = va[FEATURES].fillna(0).values
+        pipe = Pipeline([("scaler", StandardScaler()), ("lr", LinearRegression())])
+        pipe.fit(Xtr, ytr)
+        return pipe.predict(Xva)
+    raise ValueError("unknown model")
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--features", default="data/processed/features_sql.parquet")
+    ap.add_argument("--out", default="reports/walkforward_results.csv")
+    ap.add_argument("--val-out", default="reports/preds_by_split.csv")
+    ap.add_argument("--train-min", type=int, default=252)
+    ap.add_argument("--val-size", type=int, default=63)
+    ap.add_argument("--step", type=int, default=63)
+    ap.add_argument("--embargo", type=int, default=5)
+    ap.add_argument("--models", nargs="+", default=["zero","lag1","linreg"])
+    args = ap.parse_args()
+
+    df = pd.read_parquet(args.features)
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.dropna(subset=["r_1d"]).sort_values(["ticker","date"])
+
+    splits = make_walkforward_splits(df["date"], args.train_min, args.val_size, args.step, args.embargo)
+    check_no_overlap(splits)
+
+    rows, preds = [], []
+    for sid,(a,b,c,d) in enumerate(splits, start=1):
+        tr = df[(df["date"]>=a)&(df["date"]<=b)]
+        va = df[(df["date"]>=c)&(df["date"]<=d)]
+        for m in args.models:
+            yhat = fit_predict(m, tr, va)
+            y = va["r_1d"].values
+            from sklearn.metrics import mean_absolute_error
+            rows.append({"split":sid,"model":m,"agg":"micro",
+                         "n":len(y),"mae":float(mean_absolute_error(y,yhat)),
+                         "smape":smape(y,yhat), "dir_acc":directional_accuracy(y,yhat),
+                         "train_range":f"{a.date()}→{b.date()}","val_range":f"{c.date()}→{d.date()}"})
+            tmp = va[["ticker","date"]].copy(); tmp["y"]=y; tmp["yhat"]=yhat; tmp["model"]=m; tmp["split"]=sid
+            preds.append(tmp)
+
+    out = pd.DataFrame(rows).sort_values(["model","split"])
+    out.to_csv(args.out, index=False)
+    pd.concat(preds).to_csv(args.val_out, index=False)
+    print("Wrote", args.out, "and", args.val_out)
+
+if __name__ == "__main__":
+    main()
+```
+
+Make executable:
+
+``` python
+import os, stat, pathlib
+p = pathlib.Path("scripts/walkforward_eval.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part C --- Tests to catch leakage
+
+**`tests/test_splits.py`**
+
+``` python
+import pandas as pd
+from src.projectname.splits import make_walkforward_splits, check_no_overlap
+
+def test_walkforward_no_overlap():
+    dates = pd.date_range("2020-01-01", periods=400, freq="B")
+    splits = make_walkforward_splits(pd.Series(dates), train_min=252, val_size=63, step=63, embargo=5)
+    check_no_overlap(splits)
+```
+
+**`tests/test_metrics.py`**
+
+``` python
+import numpy as np
+from src.projectname.metrics import smape, directional_accuracy
+
+def test_smape_bounds():
+    y = np.array([0.1, -0.2, 0.3]); yhat = y.copy()
+    assert smape(y,yhat) < 1e-9
+
+def test_directional_accuracy():
+    y = np.array([1,-1,0,2]); yhat = np.array([0.5,-0.7,0, -3])
+    assert abs(directional_accuracy(y,yhat) - 0.75) < 1e-9
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+pytest -q
+```
+
+### Part D --- Makefile target
+
+Append to your `Makefile`:
+
+``` make
+.PHONY: eval
+eval: ## Run walk-forward evaluation and save reports
+\tpython scripts/walkforward_eval.py --features data/processed/features_sql.parquet --out reports/walkforward_results.csv --val-out reports/preds_by_split.csv --train-min 252 --val-size 63 --step 63 --embargo 5
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+make eval
+head -n 5 reports/walkforward_results.csv
+```
+
+### Part E --- (Stretch) Multi‑step labels and embargo sensitivity
+
+1.  Create 5‑step labels `r_5d = sum of next 5 daily returns` and re‑run evaluation.
+2.  Compare results for embargo ∈ {0, 3, 5, 10}. Produce a small table in `reports/embargo_sensitivity.csv`.
+
+**Hint:**
+
+``` python
+# to create r_5d
+df = pd.read_parquet("data/processed/features_sql.parquet").sort_values(["ticker","date"])
+r = df.groupby("ticker")["r_1d"].shift(-1)  # next day
+for k in range(5): 
+    df[f"fwd{k+1}"] = df.groupby("ticker")["r_1d"].shift(-(k+1))
+df["r_5d"] = df[[f"fwd{k+1}" for k in range(5)]].sum(axis=1)
+```
+
+### Submission checklist (pass/revise)
+
+-   `scripts/walkforward_eval.py` runs and writes `reports/walkforward_results.csv` and `reports/preds_by_split.csv`.
+-   `src/projectname/splits.py` and `src/projectname/metrics.py` present.
+-   Tests pass (`pytest` green).
+-   `Makefile` has `eval` target.
+-   (Stretch) embargo sensitivity and/or 5‑step labels explored.
+
+------------------------------------------------------------------------
+
+## Instructor checklist (before class)
+
+-   Dry‑run the lab on a fresh Colab runtime with your repo.
+-   Have a slide showing a **timeline sketch** of one expanding split with **embargo**.
+-   Prepare one example of "bad scaling" code to warn against (fit scaler on full data) and show the fix (pipeline fit on train only).
+
+## Emphasize while teaching
+
+-   **Dates, not rows**, define splits. Keep a **gap** (embargo).
+-   **Features at t** → predict **label at t+1** (or t+H).
+-   Always compute **regime thresholds from training** to avoid leakage.
+-   Report **micro, macro, and regime** metrics; archive your backtest traces in `reports/`.
+
+**Next session (10):** PyTorch fundamentals---tensors, datasets/dataloaders, training loop, and a small sequence model to beat baselines.

@@ -1,0 +1,696 @@
+---
+title: "Session 12 — Unified Tiny‑GPT: Walk‑Forward Evaluation & Light Hyper‑Parameter Sweeps"
+---
+
+Below is a complete lecture package for **Session 12 --- Unified Tiny‑GPT: Walk‑Forward Evaluation & Light Hyper‑Parameter Sweeps** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. Today we'll take the tiny GPT you built in Session 11 and (1) run a **proper walk‑forward evaluation** across multiple time splits, (2) compare against a **lag‑1** baseline, and (3) run a **small, fast sweep** (heads × context) to practice experiment management.
+
+> **Educational use only --- not trading advice.** Assumes the same Drive‑mounted repo (e.g., `unified-stocks-teamX`) and a features file from Session 8: `data/processed/features_sql.parquet`. If missing, the lab creates a safe fallback from `data/raw/prices.csv`.
+
+------------------------------------------------------------------------
+
+## Session 12 --- Unified Tiny‑GPT: Walk‑Forward + Sweeps (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1.  Run **walk‑forward (expanding) evaluation** for a tiny GPT with **embargo‑style gaps** (no temporal overlap).
+2.  Normalize features using **train‑window statistics** for each split (no leakage).
+3.  Track **per‑split** metrics (MAE, sMAPE, directional accuracy) and aggregate **micro**/**macro** summaries.
+4.  Run a **light hyper‑parameter sweep** (e.g., heads × context) and save results reproducibly.
+
+------------------------------------------------------------------------
+
+## Agenda (75 min)
+
+-   **(8 min)** Slides: pipeline overview; split logic; leakage tripwires
+-   **(12 min)** Slides: training efficiency & stability (seed, early stopping, weight decay, batch/context tradeoffs)
+-   **(35 min)** **In‑class lab**: walk‑forward tiny GPT (2--3 splits) → baseline comparison → small sweep → save CSV reports
+-   **(10 min)** Wrap‑up + homework briefing
+-   **(10 min)** Buffer
+
+------------------------------------------------------------------------
+
+## Slides / talking points
+
+**Pipeline design**
+
+-   **Dates define splits.** Use **expanding** training windows; validation starts **after an embargo gap** to avoid adjacency leakage.
+-   For each split: **recompute normalization** (μ, σ) on training only; fit model; early‑stop on validation loss; log artifacts.
+
+**Training efficiency & stability**
+
+-   **Seeds:** `random`, `numpy`, `torch` → reproducible runs.
+-   **Regularization:** weight decay (AdamW), dropout in blocks, gradient clipping (1.0), early stopping.
+-   **Batch vs Context vs Model Size:** memory roughly grows with `B×T×d_model` and attention's `T²`. Keep `T` modest (16--64) for Colab.
+
+**Fair comparisons**
+
+-   Baseline must use **only past info** (e.g., lag‑1 return at time *t* to predict *t+1*).
+-   Use identical **date ranges** and **tickers** for model vs baseline.
+
+------------------------------------------------------------------------
+
+## In‑class lab (35 min, Colab‑friendly)
+
+> Run each block as its **own Colab cell**. Adjust `REPO_OWNER`/`REPO_NAME` first.
+
+### 0) Setup, mount Drive, seed, device
+
+``` python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, random, math, time, json
+import numpy as np, pandas as pd
+import torch
+from torch import nn
+
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found. Clone it first (Session 2/3)."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+
+def set_seed(seed=2025, deterministic=True):
+    random.seed(seed); np.random.seed(seed)
+    torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
+    if deterministic:
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        try: torch.use_deterministic_algorithms(True)
+        except Exception: pass
+
+set_seed(2025)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device
+```
+
+### 1) Load features (or build a small fallback)
+
+``` python
+from pathlib import Path
+feats_path = Path("data/processed/features_sql.parquet")
+raw_path   = Path("data/raw/prices.csv")
+
+if feats_path.exists():
+    df = pd.read_parquet(feats_path)
+else:
+    assert raw_path.exists(), "Missing features_sql.parquet and raw prices.csv."
+    raw = pd.read_csv(raw_path, parse_dates=["date"]).sort_values(["ticker","date"])
+    # Minimal safe features
+    raw["r_1d"] = raw.groupby("ticker")["log_return"].shift(-1)  # label (t+1)
+    raw["lag1"] = raw.groupby("ticker")["log_return"].shift(1)
+    raw["lag2"] = raw.groupby("ticker")["log_return"].shift(2)
+    raw["lag3"] = raw.groupby("ticker")["log_return"].shift(3)
+    raw["roll_std_20"] = (raw.groupby("ticker")["log_return"]
+                          .rolling(20, min_periods=10).std()
+                          .reset_index(level=0, drop=True))
+    df = raw[["ticker","date","r_1d","lag1","lag2","lag3","roll_std_20"]]
+
+df["date"] = pd.to_datetime(df["date"])
+df = df.dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+
+FEATURES = [c for c in ["r_1d","roll_mean_20","roll_std_20","zscore_20","lag1","lag2","lag3"] if c in df.columns]
+if "r_1d" not in FEATURES: FEATURES.insert(0, "r_1d")
+len(df), FEATURES
+```
+
+### 2) Walk‑forward splits with embargo (reused from Session 9)
+
+``` python
+def make_walkforward_splits(dates: pd.Series,
+                            train_min: int = 252,   # ~ 1 trading year
+                            val_size: int = 63,     # ~ 1 quarter
+                            step: int = 63,         # slide by a quarter
+                            embargo: int = 5):      # gap days
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    n = len(u)
+    splits = []
+    i = train_min - 1
+    while True:
+        if i >= n: break
+        train_start, train_end = u[0], u[i]
+        val_start_idx = i + embargo + 1
+        val_end_idx   = val_start_idx + val_size - 1
+        if val_end_idx >= n: break
+        splits.append((train_start, train_end, u[val_start_idx], u[val_end_idx]))
+        i += step
+    return splits
+
+def check_no_overlap(splits):
+    for j,(a,b,c,d) in enumerate(splits):
+        assert b < c, f"Overlap leak in split {j}: train_end {b} >= val_start {c}"
+
+splits = make_walkforward_splits(df["date"], train_min=252, val_size=63, step=63, embargo=5)
+check_no_overlap(splits)
+len(splits), splits[:2]
+```
+
+> **For class speed**, we'll run the **first 2--3 splits**. You can increase later.
+
+``` python
+SPLITS_TO_RUN = min(3, len(splits))
+splits = splits[:SPLITS_TO_RUN]
+SPLITS_TO_RUN, splits
+```
+
+### 3) Dataset, causal‑Transformer (tiny GPT), metrics
+
+``` python
+# --- Dataset (windowed, multi-ticker), normalization from TRAIN ONLY ---
+class TSWindowDS(torch.utils.data.Dataset):
+    def __init__(self, frame: pd.DataFrame, feature_cols, context=32, horizon=1, mu=None, sg=None):
+        self.context = int(context); self.horizon = int(horizon)
+        self.cols = list(feature_cols)
+        self.mu = torch.tensor(mu, dtype=torch.float32) if mu is not None else None
+        self.sg = torch.tensor(sg, dtype=torch.float32) if sg is not None else None
+        rows=[]
+        for tkr, g in frame.groupby("ticker"):
+            g = g.sort_values("date").reset_index(drop=True)
+            T = len(g)
+            if T < self.context + self.horizon: continue
+            Xmat = g[self.cols].values.astype("float32")
+            yvec = g["r_1d"].values.astype("float32")
+            for i in range(0, T - self.context - self.horizon + 1):
+                j = i + self.context - 1
+                y_idx = j + self.horizon
+                rows.append((Xmat[i:j+1], yvec[y_idx], tkr))
+        self.rows = rows
+        self.r1d_idx = self.cols.index("r_1d")
+    def __len__(self): return len(self.rows)
+    def __getitem__(self, idx):
+        X, y, tkr = self.rows[idx]
+        X = torch.tensor(X, dtype=torch.float32)
+        if (self.mu is not None) and (self.sg is not None):
+            X = (X - self.mu) / (self.sg + 1e-8)
+        y = torch.tensor([y], dtype=torch.float32)
+        return X, y, tkr
+
+def norm_stats(train_df, cols):
+    mu = train_df[cols].mean().values.astype("float32")
+    sg = train_df[cols].std(ddof=0).replace(0, np.nan).fillna(1.0).values.astype("float32")
+    return mu, sg
+
+# --- Tiny GPT components (causal) ---
+def build_causal_mask(T, device):
+    m = torch.full((T, T), float('-inf'), device=device)
+    m = torch.triu(m, diagonal=1)
+    return m
+
+class CausalSelfAttention(nn.Module):
+    def __init__(self, d_model, n_heads=4, attn_drop=0.0, proj_drop=0.0):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.n_heads = n_heads
+        self.d_head = d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3*d_model, bias=False)
+        self.attn_drop = nn.Dropout(attn_drop)
+        self.proj = nn.Linear(d_model, d_model)
+        self.proj_drop = nn.Dropout(proj_drop)
+    def forward(self, x, mask):
+        B, T, C = x.shape
+        qkv = self.qkv(x); q,k,v = qkv.chunk(3, dim=-1)
+        def reshape(z): return z.view(B, T, self.n_heads, self.d_head).transpose(1,2)
+        q,k,v = map(reshape, (q,k,v))
+        scores = (q @ k.transpose(-2,-1)) / math.sqrt(self.d_head)
+        scores = scores + mask
+        attn = torch.softmax(scores, dim=-1)
+        attn = self.attn_drop(attn)
+        y = attn @ v
+        y = y.transpose(1,2).contiguous().view(B,T,C)
+        y = self.proj_drop(self.proj(y))
+        return y
+
+class TransformerBlock(nn.Module):
+    def __init__(self, d_model, n_heads, mlp_ratio=4.0, drop=0.1):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(d_model)
+        self.attn = CausalSelfAttention(d_model, n_heads, proj_drop=drop)
+        self.ln2 = nn.LayerNorm(d_model)
+        self.mlp = nn.Sequential(
+            nn.Linear(d_model, int(mlp_ratio*d_model)),
+            nn.GELU(),
+            nn.Linear(int(mlp_ratio*d_model), d_model),
+            nn.Dropout(drop),
+        )
+    def forward(self, x, mask):
+        x = x + self.attn(self.ln1(x), mask)
+        x = x + self.mlp(self.ln2(x))
+        return x
+
+class TinyGPT_TS(nn.Module):
+    def __init__(self, in_dim, d_model=64, n_heads=4, n_layers=2, context=32, drop=0.1):
+        super().__init__()
+        self.context = context
+        self.embed = nn.Linear(in_dim, d_model)
+        self.pos   = nn.Parameter(torch.zeros(1, context, d_model))
+        self.blocks = nn.ModuleList([TransformerBlock(d_model, n_heads, drop=drop) for _ in range(n_layers)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, 1)
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_uniform_(m.weight); 
+                if m.bias is not None: nn.init.zeros_(m.bias)
+    def forward(self, x):
+        B,T,F = x.shape
+        assert T == self.context
+        h = self.embed(x) + self.pos[:, :T, :]
+        mask = build_causal_mask(T, x.device)
+        for blk in self.blocks:
+            h = blk(h, mask)
+        h = self.ln_f(h)
+        return self.head(h[:, -1, :])  # r_{t+1}
+
+# --- metrics ---
+from sklearn.metrics import mean_absolute_error
+def smape(y, yhat, eps=1e-8):
+    y = np.asarray(y); yhat = np.asarray(yhat)
+    return float(np.mean(2*np.abs(yhat - y)/(np.abs(yhat)+np.abs(y)+eps)))
+def diracc(y, yhat):
+    y = np.asarray(y); yhat = np.asarray(yhat)
+    return float(np.mean(np.sign(y) == np.sign(yhat)))
+```
+
+### 4) Train/eval per‑split (with early stopping), compare to **lag‑1**
+
+``` python
+def train_one_split(train_df, val_df,
+                    context=32, batch=256, epochs=12, patience=3,
+                    d_model=64, heads=4, layers=2, dropout=0.1, lr=1e-3, wd=1e-4):
+    # normalization from TRAIN ONLY
+    mu, sg = norm_stats(train_df, FEATURES)
+    tr_ds = TSWindowDS(train_df, FEATURES, context=context, horizon=1, mu=mu, sg=sg)
+    va_ds = TSWindowDS(val_df,   FEATURES, context=context, horizon=1, mu=mu, sg=sg)
+    tr_ld = torch.utils.data.DataLoader(tr_ds, batch_size=batch, shuffle=True, drop_last=True)
+    va_ld = torch.utils.data.DataLoader(va_ds, batch_size=batch, shuffle=False)
+    model = TinyGPT_TS(in_dim=len(FEATURES), d_model=d_model, n_heads=heads, n_layers=layers,
+                       context=context, drop=dropout).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
+    loss_fn = nn.SmoothL1Loss()
+
+    @torch.no_grad()
+    def eval_loss():
+        model.eval(); tot=n=0
+        for X,y,_ in va_ld:
+            X,y = X.to(device), y.to(device)
+            tot += float(loss_fn(model(X), y).item()) * X.size(0); n += X.size(0)
+        return tot/max(n,1)
+
+    def train_epoch():
+        model.train(); tot=n=0
+        for X,y,_ in tr_ld:
+            X,y = X.to(device), y.to(device)
+            opt.zero_grad(set_to_none=True)
+            loss = loss_fn(model(X), y)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            opt.step()
+            tot += float(loss.item()) * X.size(0); n += X.size(0)
+        return tot/max(n,1)
+
+    best={"epoch":0,"val":float("inf"),"state":None}
+    history=[]
+    for ep in range(1, epochs+1):
+        tr = train_epoch(); va = eval_loss()
+        history.append({"epoch":ep, "train_loss":tr, "val_loss":va})
+        if va < best["val"] - 1e-12:
+            best={"epoch":ep,"val":va,"state":{k:v.detach().cpu().clone() for k,v in model.state_dict().items()}}
+        # verbose
+        print(f"ep {ep:02d} | train {tr:.6f} | val {va:.6f} | best {best['val']:.6f} (ep {best['epoch']})")
+        if ep - best["epoch"] >= patience:
+            print("Early stopping."); break
+    if best["state"] is not None:
+        model.load_state_dict(best["state"])
+
+    # predictions on validation
+    @torch.no_grad()
+    def preds(loader):
+        model.eval(); Y=[]; YH=[]; TK=[]; 
+        for X,y,tkr in loader:
+            X = X.to(device)
+            Y.append(y.numpy().reshape(-1))
+            YH.append(model(X).cpu().numpy().reshape(-1))
+            TK += list(tkr)
+        return np.concatenate(Y), np.concatenate(YH), TK
+    y_val, yhat_val, tickers_val = preds(va_ld)
+
+    # lag-1 baseline on raw (unnormalized) windows
+    raw_va_ds = TSWindowDS(val_df, FEATURES, context=context, horizon=1, mu=None, sg=None)
+    raw_va_ld = torch.utils.data.DataLoader(raw_va_ds, batch_size=batch, shuffle=False)
+    lagY=[]; lagYH=[]
+    for X,y,_ in raw_va_ld:
+        lagY.append(y.numpy().reshape(-1))
+        lagYH.append(X[:, -1, raw_va_ds.r1d_idx].numpy())
+    lagY = np.concatenate(lagY); lagYH = np.concatenate(lagYH)
+
+    metrics = {
+        "gpt_mae": float(mean_absolute_error(y_val, yhat_val)),
+        "gpt_smape": smape(y_val, yhat_val),
+        "gpt_diracc": diracc(y_val, yhat_val),
+        "lag1_mae": float(mean_absolute_error(lagY, lagYH)),
+        "lag1_smape": smape(lagY, lagYH),
+        "lag1_diracc": diracc(lagY, lagYH),
+        "n_val": int(len(y_val)),
+        "best_epoch": int(best["epoch"]),
+        "best_val_loss": float(best["val"])
+    }
+    return metrics, history, (y_val, yhat_val, tickers_val)
+
+# Quick smoke test on the first split with small epochs
+(a,b,c) = splits[0]
+train_df = df[(df["date"]>=a)&(df["date"]<=b)]
+val_df   = df[(df["date"]>=c)&(df["date"]<=d)]
+m, hist, (y, yhat, tk) = train_one_split(train_df, val_df, context=32, epochs=6, patience=2)
+m
+```
+
+### 5) Run the **walk‑forward** (2--3 splits) and save reports
+
+``` python
+import pathlib, pandas as pd, numpy as np, json
+pathlib.Path("reports").mkdir(exist_ok=True)
+pathlib.Path("models").mkdir(exist_ok=True)
+
+CONFIG = {"context":32, "d_model":64, "heads":4, "layers":2, "dropout":0.1, "batch":256, "epochs":8, "patience":2, "lr":1e-3, "wd":1e-4}
+
+rows=[]; preds_all=[]
+for sid,(a,b,c,d) in enumerate(splits, start=1):
+    tr = df[(df["date"]>=a)&(df["date"]<=b)]
+    va = df[(df["date"]>=c)&(df["date"]<=d)]
+    print(f"\n=== Split {sid}: train {a.date()}→{b.date()} | val {c.date()}→{d.date()} ===")
+    metrics, history, (y, yhat, tk) = train_one_split(tr, va, **CONFIG)
+    rows.append({"split":sid, "train_range":f"{a.date()}→{b.date()}",
+                 "val_range":f"{c.date()}→{d.date()}", **metrics})
+    # Save per-split artifacts
+    pd.DataFrame(history).to_csv(f"reports/gpt_wf_split{sid}_curve.csv", index=False)
+    pd.DataFrame({"y":y, "yhat":yhat, "ticker":tk}).to_csv(f"reports/gpt_wf_split{sid}_preds.csv", index=False)
+
+walk = pd.DataFrame(rows).sort_values("split")
+walk.to_csv("reports/gpt_walkforward_metrics.csv", index=False)
+
+# Aggregate summary (micro average across splits)
+summary = {
+    "splits": int(len(walk)),
+    "gpt_mae_mean": float(walk["gpt_mae"].mean()),
+    "lag1_mae_mean": float(walk["lag1_mae"].mean()),
+    "gpt_diracc_mean": float(walk["gpt_diracc"].mean()),
+    "lag1_diracc_mean": float(walk["lag1_diracc"].mean()),
+}
+with open("reports/gpt_walkforward_summary.json","w") as f: json.dump(summary, f, indent=2)
+
+walk.head(), summary
+```
+
+### 6) **Light sweep** (heads × context) on **first split only** (fast)
+
+``` python
+from copy import deepcopy
+(a,b,c,d) = splits[0]
+tr = df[(df["date"]>=a)&(df["date"]<=b)]
+va = df[(df["date"]>=c)&(df["date"]<=d)]
+
+grid = [{"context":16,"heads":1},{"context":16,"heads":4},{"context":32,"heads":1},{"context":32,"heads":4}]
+srows=[]
+SWEEP_CFG = deepcopy(CONFIG); SWEEP_CFG.update({"epochs":6, "patience":2})  # faster
+
+for cfg in grid:
+    cfg_run = deepcopy(SWEEP_CFG); cfg_run.update(cfg)
+    print("\nSweep run:", cfg_run)
+    metrics, _, _ = train_one_split(tr, va, **cfg_run)
+    srows.append({**cfg_run, **metrics})
+
+sweep = pd.DataFrame(srows)
+sweep.to_csv("reports/gpt_sweep_heads_context.csv", index=False)
+sweep.sort_values("gpt_mae").head()
+```
+
+------------------------------------------------------------------------
+
+## Wrap‑up (10 min)
+
+-   You now have a **split‑by‑split** evaluation for tiny GPT that's **leakage‑safe**: embargo, train‑only normalization, early stopping.
+-   You produced reproducible **CSV reports** for both the walk‑forward and a **small sweep**.
+-   Next time we'll integrate this with your **project Makefile**, add a minimal **inference/export** path, and start shaping results into a **symposium‑ready** narrative.
+
+------------------------------------------------------------------------
+
+## Homework (due before Session 13)
+
+**Goal:** Productionize the walk‑forward GPT and sweep in your repo with scripts, a Makefile target, and minimal tests.
+
+### Part A --- CLI: `scripts/gpt_walkforward.py`
+
+``` python
+#!/usr/bin/env python
+import argparse, json, numpy as np, pandas as pd, torch
+from pathlib import Path
+from sklearn.metrics import mean_absolute_error
+
+# (Paste: TSWindowDS, norm_stats, build_causal_mask, CausalSelfAttention, TransformerBlock, TinyGPT_TS, smape, diracc, make_walkforward_splits, check_no_overlap)
+# Keep configs small for CI/Colab.
+
+def run_split(train_df, val_df, FEATURES, device, cfg):
+    # normalization
+    mu = train_df[FEATURES].mean().values.astype("float32")
+    sg = train_df[FEATURES].std(ddof=0).replace(0, np.nan).fillna(1.0).values.astype("float32")
+    tr_ds = TSWindowDS(train_df, FEATURES, context=cfg["context"], mu=mu, sg=sg)
+    va_ds = TSWindowDS(val_df,   FEATURES, context=cfg["context"], mu=mu, sg=sg)
+    tr_ld = torch.utils.data.DataLoader(tr_ds, batch_size=cfg["batch"], shuffle=True, drop_last=True)
+    va_ld = torch.utils.data.DataLoader(va_ds, batch_size=cfg["batch"], shuffle=False)
+    model = TinyGPT_TS(in_dim=len(FEATURES), d_model=cfg["d_model"], n_heads=cfg["heads"],
+                       n_layers=cfg["layers"], context=cfg["context"], drop=cfg["dropout"]).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["wd"])
+    loss_fn = torch.nn.SmoothL1Loss()
+
+    def train_epoch():
+        model.train(); tot=n=0
+        for X,y,_ in tr_ld:
+            X,y = X.to(device), y.to(device)
+            opt.zero_grad(set_to_none=True)
+            loss = loss_fn(model(X), y); loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            opt.step(); tot += float(loss.item()) * X.size(0); n += X.size(0)
+        return tot/max(n,1)
+
+    @torch.no_grad()
+    def val_loss():
+        model.eval(); tot=n=0
+        for X,y,_ in va_ld:
+            X,y = X.to(device), y.to(device)
+            tot += float(loss_fn(model(X), y).item()) * X.size(0); n += X.size(0)
+        return tot/max(n,1)
+
+    best = {"ep":0,"val":float("inf"),"state":None}
+    for ep in range(1, cfg["epochs"]+1):
+        tr = train_epoch(); va = val_loss()
+        if va < best["val"]-1e-12:
+            best={"ep":ep,"val":va,"state":{k:v.detach().cpu() for k,v in model.state_dict().items()}}
+        if ep - best["ep"] >= cfg["patience"]:
+            break
+    if best["state"] is not None: model.load_state_dict(best["state"])
+
+    # predictions
+    @torch.no_grad()
+    def preds(ld):
+        model.eval(); Y=[]; YH=[]
+        for X,y,_ in ld:
+            Y.append(y.numpy().reshape(-1)); YH.append(model(X.to(device)).cpu().numpy().reshape(-1))
+        return np.concatenate(Y), np.concatenate(YH)
+    y, yhat = preds(va_ld)
+    # lag-1 baseline on raw windows
+    raw_va_ds = TSWindowDS(val_df, FEATURES, context=cfg["context"], mu=None, sg=None)
+    raw_va_ld = torch.utils.data.DataLoader(raw_va_ds, batch_size=cfg["batch"], shuffle=False)
+    lagY=[]; lagYH=[]
+    for X,Y,_ in raw_va_ld:
+        lagY.append(Y.numpy().reshape(-1))
+        lagYH.append(X[:, -1, raw_va_ds.r1d_idx].numpy())
+    lagY = np.concatenate(lagY); lagYH = np.concatenate(lagYH)
+
+    return {
+        "gpt_mae": float(mean_absolute_error(y, yhat)),
+        "gpt_smape": smape(y, yhat),
+        "gpt_diracc": diracc(y, yhat),
+        "lag1_mae": float(mean_absolute_error(lagY, lagYH)),
+        "lag1_smape": smape(lagY, lagYH),
+        "lag1_diracc": diracc(lagY, lagYH),
+        "n_val": int(len(y)), "best_val_loss": float(best["val"])
+    }
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--features", default="data/processed/features_sql.parquet")
+    ap.add_argument("--splits", type=int, default=2)
+    ap.add_argument("--context", type=int, default=32)
+    ap.add_argument("--d-model", type=int, default=64)
+    ap.add_argument("--heads", type=int, default=4)
+    ap.add_argument("--layers", type=int, default=2)
+    ap.add_argument("--dropout", type=float, default=0.1)
+    ap.add_argument("--batch", type=int, default=256)
+    ap.add_argument("--epochs", type=int, default=8)
+    ap.add_argument("--patience", type=int, default=2)
+    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--wd", type=float, default=1e-4)
+    ap.add_argument("--out", default="reports/gpt_walkforward_metrics.csv")
+    args = ap.parse_args()
+
+    Path("reports").mkdir(exist_ok=True)
+    df = pd.read_parquet(args.features).dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+    df["date"] = pd.to_datetime(df["date"])
+    FEATS = [c for c in ["r_1d","roll_mean_20","roll_std_20","zscore_20","lag1","lag2","lag3"] if c in df.columns]
+    if "r_1d" not in FEATS: FEATS.insert(0, "r_1d")
+    s = make_walkforward_splits(df["date"], train_min=252, val_size=63, step=63, embargo=5)
+    s = s[:min(args.splits, len(s))]
+    check_no_overlap(s)
+
+    cfg = vars(args);  # dict
+    rows=[]
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    for sid,(a,b,c,d) in enumerate(s, start=1):
+        tr = df[(df["date"]>=a)&(df["date"]<=b)]
+        va = df[(df["date"]>=c)&(df["date"]<=d)]
+        m = run_split(tr, va, FEATS, device, cfg)
+        rows.append({"split":sid, "train_range":f"{a.date()}→{b.date()}",
+                     "val_range":f"{c.date()}→{d.date()}", **m})
+    pd.DataFrame(rows).to_csv(args.out, index=False)
+    print("Wrote", args.out)
+
+if __name__ == "__main__":
+    main()
+```
+
+Make it executable:
+
+``` python
+import os, stat, pathlib
+p = pathlib.Path("scripts/gpt_walkforward.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part B --- CLI sweep: `scripts/sweep_gpt.py`
+
+``` python
+#!/usr/bin/env python
+import argparse, subprocess, json, pandas as pd, pathlib, itertools
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--contexts", nargs="+", type=int, default=[16,32])
+    ap.add_argument("--heads",    nargs="+", type=int, default=[1,4])
+    ap.add_argument("--splits", type=int, default=1)
+    ap.add_argument("--epochs", type=int, default=6)
+    ap.add_argument("--patience", type=int, default=2)
+    ap.add_argument("--out", default="reports/gpt_sweep_heads_context.csv")
+    args = ap.parse_args()
+    rows=[]
+    for ctx, hd in itertools.product(args.contexts, args.heads):
+        cmd = ["python","scripts/gpt_walkforward.py","--splits",str(args.splits),
+               "--context",str(ctx),"--heads",str(hd),
+               "--epochs",str(args.epochs),"--patience",str(args.patience)]
+        print("Running:", " ".join(cmd))
+        subprocess.run(cmd, check=True)
+        df = pd.read_csv("reports/gpt_walkforward_metrics.csv")
+        # take first row (split 1) for this sweep
+        r = df.iloc[0].to_dict()
+        r.update({"context":ctx,"heads":hd})
+        rows.append(r)
+    out = pd.DataFrame(rows)
+    pathlib.Path("reports").mkdir(exist_ok=True)
+    out.to_csv(args.out, index=False)
+    print("Wrote", args.out)
+if __name__ == "__main__":
+    main()
+```
+
+Make it executable:
+
+``` python
+import os, stat, pathlib
+p = pathlib.Path("scripts/sweep_gpt.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part C --- Makefile targets
+
+Append to your `Makefile`:
+
+``` make
+.PHONY: eval-gpt wf-sweep
+eval-gpt: ## Walk-forward tiny GPT (2 splits) and save metrics
+\tpython scripts/gpt_walkforward.py --splits 2 --context 32 --heads 4 --epochs 8 --patience 2
+
+wf-sweep: ## Small sweep over heads × context on split 1
+\tpython scripts/sweep_gpt.py --contexts 16 32 --heads 1 4 --splits 1 --epochs 6 --patience 2
+```
+
+### Part D --- Minimal tests
+
+Create `tests/test_wf_no_overlap.py`:
+
+``` python
+import pandas as pd, numpy as np
+from scripts.gpt_walkforward import make_walkforward_splits, check_no_overlap
+
+def test_no_overlap():
+    dates = pd.date_range("2020-01-01", periods=400, freq="B")
+    s = make_walkforward_splits(pd.Series(dates), train_min=252, val_size=63, step=63, embargo=5)
+    check_no_overlap(s)
+```
+
+Create `tests/test_norm_from_train.py`:
+
+``` python
+import numpy as np, pandas as pd
+from scripts.gpt_walkforward import norm_stats
+
+def test_norm_nonzero_sigma():
+    df = pd.DataFrame({"r_1d":[0.1, -0.2, 0.0, 0.3], "lag1":[0.05, -0.1, 0.0, 0.2]})
+    mu, sg = norm_stats(df, ["r_1d","lag1"])
+    assert np.isfinite(mu).all() and np.isfinite(sg).all()
+    assert (sg >= 0).all()
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+pytest -q
+```
+
+### Part E --- Deliverables to commit
+
+-   `scripts/gpt_walkforward.py`, `scripts/sweep_gpt.py`, updated `Makefile`
+-   `reports/gpt_walkforward_metrics.csv`, `reports/gpt_sweep_heads_context.csv`
+-   `tests/test_wf_no_overlap.py`, `tests/test_norm_from_train.py`
+
+------------------------------------------------------------------------
+
+### Grading (pass/revise)
+
+-   Walk‑forward GPT runs for ≥2 splits and writes `reports/gpt_walkforward_metrics.csv`.
+-   Sweep writes `reports/gpt_sweep_heads_context.csv` with ≥4 rows.
+-   Makefile targets `eval-gpt` and `wf-sweep` work.
+-   Tests pass (no overlap; finite normalization stats).
+
+------------------------------------------------------------------------
+
+## Instructor checklist (before class)
+
+-   Dry‑run the lab on a fresh Colab runtime; ensure 2--3 splits finish in \<10 minutes.
+-   Prepare a one‑slide schematic of expanding window + embargo.
+-   Be ready to point out exactly where **train‑only normalization** occurs for each split.
+
+## Emphasize while teaching
+
+-   **Recompute μ/σ per split** (never global stats).
+-   Keep models **small** and runs **short**; compare to **lag‑1** fairly.
+-   Save artifacts in `reports/` to make your symposium poster easy to build.
+
+**Next (Session 13)**: Packaging your pipeline + producing a clean **Quarto model card** and a short **poster‑ready** results table and figure.

@@ -1,0 +1,542 @@
+---
+title: "Session 21 — Attention & Tiny GPT on Toy Data"
+---
+Below is a complete lecture package for **Session 21 — Attention & Tiny GPT on Toy Data** (75 minutes). It includes a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. In class you’ll implement a **tiny GPT** (token + positional embeddings → stacked Transformer blocks → LM head) and verify learning on a **toy character‑level next‑token task**.
+
+> **Educational use only.**
+> Assumes your Drive‑mounted repo (e.g., `unified-stocks-teamX`). No finance data needed today; we train on a tiny public‑domain‑friendly toy corpus embedded in the notebook (with fallbacks).
+
+---
+
+## Session 21 — Attention & Tiny GPT on Toy Data (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Explain the core pieces of GPT: **token embeddings**, **positional embeddings**, **multi‑head causal self‑attention**, **MLP**, **residual + LayerNorm**.
+2. Implement a **causal mask** (no look‑ahead).
+3. Train a **tiny GPT** (≈100–300k parameters) on a toy corpus and monitor **loss/perplexity**.
+4. Generate text samples and diagnose **calibration/overfit** qualitatively.
+
+---
+
+## Agenda (75 min)
+
+* **(12 min)** Slides: attention recap; Transformer block anatomy; causal masking
+* **(8 min)** Slides: next‑token objective, cross‑entropy, perplexity; weight tying; tiny configs
+* **(35 min)** **In‑class lab**: build `TinyGPT` → train on toy corpus → plot train/val loss → sample text
+* **(10 min)** Wrap‑up + homework brief
+* **(10 min)** Buffer / Q\&A
+
+---
+
+## Slides / talking points (drop into your deck)
+
+### Scaled dot‑product attention (single head)
+
+* Queries **Q**, keys **K**, values **V** from input **X** via linear projections.
+* Scores = $QK^\top / \sqrt{d_k}$; apply **causal mask** to set future positions to $-\infty$; softmax over last dim; output $A = \text{softmax}(\text{masked scores})V$.
+
+### Multi‑head + block
+
+* Parallel heads capture different patterns; concat and project.
+* **Pre‑norm** block (LayerNorm → Attention → residual; LayerNorm → MLP → residual) is stable and common.
+
+### Next‑token objective
+
+* Given context of length **T**, predict token $x_{t+1}$ from $x_{\le t}$ using **cross‑entropy**.
+* Report **loss** and **perplexity** $=\exp(\text{loss})$.
+
+### Tiny GPT config (fits in Colab/CPU)
+
+* `d_model=64`, `n_head=2`, `n_layer=2`, `ffn=128`, `ctx=64`, batch 64–128, \~1–3 minutes on CPU (faster on GPU).
+
+---
+
+## In‑class lab (35 min, Colab‑friendly)
+
+> Run each block as its **own cell**. Update `REPO_NAME` to your repo.
+
+### 0) Setup & folders
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_NAME = "unified-stocks-teamX"  # <- change if needed
+BASE_DIR  = "/content/drive/MyDrive/dspt25"
+REPO_DIR  = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, sys, platform, random, math, time
+pathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)
+os.chdir(REPO_DIR)
+for p in ["models","reports","scripts","tests","data/raw"]:
+    pathlib.Path(p).mkdir(parents=True, exist_ok=True)
+print("Working dir:", os.getcwd(), "| Python", sys.version.split()[0], "| OS", platform.system())
+```
+
+### 1) Tiny toy corpus (char‑level), encoding, and splits
+
+```python
+import numpy as np, pandas as pd, torch
+
+# Try to load an existing text; else use a small public‑domain‑friendly snippet
+txt_path = pathlib.Path("data/raw/tiny_text.txt")
+if txt_path.exists():
+    text = txt_path.read_text(encoding="utf-8")
+else:
+    text = (
+        "To be, or not to be, that is the question:\n"
+        "Whether 'tis nobler in the mind to suffer\n"
+        "The slings and arrows of outrageous fortune,\n"
+        "Or to take arms against a sea of troubles\n"
+        "And by opposing end them.\n"
+    ) * 50  # repeat to make a few thousand chars
+
+# Build vocabulary
+chars = sorted(list(set(text)))
+stoi  = {ch:i for i,ch in enumerate(chars)}
+itos  = {i:ch for ch,i in stoi.items()}
+vocab_size = len(chars)
+print("Vocab size:", vocab_size, "| Text length:", len(text))
+
+def encode(s: str): return torch.tensor([stoi[c] for c in s], dtype=torch.long)
+def decode(t: torch.Tensor): return "".join(itos[int(i)] for i in t)
+
+# Train/val split (90/10 by characters)
+data = encode(text)
+split = int(0.9 * len(data))
+train_data = data[:split]
+val_data   = data[split:]
+len(train_data), len(val_data)
+```
+
+### 2) Batch generator (random contiguous chunks)
+
+```python
+torch.manual_seed(1337); np.random.seed(1337); random.seed(1337)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+block_size = 64   # context length
+batch_size = 128  # reduce to 64 if CPU is slow
+
+def get_batch(split="train"):
+    src = train_data if split=="train" else val_data
+    ix = torch.randint(low=0, high=len(src) - block_size - 1, size=(batch_size,))
+    x  = torch.stack([src[i:i+block_size] for i in ix])
+    y  = torch.stack([src[i+1:i+block_size+1] for i in ix])
+    return x.to(device), y.to(device)
+
+xb, yb = get_batch("train")
+xb.shape, yb.shape
+```
+
+### 3) Tiny GPT model (causal mask, multi‑head attention, pre‑norm)
+
+```python
+import torch.nn as nn
+from torch.nn import functional as F
+
+class CausalSelfAttention(nn.Module):
+    def __init__(self, d_model: int, n_head: int, dropout: float = 0.0):
+        super().__init__()
+        assert d_model % n_head == 0
+        self.n_head = n_head
+        self.d_head = d_model // n_head
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.proj = nn.Linear(d_model, d_model, bias=False)
+        self.attn_drop = nn.Dropout(dropout)
+        self.resid_drop = nn.Dropout(dropout)
+        # Causal mask buffer (max at runtime = block_size we train with)
+        self.register_buffer("mask", torch.tril(torch.ones(block_size, block_size)).unsqueeze(0).unsqueeze(0))
+    def forward(self, x):
+        B, T, C = x.size()
+        qkv = self.qkv(x)                            # (B,T,3C)
+        q, k, v = qkv.split(C, dim=2)                # (B,T,C) each
+        # reshape to heads
+        q = q.view(B, T, self.n_head, self.d_head).transpose(1,2)  # (B,H,T,d)
+        k = k.view(B, T, self.n_head, self.d_head).transpose(1,2)
+        v = v.view(B, T, self.n_head, self.d_head).transpose(1,2)
+        # attention scores
+        att = (q @ k.transpose(-2, -1)) / math.sqrt(self.d_head)   # (B,H,T,T)
+        att = att.masked_fill(self.mask[:,:,:T,:T] == 0, float("-inf"))
+        att = F.softmax(att, dim=-1)
+        att = self.attn_drop(att)
+        y = att @ v                                                # (B,H,T,d)
+        y = y.transpose(1,2).contiguous().view(B, T, C)            # (B,T,C)
+        y = self.resid_drop(self.proj(y))
+        return y
+
+class MLP(nn.Module):
+    def __init__(self, d_model: int, d_ff: int, dropout: float = 0.0):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_ff, d_model),
+            nn.Dropout(dropout),
+        )
+    def forward(self, x): return self.net(x)
+
+class Block(nn.Module):
+    def __init__(self, d_model: int, n_head: int, d_ff: int, dropout: float = 0.0):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(d_model)
+        self.attn = CausalSelfAttention(d_model, n_head, dropout)
+        self.ln2 = nn.LayerNorm(d_model)
+        self.mlp = MLP(d_model, d_ff, dropout)
+    def forward(self, x):
+        x = x + self.attn(self.ln1(x))
+        x = x + self.mlp(self.ln2(x))
+        return x
+
+class TinyGPT(nn.Module):
+    def __init__(self, vocab_size: int, d_model=64, n_head=2, n_layer=2, d_ff=128, block_size=64, dropout=0.0):
+        super().__init__()
+        self.block_size = block_size
+        self.tok_emb = nn.Embedding(vocab_size, d_model)
+        self.pos_emb = nn.Embedding(block_size, d_model)
+        self.blocks  = nn.ModuleList([Block(d_model, n_head, d_ff, dropout) for _ in range(n_layer)])
+        self.ln_f    = nn.LayerNorm(d_model)
+        self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
+        # Weight tying (common trick)
+        self.lm_head.weight = self.tok_emb.weight
+        # Init
+        self.apply(self._init_weights)
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            nn.init.xavier_uniform_(m.weight)
+            if m.bias is not None: nn.init.zeros_(m.bias)
+        elif isinstance(m, nn.Embedding):
+            nn.init.normal_(m.weight, mean=0.0, std=0.02)
+    def forward(self, idx, targets=None):
+        B, T = idx.size()
+        assert T <= self.block_size, "Sequence length > block size"
+        pos = torch.arange(0, T, device=idx.device)
+        x = self.tok_emb(idx) + self.pos_emb(pos)[None, :, :]
+        for blk in self.blocks:
+            x = blk(x)
+        x = self.ln_f(x)
+        logits = self.lm_head(x)                      # (B,T,vocab)
+        loss = None
+        if targets is not None:
+            loss = F.cross_entropy(logits.view(B*T, -1), targets.view(B*T))
+        return logits, loss
+    @torch.no_grad()
+    def generate(self, idx, max_new_tokens=100, temperature=1.0, top_k=None):
+        for _ in range(max_new_tokens):
+            idx_cond = idx[:, -self.block_size:]      # crop to block size
+            logits, _ = self(idx_cond)
+            logits = logits[:, -1, :] / temperature   # last time step
+            if top_k is not None:
+                v, _ = torch.topk(logits, top_k)
+                logits[logits < v[:, [-1]]] = -float("inf")
+            probs = F.softmax(logits, dim=-1)
+            next_id = torch.multinomial(probs, num_samples=1)
+            idx = torch.cat([idx, next_id], dim=1)
+        return idx
+
+# Instantiate model
+d_model, n_head, n_layer, d_ff = 64, 2, 2, 128
+model = TinyGPT(vocab_size, d_model, n_head, n_layer, d_ff, block_size, dropout=0.0).to(device)
+sum(p.numel() for p in model.parameters())/1e6
+```
+
+### 4) Training loop (cross‑entropy), eval, and sampling
+
+```python
+from torch.optim import AdamW
+from math import exp
+
+max_steps     = 1200          # keep small for class; ~1–3 min on CPU
+eval_interval = 100
+lr            = 3e-3
+torch.manual_seed(1337)
+optimizer = AdamW(model.parameters(), lr=lr, betas=(0.9, 0.99), weight_decay=0.01)
+
+@torch.no_grad()
+def estimate_loss(iters=200):
+    model.eval()
+    out = {}
+    for split in ["train","val"]:
+        losses = torch.zeros(iters, device=device)
+        for k in range(iters):
+            xb, yb = get_batch(split)
+            _, loss = model(xb, yb)
+            losses[k] = loss
+        out[split] = losses.mean().item()
+    model.train()
+    return out
+
+loss_history = []
+t0 = time.time()
+for step in range(1, max_steps+1):
+    xb, yb = get_batch("train")
+    logits, loss = model(xb, yb)
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+    optimizer.step()
+
+    if step % eval_interval == 0 or step == 1 or step == max_steps:
+        est = estimate_loss(50)
+        loss_history.append({"step": step, "train_loss": est["train"], "val_loss": est["val"],
+                             "train_ppl": exp(est["train"]), "val_ppl": exp(est["val"])})
+        print(f"step {step:4d} | train loss {est['train']:.3f} (ppl {exp(est['train']):.1f}) "
+              f"| val loss {est['val']:.3f} (ppl {exp(est['val']):.1f})")
+
+print(f"Done in {time.time()-t0:.1f}s")
+pd.DataFrame(loss_history).to_csv("reports/tinygpt_train_curve.csv", index=False)
+```
+
+#### Quick plots and sampling
+
+```python
+import matplotlib.pyplot as plt, pandas as pd
+df = pd.DataFrame(loss_history)
+plt.figure(figsize=(6,3.5))
+plt.plot(df["step"], df["train_loss"], marker="o")
+plt.plot(df["step"], df["val_loss"], marker="s")
+plt.xlabel("Step"); plt.ylabel("Loss"); plt.title("TinyGPT train/val loss"); plt.tight_layout()
+plt.show()
+
+# Sample text
+start_prompt = "To be"
+start_ids = encode(start_prompt)[None, :].to(device)
+sample_ids = model.generate(start_ids, max_new_tokens=200, temperature=0.8, top_k=40)
+print(decode(sample_ids[0].tolist()))
+```
+
+> **Sanity checks:**
+> • **Loss should fall** and val perplexity should be reasonable (>1, < vocab\_size).
+> • Generated text should **mimic** the corpus style (not necessarily coherent).
+
+---
+
+## Wrap‑up (10 min) — key points to emphasize
+
+* **Causal mask** prevents look‑ahead; this mirrors leakage controls from Sessions 17–18.
+* **Weight tying** reduces params and often helps.
+* **Positional embeddings** are required for order; we used simple learned absolute positions today.
+* This tiny model is a **teaching scaffold**—Session 22 adapts the embedding to **real‑valued features** for time‑series forecasting.
+
+---
+
+## Homework (due before Session 22)
+
+**Goal:** Explore how **depth (layers)**, **width (heads/hidden)**, and **context length** affect tiny GPT’s learning on the toy corpus. Produce a one‑page table and a short reflection (≈300–500 words).
+
+### A. Script: `scripts/tinygpt_train.py` (configurable tiny GPT)
+
+```python
+#!/usr/bin/env python
+from __future__ import annotations
+import argparse, time, math, random, pathlib
+import numpy as np, torch, torch.nn as nn
+from torch.nn import functional as F
+import pandas as pd
+
+# ---- Model components from class (compact) ----
+class CausalSelfAttention(nn.Module):
+    def __init__(self, d_model, n_head, ctx, p=0.0):
+        super().__init__()
+        assert d_model % n_head == 0
+        self.n_head = n_head; self.d_head = d_model // n_head
+        self.qkv = nn.Linear(d_model, 3*d_model, bias=False)
+        self.proj = nn.Linear(d_model, d_model, bias=False)
+        self.attn_drop = nn.Dropout(p); self.resid_drop = nn.Dropout(p)
+        self.register_buffer("mask", torch.tril(torch.ones(ctx, ctx)).unsqueeze(0).unsqueeze(0))
+    def forward(self, x):
+        B,T,C=x.size()
+        qkv=self.qkv(x); q,k,v=qkv.split(C,dim=2)
+        q=q.view(B,T,self.n_head,self.d_head).transpose(1,2)
+        k=k.view(B,T,self.n_head,self.d_head).transpose(1,2)
+        v=v.view(B,T,self.n_head,self.d_head).transpose(1,2)
+        att=(q @ k.transpose(-2,-1)) / math.sqrt(self.d_head)
+        att=att.masked_fill(self.mask[:,:,:T,:T]==0, float("-inf"))
+        att=att.softmax(dim=-1); att=self.attn_drop(att)
+        y=att @ v; y=y.transpose(1,2).contiguous().view(B,T,C)
+        return self.resid_drop(self.proj(y))
+
+class Block(nn.Module):
+    def __init__(self, d_model, n_head, d_ff, ctx, p=0.0):
+        super().__init__()
+        self.ln1=nn.LayerNorm(d_model); self.attn=CausalSelfAttention(d_model,n_head,ctx,p)
+        self.ln2=nn.LayerNorm(d_model); self.mlp=nn.Sequential(nn.Linear(d_model,d_ff), nn.GELU(), nn.Dropout(p), nn.Linear(d_ff,d_model), nn.Dropout(p))
+    def forward(self,x):
+        x=x+self.attn(self.ln1(x)); x=x+self.mlp(self.ln2(x)); return x
+
+class TinyGPT(nn.Module):
+    def __init__(self, vocab, d_model=64, n_head=2, n_layer=2, d_ff=128, ctx=64, p=0.0):
+        super().__init__()
+        self.ctx=ctx
+        self.tok=nn.Embedding(vocab,d_model); self.pos=nn.Embedding(ctx,d_model)
+        self.blocks=nn.ModuleList([Block(d_model,n_head,d_ff,ctx,p) for _ in range(n_layer)])
+        self.ln=nn.LayerNorm(d_model); self.head=nn.Linear(d_model,vocab,bias=False)
+        self.head.weight = self.tok.weight
+        self.apply(self._init)
+    def _init(self,m):
+        if isinstance(m, nn.Linear): nn.init.xavier_uniform_(m.weight); 
+        if isinstance(m, nn.Embedding): nn.init.normal_(m.weight, 0.0, 0.02)
+    def forward(self, idx, targets=None):
+        B,T=idx.size(); pos=torch.arange(T, device=idx.device)
+        x=self.tok(idx)+self.pos(pos)[None,:,:]
+        for b in self.blocks: x=b(x)
+        x=self.ln(x); logits=self.head(x)
+        loss=None
+        if targets is not None: loss=F.cross_entropy(logits.view(B*T,-1), targets.view(B*T))
+        return logits, loss
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--text", default="data/raw/tiny_text.txt")
+    ap.add_argument("--d_model", type=int, default=64)
+    ap.add_argument("--n_head", type=int, default=2)
+    ap.add_argument("--n_layer", type=int, default=2)
+    ap.add_argument("--d_ff", type=int, default=128)
+    ap.add_argument("--ctx", type=int, default=64)
+    ap.add_argument("--batch", type=int, default=128)
+    ap.add_argument("--steps", type=int, default=1200)
+    ap.add_argument("--lr", type=float, default=3e-3)
+    ap.add_argument("--seed", type=int, default=1337)
+    ap.add_argument("--out", default="reports/tinygpt_run.csv")
+    args=ap.parse_args()
+
+    # Load or synthesize text
+    p=pathlib.Path(args.text)
+    if p.exists(): text=p.read_text(encoding="utf-8")
+    else:
+        text=("To be, or not to be: that is the question.\n")*50
+        pathlib.Path(p.parent).mkdir(parents=True, exist_ok=True); p.write_text(text)
+
+    # Vocab/encode
+    chars=sorted(list(set(text))); stoi={c:i for i,c in enumerate(chars)}; itos={i:c for c,i in stoi.items()}
+    def enc(s): return torch.tensor([stoi[c] for c in s], dtype=torch.long)
+    data=enc(text); split=int(0.9*len(data)); train, val = data[:split], data[split:]
+
+    # Batching
+    device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed)
+    def batch(src):
+        ix=torch.randint(0, len(src)-args.ctx-1, (args.batch,))
+        x=torch.stack([src[i:i+args.ctx] for i in ix])
+        y=torch.stack([src[i+1:i+args.ctx+1] for i in ix])
+        return x.to(device), y.to(device)
+
+    # Model/opt
+    net=TinyGPT(vocab=len(chars), d_model=args.d_model, n_head=args.n_head, n_layer=args.n_layer,
+                d_ff=args.d_ff, ctx=args.ctx, p=0.0).to(device)
+    opt=torch.optim.AdamW(net.parameters(), lr=args.lr, betas=(0.9,0.99), weight_decay=0.01)
+
+    @torch.no_grad()
+    def eval_loss(iters=100):
+        net.eval(); import math
+        def run(src):
+            losses=[]
+            for _ in range(iters):
+                xb, yb = batch(src)
+                _, loss = net(xb, yb); losses.append(loss.item())
+            m=np.mean(losses); return m, math.exp(m)
+        tr, trp = run(train); va, vap = run(val); net.train()
+        return tr, trp, va, vap
+
+    hist=[]
+    for step in range(1, args.steps+1):
+        xb,yb = batch(train)
+        _,loss = net(xb,yb)
+        opt.zero_grad(set_to_none=True); loss.backward()
+        torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0)
+        opt.step()
+        if step%100==0 or step==1 or step==args.steps:
+            tr,trp,va,vap = eval_loss(50)
+            hist.append({"step":step,"train_loss":tr,"train_ppl":trp,"val_loss":va,"val_ppl":vap,
+                         "d_model":args.d_model,"n_head":args.n_head,"n_layer":args.n_layer,
+                         "ctx":args.ctx})
+            print(f"step {step:4d}  train {tr:.3f} (ppl {trp:.1f}) | val {va:.3f} (ppl {vap:.1f})")
+
+    pd.DataFrame(hist).to_csv(args.out, index=False)
+    print("Wrote", args.out)
+
+if __name__ == "__main__":
+    main()
+```
+
+Run examples:
+
+```bash
+%%bash
+chmod +x scripts/tinygpt_train.py
+python scripts/tinygpt_train.py --n_head 1 --n_layer 1 --ctx 32  --steps 600  --out reports/tinygpt_run_a.csv
+python scripts/tinygpt_train.py --n_head 2 --n_layer 2 --ctx 64  --steps 1200 --out reports/tinygpt_run_b.csv
+```
+
+### B. Summarize runs into a table for your report
+
+```python
+import pandas as pd
+runs = []
+for f in ["reports/tinygpt_run_a.csv","reports/tinygpt_run_b.csv"]:
+    try:
+        df = pd.read_csv(f)
+        last = df.sort_values("step").iloc[-1].to_dict()
+        last["run"] = f
+        runs.append(last)
+    except Exception as e:
+        print("Skip", f, e)
+pd.DataFrame(runs).to_csv("reports/tinygpt_ablation_summary.csv", index=False)
+pd.read_csv("reports/tinygpt_ablation_summary.csv")
+```
+
+### C. Reflection prompts (≈300–500 words)
+
+* How did **context length** (32 → 64) affect **val perplexity**?
+* Did additional **heads** or **layers** help consistently? Where did **overfitting** show up?
+* What happened to **training speed** and **stability** as you increased model size?
+* One paragraph on how you expect to **adapt embeddings** for **time‑series** in Session 22 (hint: replace token embedding with a linear projection of features; keep positional encodings and causal mask).
+
+> Submit `reports/tinygpt_ablation_summary.csv` and a short Quarto section with your table + reflection.
+
+### D. (Optional) Tiny test for the causal mask
+
+```python
+# tests/test_causal_mask.py
+import torch
+from scripts.tinygpt_train import TinyGPT
+def test_mask_is_causal():
+    m = TinyGPT(vocab=10, ctx=16, d_model=32, n_head=2, n_layer=1)
+    # Find an attention module and check its mask upper triangle is zero
+    att = [mod.attn for mod in m.blocks][:1][0]
+    M = att.mask[0,0]  # (T,T)
+    assert torch.all(M.triu(diagonal=1)==0)
+```
+
+Run:
+
+```bash
+%%bash
+pytest -q -k causal_mask
+```
+
+---
+
+## Instructor checklist (before class)
+
+* Dry‑run the in‑class script on CPU; confirm loss decreases within \~1–3 minutes.
+* Prepare a slide showing **attention mask** visually (upper‑triangle masked).
+* (Optional) Show a single head’s attention weights on a short prompt for intuition.
+
+## Emphasize while teaching
+
+* **Causal masking** is the Transformer’s built‑in “no leakage” rule—maps directly to Sessions 17–18.
+* **Smaller is fine**: We use tiny configs to teach mechanics and keep run times short.
+* **Next session** swaps token embeddings for **real‑valued feature projections** and a regression head.
+
+## Grading (pass/revise)
+
+* TinyGPT trains; `reports/tinygpt_train_curve.csv` exists; curve shows decreasing val loss.
+* Student ran at least **two configurations** via `scripts/tinygpt_train.py` and produced `reports/tinygpt_ablation_summary.csv`.
+* Reflection answers the prompts with evidence from the runs.
+
+You now have a working **Tiny GPT** on toy data. In **Session 22**, you’ll adapt this architecture to **time‑series returns** by replacing the token embedding with a linear projection of features and keeping the causal machinery.

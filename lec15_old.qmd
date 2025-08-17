@@ -1,0 +1,521 @@
+---
+title: "Session 15"
+---
+Below is a complete lecture package for **Session 15 — Uncertainty, Calibration & Conformal Prediction** (75 minutes). It includes: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. You’ll build **prediction intervals** around next‑day returns using **split conformal prediction** and a small **quantile regression** network, evaluate **empirical coverage**, and export **poster‑ready tables/plots**.
+
+> **Educational use only — not trading advice.**
+> Assumes the same Drive‑mounted repo (e.g., `unified-stocks-teamX`) and features from Sessions 6–12 (`data/processed/features_sql.parquet`). The lab includes safe fallbacks.
+
+---
+
+## Session 15 — Uncertainty, Calibration & Conformal Prediction (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1. Explain **why** uncertainty estimates matter and the difference between **point** and **interval** forecasts.
+2. Implement **split conformal prediction** (symmetric and heteroscedastic/“scaled”) for time series with an **embargo** and a dedicated **calibration window**.
+3. Train a compact **quantile regression** model (PyTorch) and **conformalize** it (CQR).
+4. Measure **empirical coverage** vs **target coverage**, **interval width**, and the **Winkler score**, and save results for your poster.
+
+---
+
+## Agenda (75 min)
+
+* **(10 min)** Slides: uncertainty, coverage, calibration; split conformal; time‑series caveats
+* **(10 min)** Slides: quantile regression & pinball loss; CQR (conformalized quantile regression)
+* **(35 min)** **In‑class lab** (Colab): prepare train/cal/test windows → linear baseline + conformal intervals → scaled conformal → quantile net + CQR → coverage & plots
+* **(10 min)** Wrap‑up & homework briefing
+* **(10 min)** Buffer
+
+---
+
+## Slides / talking points (paste into your deck)
+
+**Why intervals?**
+
+* Point forecasts hide risk. Stakeholders need **ranges** (e.g., 90% intervals).
+* **Coverage**: for a nominal level $1-\alpha$, the long‑run fraction of times the true $y$ is inside $[L, U]$.
+
+**Split conformal basics (regression)**
+
+* Fit model $\hat{f}$ on **train**.
+* Use a **calibration** set (after an embargo) to compute nonconformity scores:
+
+  * **Symmetric**: $s_i = |y_i - \hat{f}(x_i)|$.
+  * Target level $1-\alpha$: $q_\alpha = \text{Quantile}_{\lceil (n+1)(1-\alpha)\rceil/n}( \{s_i\} )$.
+* For **test** points: interval $[\hat{f}(x) - q_\alpha,\ \hat{f}(x) + q_\alpha]$.
+
+**Scaled (heteroscedastic) conformal**
+
+* Divide residuals by a scale estimate $\sigma(x_i)$ (e.g., `roll_std_20`):
+  $s_i = \frac{|y_i - \hat{f}(x_i)|}{\sigma(x_i) + \epsilon}$;
+  test interval: $[\hat{f}(x) \pm q_\alpha \cdot \sigma(x)]$.
+
+**Quantile regression (QR) & CQR**
+
+* Learn $\hat{q}_{\tau}(x)$ with **pinball loss** $\rho_\tau(u) = \max(\tau u, (\tau-1)u)$.
+* **CQR**: compute calibration scores $s_i = \max\{\hat{q}_{\tau_\ell}(x_i)-y_i,\ y_i-\hat{q}_{\tau_u}(x_i)\}$;
+  widen by $q_\alpha$: interval $[\hat{q}_{\tau_\ell}-q_\alpha,\ \hat{q}_{\tau_u}+q_\alpha]$.
+
+**Time‑series caveats**
+
+* Keep **temporal order**. Use **train → embargo → calibration → embargo → test**.
+* Fit scalers/normalizers on **train only**.
+
+---
+
+## In‑class lab (35 min)
+
+> Run each block as its **own Colab cell**. Edit `REPO_OWNER/REPO_NAME` first.
+
+### 0) Mount Drive & set up
+
+```python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, numpy as np, pandas as pd
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found (Sessions 2–3)."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Load features or build a minimal fallback
+
+```python
+from pathlib import Path
+
+feats_path = Path("data/processed/features_sql.parquet")
+raw_path   = Path("data/raw/prices.csv")
+
+if feats_path.exists():
+    df = pd.read_parquet(feats_path)
+else:
+    assert raw_path.exists(), "Missing features_sql.parquet and raw prices.csv."
+    raw = pd.read_csv(raw_path, parse_dates=["date"]).sort_values(["ticker","date"])
+    # Minimal safe features
+    raw["r_1d"] = raw.groupby("ticker")["log_return"].shift(-1)  # label t+1
+    raw["lag1"] = raw.groupby("ticker")["log_return"].shift(1)
+    raw["lag2"] = raw.groupby("ticker")["log_return"].shift(2)
+    raw["lag3"] = raw.groupby("ticker")["log_return"].shift(3)
+    raw["roll_std_20"] = (raw.groupby("ticker")["log_return"]
+                          .rolling(20, min_periods=10).std()
+                          .reset_index(level=0, drop=True))
+    df = raw[["ticker","date","r_1d","lag1","lag2","lag3","roll_std_20"]]
+
+df["date"] = pd.to_datetime(df["date"])
+df = df.dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+
+FEATURES = [c for c in ["lag1","lag2","lag3","roll_std_20","zscore_20","roll_mean_20","r_1d"] if c in df.columns]
+# We will **not** use future info: only lags & rolling stats (no 'r_1d' as predictor)
+XCOLS = [c for c in FEATURES if c != "r_1d"]
+print("X features:", XCOLS)
+```
+
+### 2) Define **train / calibration / test** windows (with embargo)
+
+```python
+def make_train_cal_test_dates(dates, train_min=252, cal_days=42, test_days=42, embargo=5):
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    assert len(u) > train_min + cal_days + test_days + 2*embargo, "Not enough days."
+    train_end = u[train_min-1]
+    cal_start = u[train_min + embargo]
+    cal_end   = u[train_min + embargo + cal_days - 1]
+    test_start= u[train_min + embargo + cal_days + embargo]
+    test_end  = u[min(train_min + embargo + cal_days + embargo + test_days - 1, len(u)-1)]
+    return (u[0], train_end, cal_start, cal_end, test_start, test_end)
+
+a,b,c,d,e,f = make_train_cal_test_dates(df["date"], train_min=252, cal_days=42, test_days=42, embargo=5)
+print("Train:", a.date(), "→", b.date(), "| Cal:", c.date(), "→", d.date(), "| Test:", e.date(), "→", f.date())
+
+tr = df[(df["date"]>=a) & (df["date"]<=b)].copy()
+ca = df[(df["date"]>=c) & (df["date"]<=d)].copy()
+te = df[(df["date"]>=e) & (df["date"]<=f)].copy()
+print(len(tr), len(ca), len(te))
+```
+
+### 3) **Linear regression** baseline → **conformal intervals**
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+pipe = Pipeline([("scaler", StandardScaler()), ("lr", LinearRegression())])
+pipe.fit(tr[XCOLS], tr["r_1d"])
+
+# Point predictions
+ca["yhat"] = pipe.predict(ca[XCOLS])
+te["yhat"] = pipe.predict(te[XCOLS])
+
+# --- Split conformal (symmetric) ---
+alpha = 0.10  # 90% intervals
+resid = (ca["r_1d"] - ca["yhat"]).abs().to_numpy()
+k = int(np.ceil((len(resid)+1)*(1-alpha)))-1
+q_sym = np.partition(np.sort(resid), k)[k] if len(resid) else 0.0
+
+te["L_sym"] = te["yhat"] - q_sym
+te["U_sym"] = te["yhat"] + q_sym
+te["in_sym"] = (te["r_1d"].between(te["L_sym"], te["U_sym"])).astype(int)
+
+# --- Scaled conformal (heteroscedastic using roll_std_20 as sigma) ---
+eps = 1e-8
+if "roll_std_20" in ca.columns:
+    s_cal = (resid / (ca["roll_std_20"].to_numpy() + eps))
+    k2 = int(np.ceil((len(s_cal)+1)*(1-alpha)))-1
+    q_scl = np.partition(np.sort(s_cal), k2)[k2]
+    te["L_scl"] = te["yhat"] - q_scl * (te["roll_std_20"].to_numpy()+eps)
+    te["U_scl"] = te["yhat"] + q_scl * (te["roll_std_20"].to_numpy()+eps)
+    te["in_scl"] = (te["r_1d"].between(te["L_scl"], te["U_scl"])).astype(int)
+else:
+    q_scl = None
+
+def winkler(y, L, U):
+    # Winkler score for (1-alpha); lower is better.
+    y = np.asarray(y); L = np.asarray(L); U = np.asarray(U)
+    w = U-L
+    c1 = (y < L).astype(float); c2 = (y > U).astype(float)
+    return np.mean(w + (2/alpha)*(L - y)*c1 + (2/alpha)*(y - U)*c2)
+
+cov_sym = te["in_sym"].mean()
+wid_sym = (te["U_sym"] - te["L_sym"]).mean()
+wsc_sym = winkler(te["r_1d"], te["L_sym"], te["U_sym"])
+
+if q_scl is not None:
+    cov_scl = te["in_scl"].mean()
+    wid_scl = (te["U_scl"] - te["L_scl"]).mean()
+    wsc_scl = winkler(te["r_1d"], te["L_scl"], te["U_scl"])
+else:
+    cov_scl = wid_scl = wsc_scl = np.nan
+
+print({"target":1-alpha, "sym_cov":cov_sym, "sym_width":wid_sym, "sym_winkler":wsc_sym,
+       "scl_cov":cov_scl, "scl_width":wid_scl, "scl_winkler":wsc_scl})
+```
+
+### 4) **Quantile regression** (PyTorch) + **CQR** (fast, compact)
+
+```python
+import torch
+from torch import nn
+import numpy as np
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+q_lo, q_hi = 0.05, 0.95
+
+class QRNet(nn.Module):
+    def __init__(self, in_dim, hidden=64):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden), nn.ReLU(),
+            nn.Linear(hidden, hidden), nn.ReLU(),
+            nn.Linear(hidden, 2)  # outputs [q_lo, q_hi]
+        )
+    def forward(self, x): return self.net(x)
+
+def pinball_loss(y, yhat, tau):
+    u = y - yhat
+    return torch.maximum(tau*u, (tau-1)*u).mean()
+
+def train_qr(Xtr, ytr, Xva=None, yva=None, epochs=30, bs=1024, lr=1e-3):
+    model = QRNet(in_dim=Xtr.shape[1]).to(device)
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    Xtr_t = torch.tensor(Xtr, dtype=torch.float32).to(device)
+    ytr_t = torch.tensor(ytr, dtype=torch.float32).view(-1,1).to(device)
+    n = len(Xtr_t)
+    best = {"val": np.inf, "state": None}
+    for ep in range(1, epochs+1):
+        model.train()
+        idx = torch.randperm(n)
+        for i in range(0, n, bs):
+            j = idx[i:i+bs]
+            x = Xtr_t[j]; y = ytr_t[j]
+            out = model(x)
+            loss = pinball_loss(y, out[:, :1], q_lo) + pinball_loss(y, out[:, 1:], q_hi)
+            opt.zero_grad(); loss.backward(); opt.step()
+        # simple early stop on val MAE between bounds
+        if Xva is not None:
+            model.eval()
+            with torch.no_grad():
+                xv = torch.tensor(Xva, dtype=torch.float32).to(device)
+                yv = torch.tensor(yva, dtype=torch.float32).view(-1,1).to(device)
+                out = model(xv)
+                # ensure lower <= upper
+                lo = torch.minimum(out[:, :1], out[:, 1:])
+                hi = torch.maximum(out[:, :1], out[:, 1:])
+                mid = (lo+hi)/2
+                val = torch.mean(torch.abs(yv - mid)).item()
+                if val < best["val"] - 1e-6:
+                    best = {"val": val, "state": {k:v.detach().cpu().clone() for k,v in model.state_dict().items()}}
+    if best["state"] is not None: model.load_state_dict(best["state"])
+    return model
+
+# Build standardized design matrices from TRAIN stats only
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler().fit(tr[XCOLS])
+Xtr = sc.transform(tr[XCOLS]); ytr = tr["r_1d"].to_numpy()
+Xca = sc.transform(ca[XCOLS]); yca = ca["r_1d"].to_numpy()
+Xte = sc.transform(te[XCOLS]); yte = te["r_1d"].to_numpy()
+
+qr = train_qr(Xtr, ytr, Xva=Xca, yva=yca, epochs=25, bs=1024, lr=1e-3)
+qr.eval()
+with torch.no_grad():
+    out_ca = qr(torch.tensor(Xca, dtype=torch.float32).to(device)).cpu().numpy()
+    out_te = qr(torch.tensor(Xte, dtype=torch.float32).to(device)).cpu().numpy()
+
+# Enforce lo <= hi
+lo_ca = np.minimum(out_ca[:,0], out_ca[:,1]); hi_ca = np.maximum(out_ca[:,0], out_ca[:,1])
+lo_te = np.minimum(out_te[:,0], out_te[:,1]); hi_te = np.maximum(out_te[:,0], out_te[:,1])
+
+# --- Conformalize QR (CQR) on calibration set ---
+s_cqr = np.maximum(lo_ca - yca, yca - hi_ca)  # nonconformity (>=0)
+k3 = int(np.ceil((len(s_cqr)+1)*(1-alpha)))-1
+q_cqr = np.partition(np.sort(s_cqr), k3)[k3]
+
+L_cqr = lo_te - q_cqr
+U_cqr = hi_te + q_cqr
+inside_cqr = ((yte >= L_cqr) & (yte <= U_cqr)).mean()
+width_cqr = (U_cqr - L_cqr).mean()
+wsc_cqr = (lambda y,L,U: np.mean((U-L) + (2/alpha)*np.maximum(0, L-y) + (2/alpha)*np.maximum(0, y-U)))(yte, L_cqr, U_cqr)
+
+print({"target":1-alpha, "cqr_cov":inside_cqr, "cqr_width":width_cqr, "cqr_winkler":wsc_cqr})
+```
+
+### 5) Save **reports** and draw quick **plots**
+
+```python
+import pathlib, matplotlib.pyplot as plt
+pathlib.Path("reports").mkdir(exist_ok=True)
+pathlib.Path("docs/figs").mkdir(parents=True, exist_ok=True)
+
+summary = pd.DataFrame([
+    {"method":"Sym Conformal (LR)", "target":1-alpha, "coverage":cov_sym, "mean_width":wid_sym, "winkler":wsc_sym},
+    {"method":"Scaled Conformal (LR)", "target":1-alpha, "coverage":cov_scl, "mean_width":wid_scl, "winkler":wsc_scl},
+    {"method":"CQR (QRNet)", "target":1-alpha, "coverage":inside_cqr, "mean_width":width_cqr, "winkler":wsc_cqr},
+])
+summary.to_csv("reports/uncertainty_summary.csv", index=False)
+summary
+
+# Build a small sample intervals file
+nshow = min(200, len(te))
+sample = te[["date","ticker","r_1d","yhat","L_sym","U_sym"]].head(nshow).copy()
+if q_scl is not None:
+    sample["L_scl"] = te["L_scl"].head(nshow).values
+    sample["U_scl"] = te["U_scl"].head(nshow).values
+# Add CQR
+sample["L_cqr"] = L_cqr[:nshow]
+sample["U_cqr"] = U_cqr[:nshow]
+sample.to_csv("reports/uncertainty_intervals_sample.csv", index=False)
+
+# Plot intervals for one ticker on test
+tt = te["ticker"].mode().iloc[0]
+plot_df = te[te["ticker"]==tt].copy().reset_index(drop=True)
+m = min(80, len(plot_df))
+plt.figure(figsize=(8,4))
+idx = np.arange(m)
+plt.plot(idx, plot_df["r_1d"].head(m), marker=".", label="True r_1d")
+plt.plot(idx, plot_df["yhat"].head(m), label="LR yhat")
+plt.fill_between(idx, plot_df["L_sym"].head(m), plot_df["U_sym"].head(m), alpha=0.25, label="Sym 90%")
+if q_scl is not None:
+    plt.fill_between(idx, plot_df["L_scl"].head(m), plot_df["U_scl"].head(m), alpha=0.25, label="Scaled 90%")
+plt.title(f"Intervals on Test — {tt}")
+plt.xlabel("test index (time-ordered)"); plt.ylabel("return")
+plt.legend(loc="upper right")
+plt.tight_layout()
+plt.savefig("docs/figs/uncertainty_intervals_example.png", dpi=200)
+"Saved docs/figs/uncertainty_intervals_example.png"
+```
+
+---
+
+## Wrap‑up (10 min)
+
+* **Split conformal** gives **valid coverage** under minimal assumptions, with **train → embargo → calibration → embargo → test**.
+* **Scaled conformal** handles heteroscedasticity (volatility changes) using a scale proxy (e.g., `roll_std_20`).
+* **CQR** refines intervals by learning conditional quantiles then conformalizing.
+* Always report: **target vs empirical coverage**, **mean/median width**, **Winkler score**, and a plot.
+
+---
+
+## Homework (due before next meeting)
+
+**Goal:** Productionize uncertainty estimation and compare methods across coverage levels and walk‑forward splits.
+
+### Part A — CLI script `scripts/uncertainty_eval.py`
+
+```python
+#!/usr/bin/env python
+import argparse, numpy as np, pandas as pd
+from pathlib import Path
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+
+def make_dates(dates, train_min, cal_days, test_days, embargo):
+    u = np.array(sorted(pd.to_datetime(dates.unique())))
+    train_end = u[train_min-1]
+    cal_start = u[train_min + embargo]
+    cal_end   = u[min(train_min + embargo + cal_days - 1, len(u)-1)]
+    test_start= u[min(train_min + embargo + cal_days + embargo, len(u)-1)]
+    test_end  = u[min(train_min + embargo + cal_days + embargo + test_days - 1, len(u)-1)]
+    return (u[0], train_end, cal_start, cal_end, test_start, test_end)
+
+def winkler(y,L,U,alpha):
+    y = np.asarray(y); L = np.asarray(L); U = np.asarray(U)
+    return float(np.mean((U-L) + (2/alpha)*np.maximum(0, L-y) + (2/alpha)*np.maximum(0, y-U)))
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--features", default="data/processed/features_sql.parquet")
+    ap.add_argument("--train-min", type=int, default=252)
+    ap.add_argument("--cal-days", type=int, default=42)
+    ap.add_argument("--test-days", type=int, default=42)
+    ap.add_argument("--embargo", type=int, default=5)
+    ap.add_argument("--alphas", nargs="+", type=float, default=[0.2,0.1,0.05])
+    ap.add_argument("--out", default="reports/uncertainty_grid.csv")
+    args = ap.parse_args()
+
+    df = pd.read_parquet(args.features).dropna().sort_values(["ticker","date"]).reset_index(drop=True)
+    df["date"] = pd.to_datetime(df["date"])
+    XCOLS = [c for c in ["lag1","lag2","lag3","roll_std_20","zscore_20","roll_mean_20"] if c in df.columns]
+
+    a,b,c,d,e,f = make_dates(df["date"], args.train_min, args.cal_days, args.test_days, args.embargo)
+    tr = df[(df["date"]>=a)&(df["date"]<=b)]
+    ca = df[(df["date"]>=c)&(df["date"]<=d)]
+    te = df[(df["date"]>=e)&(df["date"]<=f)]
+
+    pipe = Pipeline([("scaler", StandardScaler()), ("lr", LinearRegression())]).fit(tr[XCOLS], tr["r_1d"])
+    ca = ca.assign(yhat=pipe.predict(ca[XCOLS]))
+    te = te.assign(yhat=pipe.predict(te[XCOLS]))
+
+    rows=[]
+    eps=1e-8
+    for alpha in args.alphas:
+        # symmetric
+        resid = (ca["r_1d"]-ca["yhat"]).abs().to_numpy()
+        k = int(np.ceil((len(resid)+1)*(1-alpha)))-1
+        q = np.partition(np.sort(resid), k)[k]
+        L = te["yhat"] - q; U = te["yhat"] + q
+        cov = float((te["r_1d"].between(L,U)).mean()); wid = float((U-L).mean())
+        rows.append({"method":"Sym", "alpha":alpha, "target":1-alpha, "coverage":cov, "mean_width":wid, "winkler":winkler(te["r_1d"],L,U,alpha)})
+
+        # scaled
+        if "roll_std_20" in ca.columns:
+            s = resid/(ca["roll_std_20"].to_numpy()+eps)
+            k2 = int(np.ceil((len(s)+1)*(1-alpha)))-1
+            q2 = np.partition(np.sort(s), k2)[k2]
+            L2 = te["yhat"] - q2*(te["roll_std_20"].to_numpy()+eps)
+            U2 = te["yhat"] + q2*(te["roll_std_20"].to_numpy()+eps)
+            cov2 = float((te["r_1d"].between(L2,U2)).mean()); wid2 = float((U2-L2).mean())
+            rows.append({"method":"Scaled", "alpha":alpha, "target":1-alpha, "coverage":cov2, "mean_width":wid2, "winkler":winkler(te["r_1d"],L2,U2,alpha)})
+
+    out = pd.DataFrame(rows).sort_values(["method","alpha"])
+    Path("reports").mkdir(exist_ok=True)
+    out.to_csv(args.out, index=False)
+    print("Wrote", args.out)
+
+if __name__ == "__main__":
+    main()
+```
+
+Make executable:
+
+```python
+import os, stat, pathlib
+p = pathlib.Path("scripts/uncertainty_eval.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part B — Add a Makefile target
+
+Append to your `Makefile`:
+
+```make
+.PHONY: uncertainty
+uncertainty: ## Evaluate conformal intervals at multiple coverages
+\tpython scripts/uncertainty_eval.py --alphas 0.2 0.1 0.05 --out reports/uncertainty_grid.csv
+```
+
+### Part C — Plot reliability (target vs empirical coverage)
+
+```python
+import pandas as pd, matplotlib.pyplot as plt, pathlib
+pathlib.Path("docs/figs").mkdir(parents=True, exist_ok=True)
+dfg = pd.read_csv("reports/uncertainty_grid.csv")
+plt.figure(figsize=(5,4))
+for method, g in dfg.groupby("method"):
+    plt.plot(g["target"], g["coverage"], marker="o", label=method)
+plt.plot([0.7,0.95],[0.7,0.95],"--",label="ideal")
+plt.xlabel("Target coverage"); plt.ylabel("Empirical coverage")
+plt.title("Reliability of intervals")
+plt.legend(); plt.tight_layout()
+plt.savefig("docs/figs/uncertainty_reliability.png", dpi=200)
+"Saved docs/figs/uncertainty_reliability.png"
+```
+
+### Part D — Two lightweight tests
+
+Create `tests/test_intervals.py`:
+
+```python
+import pandas as pd, numpy as np
+
+def test_bounds_order():
+    df = pd.read_csv("reports/uncertainty_intervals_sample.csv")
+    cols = [c for c in df.columns if c.startswith("L_")]
+    for c in cols:
+        U = c.replace("L_","U_")
+        assert (df[c] <= df[U]).all()
+
+def test_coverage_bounds():
+    df = pd.read_csv("reports/uncertainty_summary.csv")
+    assert ((df["coverage"] >= 0) & (df["coverage"] <= 1)).all()
+```
+
+Run:
+
+```bash
+%%bash
+set -euo pipefail
+pytest -q
+```
+
+### Part E — (Stretch) Walk‑forward uncertainty
+
+* Repeat conformal evaluation across **2–3 expanding splits** (reuse Session 12’s splits).
+* Save `reports/uncertainty_walkforward.csv` with per‑split coverage/width for **Sym**, **Scaled**, and **CQR** at 90%.
+* Add a panel chart of coverage per split.
+
+---
+
+## Instructor checklist (before class)
+
+* Dry‑run the lab with a fresh Colab runtime; ensure the PyTorch QR section finishes in a few minutes.
+* Keep one slide with the conformal **quantile index** formula $\lceil (n+1)(1-\alpha) \rceil$.
+* Be ready to explain **why** calibration must be **strictly after** training.
+
+## Emphasize while teaching
+
+* **Intervals > points** for decision‑making; report both **coverage** and **width**.
+* **Scaled conformal** often improves coverage in volatile regimes.
+* **CQR** leverages learning + distribution‑free calibration.
+* Keep **temporal discipline**: train → embargo → calibration → embargo → test.
+
+---
+
+### What to bring to your symposium poster (uncertainty section)
+
+* `reports/uncertainty_summary.csv` (table)
+* `docs/figs/uncertainty_intervals_example.png` (intervals plot)
+* `docs/figs/uncertainty_reliability.png` (reliability curve)
+* 1–2 sentences on **coverage vs width** trade‑off and the calibration protocol.

@@ -1,0 +1,601 @@
+---
+title: "Session 7 — SQL I: SQLite Schemas & Joins"
+---
+
+Below is a complete lecture package for **Session 7 --- SQL I: SQLite Schemas & Joins** (75 minutes). It includes: a timed agenda, slide talking points, a **Colab‑friendly in‑class lab with copy‑paste code**, and **homework with copy‑paste code**. By the end, students will have a **SQLite database** with a clean schema, constraints, indexes, and several **SELECT/JOIN** queries they can reuse from Python.
+
+> **Assumptions:** You're continuing in the same Drive‑mounted repo (e.g., `unified-stocks-teamX`). You have `data/raw/prices.csv` from prior sessions. If not, the lab includes a fallback generator.
+
+------------------------------------------------------------------------
+
+## Session 7 --- SQL I: SQLite Schemas & Joins (75 min)
+
+### Learning goals
+
+By the end of class, students can:
+
+1.  Create a **SQLite database** with proper **tables, primary keys, constraints,** and **indexes**.
+2.  Load CSV data into SQLite safely (parameterized inserts or `pandas.to_sql`), avoiding duplicates.
+3.  Write **SELECT** queries with **WHERE/ORDER/LIMIT** and basic **JOINs**.
+4.  Use **parameterized queries from Python** to avoid SQL injection.
+5.  Build a small **SQL I/O helper** to streamline queries from Python.
+
+------------------------------------------------------------------------
+
+## Agenda (75 minutes)
+
+-   **(10 min)** Why relational databases for DS; SQLite types; PK/constraints; indexes
+-   **(10 min)** DDL overview (CREATE TABLE/INDEX); transactions; parameterized queries
+-   **(35 min)** **In‑class lab** (Colab): create `prices.db` → load `prices` + `meta` → write joins
+-   **(10 min)** Wrap‑up & homework briefing
+-   **(10 min)** Buffer
+
+------------------------------------------------------------------------
+
+## Slides / talking points (add to your deck)
+
+**Why SQLite for DS**
+
+-   Single file DB → easy to version, ship, query; no server admin.
+-   Stronger **guarantees** than loose CSVs: types, **constraints**, **unique keys**, **foreign keys**.
+-   Fast **filters/joins** with **indexes**; JIT queries from Python, R, or CLI.
+
+**SQLite types & constraints**
+
+-   SQLite uses **dynamic typing** but honors affinities: `INTEGER`, `REAL`, `TEXT`, `BLOB`.
+-   Use **PRIMARY KEY** (uniqueness + index), **NOT NULL**, and **CHECK** (e.g., volume ≥ 0).
+-   Turn on **foreign keys**: `PRAGMA foreign_keys = ON;`
+
+**Indexes & performance**
+
+-   Index columns used in **joins** and **filters**.
+-   Composite PK `(ticker, date)` makes common lookups fast.
+
+**What NOT to commit**
+
+-   Large `.db` files. Keep DB small or regenerate from CSV with a script.
+-   If you must version a small DB, ensure **Git‑LFS** tracks `data/*.db` (we set this in Session 2).
+
+------------------------------------------------------------------------
+
+## In‑class lab (35 min)
+
+> **Instructor tip:** Have students run each block as its own Colab cell. Commands that start with `!` run in the Colab shell; the rest are Python.
+
+### 0) Mount Drive & enter repo
+
+``` python
+from google.colab import drive
+drive.mount('/content/drive', force_remount=True)
+
+REPO_OWNER = "YOUR_GITHUB_USERNAME_OR_ORG"   # <- change
+REPO_NAME  = "unified-stocks-teamX"          # <- change
+BASE_DIR   = "/content/drive/MyDrive/dspt25"
+REPO_DIR   = f"{BASE_DIR}/{REPO_NAME}"
+
+import os, pathlib, pandas as pd, numpy as np
+pathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)
+assert pathlib.Path(REPO_DIR).exists(), "Repo not found in Drive. Clone it first."
+os.chdir(REPO_DIR)
+print("Working dir:", os.getcwd())
+```
+
+### 1) Ensure prerequisites & create a small `prices.csv` if missing
+
+``` python
+# Ensure pandas and sqlite3 are available (sqlite3 is in stdlib)
+import pandas as pd, sqlite3, numpy as np, os
+from pathlib import Path
+
+Path("data/raw").mkdir(parents=True, exist_ok=True)
+if not Path("data/raw/prices.csv").exists():
+    print("No prices.csv found; generating a small synthetic one.")
+    tickers = ["AAPL","MSFT","NVDA","AMZN","GOOGL"]
+    dates = pd.bdate_range("2022-01-03", periods=120)
+    rng = np.random.default_rng(7)
+    frames=[]
+    for t in tickers:
+        r = rng.normal(0, 0.01, len(dates))
+        price = 100*np.exp(np.cumsum(r))
+        vol = rng.integers(1e5, 5e6, len(dates))
+        df = pd.DataFrame({"ticker": t, "date": dates, "adj_close": price, "volume": vol})
+        df["log_return"] = np.log(df["adj_close"]).diff().fillna(0)
+        frames.append(df)
+    pd.concat(frames, ignore_index=True).to_csv("data/raw/prices.csv", index=False)
+
+# Show a peek
+pd.read_csv("data/raw/prices.csv").head()
+```
+
+### 2) Design schema & create the database `data/prices.db`
+
+We'll use two tables:
+
+-   `meta(ticker TEXT PRIMARY KEY, name TEXT, sector TEXT NOT NULL)`
+-   `prices(ticker TEXT NOT NULL, date TEXT NOT NULL, adj_close REAL NOT NULL, volume INTEGER NOT NULL, log_return REAL NOT NULL, PRIMARY KEY (ticker,date), FOREIGN KEY (ticker) REFERENCES meta(ticker))`
+
+``` python
+import sqlite3, textwrap, os
+from pathlib import Path
+
+db_path = Path("data/prices.db")
+if db_path.exists(): db_path.unlink()  # start fresh for class; remove this in real life
+con = sqlite3.connect(db_path)
+cur = con.cursor()
+
+# Turn on foreign keys
+cur.execute("PRAGMA foreign_keys = ON;")
+# (Optional) WAL can help concurrency; not critical here
+cur.execute("PRAGMA journal_mode = WAL;")
+
+ddl = textwrap.dedent("""
+CREATE TABLE meta (
+  ticker TEXT PRIMARY KEY,
+  name   TEXT,
+  sector TEXT NOT NULL
+);
+
+CREATE TABLE prices (
+  ticker     TEXT NOT NULL,
+  date       TEXT NOT NULL,               -- ISO 'YYYY-MM-DD'
+  adj_close  REAL NOT NULL CHECK (adj_close >= 0),
+  volume     INTEGER NOT NULL CHECK (volume >= 0),
+  log_return REAL NOT NULL,
+  PRIMARY KEY (ticker, date),
+  FOREIGN KEY (ticker) REFERENCES meta(ticker)
+);
+
+-- Index to speed up date-range scans across all tickers
+CREATE INDEX IF NOT EXISTS idx_prices_date ON prices(date);
+""")
+cur.executescript(ddl)
+con.commit()
+print("Created:", db_path)
+```
+
+### 3) Populate `meta` (try yfinance sector; fallback to synthetic)
+
+``` python
+import pandas as pd, numpy as np
+import warnings
+warnings.filterwarnings("ignore")
+
+# Read tickers (from existing CSV or fallback)
+if Path("tickers_25.csv").exists():
+    tickers = pd.read_csv("tickers_25.csv")["ticker"].dropna().unique().tolist()
+else:
+    tickers = pd.read_csv("data/raw/prices.csv")["ticker"].dropna().unique().tolist()
+
+def fetch_sector_map(tickers):
+    try:
+        import yfinance as yf
+        out=[]
+        for t in tickers:
+            info = yf.Ticker(t).info or {}
+            name  = info.get("shortName") or info.get("longName") or t
+            sector= info.get("sector") or "Unknown"
+            out.append({"ticker": t, "name": name, "sector": sector})
+        return pd.DataFrame(out)
+    except Exception:
+        pass
+    # Fallback: deterministic synthetic sectors
+    sectors = ["Technology","Financials","Healthcare","Energy","Consumer"]
+    rng = np.random.default_rng(42)
+    return pd.DataFrame({
+        "ticker": tickers,
+        "name": tickers,
+        "sector": [sectors[i % len(sectors)] for i in range(len(tickers))]
+    })
+
+meta_df = fetch_sector_map(tickers)
+meta_df.head()
+```
+
+``` python
+# Insert meta with parameterized query
+with con:
+    con.executemany(
+        "INSERT INTO meta(ticker, name, sector) VALUES(?, ?, ?)",
+        meta_df[["ticker","name","sector"]].itertuples(index=False, name=None)
+    )
+print(pd.read_sql_query("SELECT * FROM meta LIMIT 5;", con))
+```
+
+### 4) Load `data/raw/prices.csv` into a staging DataFrame and insert into `prices`
+
+We'll use **parameterized bulk insert** (`executemany`) which is fast and safe.
+
+``` python
+prices = pd.read_csv("data/raw/prices.csv", parse_dates=["date"])
+# Normalize date to ISO text
+prices["date"] = prices["date"].dt.strftime("%Y-%m-%d")
+# Keep only needed columns and ensure order matches table
+prices = prices[["ticker","date","adj_close","volume","log_return"]]
+
+# Optional: drop duplicates to respect PK before insert
+prices = prices.drop_duplicates(subset=["ticker","date"]).reset_index(drop=True)
+len(prices)
+```
+
+``` python
+# Bulk insert inside one transaction; ignore rows violating FK or PK (e.g., duplicates)
+with con:
+    con.executemany(
+        "INSERT OR IGNORE INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)",
+        prices.itertuples(index=False, name=None)
+    )
+
+# Quick counts
+print(pd.read_sql_query("SELECT COUNT(*) AS nrows FROM prices;", con))
+print(pd.read_sql_query("SELECT ticker, COUNT(*) AS n FROM prices GROUP BY ticker ORDER BY n DESC LIMIT 5;", con))
+```
+
+### 5) Sanity queries (filters, order, limit)
+
+``` python
+q1 = """
+SELECT ticker, date, adj_close, volume
+FROM prices
+WHERE ticker = ? AND date BETWEEN ? AND ?
+ORDER BY date ASC
+LIMIT 5;
+"""
+print(pd.read_sql_query(q1, con, params=["AAPL","2022-03-01","2022-06-30"]))
+```
+
+``` python
+# Top 10 absolute daily moves for a chosen ticker
+q2 = """
+SELECT p.ticker, p.date, p.log_return, ABS(p.log_return) AS abs_move
+FROM prices AS p
+WHERE p.ticker = ?
+ORDER BY abs_move DESC
+LIMIT 10;
+"""
+print(pd.read_sql_query(q2, con, params=["NVDA"]))
+```
+
+### 6) JOIN with `meta` (per‑sector summaries)
+
+``` python
+# Mean |std| of daily returns per sector over a date range
+q3 = """
+SELECT m.sector,
+       AVG(ABS(p.log_return)) AS mean_abs_return,
+       AVG(p.log_return)      AS mean_return,
+       STDDEV(p.log_return)   AS std_return
+FROM prices p
+JOIN meta   m ON p.ticker = m.ticker
+WHERE p.date BETWEEN ? AND ?
+GROUP BY m.sector
+ORDER BY mean_abs_return DESC;
+"""
+# SQLite doesn't have STDDEV by default; fallback using variance formula via window? We'll compute in pandas:
+df = pd.read_sql_query("""
+SELECT m.sector, p.log_return
+FROM prices p JOIN meta m ON p.ticker = m.ticker
+WHERE p.date BETWEEN ? AND ?;
+""", con, params=["2022-01-01","2025-08-01"])
+agg = (df.assign(abs=lambda d: d["log_return"].abs())
+         .groupby("sector")
+         .agg(mean_abs_return=("abs","mean"),
+              mean_return=("log_return","mean"),
+              std_return=("log_return","std"))
+         .sort_values("mean_abs_return", ascending=False))
+agg
+```
+
+### 7) Create a **view** for convenience & test uniqueness constraint
+
+``` python
+# View: latest available date per ticker
+with con:
+    con.execute("""
+    CREATE VIEW IF NOT EXISTS latest_prices AS
+    SELECT p.*
+    FROM prices p
+    JOIN (
+      SELECT ticker, MAX(date) AS max_date
+      FROM prices
+      GROUP BY ticker
+    ) t ON p.ticker = t.ticker AND p.date = t.max_date;
+    """)
+pd.read_sql_query("SELECT * FROM latest_prices ORDER BY ticker LIMIT 10;", con)
+```
+
+``` python
+# Demonstrate the UNIQUE/PK constraint: inserting a duplicate row should be ignored or fail
+import sqlite3
+row = pd.read_sql_query("SELECT * FROM prices LIMIT 1;", con).iloc[0].to_dict()
+try:
+    with con:
+        con.execute(
+            "INSERT INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)",
+            (row["ticker"], row["date"], row["adj_close"], row["volume"], row["log_return"])
+        )
+    print("Unexpected: duplicate insert succeeded (should not).")
+except sqlite3.IntegrityError as e:
+    print("IntegrityError as expected:", e)
+```
+
+### 8) A tiny **SQL I/O helper** for your project
+
+``` python
+from pathlib import Path
+Path("src").mkdir(exist_ok=True)
+Path("src/projectname").mkdir(parents=True, exist_ok=True)
+
+sqlio_py = """\
+from __future__ import annotations
+import sqlite3
+import pandas as pd
+from contextlib import contextmanager
+from pathlib import Path
+
+DB_PATH = Path("data/prices.db")
+
+@contextmanager
+def connect(db_path: str | Path = DB_PATH):
+    con = sqlite3.connect(str(db_path))
+    con.execute("PRAGMA foreign_keys = ON;")
+    try:
+        yield con
+    finally:
+        con.close()
+
+def query_df(sql: str, params: tuple | list | None = None, db_path: str | Path = DB_PATH) -> pd.DataFrame:
+    with connect(db_path) as con:
+        return pd.read_sql_query(sql, con, params=params)
+
+def sector_summary(start: str, end: str, db_path: str | Path = DB_PATH) -> pd.DataFrame:
+    sql = '''
+    SELECT m.sector, p.log_return
+    FROM prices p JOIN meta m ON p.ticker = m.ticker
+    WHERE p.date BETWEEN ? AND ?;
+    '''
+    df = query_df(sql, [start, end], db_path)
+    if df.empty:
+        return df
+    g = df.assign(abs=lambda d: d["log_return"].abs()).groupby("sector")
+    return g.agg(mean_abs_return=("abs","mean"),
+                 mean_return=("log_return","mean"),
+                 std_return=("log_return","std")).reset_index()
+"""
+open("src/projectname/sqlio.py","w").write(sqlio_py)
+print("Wrote src/projectname/sqlio.py")
+```
+
+Quick test:
+
+``` python
+from src.projectname.sqlio import sector_summary
+sector_summary("2022-01-01","2025-08-01").head()
+```
+
+> **Note on versioning:** If `data/prices.db` stays small (a few MB), you may commit it via **Git‑LFS** (we tracked `data/*.db` in Session 2). Otherwise, **do not commit**---rebuild from CSV with a script (homework).
+
+------------------------------------------------------------------------
+
+## Wrap‑up (10 min)
+
+-   You now have a **relational core** for the project.
+-   Use **PK + constraints** to prevent silent data corruption.
+-   Use **parameterized queries** from Python.
+-   Next session: **SQL II --- Window functions & `pandas.read_sql` workflows** (rolling stats, LAG/LEAD).
+
+------------------------------------------------------------------------
+
+## Homework (due before Session 8)
+
+**Goal:** Make database creation reproducible, add metadata, write joins you'll reuse later, and hook it into your Makefile.
+
+### Part A --- Script to (re)build the DB
+
+Create `scripts/build_db.py` that **creates tables** and **loads CSVs** deterministically.
+
+``` python
+# scripts/build_db.py
+#!/usr/bin/env python
+import argparse, sys, textwrap, sqlite3
+from pathlib import Path
+import pandas as pd, numpy as np
+
+DDL = textwrap.dedent("""
+PRAGMA foreign_keys = ON;
+CREATE TABLE IF NOT EXISTS meta (
+  ticker TEXT PRIMARY KEY,
+  name   TEXT,
+  sector TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS prices (
+  ticker     TEXT NOT NULL,
+  date       TEXT NOT NULL,
+  adj_close  REAL NOT NULL CHECK (adj_close >= 0),
+  volume     INTEGER NOT NULL CHECK (volume >= 0),
+  log_return REAL NOT NULL,
+  PRIMARY KEY (ticker,date),
+  FOREIGN KEY (ticker) REFERENCES meta(ticker)
+);
+CREATE INDEX IF NOT EXISTS idx_prices_date ON prices(date);
+""")
+
+def load_meta(con, tickers_csv: Path):
+    if tickers_csv.exists():
+        tks = pd.read_csv(tickers_csv)["ticker"].dropna().unique().tolist()
+    else:
+        raise SystemExit(f"tickers CSV not found: {tickers_csv}")
+    sectors = ["Technology","Financials","Healthcare","Energy","Consumer"]
+    meta = pd.DataFrame({
+        "ticker": tks,
+        "name": tks,
+        "sector": [sectors[i % len(sectors)] for i in range(len(tks))]
+    })
+    with con:
+        con.executemany("INSERT OR REPLACE INTO meta(ticker,name,sector) VALUES(?,?,?)",
+                        meta.itertuples(index=False, name=None))
+
+def load_prices(con, prices_csv: Path):
+    df = pd.read_csv(prices_csv, parse_dates=["date"])
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+    df = df[["ticker","date","adj_close","volume","log_return"]].drop_duplicates(["ticker","date"])
+    with con:
+        con.executemany(
+            "INSERT OR REPLACE INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)",
+            df.itertuples(index=False, name=None)
+        )
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--db", default="data/prices.db")
+    ap.add_argument("--tickers", default="tickers_25.csv")
+    ap.add_argument("--prices", default="data/raw/prices.csv")
+    args = ap.parse_args()
+
+    Path(args.db).parent.mkdir(parents=True, exist_ok=True)
+    con = sqlite3.connect(args.db)
+    con.executescript(DDL)
+    load_meta(con, Path(args.tickers))
+    load_prices(con, Path(args.prices))
+    con.close()
+    print("Built DB:", args.db)
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+Make it executable:
+
+``` python
+import os, stat, pathlib
+p = pathlib.Path("scripts/build_db.py")
+os.chmod(p, os.stat(p).st_mode | stat.S_IEXEC)
+print("Ready:", p)
+```
+
+### Part B --- Add Makefile target `db` and a small SQL report
+
+Append to your `Makefile`:
+
+``` make
+DB := data/prices.db
+
+.PHONY: db sql-report
+db: ## Build/refresh SQLite database from CSVs
+\tpython scripts/build_db.py --db $(DB) --tickers tickers_25.csv --prices data/raw/prices.csv
+
+sql-report: db ## Generate a simple SQL-driven CSV summary
+\tpython - << 'PY'
+import pandas as pd, sqlite3, os
+con = sqlite3.connect("data/prices.db")
+df = pd.read_sql_query(\"\"\"\nSELECT m.sector, COUNT(*) AS n_obs, AVG(ABS(p.log_return)) AS mean_abs_return\nFROM prices p JOIN meta m ON p.ticker=m.ticker\nGROUP BY m.sector ORDER BY n_obs DESC;\n\"\"\", con)
+os.makedirs("reports", exist_ok=True)
+df.to_csv("reports/sql_sector_summary.csv", index=False)
+print(df.head())
+con.close()
+PY
+```
+
+Run:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+make db
+make sql-report
+```
+
+### Part C --- Write 3 JOIN queries (save as `.sql` under `sql/`)
+
+Create a folder `sql/` and add:
+
+1.  `sector_top_moves.sql`: top 10 absolute daily moves per sector (date, ticker, abs_move).
+2.  `ticker_activity.sql`: per‑ticker counts, min/max date.
+3.  `range_summary.sql`: for a given date range (use placeholders), mean/std of returns by ticker and sector.
+
+Example (1):
+
+``` sql
+-- sql/sector_top_moves.sql
+SELECT m.sector, p.ticker, p.date, p.log_return, ABS(p.log_return) AS abs_move
+FROM prices p JOIN meta m ON p.ticker = m.ticker
+ORDER BY abs_move DESC
+LIMIT 10;
+```
+
+Then a small Python launcher to run any `.sql` file with optional parameters:
+
+``` python
+# scripts/run_sql.py
+#!/usr/bin/env python
+import argparse, sqlite3, pandas as pd
+from pathlib import Path
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--db", default="data/prices.db")
+    ap.add_argument("--sqlfile", required=True)
+    ap.add_argument("--params", nargs="*", default=[])
+    ap.add_argument("--out", default="")
+    args = ap.parse_args()
+
+    sql = Path(args.sqlfile).read_text()
+    con = sqlite3.connect(args.db)
+    df = pd.read_sql_query(sql, con, params=args.params or None)
+    con.close()
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(args.out, index=False)
+    print(df.head())
+
+if __name__ == "__main__":
+    main()
+```
+
+Run a demo:
+
+``` bash
+%%bash
+set -euo pipefail
+cd "/content/drive/MyDrive/dspt25/unified-stocks-teamX"
+python scripts/run_sql.py --sqlfile sql/sector_top_moves.sql --out reports/sector_top_moves.csv
+```
+
+### Part D --- (Stretch) Create a **calendar** table & missing‑day check
+
+Create `calendar(date TEXT PRIMARY KEY)` covering min→max date in `prices`, and write a query that counts **missing business days** per ticker (join `calendar` LEFT JOIN `prices`). Save result to `reports/missing_days.csv`.
+
+*Hint: build the calendar in Python with `pd.bdate_range()`; insert into `calendar`; then `SELECT c.date, p.ticker FROM calendar c LEFT JOIN prices p ... WHERE p.date IS NULL`.*
+
+### Part E --- Commit & push (use the short‑lived token flow from Session 2)
+
+Recommended files to add:
+
+-   `scripts/build_db.py`, `scripts/run_sql.py`, `sql/*.sql`, updated `Makefile`, `reports/sql_sector_summary.csv`
+-   Optionally **do not** commit `data/prices.db` if large; if small and you must commit, ensure LFS is tracking `data/*.db`.
+
+------------------------------------------------------------------------
+
+### Grading (pass/revise)
+
+-   `data/prices.db` builds from `make db` and contains **meta** + **prices** with PK `(ticker,date)` and FK to `meta`.
+-   `reports/sql_sector_summary.csv` generated by `make sql-report`.
+-   `sql/sector_top_moves.sql`, `sql/ticker_activity.sql`, `sql/range_summary.sql` present and runnable via `scripts/run_sql.py`.
+-   If stretch completed: `calendar` table + `reports/missing_days.csv`.
+
+------------------------------------------------------------------------
+
+## Instructor checklist (before class)
+
+-   Run the entire lab once in a fresh Colab runtime with a small synthetic `prices.csv` to ensure speed.
+-   Prepare a one‑slide schema diagram (`meta ⟷ prices`) and a slide showing an index scan vs table scan (EXPLAIN output optional).
+-   Remind students: **don't commit big DBs**; keep `build_db.py` as the source of truth.
+
+## Emphasize while teaching
+
+-   **Schema first**: clean DDL prevents downstream headaches.
+-   **Constraints** are your guardrails; test them (we did with a duplicate insert).
+-   **Parameterize** queries; never string‑concat user inputs into SQL.
+-   Keep SQLite for **analysis**; push heavy analytics to Python/Polars when needed.
+
+Next time (Session 8): **SQL II --- Window functions & `pandas.read_sql` workflows** (LAG/LEAD, rolling stats, and SQL↔pandas round‑trips).
