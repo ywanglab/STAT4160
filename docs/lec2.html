@@ -335,40 +335,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">2.1.1</span> Learning goals</a></li>
   </ul></li>
   <li><a href="#agenda-75-minutes" id="toc-agenda-75-minutes" class="nav-link" data-scroll-target="#agenda-75-minutes"><span class="header-section-number">2.2</span> Agenda (75 minutes)</a></li>
-  <li><a href="#main-points" id="toc-main-points" class="nav-link" data-scroll-target="#main-points"><span class="header-section-number">2.3</span> Main points</a>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">2.3</span> Slides</a>
   <ul class="collapse">
   <li><a href="#git-mental-model" id="toc-git-mental-model" class="nav-link" data-scroll-target="#git-mental-model"><span class="header-section-number">2.3.1</span> Git mental model</a></li>
-  <li><a href="#branch-pr-etiquette" id="toc-branch-pr-etiquette" class="nav-link" data-scroll-target="#branch-pr-etiquette"><span class="header-section-number">2.3.2</span> Branch &amp; PR etiquette</a></li>
-  <li><a href="#gitignore-musthaves" id="toc-gitignore-musthaves" class="nav-link" data-scroll-target="#gitignore-musthaves"><span class="header-section-number">2.3.3</span> <code>.gitignore</code> must‑haves</a></li>
-  <li><a href="#gitlfs" id="toc-gitlfs" class="nav-link" data-scroll-target="#gitlfs"><span class="header-section-number">2.3.4</span> Git‑LFS</a></li>
-  <li><a href="#safe-pushes-from-colab" id="toc-safe-pushes-from-colab" class="nav-link" data-scroll-target="#safe-pushes-from-colab"><span class="header-section-number">2.3.5</span> Safe pushes from Colab</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">2.4</span> In‑class lab (35 min)</a>
+  <li><a href="#the-simple-definition" id="toc-the-simple-definition" class="nav-link" data-scroll-target="#the-simple-definition"><span class="header-section-number">2.4</span> <strong>1. The simple definition</strong></a></li>
+  <li><a href="#visual-example" id="toc-visual-example" class="nav-link" data-scroll-target="#visual-example"><span class="header-section-number">2.5</span> <strong>2. Visual example</strong></a></li>
+  <li><a href="#head-and-active-branch" id="toc-head-and-active-branch" class="nav-link" data-scroll-target="#head-and-active-branch"><span class="header-section-number">2.6</span> <strong>3. HEAD and active branch</strong></a></li>
+  <li><a href="#why-branches-matter" id="toc-why-branches-matter" class="nav-link" data-scroll-target="#why-branches-matter"><span class="header-section-number">2.7</span> <strong>4. Why branches matter</strong></a></li>
+  <li><a href="#branches-vs-tags" id="toc-branches-vs-tags" class="nav-link" data-scroll-target="#branches-vs-tags"><span class="header-section-number">2.8</span> <strong>5. Branches vs tags</strong></a>
   <ul class="collapse">
-  <li><a href="#mount-google-drive-and-set-variables" id="toc-mount-google-drive-and-set-variables" class="nav-link" data-scroll-target="#mount-google-drive-and-set-variables"><span class="header-section-number">2.4.1</span> 0) Mount Google Drive and set variables</a></li>
-  <li><a href="#clone-the-repo-or-pull-latest-if-already-cloned" id="toc-clone-the-repo-or-pull-latest-if-already-cloned" class="nav-link" data-scroll-target="#clone-the-repo-or-pull-latest-if-already-cloned"><span class="header-section-number">2.4.2</span> 1) Clone the repo (or pull latest if already cloned)</a></li>
-  <li><a href="#configure-git-identity-local-to-this-repo" id="toc-configure-git-identity-local-to-this-repo" class="nav-link" data-scroll-target="#configure-git-identity-local-to-this-repo"><span class="header-section-number">2.4.3</span> 2) Configure Git identity (local to this repo)</a></li>
-  <li><a href="#create-and-switch-to-a-feature-branch" id="toc-create-and-switch-to-a-feature-branch" class="nav-link" data-scroll-target="#create-and-switch-to-a-feature-branch"><span class="header-section-number">2.4.4</span> 3) Create and switch to a feature branch</a></li>
-  <li><a href="#add-a-robust-.gitignore" id="toc-add-a-robust-.gitignore" class="nav-link" data-scroll-target="#add-a-robust-.gitignore"><span class="header-section-number">2.4.5</span> 4) Add a robust <code>.gitignore</code></a></li>
-  <li><a href="#install-and-initialize-gitlfs-colab" id="toc-install-and-initialize-gitlfs-colab" class="nav-link" data-scroll-target="#install-and-initialize-gitlfs-colab"><span class="header-section-number">2.4.6</span> 5) Install and initialize Git‑LFS (Colab)</a></li>
-  <li><a href="#track-parquetdbpdfmodel-binaries-with-lfs" id="toc-track-parquetdbpdfmodel-binaries-with-lfs" class="nav-link" data-scroll-target="#track-parquetdbpdfmodel-binaries-with-lfs"><span class="header-section-number">2.4.7</span> 6) Track Parquet/DB/PDF/model binaries with LFS</a></li>
-  <li><a href="#create-a-small-parquet-file-to-test-lfs" id="toc-create-a-small-parquet-file-to-test-lfs" class="nav-link" data-scroll-target="#create-a-small-parquet-file-to-test-lfs"><span class="header-section-number">2.4.8</span> 7) Create a small Parquet file to test LFS</a></li>
-  <li><a href="#stage-and-commit-changes" id="toc-stage-and-commit-changes" class="nav-link" data-scroll-target="#stage-and-commit-changes"><span class="header-section-number">2.4.9</span> 8) Stage and commit changes</a></li>
-  <li><a href="#push-from-colab-with-a-shortlived-token-safe-method" id="toc-push-from-colab-with-a-shortlived-token-safe-method" class="nav-link" data-scroll-target="#push-from-colab-with-a-shortlived-token-safe-method"><span class="header-section-number">2.4.10</span> 9) <strong>Push from Colab with a short‑lived token (safe method)</strong></a></li>
-  <li><a href="#open-a-pull-request" id="toc-open-a-pull-request" class="nav-link" data-scroll-target="#open-a-pull-request"><span class="header-section-number">2.4.11</span> 10) Open a Pull Request</a></li>
-  <li><a href="#quick-verification-checklist" id="toc-quick-verification-checklist" class="nav-link" data-scroll-target="#quick-verification-checklist"><span class="header-section-number">2.4.12</span> 11) Quick verification checklist</a></li>
+  <li><a href="#without--b" id="toc-without--b" class="nav-link" data-scroll-target="#without--b"><span class="header-section-number">2.8.1</span> Without <code>-b</code></a></li>
+  <li><a href="#with--b" id="toc-with--b" class="nav-link" data-scroll-target="#with--b"><span class="header-section-number">2.8.2</span> With <code>-b</code></a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.8.3</span> Example</a></li>
+  <li><a href="#branch-pr-etiquette" id="toc-branch-pr-etiquette" class="nav-link" data-scroll-target="#branch-pr-etiquette"><span class="header-section-number">2.8.4</span> Branch &amp; PR etiquette</a></li>
+  <li><a href="#gitignore-musthaves" id="toc-gitignore-musthaves" class="nav-link" data-scroll-target="#gitignore-musthaves"><span class="header-section-number">2.8.5</span> <code>.gitignore</code> must‑haves</a></li>
+  <li><a href="#gitlfs" id="toc-gitlfs" class="nav-link" data-scroll-target="#gitlfs"><span class="header-section-number">2.8.6</span> Git‑LFS</a></li>
+  <li><a href="#safe-pushes-from-colab" id="toc-safe-pushes-from-colab" class="nav-link" data-scroll-target="#safe-pushes-from-colab"><span class="header-section-number">2.8.7</span> Safe pushes from Colab</a></li>
   </ul></li>
-  <li><a href="#wrapup-talking-points-10-min" id="toc-wrapup-talking-points-10-min" class="nav-link" data-scroll-target="#wrapup-talking-points-10-min"><span class="header-section-number">2.5</span> Wrap‑up (talking points, 10 min)</a></li>
-  <li><a href="#homework-due-before-session-3" id="toc-homework-due-before-session-3" class="nav-link" data-scroll-target="#homework-due-before-session-3"><span class="header-section-number">2.6</span> Homework (due before Session 3)</a>
+  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">2.9</span> In‑class lab (35 min)</a>
   <ul class="collapse">
-  <li><a href="#part-a-add-a-pr-template-and-codeowners" id="toc-part-a-add-a-pr-template-and-codeowners" class="nav-link" data-scroll-target="#part-a-add-a-pr-template-and-codeowners"><span class="header-section-number">2.6.1</span> Part A — Add a PR template and CODEOWNERS</a></li>
-  <li><a href="#part-b-add-a-largefile-guard-simple-python-script" id="toc-part-b-add-a-largefile-guard-simple-python-script" class="nav-link" data-scroll-target="#part-b-add-a-largefile-guard-simple-python-script"><span class="header-section-number">2.6.2</span> Part B — Add a large‑file guard (simple Python script)</a></li>
-  <li><a href="#part-c-branchpr-practice-each-student" id="toc-part-c-branchpr-practice-each-student" class="nav-link" data-scroll-target="#part-c-branchpr-practice-each-student"><span class="header-section-number">2.6.3</span> Part C — Branch/PR practice (each student)</a></li>
-  <li><a href="#part-d-prove-lfs-is-working" id="toc-part-d-prove-lfs-is-working" class="nav-link" data-scroll-target="#part-d-prove-lfs-is-working"><span class="header-section-number">2.6.4</span> Part D — Prove LFS is working</a></li>
-  <li><a href="#submission-checklist-passrevise" id="toc-submission-checklist-passrevise" class="nav-link" data-scroll-target="#submission-checklist-passrevise"><span class="header-section-number">2.6.5</span> Submission checklist (pass/revise)</a></li>
+  <li><a href="#mount-google-drive-and-set-variables" id="toc-mount-google-drive-and-set-variables" class="nav-link" data-scroll-target="#mount-google-drive-and-set-variables"><span class="header-section-number">2.9.1</span> 0) Mount Google Drive and set variables</a></li>
+  <li><a href="#clone-the-repo-or-pull-latest-if-already-cloned" id="toc-clone-the-repo-or-pull-latest-if-already-cloned" class="nav-link" data-scroll-target="#clone-the-repo-or-pull-latest-if-already-cloned"><span class="header-section-number">2.9.2</span> 1) Clone the repo (or pull latest if already cloned)</a></li>
+  <li><a href="#configure-git-identity-local-to-this-repo" id="toc-configure-git-identity-local-to-this-repo" class="nav-link" data-scroll-target="#configure-git-identity-local-to-this-repo"><span class="header-section-number">2.9.3</span> 2) Configure Git identity (local to this repo)</a></li>
+  <li><a href="#create-and-switch-to-a-feature-branch" id="toc-create-and-switch-to-a-feature-branch" class="nav-link" data-scroll-target="#create-and-switch-to-a-feature-branch"><span class="header-section-number">2.9.4</span> 3) Create and switch to a feature branch</a></li>
+  <li><a href="#add-a-robust-.gitignore" id="toc-add-a-robust-.gitignore" class="nav-link" data-scroll-target="#add-a-robust-.gitignore"><span class="header-section-number">2.9.5</span> 4) Add a robust <code>.gitignore</code></a></li>
+  <li><a href="#install-and-initialize-gitlfs-colab" id="toc-install-and-initialize-gitlfs-colab" class="nav-link" data-scroll-target="#install-and-initialize-gitlfs-colab"><span class="header-section-number">2.9.6</span> 5) Install and initialize Git‑LFS (Colab)</a></li>
+  <li><a href="#track-parquetdbpdfmodel-binaries-with-lfs" id="toc-track-parquetdbpdfmodel-binaries-with-lfs" class="nav-link" data-scroll-target="#track-parquetdbpdfmodel-binaries-with-lfs"><span class="header-section-number">2.9.7</span> 6) Track Parquet/DB/PDF/model binaries with LFS</a></li>
+  <li><a href="#create-a-small-parquet-file-to-test-lfs" id="toc-create-a-small-parquet-file-to-test-lfs" class="nav-link" data-scroll-target="#create-a-small-parquet-file-to-test-lfs"><span class="header-section-number">2.9.8</span> 7) Create a small Parquet file to test LFS</a></li>
+  <li><a href="#stage-and-commit-changes" id="toc-stage-and-commit-changes" class="nav-link" data-scroll-target="#stage-and-commit-changes"><span class="header-section-number">2.9.9</span> 8) Stage and commit changes</a></li>
+  <li><a href="#if-you-want-to-bypass-hooks-one-off" id="toc-if-you-want-to-bypass-hooks-one-off" class="nav-link" data-scroll-target="#if-you-want-to-bypass-hooks-one-off"><span class="header-section-number">2.9.10</span> If you want to bypass hooks (one-off)</a></li>
+  <li><a href="#push-from-colab-with-a-shortlived-token-safe-method" id="toc-push-from-colab-with-a-shortlived-token-safe-method" class="nav-link" data-scroll-target="#push-from-colab-with-a-shortlived-token-safe-method"><span class="header-section-number">2.9.11</span> 9) <strong>Push from Colab with a short‑lived token (safe method)</strong></a></li>
+  <li><a href="#check-permissions" id="toc-check-permissions" class="nav-link" data-scroll-target="#check-permissions"><span class="header-section-number">2.9.12</span> 1. Check permissions</a></li>
+  <li><a href="#check-the-first-line-shebang" id="toc-check-the-first-line-shebang" class="nav-link" data-scroll-target="#check-the-first-line-shebang"><span class="header-section-number">2.9.13</span> 2. Check the first line (shebang)</a></li>
+  <li><a href="#test-the-hook-manually" id="toc-test-the-hook-manually" class="nav-link" data-scroll-target="#test-the-hook-manually"><span class="header-section-number">2.9.14</span> 3. Test the hook manually</a></li>
+  <li><a href="#open-a-pull-request" id="toc-open-a-pull-request" class="nav-link" data-scroll-target="#open-a-pull-request"><span class="header-section-number">2.9.15</span> 10) Open a Pull Request</a></li>
   </ul></li>
-  <li><a href="#instructor-checklist-before-class" id="toc-instructor-checklist-before-class" class="nav-link" data-scroll-target="#instructor-checklist-before-class"><span class="header-section-number">2.7</span> Instructor checklist (before class)</a></li>
-  <li><a href="#emphasize-while-teaching" id="toc-emphasize-while-teaching" class="nav-link" data-scroll-target="#emphasize-while-teaching"><span class="header-section-number">2.8</span> Emphasize while teaching</a></li>
+  <li><a href="#origin-of-the-term" id="toc-origin-of-the-term" class="nav-link" data-scroll-target="#origin-of-the-term"><span class="header-section-number">2.10</span> 📌 Origin of the term</a></li>
+  <li><a href="#how-it-works-e.g.-on-github-gitlab-bitbucket" id="toc-how-it-works-e.g.-on-github-gitlab-bitbucket" class="nav-link" data-scroll-target="#how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> 📌 How it works (e.g., on GitHub, GitLab, Bitbucket)</a></li>
+  <li><a href="#contrast-with-push" id="toc-contrast-with-push" class="nav-link" data-scroll-target="#contrast-with-push"><span class="header-section-number">2.12</span> 📌 Contrast with “push”</a>
+  <ul class="collapse">
+  <li><a href="#quick-verification-checklist" id="toc-quick-verification-checklist" class="nav-link" data-scroll-target="#quick-verification-checklist"><span class="header-section-number">2.12.1</span> 11) Quick verification checklist</a></li>
+  </ul></li>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">2.13</span> Wrap‑up</a></li>
+  <li><a href="#homework-due-before-session-3" id="toc-homework-due-before-session-3" class="nav-link" data-scroll-target="#homework-due-before-session-3"><span class="header-section-number">2.14</span> Homework (due before Session 3)</a>
+  <ul class="collapse">
+  <li><a href="#part-a-add-a-pr-template-and-codeowners" id="toc-part-a-add-a-pr-template-and-codeowners" class="nav-link" data-scroll-target="#part-a-add-a-pr-template-and-codeowners"><span class="header-section-number">2.14.1</span> Part A — Add a PR template and CODEOWNERS</a></li>
+  <li><a href="#part-b-add-a-largefile-guard-simple-python-script" id="toc-part-b-add-a-largefile-guard-simple-python-script" class="nav-link" data-scroll-target="#part-b-add-a-largefile-guard-simple-python-script"><span class="header-section-number">2.14.2</span> Part B — Add a large‑file guard (simple Python script)</a></li>
+  <li><a href="#part-c-branchpr-practice-each-student" id="toc-part-c-branchpr-practice-each-student" class="nav-link" data-scroll-target="#part-c-branchpr-practice-each-student"><span class="header-section-number">2.14.3</span> Part C — Branch/PR practice (each student)</a></li>
+  <li><a href="#part-d-prove-lfs-is-working" id="toc-part-d-prove-lfs-is-working" class="nav-link" data-scroll-target="#part-d-prove-lfs-is-working"><span class="header-section-number">2.14.4</span> Part D — Prove LFS is working</a></li>
+  <li><a href="#submission-checklist-passrevise" id="toc-submission-checklist-passrevise" class="nav-link" data-scroll-target="#submission-checklist-passrevise"><span class="header-section-number">2.14.5</span> Submission checklist (pass/revise)</a></li>
+  </ul></li>
+  <li><a href="#emphasize" id="toc-emphasize" class="nav-link" data-scroll-target="#emphasize"><span class="header-section-number">2.15</span> Emphasize</a></li>
   </ul>
 </nav>
     </div>
@@ -424,8 +442,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="main-points" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="main-points"><span class="header-section-number">2.3</span> Main points</h2>
+<section id="slides" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">2.3</span> Slides</h2>
 <section id="git-mental-model" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="git-mental-model"><span class="header-section-number">2.3.1</span> Git mental model</h3>
 <ul>
@@ -433,9 +451,104 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Remote</strong>: GitHub hosts a copy. <code>git push</code> publishes commits; <code>git pull</code> brings others’ changes.</li>
 <li><strong>Branch</strong>: a movable pointer to a chain of commits. Default is <code>main</code>. Create <strong>feature branches</strong> for each change.</li>
 </ul>
+<p>In Git, a <strong>branch</strong> is essentially just a <strong>movable pointer</strong> to a commit.</p>
+<hr>
 </section>
-<section id="branch-pr-etiquette" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="branch-pr-etiquette"><span class="header-section-number">2.3.2</span> Branch &amp; PR etiquette</h3>
+</section>
+<section id="the-simple-definition" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="the-simple-definition"><span class="header-section-number">2.4</span> <strong>1. The simple definition</strong></h2>
+<ul>
+<li>A branch has a <strong>name</strong> (e.g., <code>main</code>, <code>feature/login</code>).</li>
+<li>That name points to a <strong>specific commit</strong> in your repository.</li>
+<li>As you make new commits on that branch, the pointer moves forward.</li>
+</ul>
+<hr>
+</section>
+<section id="visual-example" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="visual-example"><span class="header-section-number">2.5</span> <strong>2. Visual example</strong></h2>
+<p>Let’s say your repo looks like this:</p>
+<pre><code>A --- B --- C   ← main</code></pre>
+<p>Here:</p>
+<ul>
+<li><code>main</code> is the branch name.</li>
+<li>It points to commit <code>C</code>.</li>
+</ul>
+<p>If you make a new branch:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch feature</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now you have:</p>
+<pre><code>A --- B --- C   ← main, feature</code></pre>
+<p>If you <strong>checkout</strong> <code>feature</code> and make a commit:</p>
+<pre><code>A --- B --- C   ← main
+             \
+              D   ← feature</code></pre>
+<ul>
+<li><code>feature</code> moves forward to <code>D</code> (new commit).</li>
+<li><code>main</code> stays at <code>C</code>.</li>
+</ul>
+<hr>
+</section>
+<section id="head-and-active-branch" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="head-and-active-branch"><span class="header-section-number">2.6</span> <strong>3. HEAD and active branch</strong></h2>
+<ul>
+<li><code>HEAD</code> is your <em>current position</em> — it points to the branch you’re working on.</li>
+<li>When you commit, Git moves that branch forward.</li>
+</ul>
+<hr>
+</section>
+<section id="why-branches-matter" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="why-branches-matter"><span class="header-section-number">2.7</span> <strong>4. Why branches matter</strong></h2>
+<ul>
+<li>Let you work on new features, bug fixes, or experiments <strong>without touching</strong> the main codebase.</li>
+<li>Cheap to create and delete — Git branching is just updating a tiny file.</li>
+<li>Enable parallel development.</li>
+</ul>
+<hr>
+</section>
+<section id="branches-vs-tags" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="branches-vs-tags"><span class="header-section-number">2.8</span> <strong>5. Branches vs tags</strong></h2>
+<ul>
+<li><strong>Branch</strong> → moves as you commit.</li>
+<li><strong>Tag</strong> → fixed pointer to a commit (used for marking releases).</li>
+</ul>
+<hr>
+<p>💡 Inside <code>.git/refs/heads/</code>, each branch is just a plain text file storing a commit hash.</p>
+<p>In <code>git checkout -b</code>, the <strong><code>-b</code></strong> means <strong>“create a new branch”</strong> before checking it out.</p>
+<hr>
+<section id="without--b" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="without--b"><span class="header-section-number">2.8.1</span> Without <code>-b</code></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout branchname</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Switches to an <strong>existing</strong> branch.</li>
+<li>Fails if the branch does not exist.</li>
+</ul>
+<hr>
+</section>
+<section id="with--b" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="with--b"><span class="header-section-number">2.8.2</span> With <code>-b</code></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> branchname</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Tells Git: “<strong>make</strong> a branch called <code>branchname</code> pointing to the current commit, and then switch to it.”</li>
+<li>Fails if the branch <strong>already exists</strong>.</li>
+</ul>
+<hr>
+</section>
+<section id="example" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="example"><span class="header-section-number">2.8.3</span> Example</h3>
+<p>If you’re on <code>main</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature-x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Steps Git takes:</p>
+<ol type="1">
+<li>Create a new branch pointer <code>feature-x</code> → same commit as <code>main</code>.</li>
+<li>Move HEAD to <code>feature-x</code> (you’re now “on” that branch).</li>
+</ol>
+<hr>
+<p>💡 In newer Git versions, the same idea is expressed with:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch <span class="at">-c</span> feature-x   <span class="co"># -c means create</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>-b</code> in <code>checkout</code> and <code>-c</code> in <code>switch</code> both mean <strong>create</strong>.</p>
+<hr>
+</section>
+<section id="branch-pr-etiquette" class="level3" data-number="2.8.4">
+<h3 data-number="2.8.4" class="anchored" data-anchor-id="branch-pr-etiquette"><span class="header-section-number">2.8.4</span> Branch &amp; PR etiquette</h3>
 <ul>
 <li><p>One feature/change per branch (small, reviewable diffs).</p></li>
 <li><p>Commit messages: <em>imperative mood</em>, short subject line (≤ 72 chars), details in body if needed:</p>
@@ -447,17 +560,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>PR description: what/why, testing notes, checklist. Tag your teammate for review.</p></li>
 </ul>
 </section>
-<section id="gitignore-musthaves" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="gitignore-musthaves"><span class="header-section-number">2.3.3</span> <code>.gitignore</code> must‑haves</h3>
+<section id="gitignore-musthaves" class="level3" data-number="2.8.5">
+<h3 data-number="2.8.5" class="anchored" data-anchor-id="gitignore-musthaves"><span class="header-section-number">2.8.5</span> <code>.gitignore</code> must‑haves</h3>
 <ul>
 <li><strong>Secrets</strong>: <code>.env</code>, API keys (never commit).</li>
 <li><strong>Large/derived artifacts</strong>: raw/interim data, logs, cache, compiled assets.</li>
 <li><strong>Notebooks’ checkpoints</strong>: <code>.ipynb_checkpoints/</code>.</li>
-<li>OS/editor cruft: <code>.DS_Store</code>, <code>Thumbs.db</code>, <code>.vscode/</code>.</li>
+<li>OS/editor cruft: <code>.DS_Store</code> (for Mac), <code>Thumbs.db</code> (for Windows), <code>.vscode/</code>.</li>
 </ul>
 </section>
-<section id="gitlfs" class="level3" data-number="2.3.4">
-<h3 data-number="2.3.4" class="anchored" data-anchor-id="gitlfs"><span class="header-section-number">2.3.4</span> Git‑LFS</h3>
+<section id="gitlfs" class="level3" data-number="2.8.6">
+<h3 data-number="2.8.6" class="anchored" data-anchor-id="gitlfs"><span class="header-section-number">2.8.6</span> Git‑LFS</h3>
 <ul>
 <li>Git‑LFS = Large File Storage. Keeps <strong>pointers</strong> in Git; binaries in LFS storage.</li>
 <li>Track only what’s necessary to version (e.g., <em>small</em> processed Parquet samples, posters/PDFs, small models).</li>
@@ -465,8 +578,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Quotas apply on Git hosting—be selective.</li>
 </ul>
 </section>
-<section id="safe-pushes-from-colab" class="level3" data-number="2.3.5">
-<h3 data-number="2.3.5" class="anchored" data-anchor-id="safe-pushes-from-colab"><span class="header-section-number">2.3.5</span> Safe pushes from Colab</h3>
+<section id="safe-pushes-from-colab" class="level3" data-number="2.8.7">
+<h3 data-number="2.8.7" class="anchored" data-anchor-id="safe-pushes-from-colab"><span class="header-section-number">2.8.7</span> Safe pushes from Colab</h3>
 <ul>
 <li>Use a <strong>fine‑grained PAT</strong> limited to a single repo with <strong>Contents: Read/Write</strong> + <strong>Pull requests: Read/Write</strong>.</li>
 <li>Enter token via <code>getpass</code> (not stored). Push using a <strong>temporary URL</strong> (token not saved in <code>git config</code>).</li>
@@ -475,8 +588,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">2.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab-35-min" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">2.9</span> In‑class lab (35 min)</h2>
 <blockquote class="blockquote">
 <p><strong>Instructor tip:</strong> Students should have created a repo on GitHub before this lab (e.g., <code>unified-stocks-teamX</code>). If not, give them 3 minutes to do so and add their partner as a collaborator.</p>
 </blockquote>
@@ -491,196 +604,284 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Commit &amp; <strong>push from Colab</strong> using a short‑lived PAT.</li>
 <li>Open a PR (via web UI, optional API snippet included).</li>
 </ol>
-<section id="mount-google-drive-and-set-variables" class="level3" data-number="2.4.1">
-<h3 data-number="2.4.1" class="anchored" data-anchor-id="mount-google-drive-and-set-variables"><span class="header-section-number">2.4.1</span> 0) Mount Google Drive and set variables</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust these two for YOUR repo</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"YOUR_GITHUB_USERNAME_OR_ORG"</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span>   <span class="co"># e.g., unified-stocks-team1</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>BASE_DIR   <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>CLONE_DIR  <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>REPO_URL   <span class="op">=</span> <span class="ss">f"https://github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="mount-google-drive-and-set-variables" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="mount-google-drive-and-set-variables"><span class="header-section-number">2.9.1</span> 0) Mount Google Drive and set variables</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust these two for YOUR repo</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"YOUR_GITHUB_USERNAME_OR_ORG"</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"unified-stocks-teamX"</span>   <span class="co"># e.g., unified-stocks-team1</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>BASE_DIR   <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>CLONE_DIR  <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>REPO_URL   <span class="op">=</span> <span class="ss">f"https://github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="clone-the-repo-or-pull-latest-if-already-cloned" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="clone-the-repo-or-pull-latest-if-already-cloned"><span class="header-section-number">2.4.2</span> 1) Clone the repo (or pull latest if already cloned)</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, shutil, pathlib</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(CLONE_DIR).exists():</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git clone {REPO_URL} {CLONE_DIR}</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the folder exists, just ensure it's a git repo and pull latest</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    os.chdir(CLONE_DIR)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git status</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git pull <span class="op">--</span>ff<span class="op">-</span>only</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>os.chdir(CLONE_DIR)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="clone-the-repo-or-pull-latest-if-already-cloned" class="level3" data-number="2.9.2">
+<h3 data-number="2.9.2" class="anchored" data-anchor-id="clone-the-repo-or-pull-latest-if-already-cloned"><span class="header-section-number">2.9.2</span> 1) Clone the repo (or pull latest if already cloned)</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, shutil, pathlib</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(CLONE_DIR).exists():</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git clone {REPO_URL} {CLONE_DIR}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the folder exists, just ensure it's a git repo and pull latest</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    os.chdir(CLONE_DIR)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git status</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git pull <span class="op">--</span>ff<span class="op">-</span>only  <span class="co"># ff to avoid diverged branches</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>os.chdir(CLONE_DIR)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="configure-git-identity-local-to-this-repo" class="level3" data-number="2.4.3">
-<h3 data-number="2.4.3" class="anchored" data-anchor-id="configure-git-identity-local-to-this-repo"><span class="header-section-number">2.4.3</span> 2) Configure Git identity (local to this repo)</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with your name and school email</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config user.name <span class="st">"Your Name"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config user.email <span class="st">"you@example.edu"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config <span class="op">--</span>get user.name</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config <span class="op">--</span>get user.email</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="configure-git-identity-local-to-this-repo" class="level3" data-number="2.9.3">
+<h3 data-number="2.9.3" class="anchored" data-anchor-id="configure-git-identity-local-to-this-repo"><span class="header-section-number">2.9.3</span> 2) Configure Git identity (local to this repo)</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with your name and school email</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config user.name <span class="st">"Your Name"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config user.email <span class="st">"you@example.edu"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config <span class="op">--</span>get user.name</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git config <span class="op">--</span>get user.email</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="create-and-switch-to-a-feature-branch" class="level3" data-number="2.4.4">
-<h3 data-number="2.4.4" class="anchored" data-anchor-id="create-and-switch-to-a-feature-branch"><span class="header-section-number">2.4.4</span> 3) Create and switch to a feature branch</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>BRANCH <span class="op">=</span> <span class="st">"setup/git-lfs"</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git checkout <span class="op">-</span>b {BRANCH}</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git branch <span class="op">--</span>show<span class="op">-</span>current</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="create-and-switch-to-a-feature-branch" class="level3" data-number="2.9.4">
+<h3 data-number="2.9.4" class="anchored" data-anchor-id="create-and-switch-to-a-feature-branch"><span class="header-section-number">2.9.4</span> 3) Create and switch to a feature branch</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>BRANCH <span class="op">=</span> <span class="st">"setup/git-lfs"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git checkout <span class="op">-</span>b {BRANCH}</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git branch <span class="op">--</span>show<span class="op">-</span>current</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="add-a-robust-.gitignore" class="level3" data-number="2.4.5">
-<h3 data-number="2.4.5" class="anchored" data-anchor-id="add-a-robust-.gitignore"><span class="header-section-number">2.4.5</span> 4) Add a robust <code>.gitignore</code></h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gitignore <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st"># Byte-compiled / cache</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">__pycache__/</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">*.py[cod]</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st"># Jupyter checkpoints</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">.ipynb_checkpoints/</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st"># OS/editor files</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">.DS_Store</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">Thumbs.db</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">.vscode/</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st"># Environments &amp; secrets</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">.env</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="st">.env.*</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="st">.venv/</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">*.pem</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">*.key</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="st"># Data (raw &amp; interim never committed)</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="st">data/raw/</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="st">data/interim/</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="st"># Logs &amp; caches</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="st">logs/</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="st">.cache/</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".gitignore"</span>, <span class="st">"w"</span>).write(gitignore)</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">".gitignore"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="add-a-robust-.gitignore" class="level3" data-number="2.9.5">
+<h3 data-number="2.9.5" class="anchored" data-anchor-id="add-a-robust-.gitignore"><span class="header-section-number">2.9.5</span> 4) Add a robust <code>.gitignore</code></h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gitignore <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st"># Byte-compiled / cache</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">__pycache__/</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="st">*.py[cod]</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st"># Jupyter checkpoints</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="st">.ipynb_checkpoints/</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="st"># OS/editor files</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="st">.DS_Store</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="st">Thumbs.db</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="st">.vscode/</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="st"># Environments &amp; secrets</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="st">.env</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="st">.env.*</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="st">.venv/</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="st">*.pem</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="st">*.key</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="st"># Data (raw &amp; interim never committed)</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="st">data/raw/</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="st">data/interim/</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="st"># Logs &amp; caches</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="st">logs/</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="st">.cache/</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".gitignore"</span>, <span class="st">"w"</span>).write(gitignore)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">".gitignore"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="install-and-initialize-gitlfs-colab" class="level3" data-number="2.4.6">
-<h3 data-number="2.4.6" class="anchored" data-anchor-id="install-and-initialize-gitlfs-colab"><span class="header-section-number">2.4.6</span> 5) Install and initialize Git‑LFS (Colab)</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install git-lfs on the Colab VM (one-time per runtime)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get <span class="op">-</span>y update <span class="op">&gt;/</span>dev<span class="op">/</span>null</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get <span class="op">-</span>y install git<span class="op">-</span>lfs <span class="op">&gt;/</span>dev<span class="op">/</span>null</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs install</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="install-and-initialize-gitlfs-colab" class="level3" data-number="2.9.6">
+<h3 data-number="2.9.6" class="anchored" data-anchor-id="install-and-initialize-gitlfs-colab"><span class="header-section-number">2.9.6</span> 5) Install and initialize Git‑LFS (Colab)</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install git-lfs on the Colab VM (one-time per runtime): apt-get: advanced package tool(manager)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get <span class="op">-</span>y update <span class="op">&gt;/</span>dev<span class="op">/</span>null <span class="co"># refresh vailable packages from the repositories</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get <span class="op">-</span>y install git<span class="op">-</span>lfs <span class="op">&gt;/</span>dev<span class="op">/</span>null</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs install</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="track-parquetdbpdfmodel-binaries-with-lfs" class="level3" data-number="2.4.7">
-<h3 data-number="2.4.7" class="anchored" data-anchor-id="track-parquetdbpdfmodel-binaries-with-lfs"><span class="header-section-number">2.4.7</span> 6) Track Parquet/DB/PDF/model binaries with LFS</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add .gitattributes entries via git lfs track</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"data/processed/*.parquet"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"data/*.db"</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"models/*.pt"</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"reports/*.pdf"</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show what LFS is tracking and verify .gitattributes created</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">.gitattributes:"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">".gitattributes"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="track-parquetdbpdfmodel-binaries-with-lfs" class="level3" data-number="2.9.7">
+<h3 data-number="2.9.7" class="anchored" data-anchor-id="track-parquetdbpdfmodel-binaries-with-lfs"><span class="header-section-number">2.9.7</span> 6) Track Parquet/DB/PDF/model binaries with LFS</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add .gitattributes entries via git lfs track</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"data/processed/*.parquet"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"data/*.db"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"models/*.pt"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track <span class="st">"reports/*.pdf"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show what LFS is tracking and verify .gitattributes created</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs track</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">.gitattributes:"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">".gitattributes"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <blockquote class="blockquote">
 <p><strong>Why not LFS for raw?</strong> Raw data should be <strong>re‑downloadable</strong> with <code>make get-data</code> later; don’t burn LFS quota.</p>
 </blockquote>
 </section>
-<section id="create-a-small-parquet-file-to-test-lfs" class="level3" data-number="2.4.8">
-<h3 data-number="2.4.8" class="anchored" data-anchor-id="create-a-small-parquet-file-to-test-lfs"><span class="header-section-number">2.4.8</span> 7) Create a small Parquet file to test LFS</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, os, pathlib</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"data/processed"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> pd.read_csv(<span class="st">"tickers_25.csv"</span>)[<span class="st">"ticker"</span>].tolist() <span class="cf">if</span> os.path.exists(<span class="st">"tickers_25.csv"</span>) <span class="cf">else</span> [</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AAPL"</span>,<span class="st">"MSFT"</span>,<span class="st">"AMZN"</span>,<span class="st">"GOOGL"</span>,<span class="st">"META"</span>,<span class="st">"NVDA"</span>,<span class="st">"TSLA"</span>,<span class="st">"JPM"</span>,<span class="st">"JNJ"</span>,<span class="st">"V"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PG"</span>,<span class="st">"HD"</span>,<span class="st">"BAC"</span>,<span class="st">"XOM"</span>,<span class="st">"CVX"</span>,<span class="st">"PFE"</span>,<span class="st">"KO"</span>,<span class="st">"DIS"</span>,<span class="st">"NFLX"</span>,<span class="st">"INTC"</span>,<span class="st">"CSCO"</span>,<span class="st">"ORCL"</span>,<span class="st">"T"</span>,<span class="st">"VZ"</span>,<span class="st">"WMT"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1000 business days x up to 25 tickers ~ 25k rows; a few MB as Parquet</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> pd.bdate_range(<span class="st">"2018-01-01"</span>, periods<span class="op">=</span><span class="dv">1000</span>)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (pd.MultiIndex.from_product([tickers, dates], names<span class="op">=</span>[<span class="st">"ticker"</span>,<span class="st">"date"</span>])</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      .to_frame(index<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"r_1d"</span>] <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.01</span>, size<span class="op">=</span><span class="bu">len</span>(df))  <span class="co"># synthetic daily returns</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>df.to_parquet(<span class="st">"data/processed/sample_returns.parquet"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="create-a-small-parquet-file-to-test-lfs" class="level3" data-number="2.9.8">
+<h3 data-number="2.9.8" class="anchored" data-anchor-id="create-a-small-parquet-file-to-test-lfs"><span class="header-section-number">2.9.8</span> 7) Create a small Parquet file to test LFS</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, os, pathlib</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"data/processed"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> pd.read_csv(<span class="st">"tickers_25.csv"</span>)[<span class="st">"ticker"</span>].tolist() <span class="cf">if</span> os.path.exists(<span class="st">"tickers_25.csv"</span>) <span class="cf">else</span> [</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AAPL"</span>,<span class="st">"MSFT"</span>,<span class="st">"AMZN"</span>,<span class="st">"GOOGL"</span>,<span class="st">"META"</span>,<span class="st">"NVDA"</span>,<span class="st">"TSLA"</span>,<span class="st">"JPM"</span>,<span class="st">"JNJ"</span>,<span class="st">"V"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PG"</span>,<span class="st">"HD"</span>,<span class="st">"BAC"</span>,<span class="st">"XOM"</span>,<span class="st">"CVX"</span>,<span class="st">"PFE"</span>,<span class="st">"KO"</span>,<span class="st">"DIS"</span>,<span class="st">"NFLX"</span>,<span class="st">"INTC"</span>,<span class="st">"CSCO"</span>,<span class="st">"ORCL"</span>,<span class="st">"T"</span>,<span class="st">"VZ"</span>,<span class="st">"WMT"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1000 business days x up to 25 tickers ~ 25k rows; a few MB as Parquet</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> pd.bdate_range(<span class="st">"2018-01-01"</span>, periods<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (pd.MultiIndex.from_product([tickers, dates], names<span class="op">=</span>[<span class="st">"ticker"</span>,<span class="st">"date"</span>])</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      .to_frame(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"r_1d"</span>] <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.01</span>, size<span class="op">=</span><span class="bu">len</span>(df))  <span class="co"># synthetic daily returns</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>df.to_parquet(<span class="st">"data/processed/sample_returns.parquet"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="stage-and-commit-changes" class="level3" data-number="2.4.9">
-<h3 data-number="2.4.9" class="anchored" data-anchor-id="stage-and-commit-changes"><span class="header-section-number">2.4.9</span> 8) Stage and commit changes</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add .gitignore .gitattributes data<span class="op">/</span>processed<span class="op">/</span>sample_returns.parquet</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"feat: add .gitignore and git-lfs tracking; add sample Parquet"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git log <span class="op">--</span>oneline <span class="op">-</span>n <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="stage-and-commit-changes" class="level3" data-number="2.9.9">
+<h3 data-number="2.9.9" class="anchored" data-anchor-id="stage-and-commit-changes"><span class="header-section-number">2.9.9</span> 8) Stage and commit changes</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add .gitignore .gitattributes data<span class="op">/</span>processed<span class="op">/</span>sample_returns.parquet</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"feat: add .gitignore and git-lfs tracking; add sample Parquet"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git log <span class="op">--</span>oneline <span class="op">-</span>n <span class="dv">2</span>  <span class="co"># limit to the most recent 2 commits</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If see error “<code>error: cannot run .git/hooks/post-commit: No such file or directory</code>”, it means the post-commit hook is not executable or missing. ### Troubleshooting post-commit hook error 1. See what Git is trying to run</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> .git/hooks/post-commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>If you see <code>-rw-r--r--</code>, it’s <strong>not</strong> executable.</li>
+</ul>
+<ol start="2" type="1">
+<li>Make it executable</li>
+</ol>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x .git/hooks/post-commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Ensure it has a valid shebang (first line) Open it and confirm the first line is one of:</li>
+</ol>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 1 .git/hooks/post-commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or (if it’s Node)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env node</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Save if you needed to fix that.</p>
+<ol start="4" type="1">
+<li>Test the hook manually</li>
+</ol>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.git/hooks/post-commit</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or explicitly with the interpreter you expect, e.g.:</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> .git/hooks/post-commit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="push-from-colab-with-a-shortlived-token-safe-method" class="level3" data-number="2.4.10">
-<h3 data-number="2.4.10" class="anchored" data-anchor-id="push-from-colab-with-a-shortlived-token-safe-method"><span class="header-section-number">2.4.10</span> 9) <strong>Push from Colab with a short‑lived token (safe method)</strong></h3>
+<section id="if-you-want-to-bypass-hooks-one-off" class="level3" data-number="2.9.10">
+<h3 data-number="2.9.10" class="anchored" data-anchor-id="if-you-want-to-bypass-hooks-one-off"><span class="header-section-number">2.9.10</span> If you want to bypass hooks (one-off)</h3>
+<ul>
+<li><p>Generic Git (disable all hooks for just this command):</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">-c</span> core.hooksPath=/dev/null commit <span class="at">-m</span> <span class="st">"skip hooks"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Husky-managed hooks:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="va">HUSKY</span><span class="op">=</span>0 <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"skip husky hooks"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or older Husky:</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="va">HUSKY_SKIP_HOOKS</span><span class="op">=</span>1 <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"skip husky hooks"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="push-from-colab-with-a-shortlived-token-safe-method" class="level3" data-number="2.9.11">
+<h3 data-number="2.9.11" class="anchored" data-anchor-id="push-from-colab-with-a-shortlived-token-safe-method"><span class="header-section-number">2.9.11</span> 9) <strong>Push from Colab with a short‑lived token (safe method)</strong></h3>
 <blockquote class="blockquote">
 <p>Create a <strong>fine‑grained PAT</strong> at GitHub → Settings → Developer settings → <strong>Fine‑grained tokens</strong></p>
 <ul>
 <li>Resource owner: your username/org</li>
-<li>Repositories: select <strong>this repo only</strong></li>
+<li>Repositories: <strong>only select repositories</strong></li>
 <li>Permissions: <strong>Contents (Read/Write)</strong>, <strong>Pull requests (Read/Write)</strong></li>
 <li>Expiration: short (e.g., 7 days)</li>
 </ul>
 </blockquote>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: push using a temporary URL with token (not saved to git config)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"Enter your GitHub token (input hidden; not stored): "</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} {BRANCH}:{BRANCH}</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: immediately clear the token variable</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: push using a temporary URL with token (not saved to git config)</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"Enter your GitHub token (input hidden; not stored): "</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} {BRANCH}:{BRANCH}</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: immediately clear the token variable</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If error occurs, check:</p>
+</section>
+<section id="check-permissions" class="level3" data-number="2.9.12">
+<h3 data-number="2.9.12" class="anchored" data-anchor-id="check-permissions"><span class="header-section-number">2.9.12</span> 1. Check permissions</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> .git/hooks/pre-push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If it looks like <code>-rw-r--r--</code>, then it’s missing the <strong>executable bit</strong>. Fix:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x .git/hooks/pre-push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="check-the-first-line-shebang" class="level3" data-number="2.9.13">
+<h3 data-number="2.9.13" class="anchored" data-anchor-id="check-the-first-line-shebang"><span class="header-section-number">2.9.13</span> 2. Check the first line (shebang)</h3>
+<p>Open it:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 1 .git/hooks/pre-push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should see something like:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If it’s missing, add a valid shebang.</p>
+</section>
+<section id="test-the-hook-manually" class="level3" data-number="2.9.14">
+<h3 data-number="2.9.14" class="anchored" data-anchor-id="test-the-hook-manually"><span class="header-section-number">2.9.14</span> 3. Test the hook manually</h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.git/hooks/pre-push</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or explicitly:</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> .git/hooks/pre-push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <blockquote class="blockquote">
 <p>If the command prints the URL, <strong>clear this cell’s output</strong> after a successful push (Colab: “⋮” → “Clear output”).</p>
 </blockquote>
 </section>
-<section id="open-a-pull-request" class="level3" data-number="2.4.11">
-<h3 data-number="2.4.11" class="anchored" data-anchor-id="open-a-pull-request"><span class="header-section-number">2.4.11</span> 10) Open a Pull Request</h3>
+<section id="open-a-pull-request" class="level3" data-number="2.9.15">
+<h3 data-number="2.9.15" class="anchored" data-anchor-id="open-a-pull-request"><span class="header-section-number">2.9.15</span> 10) Open a Pull Request</h3>
+<p>The name <strong>“pull request”</strong> can be confusing at first — it sounds like you are “pushing” your code, but really you’re asking someone else to <strong>pull</strong> it.</p>
+</section>
+</section>
+<section id="origin-of-the-term" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="origin-of-the-term"><span class="header-section-number">2.10</span> 📌 Origin of the term</h2>
+<ul>
+<li><p>The phrase comes from <strong>distributed version control</strong> (like Git before GitHub’s UI popularized it).</p></li>
+<li><p>If you had changes in your branch/repo and wanted them in the upstream project, you’d contact the maintainer and say:</p>
+<blockquote class="blockquote">
+<p>“Please <strong>pull</strong> these changes from my branch into yours.”</p>
+</blockquote></li>
+<li><p>So a <em>pull request</em> is literally a <strong>request for someone else to pull</strong> your commits.</p></li>
+</ul>
+</section>
+<section id="how-it-works-e.g.-on-github-gitlab-bitbucket" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> 📌 How it works (e.g., on GitHub, GitLab, Bitbucket)</h2>
+<ol type="1">
+<li>You push your branch to your fork or to the remote repository.</li>
+<li>You open a <em>pull request</em> against the target branch (usually <code>main</code> or <code>develop</code>).</li>
+<li>The repository maintainers review your code.</li>
+<li>If accepted, they “pull” your commits into their branch (though under the hood it’s often implemented as a <strong>merge</strong> or <strong>rebase</strong>).</li>
+</ol>
+</section>
+<section id="contrast-with-push" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="contrast-with-push"><span class="header-section-number">2.12</span> 📌 Contrast with “push”</h2>
+<ul>
+<li><strong>Push</strong>: You directly upload commits to a remote branch you have permission to write to.</li>
+<li><strong>Pull request</strong>: You don’t merge directly — instead, you ask maintainers to <strong>pull</strong> your changes, review them, and integrate them.</li>
+</ul>
+<p>✅ <strong>Summary</strong>: It’s called a <strong>pull request</strong> because you’re not pushing your changes into the target branch; you’re asking the project owner/maintainer to <strong>pull</strong> your branch into theirs.</p>
 <ul>
 <li><p><strong>Recommended (web UI):</strong> Navigate to your repo on GitHub → Compare &amp; pull request → base: <code>main</code>, compare: <code>setup/git-lfs</code>. Fill title/description, tag your partner, and create the PR.</p></li>
 <li><p><strong>Optional (API):</strong> open a PR programmatically from Colab:</p></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OPTIONAL: Create PR via GitHub API (requires token again)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, json</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (again, not stored): "</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {<span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Accept"</span>: <span class="st">"application/vnd.github+json"</span>}</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> {</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Setup: .gitignore + Git-LFS + sample Parquet"</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"head"</span>: BRANCH,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"base"</span>: <span class="st">"main"</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"body"</span>: <span class="st">"Adds .gitignore, configures Git-LFS for parquet/db/pdf/model files, and commits a sample Parquet for verification."</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> requests.post(<span class="ss">f"https://api.github.com/repos/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">/pulls"</span>,</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                  headers<span class="op">=</span>headers, data<span class="op">=</span>json.dumps(payload))</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PR status:"</span>, r.status_code)</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    pr_url <span class="op">=</span> r.json()[<span class="st">"html_url"</span>]</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"PR URL:"</span>, pr_url)</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Response:"</span>, r.text)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="quick-verification-checklist" class="level3" data-number="2.4.12">
-<h3 data-number="2.4.12" class="anchored" data-anchor-id="quick-verification-checklist"><span class="header-section-number">2.4.12</span> 11) Quick verification checklist</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OPTIONAL: Create PR via GitHub API (requires token again)</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, json</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (again, not stored): "</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {<span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Accept"</span>: <span class="st">"application/vnd.github+json"</span>}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> {</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"title"</span>: <span class="st">"Setup: .gitignore + Git-LFS + sample Parquet"</span>,</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"head"</span>: BRANCH,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"base"</span>: <span class="st">"main"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"body"</span>: <span class="st">"Adds .gitignore, configures Git-LFS for parquet/db/pdf/model files, and commits a sample Parquet for verification."</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> requests.post(<span class="ss">f"https://api.github.com/repos/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">/pulls"</span>,</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>                  headers<span class="op">=</span>headers, data<span class="op">=</span>json.dumps(payload))</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PR status:"</span>, r.status_code)</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    pr_url <span class="op">=</span> r.json()[<span class="st">"html_url"</span>]</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"PR URL:"</span>, pr_url)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Response:"</span>, r.text)</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="quick-verification-checklist" class="level3" data-number="2.12.1">
+<h3 data-number="2.12.1" class="anchored" data-anchor-id="quick-verification-checklist"><span class="header-section-number">2.12.1</span> 11) Quick verification checklist</h3>
 <ul>
 <li><code>git lfs ls-files</code> shows <code>data/processed/sample_returns.parquet</code>:</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs ls<span class="op">-</span>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs ls<span class="op">-</span>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>PR diff shows a small <strong>pointer</strong> for the Parquet, not raw binary content.</li>
 <li><code>.gitignore</code> present; no secrets or raw data committed.</li>
@@ -688,8 +889,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-talking-points-10-min" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="wrapup-talking-points-10-min"><span class="header-section-number">2.5</span> Wrap‑up (talking points, 10 min)</h2>
+<section id="wrapup" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">2.13</span> Wrap‑up</h2>
 <ul>
 <li>Keep PRs small and focused; write helpful titles and descriptions.</li>
 <li>Don’t commit secrets or large data. Use <code>.env</code> + <code>.env.example</code>.</li>
@@ -698,103 +899,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-3" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="homework-due-before-session-3"><span class="header-section-number">2.6</span> Homework (due before Session 3)</h2>
+<section id="homework-due-before-session-3" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="homework-due-before-session-3"><span class="header-section-number">2.14</span> Homework (due before Session 3)</h2>
 <p><strong>Goal:</strong> Cement branch/PR hygiene, add review scaffolding, and add a small guard against large files accidentally committed outside LFS.</p>
-<section id="part-a-add-a-pr-template-and-codeowners" class="level3" data-number="2.6.1">
-<h3 data-number="2.6.1" class="anchored" data-anchor-id="part-a-add-a-pr-template-and-codeowners"><span class="header-section-number">2.6.1</span> Part A — Add a PR template and CODEOWNERS</h3>
+<section id="part-a-add-a-pr-template-and-codeowners" class="level3" data-number="2.14.1">
+<h3 data-number="2.14.1" class="anchored" data-anchor-id="part-a-add-a-pr-template-and-codeowners"><span class="header-section-number">2.14.1</span> Part A — Add a PR template and CODEOWNERS</h3>
 <p>Create a PR template so every PR includes key info.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run in your repo root</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib, textwrap</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">".github"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>tpl <span class="op">=</span> textwrap.dedent(<span class="st">"""</span><span class="ch">\</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Summary</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st">    What does this PR do and why?</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Changes</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="st">    - </span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="st">    ## How to test</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="st">    - From a fresh clone: steps to run</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Checklist</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Runs from a fresh clone (README steps)</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] No secrets committed; `.env` only (and `.env.example` updated if needed)</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Large artifacts tracked by LFS (`git lfs ls-files` shows expected files)</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Clear, small diff; comments where useful</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".github/pull_request_template.md"</span>,<span class="st">"w"</span>).write(tpl)</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote .github/pull_request_template.md"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run in your repo root</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib, textwrap</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">".github"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>tpl <span class="op">=</span> textwrap.dedent(<span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Summary</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="st">    What does this PR do and why?</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Changes</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="st">    - </span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="st">    ## How to test</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="st">    - From a fresh clone: steps to run</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="st">    ## Checklist</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Runs from a fresh clone (README steps)</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] No secrets committed; `.env` only (and `.env.example` updated if needed)</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Large artifacts tracked by LFS (`git lfs ls-files` shows expected files)</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="st">    - [ ] Clear, small diff; comments where useful</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".github/pull_request_template.md"</span>,<span class="st">"w"</span>).write(tpl)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote .github/pull_request_template.md"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>(Optional) Require both teammates to review by setting <strong>CODEOWNERS</strong> (edit handles):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>owners <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st"># Replace with your GitHub handles</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">* @teammate1 @teammate2</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".github/CODEOWNERS"</span>,<span class="st">"w"</span>).write(owners)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote .github/CODEOWNERS (edit handles!)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>owners <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st"># Replace with your GitHub handles</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="st">* @teammate1 @teammate2</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">".github/CODEOWNERS"</span>,<span class="st">"w"</span>).write(owners)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote .github/CODEOWNERS (edit handles!)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Commit and push on a new branch (example: <code>chore/pr-template</code>), open a PR, and merge after review.</p>
 </section>
-<section id="part-b-add-a-largefile-guard-simple-python-script" class="level3" data-number="2.6.2">
-<h3 data-number="2.6.2" class="anchored" data-anchor-id="part-b-add-a-largefile-guard-simple-python-script"><span class="header-section-number">2.6.2</span> Part B — Add a large‑file guard (simple Python script)</h3>
+<section id="part-b-add-a-largefile-guard-simple-python-script" class="level3" data-number="2.14.2">
+<h3 data-number="2.14.2" class="anchored" data-anchor-id="part-b-add-a-largefile-guard-simple-python-script"><span class="header-section-number">2.14.2</span> Part B — Add a large‑file guard (simple Python script)</h3>
 <p>Create a small tool that <strong>fails</strong> if files &gt; 10 MB are found <strong>and</strong> aren’t tracked by LFS. This will be used manually for now (automation later in CI).</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tools/guard_large_files.py</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, sys</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>LIMIT_MB <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> os.getcwd()</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lfs_tracked_paths():</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> subprocess.check_output([<span class="st">"git"</span>, <span class="st">"lfs"</span>, <span class="st">"ls-files"</span>], text<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        tracked <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> line <span class="kw">in</span> out.strip().splitlines():</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>            <span class="co"># line format: "&lt;oid&gt; &lt;path&gt;"</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>            p <span class="op">=</span> line.split(<span class="va">None</span>, <span class="dv">1</span>)[<span class="op">-</span><span class="dv">1</span>].strip()</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>            tracked.add(os.path.normpath(p))</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tracked</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">set</span>()</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> humanize(bytes_):</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>bytes_<span class="op">/</span>(<span class="dv">1024</span><span class="op">*</span><span class="dv">1024</span>)<span class="sc">:.2f}</span><span class="ss"> MB"</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>lfs_set <span class="op">=</span> lfs_tracked_paths()</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>bad <span class="op">=</span> []</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dirpath, dirnames, filenames <span class="kw">in</span> os.walk(ROOT):</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># skip .git directory</span></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">".git"</span> <span class="kw">in</span> dirpath.split(os.sep):</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fn <span class="kw">in</span> filenames:</span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        path <span class="op">=</span> os.path.normpath(os.path.join(dirpath, fn))</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>            size <span class="op">=</span> os.path.getsize(path)</span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">FileNotFoundError</span>:</span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> size <span class="op">&gt;=</span> LIMIT_MB <span class="op">*</span> <span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>:</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>            rel <span class="op">=</span> os.path.relpath(path, ROOT)</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> rel <span class="kw">not</span> <span class="kw">in</span> lfs_set:</span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>                bad.append((rel, size))</span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> bad:</span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"ERROR: Large non-LFS files found:"</span>)</span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> rel, size <span class="kw">in</span> bad:</span>
-<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f" - </span><span class="sc">{</span>rel<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>humanize(size)<span class="sc">}</span><span class="ss">)"</span>)</span>
-<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>    sys.exit(<span class="dv">1</span>)</span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"OK: No large non-LFS files detected."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tools/guard_large_files.py</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, sys</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>LIMIT_MB <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>ROOT <span class="op">=</span> os.getcwd()</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lfs_tracked_paths():</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> subprocess.check_output([<span class="st">"git"</span>, <span class="st">"lfs"</span>, <span class="st">"ls-files"</span>], text<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        tracked <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> line <span class="kw">in</span> out.strip().splitlines():</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>            <span class="co"># line format: "&lt;oid&gt; &lt;path&gt;"</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>            p <span class="op">=</span> line.split(<span class="va">None</span>, <span class="dv">1</span>)[<span class="op">-</span><span class="dv">1</span>].strip()</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>            tracked.add(os.path.normpath(p))</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tracked</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">set</span>()</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> humanize(bytes_):</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>bytes_<span class="op">/</span>(<span class="dv">1024</span><span class="op">*</span><span class="dv">1024</span>)<span class="sc">:.2f}</span><span class="ss"> MB"</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>lfs_set <span class="op">=</span> lfs_tracked_paths()</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>bad <span class="op">=</span> []</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dirpath, dirnames, filenames <span class="kw">in</span> os.walk(ROOT):</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># skip .git directory</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">".git"</span> <span class="kw">in</span> dirpath.split(os.sep):</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fn <span class="kw">in</span> filenames:</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>        path <span class="op">=</span> os.path.normpath(os.path.join(dirpath, fn))</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>            size <span class="op">=</span> os.path.getsize(path)</span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">FileNotFoundError</span>:</span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> size <span class="op">&gt;=</span> LIMIT_MB <span class="op">*</span> <span class="dv">1024</span> <span class="op">*</span> <span class="dv">1024</span>:</span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>            rel <span class="op">=</span> os.path.relpath(path, ROOT)</span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> rel <span class="kw">not</span> <span class="kw">in</span> lfs_set:</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>                bad.append((rel, size))</span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> bad:</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"ERROR: Large non-LFS files found:"</span>)</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> rel, size <span class="kw">in</span> bad:</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f" - </span><span class="sc">{</span>rel<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>humanize(size)<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>    sys.exit(<span class="dv">1</span>)</span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"OK: No large non-LFS files detected."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Add a Makefile target to run it:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create/append Makefile target</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">guard:</span><span class="ch">\n\t</span><span class="st">python tools/guard_large_files.py</span><span class="ch">\n</span><span class="st">"</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Path(<span class="st">"Makefile"</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>p.write_text(p.read_text() <span class="op">+</span> text <span class="cf">if</span> p.exists() <span class="cf">else</span> text)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Added 'guard' target to Makefile"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create/append Makefile target</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">guard:</span><span class="ch">\n\t</span><span class="st">python tools/guard_large_files.py</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Path(<span class="st">"Makefile"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>p.write_text(p.read_text() <span class="op">+</span> text <span class="cf">if</span> p.exists() <span class="cf">else</span> text)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Added 'guard' target to Makefile"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Run locally/Colab:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python tools<span class="op">/</span>guard_large_files.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python tools<span class="op">/</span>guard_large_files.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Commit on a new branch (e.g., <code>chore/large-file-guard</code>), push, open PR, and merge after review.</p>
 </section>
-<section id="part-c-branchpr-practice-each-student" class="level3" data-number="2.6.3">
-<h3 data-number="2.6.3" class="anchored" data-anchor-id="part-c-branchpr-practice-each-student"><span class="header-section-number">2.6.3</span> Part C — Branch/PR practice (each student)</h3>
+<section id="part-c-branchpr-practice-each-student" class="level3" data-number="2.14.3">
+<h3 data-number="2.14.3" class="anchored" data-anchor-id="part-c-branchpr-practice-each-student"><span class="header-section-number">2.14.3</span> Part C — Branch/PR practice (each student)</h3>
 <ol type="1">
 <li><p>Each student creates <strong>their own</strong> branch (e.g., <code>docs/readme-username</code>) and:</p>
 <ul>
@@ -810,19 +1011,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p><strong>Expected files touched:</strong> <code>README.md</code>, <code>.github/pull_request_template.md</code>, optional <code>.github/CODEOWNERS</code>, <code>tools/guard_large_files.py</code>, <code>Makefile</code>.</p>
 </section>
-<section id="part-d-prove-lfs-is-working" class="level3" data-number="2.6.4">
-<h3 data-number="2.6.4" class="anchored" data-anchor-id="part-d-prove-lfs-is-working"><span class="header-section-number">2.6.4</span> Part D — Prove LFS is working</h3>
+<section id="part-d-prove-lfs-is-working" class="level3" data-number="2.14.4">
+<h3 data-number="2.14.4" class="anchored" data-anchor-id="part-d-prove-lfs-is-working"><span class="header-section-number">2.14.4</span> Part D — Prove LFS is working</h3>
 <ul>
 <li>On <code>main</code>, run:</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs ls<span class="op">-</span>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git lfs ls<span class="op">-</span>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>You should see <code>data/processed/sample_returns.parquet</code> (and any other tracked binaries).</li>
 <li>In the GitHub web UI, click the file to confirm it’s an <strong>LFS pointer</strong>, not full binary contents.</li>
 </ul>
 </section>
-<section id="submission-checklist-passrevise" class="level3" data-number="2.6.5">
-<h3 data-number="2.6.5" class="anchored" data-anchor-id="submission-checklist-passrevise"><span class="header-section-number">2.6.5</span> Submission checklist (pass/revise)</h3>
+<section id="submission-checklist-passrevise" class="level3" data-number="2.14.5">
+<h3 data-number="2.14.5" class="anchored" data-anchor-id="submission-checklist-passrevise"><span class="header-section-number">2.14.5</span> Submission checklist (pass/revise)</h3>
 <ul>
 <li>Two merged PRs (template + guard) with clear titles and descriptions.</li>
 <li>README updated with development workflow and contributors.</li>
@@ -832,16 +1033,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="instructor-checklist-before-class" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="instructor-checklist-before-class"><span class="header-section-number">2.7</span> Instructor checklist (before class)</h2>
-<ul>
-<li>Ensure students have or can create a GitHub repo and add collaborators.</li>
-<li>Validate the lab sequence once in a fresh Colab runtime.</li>
-<li>Have example screenshots of: PR diff, LFS pointer file, successful <code>git lfs ls-files</code>.</li>
-</ul>
-</section>
-<section id="emphasize-while-teaching" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="emphasize-while-teaching"><span class="header-section-number">2.8</span> Emphasize while teaching</h2>
+<section id="emphasize" class="level2" data-number="2.15">
+<h2 data-number="2.15" class="anchored" data-anchor-id="emphasize"><span class="header-section-number">2.15</span> Emphasize</h2>
 <ul>
 <li><strong>Small PRs win.</strong> Short diffs → fast, focused reviews.</li>
 <li><strong>Don’t commit secrets.</strong> <code>.env</code> only; keep <code>.env.example</code> up to date.</li>
