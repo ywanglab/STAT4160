@@ -371,9 +371,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#test-the-hook-manually" id="toc-test-the-hook-manually" class="nav-link" data-scroll-target="#test-the-hook-manually"><span class="header-section-number">2.9.14</span> 3. Test the hook manually</a></li>
   <li><a href="#open-a-pull-request" id="toc-open-a-pull-request" class="nav-link" data-scroll-target="#open-a-pull-request"><span class="header-section-number">2.9.15</span> 10) Open a Pull Request</a></li>
   </ul></li>
-  <li><a href="#origin-of-the-term" id="toc-origin-of-the-term" class="nav-link" data-scroll-target="#origin-of-the-term"><span class="header-section-number">2.10</span> 📌 Origin of the term</a></li>
-  <li><a href="#how-it-works-e.g.-on-github-gitlab-bitbucket" id="toc-how-it-works-e.g.-on-github-gitlab-bitbucket" class="nav-link" data-scroll-target="#how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> 📌 How it works (e.g., on GitHub, GitLab, Bitbucket)</a></li>
-  <li><a href="#contrast-with-push" id="toc-contrast-with-push" class="nav-link" data-scroll-target="#contrast-with-push"><span class="header-section-number">2.12</span> 📌 Contrast with “push”</a>
+  <li><a href="#origin-of-the-term" id="toc-origin-of-the-term" class="nav-link" data-scroll-target="#origin-of-the-term"><span class="header-section-number">2.10</span> Origin of the term</a></li>
+  <li><a href="#how-it-works-e.g.-on-github-gitlab-bitbucket" id="toc-how-it-works-e.g.-on-github-gitlab-bitbucket" class="nav-link" data-scroll-target="#how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> How it works (e.g., on GitHub, GitLab, Bitbucket)</a></li>
+  <li><a href="#contrast-with-push" id="toc-contrast-with-push" class="nav-link" data-scroll-target="#contrast-with-push"><span class="header-section-number">2.12</span> Contrast with “push”</a>
   <ul class="collapse">
   <li><a href="#quick-verification-checklist" id="toc-quick-verification-checklist" class="nav-link" data-scroll-target="#quick-verification-checklist"><span class="header-section-number">2.12.1</span> 11) Quick verification checklist</a></li>
   </ul></li>
@@ -824,7 +824,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="origin-of-the-term" class="level2" data-number="2.10">
-<h2 data-number="2.10" class="anchored" data-anchor-id="origin-of-the-term"><span class="header-section-number">2.10</span> 📌 Origin of the term</h2>
+<h2 data-number="2.10" class="anchored" data-anchor-id="origin-of-the-term"><span class="header-section-number">2.10</span> Origin of the term</h2>
 <ul>
 <li><p>The phrase comes from <strong>distributed version control</strong> (like Git before GitHub’s UI popularized it).</p></li>
 <li><p>If you had changes in your branch/repo and wanted them in the upstream project, you’d contact the maintainer and say:</p>
@@ -835,7 +835,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 <section id="how-it-works-e.g.-on-github-gitlab-bitbucket" class="level2" data-number="2.11">
-<h2 data-number="2.11" class="anchored" data-anchor-id="how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> 📌 How it works (e.g., on GitHub, GitLab, Bitbucket)</h2>
+<h2 data-number="2.11" class="anchored" data-anchor-id="how-it-works-e.g.-on-github-gitlab-bitbucket"><span class="header-section-number">2.11</span> How it works (e.g., on GitHub, GitLab, Bitbucket)</h2>
 <ol type="1">
 <li>You push your branch to your fork or to the remote repository.</li>
 <li>You open a <em>pull request</em> against the target branch (usually <code>main</code> or <code>develop</code>).</li>
@@ -844,12 +844,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 <section id="contrast-with-push" class="level2" data-number="2.12">
-<h2 data-number="2.12" class="anchored" data-anchor-id="contrast-with-push"><span class="header-section-number">2.12</span> 📌 Contrast with “push”</h2>
+<h2 data-number="2.12" class="anchored" data-anchor-id="contrast-with-push"><span class="header-section-number">2.12</span> Contrast with “push”</h2>
 <ul>
 <li><strong>Push</strong>: You directly upload commits to a remote branch you have permission to write to.</li>
 <li><strong>Pull request</strong>: You don’t merge directly — instead, you ask maintainers to <strong>pull</strong> your changes, review them, and integrate them.</li>
 </ul>
-<p>✅ <strong>Summary</strong>: It’s called a <strong>pull request</strong> because you’re not pushing your changes into the target branch; you’re asking the project owner/maintainer to <strong>pull</strong> your branch into theirs.</p>
+<p><strong>Summary</strong>: It’s called a <strong>pull request</strong> because you’re not pushing your changes into the target branch; you’re asking the project owner/maintainer to <strong>pull</strong> your branch into theirs.</p>
 <ul>
 <li><p><strong>Recommended (web UI):</strong> Navigate to your repo on GitHub → Compare &amp; pull request → base: <code>main</code>, compare: <code>setup/git-lfs</code>. Fill title/description, tag your partner, and create the PR.</p></li>
 <li><p><strong>Optional (API):</strong> open a PR programmatically from Colab:</p></li>
