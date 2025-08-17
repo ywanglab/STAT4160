@@ -3,16 +3,16 @@ _freeze/
 .quarto/
 /.quarto/
 _quarto.yml
-*.qmd
-*.png
-*.ipynb
+/*.qmd
+/*.png
+/*.ipynb
 /*.html
 
-*.json
-*.log
-*.aux
-*.tex
-*.toc
+
+/*.log
+/*.aux
+/*.tex
+/*.toc
 
 
 # Byte-compiled / cache
