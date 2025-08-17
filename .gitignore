@@ -6,7 +6,8 @@ _quarto.yml
 *.qmd
 *.png
 *.ipynb
-*.html
+/*.html
+
 *.json
 *.log
 *.aux
