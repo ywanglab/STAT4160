@@ -1,4 +1,30 @@
-_book/
+book/
 .quarto/
 /.quarto/
 
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Environments & secrets
+.env
+.env.*
+.venv/
+*.pem
+*.key
+
+# Data (raw & interim never committed)
+data/raw/
+data/interim/
+
+# Logs & caches
+logs/
+.cache/
