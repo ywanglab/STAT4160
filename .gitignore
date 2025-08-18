@@ -41,3 +41,8 @@ data/interim/
 # Logs & caches
 logs/
 .cache/
+
+# R / RStudio files
+.Rhistory
+.Rproj.user/
+
