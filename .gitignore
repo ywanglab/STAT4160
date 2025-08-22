@@ -1,6 +1,19 @@
-book/
+_book/
+_freeze/
 .quarto/
 /.quarto/
+_quarto.yml
+/*.qmd
+/*.png
+/*.ipynb
+/*.html
+
+
+/*.log
+/*.aux
+/*.tex
+/*.toc
+
 
 # Byte-compiled / cache
 __pycache__/
@@ -28,3 +41,7 @@ data/interim/
 # Logs & caches
 logs/
 .cache/
+
+# R / RStudio files
+.Rhistory
+.Rproj.user/
