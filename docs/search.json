@@ -1,0 +1,452 @@
+[
+  {
+    "objectID": "lec2.html",
+    "href": "lec2.html",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "",
+    "text": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#session-2-git-essentials-gitlfs-75-min",
+    "href": "lec2.html#session-2-git-essentials-gitlfs-75-min",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)",
+    "text": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)\n\n2.1.1 Learning goals\nBy the end of class, students can:\n\nExplain Git’s mental model: working directory → staging → commit; branches and remotes.\nCreate a feature branch, commit changes, and push to GitHub from Colab safely.\nUse .gitignore to avoid committing generated artifacts and secrets.\nInstall and configure Git‑LFS, track large/binary files, and verify tracking.\nOpen a pull request (PR) and follow review etiquette.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#agenda-75-minutes",
+    "href": "lec2.html#agenda-75-minutes",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.2 Agenda (75 minutes)",
+    "text": "2.2 Agenda (75 minutes)\n\n(8 min) Recap & goals; overview of today’s workflow\n(12 min) Slides: Git mental model; branches; remotes; commit hygiene\n(10 min) Slides: .gitignore must‑haves; Git‑LFS (when/why); LFS quotas & pitfalls\n(35 min) In‑class lab: clone → config → branch → .gitignore → LFS → sample Parquet → push → PR\n(10 min) Wrap‑up; troubleshooting; homework briefing",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#main-points",
+    "href": "lec2.html#main-points",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.3 Main points",
+    "text": "2.3 Main points\n\n2.3.1 Git mental model\n\nWorking directory (your files) → git add → staging → git commit → local history\nRemote: GitHub hosts a copy. git push publishes commits; git pull brings others’ changes.\nBranch: a movable pointer to a chain of commits. Default is main. Create feature branches for each change.\n\n\n\n2.3.2 Branch & PR etiquette\n\nOne feature/change per branch (small, reviewable diffs).\nCommit messages: imperative mood, short subject line (≤ 72 chars), details in body if needed:\n\nfeat: add git-lfs tracking for parquet\ndocs: add README section on setup\nchore: ignore raw data directory\n\nPR description: what/why, testing notes, checklist. Tag your teammate for review.\n\n\n\n2.3.3 .gitignore must‑haves\n\nSecrets: .env, API keys (never commit).\nLarge/derived artifacts: raw/interim data, logs, cache, compiled assets.\nNotebooks’ checkpoints: .ipynb_checkpoints/.\nOS/editor cruft: .DS_Store, Thumbs.db, .vscode/.\n\n\n\n2.3.4 Git‑LFS\n\nGit‑LFS = Large File Storage. Keeps pointers in Git; binaries in LFS storage.\nTrack only what’s necessary to version (e.g., small processed Parquet samples, posters/PDFs, small models).\nDo not LFS huge raw data you can re‑download (make get-data).\nQuotas apply on Git hosting—be selective.\n\n\n\n2.3.5 Safe pushes from Colab\n\nUse a fine‑grained PAT limited to a single repo with Contents: Read/Write + Pull requests: Read/Write.\nEnter token via getpass (not stored). Push using a temporary URL (token not saved in git config).\nAfter push, clear cell output.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#inclass-lab-35-min",
+    "href": "lec2.html#inclass-lab-35-min",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.10 In‑class lab (35 min)",
+    "text": "2.10 In‑class lab (35 min)\n\nInstructor tip: Students should have created a repo on GitHub before this lab (e.g., unified-stocks-teamX). If not, give them 3 minutes to do so and add their partner as a collaborator.\n\nWe’ll:\n\nMount Drive & clone the repo.\nConfigure Git identity.\nCreate a feature branch.\nAdd .gitignore.\nInstall and configure Git‑LFS.\nTrack Parquet & DB files; generate a sample Parquet.\nCommit & push from Colab using a short‑lived PAT.\nOpen a PR (via web UI, optional API snippet included).\n\n\n2.10.1 0) Mount Google Drive and set variables\n# Colab cell\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\n# Adjust these two for YOUR repo\nREPO_OWNER = \"YOUR_GITHUB_USERNAME_OR_ORG\"\nREPO_NAME  = \"unified-stocks-teamX\"   # e.g., unified-stocks-team1\n\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nCLONE_DIR  = f\"{BASE_DIR}/{REPO_NAME}\"\nREPO_URL   = f\"https://github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n\nimport os, pathlib\npathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)\n\n\n2.10.2 1) Clone the repo (or pull latest if already cloned)\nimport os, subprocess, shutil, pathlib\n\nif not pathlib.Path(CLONE_DIR).exists():\n    !git clone {REPO_URL} {CLONE_DIR}\nelse:\n    # If the folder exists, just ensure it's a git repo and pull latest\n    os.chdir(CLONE_DIR)\n    !git status\n    !git pull --ff-only  # ff to avoid diverged branches\nos.chdir(CLONE_DIR)\nprint(\"Working dir:\", os.getcwd())\n\n\n2.10.3 2) Configure Git identity (local to this repo)\n# Replace with your name and school email\n!git config user.name \"Your Name\"\n!git config user.email \"you@example.edu\"\n\n!git config --get user.name\n!git config --get user.email\n\n\n2.10.4 3) Create and switch to a feature branch\nBRANCH = \"setup/git-lfs\"\n!git checkout -b {BRANCH}\n!git branch --show-current\n\n\n2.10.5 4) Add a robust .gitignore\ngitignore = \"\"\"\\\n# Byte-compiled / cache\n__pycache__/\n*.py[cod]\n\n# Jupyter checkpoints\n.ipynb_checkpoints/\n\n# OS/editor files\n.DS_Store\nThumbs.db\n.vscode/\n\n# Environments & secrets\n.env\n.env.*\n.venv/\n*.pem\n*.key\n\n# Data (raw & interim never committed)\ndata/raw/\ndata/interim/\n\n# Logs & caches\nlogs/\n.cache/\n\"\"\"\nopen(\".gitignore\", \"w\").write(gitignore)\nprint(open(\".gitignore\").read())\n\n\n2.10.6 5) Install and initialize Git‑LFS (Colab)\n# Install git-lfs on the Colab VM (one-time per runtime): apt-get: advanced package tool(manager)\n!apt-get -y update &gt;/dev/null # refresh vailable packages from the repositories\n!apt-get -y install git-lfs &gt;/dev/null\n!git lfs install\n!git lfs version\n\n\n2.10.7 6) Track Parquet/DB/PDF/model binaries with LFS\n# Add .gitattributes entries via git lfs track\n!git lfs track \"data/processed/*.parquet\"\n!git lfs track \"data/*.db\"\n!git lfs track \"models/*.pt\"\n!git lfs track \"reports/*.pdf\"\n\n# Show what LFS is tracking and verify .gitattributes created\n!git lfs track\nprint(\"\\n.gitattributes:\")\nprint(open(\".gitattributes\").read())\n\nWhy not LFS for raw? Raw data should be re‑downloadable with make get-data later; don’t burn LFS quota.\n\n\n\n2.10.8 7) Create a small Parquet file to test LFS\nimport pandas as pd, numpy as np, os, pathlib\n\npathlib.Path(\"data/processed\").mkdir(parents=True, exist_ok=True)\n\ntickers = pd.read_csv(\"tickers_25.csv\")[\"ticker\"].tolist() if os.path.exists(\"tickers_25.csv\") else [\n    \"AAPL\",\"MSFT\",\"AMZN\",\"GOOGL\",\"META\",\"NVDA\",\"TSLA\",\"JPM\",\"JNJ\",\"V\",\n    \"PG\",\"HD\",\"BAC\",\"XOM\",\"CVX\",\"PFE\",\"KO\",\"DIS\",\"NFLX\",\"INTC\",\"CSCO\",\"ORCL\",\"T\",\"VZ\",\"WMT\"\n]\n\n# 1000 business days x up to 25 tickers ~ 25k rows; a few MB as Parquet\ndates = pd.bdate_range(\"2018-01-01\", periods=1000)\ndf = (pd.MultiIndex.from_product([tickers, dates], names=[\"ticker\",\"date\"])\n      .to_frame(index=False))\nrng = np.random.default_rng(42)\ndf[\"r_1d\"] = rng.normal(0, 0.01, size=len(df))  # synthetic daily returns\ndf.to_parquet(\"data/processed/sample_returns.parquet\", index=False)\ndf.head()\n\n\n2.10.9 8) Stage and commit changes\n!git add .gitignore .gitattributes data/processed/sample_returns.parquet\n!git status\n\n!git commit -m \"feat: add .gitignore and git-lfs tracking; add sample Parquet\"\n!git log --oneline -n 2  # limit to the most recent 2 commits\nIf see error “error: cannot run .git/hooks/post-commit: No such file or directory”, it means the post-commit hook is not executable or missing. ### Troubleshooting post-commit hook error 1. See what Git is trying to run\nls -l .git/hooks/post-commit\n\nIf you see -rw-r--r--, it’s not executable.\n\n\nMake it executable\n\nchmod +x .git/hooks/post-commit\n\nEnsure it has a valid shebang (first line) Open it and confirm the first line is one of:\n\nhead -n 1 .git/hooks/post-commit\n#!/bin/sh\n# or\n#!/usr/bin/env bash\n# or (if it’s Node)\n#!/usr/bin/env node\nSave if you needed to fix that.\n\nTest the hook manually\n\n.git/hooks/post-commit\n# or explicitly with the interpreter you expect, e.g.:\nbash .git/hooks/post-commit\n\n\n2.10.10 9) Push from Colab with a short‑lived token (safe method)\n\nCreate a fine‑grained PAT at GitHub → Settings → Developer settings → Fine‑grained tokens\n\nResource owner: your username/org\nRepositories: only select repositories\nPermissions: Contents (Read/Write), Pull requests (Read/Write)\nExpiration: short (e.g., 7 days)\n\n\n# Colab cell: push using a temporary URL with token (not saved to git config)\nfrom getpass import getpass\ntoken = getpass(\"Enter your GitHub token (input hidden; not stored): \")\n\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} {BRANCH}:{BRANCH}\n\n# Optional: immediately clear the token variable\ndel token\nIf error occurs, check:\n\n\n2.10.11 1. Check permissions\nls -l .git/hooks/pre-push\nIf it looks like -rw-r--r--, then it’s missing the executable bit. Fix:\nchmod +x .git/hooks/pre-push\n\n\n2.10.12 2. Check the first line (shebang)\nOpen it:\nhead -n 1 .git/hooks/pre-push\nYou should see something like:\n#!/bin/sh\nor\n#!/usr/bin/env bash\nIf it’s missing, add a valid shebang.\n\n\n2.10.13 3. Test the hook manually\n.git/hooks/pre-push\n# or explicitly:\nbash .git/hooks/pre-push\n\nIf the command prints the URL, clear this cell’s output after a successful push (Colab: “⋮” → “Clear output”).\n\n\n\n2.10.14 10) Open a Pull Request\nThe name “pull request” can be confusing at first — it sounds like you are “pushing” your code, but really you’re asking someone else to pull it.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#wrapup-talking-points-10-min",
+    "href": "lec2.html#wrapup-talking-points-10-min",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.5 Wrap‑up (talking points, 10 min)",
+    "text": "2.5 Wrap‑up (talking points, 10 min)\n\nKeep PRs small and focused; write helpful titles and descriptions.\nDon’t commit secrets or large data. Use .env + .env.example.\nUse LFS selectively—version only small, important binaries (e.g., sample processed sets, posters).\nNext time: Quarto polish (already started) and Unix automation to fetch raw data reproducibly.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#homework-due-before-session-3",
+    "href": "lec2.html#homework-due-before-session-3",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.15 Homework (due before Session 3)",
+    "text": "2.15 Homework (due before Session 3)\nGoal: Cement branch/PR hygiene, add review scaffolding, and add a small guard against large files accidentally committed outside LFS.\n\n2.15.1 Part A — Add a PR template and CODEOWNERS\nCreate a PR template so every PR includes key info.\n# Run in your repo root\nimport os, pathlib, textwrap\npathlib.Path(\".github\").mkdir(exist_ok=True)\ntpl = textwrap.dedent(\"\"\"\\\n    ## Summary\n    What does this PR do and why?\n\n    ## Changes\n    - \n\n    ## How to test\n    - From a fresh clone: steps to run\n\n    ## Checklist\n    - [ ] Runs from a fresh clone (README steps)\n    - [ ] No secrets committed; `.env` only (and `.env.example` updated if needed)\n    - [ ] Large artifacts tracked by LFS (`git lfs ls-files` shows expected files)\n    - [ ] Clear, small diff; comments where useful\n\"\"\")\nopen(\".github/pull_request_template.md\",\"w\").write(tpl)\nprint(\"Wrote .github/pull_request_template.md\")\n(Optional) Require both teammates to review by setting CODEOWNERS (edit handles):\nowners = \"\"\"\\\n# Replace with your GitHub handles\n* @teammate1 @teammate2\n\"\"\"\nopen(\".github/CODEOWNERS\",\"w\").write(owners)\nprint(\"Wrote .github/CODEOWNERS (edit handles!)\")\nCommit and push on a new branch (example: chore/pr-template), open a PR, and merge after review. If working on G-Drive: execute the following before git operations: chmod +x .git/hooks/*\n\n\n2.15.2 Part B — Add a large‑file guard (simple Python script)\nCreate a small tool that fails if files &gt; 10 MB are found and aren’t tracked by LFS. This will be used manually for now (automation later in CI).\n# tools/guard_large_files.py\nimport os, subprocess, sys\n\nLIMIT_MB = 10\nROOT = os.getcwd()\n\ndef lfs_tracked_paths(): #find all files tracked by lfs\n    try:\n        out = subprocess.check_output([\"git\", \"lfs\", \"ls-files\"], text=True)\n        tracked = set()\n        for line in out.strip().splitlines():\n            # line format: \"&lt;oid&gt; &lt;path&gt;\"\n            p = line.split(None, 1)[-1].strip()\n            tracked.add(os.path.normpath(p))\n        return tracked\n    except Exception:\n        return set()\n\ndef humanize(bytes_):\n    return f\"{bytes_/(1024*1024):.2f} MB\"\n\nlfs_set = lfs_tracked_paths()\nbad = []\nfor dirpath, dirnames, filenames in os.walk(ROOT):\n    # skip .git directory\n    if \".git\" in dirpath.split(os.sep):\n        continue\n    for fn in filenames:\n        path = os.path.normpath(os.path.join(dirpath, fn))\n        try:\n            size = os.path.getsize(path)\n        except FileNotFoundError:\n            continue\n        if size &gt;= LIMIT_MB * 1024 * 1024:\n            rel = os.path.relpath(path, ROOT)\n            if rel not in lfs_set:\n                bad.append((rel, size))\n\nif bad:\n    print(\"ERROR: Large non-LFS files found:\")\n    for rel, size in bad:\n        print(f\" - {rel} ({humanize(size)})\")\n    sys.exit(1)\nelse:\n    print(\"OK: No large non-LFS files detected.\")\nAdd a Makefile target to run it. Let’s generate the tools directory and the script:\n# Define the path to the tools directory\ntools_dir = Path(\"tools\")\n\n# Create it if it doesn't exist (including any parents)\ntools_dir.mkdir(parents=True, exist_ok=True)\n\nprint(f\"Directory '{tools_dir}' is ready.\")\n# Create/append Makefile target\nfrom pathlib import Path\ntext = \"\\n\\nguard:\\n\\tpython tools/guard_large_files.py\\n\" # guard: Makefile target. \\t: tab required. \np = Path(\"Makefile\") # point to the Makefile\n# p.write_text(p.read_text() + text if p.exists() else text) # if p exists, read exising content and append text and overwrites. \n# the above code will append text everytime, casue error if repeatedly excute. \nif p.exists():\n    content = p.read_text()\n    if \"guard:\" not in content:\n        p.write_text(content + text)\nelse:\n    p.write_text(text)\n\nprint(\"Added 'guard' target to Makefile\")\nAfter running the snippet: Your repo has a Makefile with a guard target. Running:\nmake guard\nwill execute your Python script:\npython tools/guard_large_files.py\nRun locally/Colab:\n!python tools/guard_large_files.py\nCommit on a new branch (e.g., chore/large-file-guard), push, open PR, and merge after review.\n\n\n2.15.3 Part C — Branch/PR practice (each student)\n\nEach student creates their own branch (e.g., docs/readme-username) and:\n\nAdds a “Development workflow” section in README.md (1–2 paragraphs): how to clone, mount Drive in Colab, install requirements, and where outputs go.\nAdds themselves to README.md “Contributors” section with a GitHub handle link.\n\nPush branch and open a PR.\nPartner reviews the PR:\n\nLeave at least 2 useful comments (nits vs blockers).\nApprove when ready; the author merges.\n\n\nExpected files touched: README.md, .github/pull_request_template.md, optional .github/CODEOWNERS, tools/guard_large_files.py, Makefile.\n\n\n2.15.4 Part D — Prove LFS is working\n\nOn main, run:\n\n!git lfs ls-files\n\nYou should see data/processed/sample_returns.parquet (and any other tracked binaries).\nIn the GitHub web UI, click the file to confirm it’s an LFS pointer, not full binary contents.\n\n\n\n2.15.5 Submission checklist (pass/revise)\n\nTwo merged PRs (template + guard) with clear titles and descriptions.\nREADME updated with development workflow and contributors.\ngit lfs ls-files shows expected files.\ntools/guard_large_files.py present and passes (OK) on main.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#instructor-checklist-before-class",
+    "href": "lec2.html#instructor-checklist-before-class",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.7 Instructor checklist (before class)",
+    "text": "2.7 Instructor checklist (before class)\n\nEnsure students have or can create a GitHub repo and add collaborators.\nValidate the lab sequence once in a fresh Colab runtime.\nHave example screenshots of: PR diff, LFS pointer file, successful git lfs ls-files.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#emphasize-while-teaching",
+    "href": "lec2.html#emphasize-while-teaching",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.8 Emphasize while teaching",
+    "text": "2.8 Emphasize while teaching\n\nSmall PRs win. Short diffs → fast, focused reviews.\nDon’t commit secrets. .env only; keep .env.example up to date.\nUse LFS sparingly and purposefully—prefer regenerating big raw data.\nColab pushes: use a short‑lived token, and clear outputs after use.\n\nNext session: Quarto reporting polish and pipeline hooks; soon after, Unix automation so make get-data can reproducibly fetch raw data for the unified‑stocks project.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#slides",
+    "href": "lec2.html#slides",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.3 Slides",
+    "text": "2.3 Slides\n\n2.3.1 Git mental model\n\nWorking directory (your files) → git add → staging → git commit → local history\nRemote: GitHub hosts a copy. git push publishes commits; git pull brings others’ changes.\nBranch: a movable pointer to a chain of commits. Default is main. Create feature branches for each change.\n\nIn Git, a branch is essentially just a movable pointer to a commit.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#the-simple-definition",
+    "href": "lec2.html#the-simple-definition",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.4 1. The simple definition",
+    "text": "2.4 1. The simple definition\n\nA branch has a name (e.g., main, feature/login).\nThat name points to a specific commit in your repository.\nAs you make new commits on that branch, the pointer moves forward.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#visual-example",
+    "href": "lec2.html#visual-example",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.5 2. Visual example",
+    "text": "2.5 2. Visual example\nLet’s say your repo looks like this:\nA --- B --- C   ← main\nHere:\n\nmain is the branch name.\nIt points to commit C.\n\nIf you make a new branch:\ngit branch feature\nNow you have:\nA --- B --- C   ← main, feature\nIf you checkout feature and make a commit:\nA --- B --- C   ← main\n             \\\n              D   ← feature\n\nfeature moves forward to D (new commit).\nmain stays at C.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#head-and-active-branch",
+    "href": "lec2.html#head-and-active-branch",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.6 3. HEAD and active branch",
+    "text": "2.6 3. HEAD and active branch\n\nHEAD is your current position — it points to the branch you’re working on.\nWhen you commit, Git moves that branch forward.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#why-branches-matter",
+    "href": "lec2.html#why-branches-matter",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.7 4. Why branches matter",
+    "text": "2.7 4. Why branches matter\n\nLet you work on new features, bug fixes, or experiments without touching the main codebase.\nCheap to create and delete — Git branching is just updating a tiny file.\nEnable parallel development.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#branches-vs-tags",
+    "href": "lec2.html#branches-vs-tags",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.8 5. Branches vs tags",
+    "text": "2.8 5. Branches vs tags\n\nBranch → moves as you commit.\nTag → fixed pointer to a commit (used for marking releases).\n\n\n💡 Inside .git/refs/heads/, each branch is just a plain text file storing a commit hash.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#origin-of-the-term",
+    "href": "lec2.html#origin-of-the-term",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.11 Origin of the term",
+    "text": "2.11 Origin of the term\n\nThe phrase comes from distributed version control (like Git before GitHub’s UI popularized it).\nIf you had changes in your branch/repo and wanted them in the upstream project, you’d contact the maintainer and say:\n\n“Please pull these changes from my branch into yours.”\n\nSo a pull request is literally a request for someone else to pull your commits.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#how-it-works-e.g.-on-github-gitlab-bitbucket",
+    "href": "lec2.html#how-it-works-e.g.-on-github-gitlab-bitbucket",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.12 How it works (e.g., on GitHub, GitLab, Bitbucket)",
+    "text": "2.12 How it works (e.g., on GitHub, GitLab, Bitbucket)\n\nYou push your branch to your fork or to the remote repository.\nYou open a pull request against the target branch (usually main or develop).\nThe repository maintainers review your code.\nIf accepted, they “pull” your commits into their branch (though under the hood it’s often implemented as a merge or rebase).",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#contrast-with-push",
+    "href": "lec2.html#contrast-with-push",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.13 Contrast with “push”",
+    "text": "2.13 Contrast with “push”\n\nPush: You directly upload commits to a remote branch you have permission to write to.\nPull request: You don’t merge directly — instead, you ask maintainers to pull your changes, review them, and integrate them.\n\nSummary: It’s called a pull request because you’re not pushing your changes into the target branch; you’re asking the project owner/maintainer to pull your branch into theirs.\n\nRecommended (web UI): Navigate to your repo on GitHub → Compare & pull request → base: main, compare: setup/git-lfs. Fill title/description, tag your partner, and create the PR.\nOptional (API): open a PR programmatically from Colab:\n\n# OPTIONAL: Create PR via GitHub API (requires token again)\nfrom getpass import getpass\nimport requests, json\n\ntoken = getpass(\"GitHub token (again, not stored): \")\nheaders = {\"Authorization\": f\"Bearer {token}\",\n           \"Accept\": \"application/vnd.github+json\"}\npayload = {\n    \"title\": \"Setup: .gitignore + Git-LFS + sample Parquet\",\n    \"head\": BRANCH,\n    \"base\": \"main\",\n    \"body\": \"Adds .gitignore, configures Git-LFS for parquet/db/pdf/model files, and commits a sample Parquet for verification.\"\n}\nr = requests.post(f\"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/pulls\",\n                  headers=headers, data=json.dumps(payload))\nprint(\"PR status:\", r.status_code)\ntry:\n    pr_url = r.json()[\"html_url\"]\n    print(\"PR URL:\", pr_url)\nexcept Exception as e:\n    print(\"Response:\", r.text)\ndel token\n\n2.13.1 11) Quick verification checklist\n\ngit lfs ls-files shows data/processed/sample_returns.parquet:\n\n!git lfs ls-files\n\nPR diff shows a small pointer for the Parquet, not raw binary content.\n.gitignore present; no secrets or raw data committed.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#wrapup",
+    "href": "lec2.html#wrapup",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.14 Wrap‑up",
+    "text": "2.14 Wrap‑up\n\nKeep PRs small and focused; write helpful titles and descriptions.\nDon’t commit secrets or large data. Use .env + .env.example.\nUse LFS selectively—version only small, important binaries (e.g., sample processed sets, posters).\nNext time: Quarto polish (already started) and Unix automation to fetch raw data reproducibly.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#emphasize",
+    "href": "lec2.html#emphasize",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.15 Emphasize",
+    "text": "2.15 Emphasize\n\nSmall PRs win. Short diffs → fast, focused reviews.\nDon’t commit secrets. .env only; keep .env.example up to date.\nUse LFS sparingly and purposefully—prefer regenerating big raw data.\nColab pushes: use a short‑lived token, and clear outputs after use.\n\nNext session: Quarto reporting polish and pipeline hooks; soon after, Unix automation so make get-data can reproducibly fetch raw data for the unified‑stocks project.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#what-to-emphasize",
+    "href": "lec2.html#what-to-emphasize",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.16 What to Emphasize",
+    "text": "2.16 What to Emphasize\n\nSmall PRs win. Short diffs → fast, focused reviews.\nDon’t commit secrets. .env only; keep .env.example up to date.\nUse LFS sparingly and purposefully—prefer regenerating big raw data.\nColab pushes: use a short‑lived token, and clear outputs after use.\n\nNext session: Quarto reporting polish and pipeline hooks; soon after, Unix automation so make get-data can reproducibly fetch raw data for the unified‑stocks project.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "13‑week plan (2 × 75‑min per week)\nWeek 1 – Setup, Colab, Git/GitHub\nWeek 2 – Reproducible reporting (Quarto) + RStudio cameo\nWeek 3 – Unix for data work + automation\nWeek 4 – SQL I (schemas, joins)\nWeek 5 – pandas for time series\nWeek 6 – APIs & Web scraping (ethics + caching)\nWeek 7 – Quality: tests, lint, minimal CI\nWeek 8 – Time‑series baselines & backtesting\nWeek 9 – Finance‑specific evaluation & leakage control\nWeek 10 – PyTorch fundamentals\nWeek 11 – Transformers for sequences (tiny GPT)\nWeek 12 – Productivity at scale (lightweight)\nWeek 13 – Communication & showcase",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "intro.html#week-plan-2-75min-per-week",
+    "href": "intro.html#week-plan-2-75min-per-week",
+    "title": "Introduction",
+    "section": "",
+    "text": "Lec A: Local Python + VS Code; Colab basics (GPU, Drive mount, persistence limits), repo cloning in Colab, requirements.txt, seeds.\nLec B: Git essentials, branching, PRs, code review etiquette, .gitignore, Git‑LFS do’s/don’ts (quota pitfalls).\nDeliverable: Team repo with a Colab notebook that runs and logs environment info; one PR merged.\n\n\n\nLec A: Quarto for Python: parameters, caching, citations; publish to GitHub Pages.\nLec B (15–25 min cameo): RStudio + Quarto rendering (so they can read R‑centric docs later), then back to Python.\nDeliverable: Parameterized EDA report (symbol, date range as params).\n\n\n\nLec A: Shell basics (pipes, redirects), grep/sed/awk, find/xargs, regex.\nLec B: Shell scripts, simple Makefile/justfile targets; rsync, quick SSH/tmux tour.\nDeliverable: make get-data and make report run end‑to‑end.\n\n\n\nLec A: SQLite in repo; schema design for OHLCV + metadata; SELECT/JOIN/GROUP BY.\nLec B: Window functions; indices; pandas.read_sql pipelines.\nDeliverable: SQL notebook producing a tidy table ready for modeling.\n\n\n\nLec A: Cleaning, types, missing, merges; groupby, pivot; Parquet I/O.\nLec B: Time‑series ops: resampling, rolling windows, shifting/lagging, calendar effects.\nDeliverable: Cleaned Parquet dataset + feature snapshot.\n\n\n\nLec A: HTTP basics, requests, pagination, auth, retries, backoff; don’t hard‑code keys (python‑dotenv).\nLec B: BeautifulSoup, CSS selectors, robots.txt, throttling; cache raw pulls; persist to SQL/Parquet.\nDeliverable: One external data source ingested with caching & schema checks.\n\n\n\nLec A: pytest (2–3 meaningful tests), data validation (light Pandera or custom checks), logging, type hints.\nLec B: Pre‑commit (black, ruff, nbstripout), GitHub Actions to run tests + lint on PRs (fast jobs only).\nDeliverable: CI badge green; failing test demonstrates leakage prevention or schema guard.\n\n\n\nLec A: Problem framing; horizon, step size; MAE/sMAPE/MASE; rolling‑origin evaluation.\nLec B: Baselines: naive/seasonal‑naive; quick ARIMA/Prophet or sklearn regressor with lags.\nDeliverable: Baseline model card + backtest plot in Quarto.\n\n\n\nLec A: Feature timing & label definition (t+1 returns, multi‑step horizons), survivorship bias, look‑ahead traps, data snooping.\nLec B: Walk‑forward / expanding window, embargoed splits, drift detection; error analysis by regime (volatility bins, bull/bear).\nDeliverable: A robust evaluation plan + revised splits; leakage test added to pytest.\n\n\n\nLec A: Tensors, autograd, datasets/dataloaders for windows; training loop, early stopping; GPU in Colab; mixed precision.\nLec B: A small LSTM/TCN baseline for forecasting; monitoring loss/metrics; save best weights.\nDeliverable: PyTorch baseline surpasses classical baseline on at least one metric.\n\n\n\nLec A: Attention from scratch; tiny char‑level GPT (embeddings, positions, single head → multi‑head), sanity‑check overfitting on toy data.\nLec B: Adapt to time series: window embedding, causal masking, regression head; ablation (context length, heads, dropout) within Colab budget.\nDeliverable: Transformer results + one ablation figure; notes on compute/time.\n\n\n\nLec A: Packaging a small library (src/ layout, pyproject.toml), simple CLI (Typer) for batch inference; config via YAML.\nLec B: Optional FastAPI endpoint demo (local only) + reproducibility audit (fresh‑clone run).\nDeliverable: Tagged release v1.0-rc, CLI can score a held‑out period and write a report.\n\n\n\nLec A: Poster + abstract workshop; tell the error‑analysis story; figure polish; README & model card.\nLec B: In‑class presentations + final feedback; plan for continuing to the Spring symposium (next‑steps backlog).\nDeliverable: Poster draft, 250‑word abstract, and a reproducible repo ready to extend.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "intro.html#project-spine",
+    "href": "intro.html#project-spine",
+    "title": "Introduction",
+    "section": "Project spine",
+    "text": "Project spine\n\nMilestones: W1 repo & env → W3 automated data pipeline → W6 external data → W7 CI green → W8 baselines → W9 robust eval plan → W10 PyTorch baseline → W11 tiny Transformer → W12 release candidate → W13 poster & talk.\nTracking (minimal): log experiments to a simple CSV (results/experiments.csv) and keep a Quarto “lab notebook.”\nData strategy: keep raw data out of Git (use make get-data); store processed Parquet under 100MB if you must commit; otherwise regenerate. Use Git‑LFS only for small, immutable artifacts to avoid quota pain.\nSecrets: .env with python‑dotenv + .env in .gitignore. For Colab, use environment variables or a JSON in Drive (not committed).",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "lec2.html#in-git-checkout--b-the--b-means-create-a-new-branch-before-checking-it-out.",
+    "href": "lec2.html#in-git-checkout--b-the--b-means-create-a-new-branch-before-checking-it-out.",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.9 In git checkout -b, the -b means “create a new branch” before checking it out.",
+    "text": "2.9 In git checkout -b, the -b means “create a new branch” before checking it out.\n\n2.9.1 Without -b\ngit checkout branchname\n\nSwitches to an existing branch.\nFails if the branch does not exist.\n\n\n\n\n2.9.2 With -b\ngit checkout -b branchname\n\nTells Git: “make a branch called branchname pointing to the current commit, and then switch to it.”\nFails if the branch already exists.\n\n\n\n\n2.9.3 Example\nIf you’re on main:\ngit checkout -b feature-x\nSteps Git takes:\n\nCreate a new branch pointer feature-x → same commit as main.\nMove HEAD to feature-x (you’re now “on” that branch).\n\n\n💡 In newer Git versions, the same idea is expressed with:\ngit switch -c feature-x   # -c means create\n-b in checkout and -c in switch both mean create.\n\n\n\n2.9.4 Branch & PR etiquette\n\nOne feature/change per branch (small, reviewable diffs).\nCommit messages: imperative mood, short subject line (≤ 72 chars), details in body if needed:\n\nfeat: add git-lfs tracking for parquet\ndocs: add README section on setup\nchore: ignore raw data directory\n\nPR description: what/why, testing notes, checklist. Tag your teammate for review.\n\n\n\n2.9.5 .gitignore must‑haves\n\nSecrets: .env, API keys (never commit).\nLarge/derived artifacts: raw/interim data, logs, cache, compiled assets.\nNotebooks’ checkpoints: .ipynb_checkpoints/.\nOS/editor cruft: .DS_Store (for Mac), Thumbs.db (for Windows), .vscode/.\n\n\n\n2.9.6 Git‑LFS\n\nGit‑LFS = Large File Storage. Keeps pointers in Git; binaries in LFS storage.\nTrack only what’s necessary to version (e.g., small processed Parquet samples, posters/PDFs, small models).\nDo not LFS huge raw data you can re‑download (make get-data).\nQuotas apply on Git hosting—be selective.\n\n\n\n2.9.7 Safe pushes from Colab\n\nUse a fine‑grained PAT limited to a single repo with Contents: Read/Write + Pull requests: Read/Write.\nEnter token via getpass (not stored). Push using a temporary URL (token not saved in git config).\nAfter push, clear cell output.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#session-1-dev-environment-colab-workflow",
+    "href": "lec1.html#session-1-dev-environment-colab-workflow",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.1 Session 1 — Dev environment & Colab workflow",
+    "text": "1.1 Session 1 — Dev environment & Colab workflow\n\n1.1.1 Learning goals\nBy the end of class, students can:\n\nMount Google Drive in Colab and work in a persistent course folder.\nClone a GitHub repo into Drive (or create a project folder if no repo yet).\nCreate and install from a soft‑pinned requirements.txt.\nVerify environment info (Python, OS, library versions) and GPU availability.\nUse a reproducibility seed pattern (NumPy + PyTorch) and validate it.\nSave a simple system check report to the repo.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#agenda-75-min",
+    "href": "lec1.html#agenda-75-min",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.2 Agenda (75 min)",
+    "text": "1.2 Agenda (75 min)\n\n(5 min) Course framing: how we’ll work this semester\n(12 min) Slides & demo: Colab + Drive persistence; project folders; soft vs hard pins\n(8 min) Slides & demo: reproducibility basics (seeds, RNG, deterministic ops)\n(35 min) In‑class lab (Colab): mount Drive → clone/create project → requirements → environment check → reproducibility check → write report\n(10 min) Wrap‑up, troubleshooting, and homework briefing",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#main-points",
+    "href": "lec1.html#main-points",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.3 Main Points",
+    "text": "1.3 Main Points\nWhy Colab + Drive\n\nColab gives you GPUs and a clean Python every session.\nThe runtime is ephemeral. Anything under /content disappears.\nMount Drive and work under /content/drive/MyDrive/... to persist code and outputs.\n\nProject layout (today’s minimal)\nproject/\n  reports/\n  notebooks/\n  data/\n  requirements.txt\n  system_check.ipynb\n(We’ll add src/, tests, CI in later sessions.)\nPins: soft vs hard\n\nSoft pins (e.g., pandas&gt;=2.2,&lt;3.0) keep you compatible across machines.\nHard pins (exact versions) are for releases. Today we’ll use soft pins, then freeze to requirements-lock.txt in homework.\n\nReproducibility basics\n\nFix seeds for random, NumPy, PyTorch (and CUDA if present).\nDisable nondeterministic cuDNN behavior for repeatability in simple models.\nBeware: some ops remain nondeterministic on GPU; we’ll use simple ones.\n\nMinimal Git today\n\nIf you already have a repo: clone it into G-Drive.\nIf not: create a folder; later you can upload the notebook via GitHub web UI.\nFull Git workflow (branch/PR/CI) starts next session.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#inclass-lab-35-min",
+    "href": "lec1.html#inclass-lab-35-min",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.4 In‑class Lab (35 min)",
+    "text": "1.4 In‑class Lab (35 min)\n\nInstructor tip: Put these as sequential Colab cells. Students should run them top‑to‑bottom. Replace placeholders like YOUR_USERNAME / YOUR_REPO before class if you already created a starter repo. If not, tell them to use the “no‑repo” path in Step 3B.\n\n\n1.4.1 1) Mount Google Drive and create a course folder\n# Colab cell\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nCOURSE_DIR = \"/content/drive/MyDrive/dspt25\"  # change if you prefer another path\nPROJECT_NAME = \"unified-stocks\"               # course project folder/repo name\nSave it as system_check.ipynb.\n# Colab cell: make directories and cd into project folder\nimport os, pathlib\nbase = pathlib.Path(COURSE_DIR)\nproj = base / PROJECT_NAME  # / is overloaded to create the path\nfor p in [base, proj, proj/\"reports\", proj/\"notebooks\", proj/\"data\"]:\n    p.mkdir(parents=True, exist_ok=True)\n\nimport os\nos.chdir(proj)\nprint(\"Working in:\", os.getcwd())\n\n\n1.4.2 2) (Optional) If you already have a GitHub repo, clone it into Drive\n\nPick A or B (not both).\n\nA. Clone an existing repo (recommended if you created a starter repo)\n# Colab cell: clone via HTTPS (public or your private; for private, you can upload later instead of pushing from Colab) ONLY clone onetime. If run this notebook again, skip this cell. \nREPO_URL = \"https://github.com/YOUR_ORG_OR_USERNAME/YOUR_REPO.git\"  # &lt;- change me\nimport subprocess, os\nos.chdir(base)  # clone next to your project folder\nsubprocess.run([\"git\", \"clone\", REPO_URL], check=True) # check if there is an error inseat of silent. \n# Optionally, use that cloned repo as the working directory:(uncomment the lines below if do this)\n# REPO_NAME = REPO_URL.split(\"/\")[-1].replace(\".git\",\"\")\n# os.chdir(base/REPO_NAME)\n# print(\"Working in:\", os.getcwd())\nos.chdir(proj) # change back to proj dir\nprint(\"Working in:\", os.getcwd())\nB. No repo yet? Stay with the folder we created. You’ll upload files via GitHub web UI after class.\n\n\n1.4.3 3) Create a soft‑pinned requirements.txt and install\n# Colab cell: write a soft-pinned requirements.txt\nreq = \"\"\"\\\npandas&gt;=2.2,&lt;3.0\nnumpy&gt;=2.0.0,&lt;3.0\npyarrow&gt;=15,&lt;17\nmatplotlib&gt;=3.8,&lt;4.0\nscikit-learn&gt;=1.6,&lt;2.0\nyfinance&gt;=0.2,&lt;0.3\npython-dotenv&gt;=1.0,&lt;2.0\n\"\"\"\nopen(\"requirements.txt\",\"w\").write(req)\nprint(open(\"requirements.txt\").read())\n# Colab cell: install (quietly). Torch is usually preinstalled in Colab; we'll check separately.\n!pip install -q -r requirements.txt\n# Colab cell: PyTorch check. If not available (rare in Colab), install CPU-only as a fallback.\ntry:\n    import torch\n    print(\"PyTorch:\", torch.__version__)\nexcept Exception as e:\n    print(\"PyTorch not found; installing CPU-only wheel as fallback...\")\n    !pip install -q torch\n    import torch\n    print(\"PyTorch:\", torch.__version__)\n\n\n1.4.4 4) Environment report (Python/OS/lib versions, GPU availability)\n# Colab cell: environment info + GPU check\nimport sys, platform, json, time\nimport pandas as pd\nimport numpy as np\n\nenv = {\n    \"timestamp\": time.strftime(\"%Y-%m-%d %H:%M:%S\"),\n    \"python\": sys.version,\n    \"os\": platform.platform(),\n    \"pandas\": pd.__version__,\n    \"numpy\": np.__version__,\n}\n\ntry:\n    import torch\n    env[\"torch\"] = torch.__version__\n    env[\"cuda_available\"] = bool(torch.cuda.is_available())\n    env[\"cuda_device\"] = torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"CPU\"\nexcept Exception as e:\n    env[\"torch\"] = \"not importable\"\n    env[\"cuda_available\"] = False\n    env[\"cuda_device\"] = \"CPU\"\n\nprint(env)\nos.makedirs(\"reports\", exist_ok=True)\nwith open(\"reports/environment.json\",\"w\") as f:\n    json.dump(env, f, indent=2)\n\n\n1.4.5 5) Reproducibility seed utility + quick validation\n# Colab cell: reproducibility helpers\nimport random\nimport numpy as np\n\ndef set_seed(seed: int = 42, deterministic_torch: bool = True):\n    random.seed(seed)\n    np.random.seed(seed)\n    try:\n        import torch\n        torch.manual_seed(seed)\n        torch.cuda.manual_seed_all(seed)\n        if deterministic_torch:\n            torch.backends.cudnn.deterministic = True\n            torch.backends.cudnn.benchmark = False\n            try:\n                torch.use_deterministic_algorithms(True)\n            except Exception:\n                pass\n    except Exception:\n        pass\n\ndef sample_rng_fingerprint(n=5, seed=42):\n    set_seed(seed)\n    a = np.random.rand(n).round(6).tolist()\n    try:\n        import torch\n        b = torch.rand(n).tolist()\n        b = [round(x,6) for x in b]\n    except Exception:\n        b = [\"torch-missing\"]*n\n    return {\"numpy\": a, \"torch\": b}\n\nf1 = sample_rng_fingerprint(n=6, seed=123)\nf2 = sample_rng_fingerprint(n=6, seed=123)\nprint(\"Fingerprint #1:\", f1)\nprint(\"Fingerprint #2:\", f2)\nprint(\"Match:\", f1 == f2)\n\nwith open(\"reports/seed_fingerprint.json\",\"w\") as f:\n    json.dump({\"f1\": f1, \"f2\": f2, \"match\": f1==f2}, f, indent=2)\n\n\n1.4.6 6) Create (or verify) tickers_25.csv for the course\n# Colab cell: create stock list if it doesn't exist yet\nimport pandas as pd, os\ntickers = [\n    \"AAPL\",\"MSFT\",\"AMZN\",\"GOOGL\",\"META\",\"NVDA\",\"TSLA\",\"JPM\",\"JNJ\",\"V\",\n    \"PG\",\"HD\",\"BAC\",\"XOM\",\"CVX\",\"PFE\",\"KO\",\"DIS\",\"NFLX\",\"INTC\",\n    \"CSCO\",\"ORCL\",\"T\",\"VZ\",\"WMT\"\n]\npath = \"tickers_25.csv\"\nif not os.path.exists(path):\n    pd.DataFrame({\"ticker\": tickers}).to_csv(path, index=False)\npd.read_csv(path).head()\n\n\n1.4.7 7) (Optional) Prove GPU works by allocating a small tensor\n# Colab cell: tiny GPU smoke test (safe if CUDA available)\nimport torch, time\n\n# change back to not use deterministic_algorithm to do the matrix computation\n# torch.use_deterministic_algorithms(False)\n\ndevice = \"cuda\" if torch.cuda.is_available() else \"cpu\"\nx = torch.randn(1000, 1000, device=device)\ny = x @ x.T\nprint(\"Device:\", device, \"| y shape:\", y.shape, \"| mean:\", y.float().mean().item())\n\n\n1.4.8 8) Save a short Markdown environment report\n# Colab cell: write a small Markdown summary for humans\nfrom textwrap import dedent\nsummary = dedent(f\"\"\"\n# System Check\n\n- Timestamp: {env['timestamp']}\n- Python: `{env['python']}`\n- OS: `{env['os']}`\n- pandas: `{env['pandas']}` | numpy: `{env['numpy']}` | torch: `{env['torch']}`\n- CUDA available: `{env['cuda_available']}` | Device: `{env['cuda_device']}`\n\n## RNG Fingerprint\n- Match on repeated seeds: `{f1 == f2}`\n- numpy: `{f1['numpy']}`\n- torch: `{f1['torch']}`\n\"\"\").strip()\n\nopen(\"reports/system_check.md\",\"w\").write(summary)\nprint(summary)\n\n\n1.4.9 Save the file as system_check.ipynb. To do it automatically, you can use the following code:\n\n# Colab cell: save this notebook as system_check.ipynb  \nfrom google.colab import  _message\nnotebook_name = \"system_check.ipynb\"\n# Create the 'notebooks' subdirectory path\nout_dir = proj / \"notebooks\"\nout_path = out_dir / notebook_name\n\n# Make sure the folder exists\nout_dir.mkdir(parents=True, exist_ok=True)\n\n# Get the CURRENT notebook JSON from Colab\nresp = _message.blocking_request('get_ipynb', timeout_sec=10)\nnb = resp.get('ipynb') if isinstance(resp, dict) else None\n\n# Basic sanity check: ensure there are cells\nif not nb or not isinstance(nb, dict) or not nb.get('cells'):\n    raise RuntimeError(\"Could not capture the current notebook contents (no cells returned). \"\n                       \"Try running this cell again after a quick edit, or use File → Save a copy in Drive once.\")\n\n# Write to Drive\nwith open(out_path, 'w', encoding='utf-8') as f:\n    json.dump(nb, f, ensure_ascii=False, indent=2)\n\nprint(\"Saved notebook to:\", out_path)\n\nWhat to submit after class (if you already have a GitHub repo): For today, students may upload system_check.ipynb, reports/environment.json, and reports/system_check.md via the GitHub web UI (Add file → Upload files). We’ll do proper pushes/PRs next session.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#troubleshooting-notes-share-in-class",
+    "href": "lec1.html#troubleshooting-notes-share-in-class",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.5 Troubleshooting notes (share in class)",
+    "text": "1.5 Troubleshooting notes (share in class)\n\nDrive won’t mount: Refresh the Colab tab, run the mount cell again, re‑authorize Google permissions.\npip install hangs: Rerun; if it persists, restart runtime (Runtime → Restart session) and re‑run from the top.\nPyTorch mismatch: If Colab has Torch preinstalled, don’t upgrade it. If you installed a CPU wheel by mistake and want GPU later, it’s usually easiest to restart runtime.\nPath confusion: Print os.getcwd() often; ensure you’re inside your project folder under /content/drive/MyDrive/....",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#homework-due-before-session-2",
+    "href": "lec1.html#homework-due-before-session-2",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.6 Homework (due before Session 2)",
+    "text": "1.6 Homework (due before Session 2)\nGoal: Produce a reproducible system snapshot and a seed‑verified mini experiment, then upload to your repo (via GitHub web UI if you’re not comfortable pushing yet).\n\n1.6.1 Part A — Freeze your environment\n\nFrom the same Colab runtime (after installing), create a lock file:\n# Colab cell: freeze exact versions\n!pip freeze &gt; requirements-lock.txt\nprint(\"Wrote requirements-lock.txt with exact versions\")\n!head -n 20 requirements-lock.txt\nAdd a note to README.md explaining the difference between:\n\nrequirements.txt (soft pins for development) and\nrequirements-lock.txt (exact versions used today).\n\n\n\n\n1.6.2 Part B — Reproducibility mini‑experiment\nCreate notebooks/reproducibility_demo.ipynb with the following cells (students copy/paste):\n1) Setup & data generation\nimport numpy as np, torch, random, json, os, time\n\ndef set_seed(seed=123):\n    random.seed(seed)\n    np.random.seed(seed)\n    torch.manual_seed(seed)\n    torch.cuda.manual_seed_all(seed)\n    torch.backends.cudnn.deterministic = True\n    torch.backends.cudnn.benchmark = False\n    try:\n        torch.use_deterministic_algorithms(True)\n    except Exception:\n        pass\n\ndef make_toy(n=512, d=10, noise=0.1, seed=123):\n    set_seed(seed)\n    X = torch.randn(n, d)\n    true_w = torch.randn(d, 1)\n    y = X @ true_w + noise * torch.randn(n, 1)\n    return X, y, true_w\n\ndevice = \"cuda\" if torch.cuda.is_available() else \"cpu\"\nX, y, true_w = make_toy()\nX, y = X.to(device), y.to(device)\n2) Minimal training loop (linear model)\ndef train_once(lr=0.05, steps=300, seed=123):\n    set_seed(seed)\n    model = torch.nn.Linear(X.shape[1], 1, bias=False).to(device)\n    opt = torch.optim.SGD(model.parameters(), lr=lr)\n    loss_fn = torch.nn.MSELoss()\n    losses=[]\n    for t in range(steps):\n        opt.zero_grad(set_to_none=True)\n        yhat = model(X)\n        loss = loss_fn(yhat, y)\n        loss.backward()\n        opt.step()\n        losses.append(loss.item())\n    return model.weight.detach().cpu().numpy(), losses[-1]\n\nw1, final_loss1 = train_once(seed=2025)\nw2, final_loss2 = train_once(seed=2025)\n\nprint(\"Final loss 1:\", round(final_loss1, 6))\nprint(\"Final loss 2:\", round(final_loss2, 6))\nprint(\"Weights equal:\", np.allclose(w1, w2, atol=1e-7))\n3) Save results JSON\nos.makedirs(\"reports\", exist_ok=True)\nresult = {\n    \"device\": device,\n    \"final_loss1\": float(final_loss1),\n    \"final_loss2\": float(final_loss2),\n    \"weights_equal\": bool(np.allclose(w1, w2, atol=1e-7)),\n    \"timestamp\": time.strftime(\"%Y-%m-%d %H:%M:%S\")\n}\nwith open(\"reports/reproducibility_results.json\",\"w\") as f:\n    json.dump(result, f, indent=2)\nresult\nExpected outcome: the two runs with the same seed should produce the same final loss and identical weights (within tolerance). If on GPU, deterministic settings should keep this stable for this simple model.\n\n\n1.6.3 Part C — Add a .env.example\nCreate a placeholder for API keys we’ll use later:\nenv_example = \"\"\"\\\n# Example environment variables (do NOT commit a real .env with secrets)\nALPHA_VANTAGE_KEY=\nFRED_API_KEY=\n\"\"\"\nopen(\".env.example\", \"w\").write(env_example)\nprint(open(\".env.example\").read())\n\n\n1.6.4 Part D — Upload to GitHub\nUntil we set up pushes/PRs next class, use the GitHub web UI:\n\nUpload: system_check.ipynb, reports/environment.json, reports/system_check.md, requirements.txt, requirements-lock.txt, notebooks/reproducibility_demo.ipynb, reports/reproducibility_results.json, .env.example.\nIf you already cloned a repo in class and are comfortable pushing, you may push from your laptop instead. Do not paste tokens into notebooks.\n\n\n\n1.6.5 Grading (pass/revise)\n\nrequirements.txt present; requirements-lock.txt present and non‑empty.\nsystem_check.ipynb runs and writes reports/system_check.md + environment.json.\nreproducibility_demo.ipynb demonstrates identical results across repeated runs with same seed and writes reports/reproducibility_results.json.\n.env.example present with placeholders.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec1.html#key-points",
+    "href": "lec1.html#key-points",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "1.7 Key points",
+    "text": "1.7 Key points\n\n“Colab is ephemeral; persist to Drive.”\n“Soft pins now; freeze later.”\n“Seeds are necessary but not sufficient—watch for nondeterministic ops.”\n“Never store secrets (API keys) in the repo; use .env and keep a .env.example.”\n\nThat’s it for Session 1. In Session 2 we’ll set up Git basics and Git‑LFS and move from uploading via web UI to branch/PR workflows.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
+    "objectID": "lec2.html#key-points",
+    "href": "lec2.html#key-points",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "2.16 Key points",
+    "text": "2.16 Key points\n\nSmall PRs win. Short diffs → fast, focused reviews.\nDon’t commit secrets. .env only; keep .env.example up to date.\nUse LFS sparingly and purposefully—prefer regenerating big raw data.\nColab pushes: use a short‑lived token, and clear outputs after use.\n\nNext session: Quarto reporting polish and pipeline hooks; soon after, Unix automation so make get-data can reproducibly fetch raw data for the unified‑stocks project.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#session-3-quarto-reports-python-75-minutes",
+    "href": "lec3.html#session-3-quarto-reports-python-75-minutes",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.1 Session 3 — Quarto Reports (Python) — 75 minutes",
+    "text": "3.1 Session 3 — Quarto Reports (Python) — 75 minutes\n\n3.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a parameterized Quarto report (.qmd) that runs Python code.\nRender a report from Colab using the Quarto CLI (with caching).\nPass parameters on the command line to re‑render for different tickers/date ranges.\nConfigure a minimal Quarto website that builds to docs/ and publish it via GitHub Pages.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#agenda-75-min",
+    "href": "lec3.html#agenda-75-min",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.2 Agenda (75 min)",
+    "text": "3.2 Agenda (75 min)\n\n(8 min) Why Quarto for DS: literate programming, parameters, caching, publishing\n(12 min) Anatomy of a .qmd: YAML front matter, params:, code chunks, execute: options, figures\n(35 min) In‑class lab: install Quarto in Colab → create _quarto.yml → write reports/eda.qmd → render for AAPL/MSFT → output to docs/\n(10 min) GitHub Pages walkthrough + troubleshooting + homework briefing\n(10 min) Buffer for hiccups (first Quarto install/render often needs a minute)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#slides",
+    "href": "lec3.html#slides",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.3 Slides",
+    "text": "3.3 Slides\nWhy Quarto\n\nOne source of truth for code + prose + figures → reproducibility and explainability.\nParameterization = fast re‑runs with different inputs (ticker/horizon).\nPublishing to GitHub Pages gives a permanent, shareable artifact.\n\nKey concepts\n\nFront matter:\n\nformat: controls HTML/PDF/RevealJS (we’ll use HTML).\nexecute: controls caching, echo, warnings.\nparams: defines inputs; accessed as params dict in Python cells.\n\nPerformance: enable execute.cache: true to avoid refetching/recomputing.\nPublishing: write to docs/ then enable GitHub Pages (Settings → Pages → “Deploy from a branch” → main / /docs).\n\nEthics/footnote\n\nFinancial data EDA here is educational only; not trading advice.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#inclass-lab-35-min",
+    "href": "lec3.html#inclass-lab-35-min",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.4 In‑class lab (35 min)",
+    "text": "3.4 In‑class lab (35 min)\n\nInstructor tip: Ask students to follow step‑by‑step. If they didn’t complete Session 2’s clone, they can create a fresh folder under Drive and initialize a new GitHub repo afterward.\n\n\n3.4.1 0) Mount Drive and set repo paths\nRun each block as a separate Colab cell.\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_OWNER = \"YOUR_GITHUB_USERNAME_OR_ORG\"  # &lt;- change\nREPO_NAME  = \"unified-stocks-teamX\"         # &lt;- change\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\nREPO_URL   = f\"https://github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n\nimport pathlib, os, subprocess\npathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)\n\nif not pathlib.Path(REPO_DIR).exists():\n    !git clone {REPO_URL} {REPO_DIR}\nelse:\n    %cd {REPO_DIR}\n    !git pull --ff-only\n%cd {REPO_DIR}\n\n\n3.4.2 1) Install Quarto CLI on Colab and verify\n# Install Quarto CLI (one-time per Colab runtime)\n!wget -q https://quarto.org/download/latest/quarto-linux-amd64.deb -O /tmp/quarto.deb\n!dpkg -i /tmp/quarto.deb || apt-get -y -f install &gt;/dev/null && dpkg -i /tmp/quarto.deb\n!quarto --version\n\n\n3.4.3 2) Minimal project config: _quarto.yml (website to docs/)\nfrom textwrap import dedent\nqproj = dedent(\"\"\"\\\nproject:\n  type: website\n  output-dir: docs\n\nwebsite:\n  title: \"Unified Stocks — EDA\"\n  navbar:\n    left:\n      - href: index.qmd\n        text: Home\n      - href: reports/eda.qmd\n        text: EDA (parametrized)\n\nformat:\n  html:\n    theme: cosmo\n    toc: true\n    code-fold: false\n\nexecute:\n  echo: true\n  warning: false\n  cache: true\n\"\"\")\nopen(\"_quarto.yml\",\"w\").write(qproj)\nprint(open(\"_quarto.yml\").read())\nCreate a simple homepage:\nindex = \"\"\"\\\n---\ntitle: \"Unified Stocks Project\"\n---\n\nWelcome! Use the navigation to view the EDA report.\n\n- **Stock set**: see `tickers_25.csv`\n- **Note**: Educational use only — no trading advice.\n\"\"\"\nopen(\"index.qmd\",\"w\").write(index)\nprint(open(\"index.qmd\").read())\n\n\n3.4.4 3) Create the parameterized EDA report: reports/eda.qmd\n::::\nimport os, pathlib\npathlib.Path(\"reports/figs\").mkdir(parents=True, exist_ok=True)\n#\neda_qmd = \"\"\"\\\n---\ntitle: \"Stock EDA\"\nformat:\n  html:\n    toc: true\n    number-sections: false\nexecute-dir: \"/content/drive/MyDrive/dspt25/STAT4160/reports\"\nexecute:\n  echo: false\n  warning: false\n  cache: false     # keep off while testing params\n\njupyter: python3\nparams:\n  symbol: \"AAPL\"\n  start_date: \"2018-01-01\"\n  end_date: \"\"\n  rolling: 20\n---\n\n\n::: callout-note\nThis report is parameterized. To change inputs without editing code, pass\n`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`.\n:::\n\n## Setup if using Python\n\n::: {#ebadf2f2 .cell tags='[\"parameters\"]' execution_count=1}\n``` {.python .cell-code}\n# Default values (overridden by -P at render time)\nSYMBOL = \"AAPL\"\nSTART  = \"2018-01-01\"\nEND    = \"\"\nROLL   =  20\n:::\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport yfinance as yf\nfrom pathlib import Path\nfrom datetime import datetime\n\n# Read parameters if using R\n# SYMBOL = params.get(\"symbol\", \"AAPL\")\n# START  = params.get(\"start_date\", \"2018-01-01\")\n# END    = params.get(\"end_date\", \"\")\n# ROLL   = int(params.get(\"rolling\", 20))\n\nif not END:\n    END = pd.Timestamp.today().strftime(\"%Y-%m-%d\")\n\nSYMBOL, START, END, ROLL",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#wrapup-10-min",
+    "href": "lec3.html#wrapup-10-min",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.10 Wrap‑up (10 min)",
+    "text": "3.10 Wrap‑up (10 min)\n\nRe‑rendering with -P lets you build many variants quickly.\nKeep data fetches cached and/or saved to files to speed up renders.\nYour team can add more pages (e.g., Methodology, Results, Model Card) and link them via _quarto.yml.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#homework-due-before-session-4",
+    "href": "lec3.html#homework-due-before-session-4",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.11 Homework (due before Session 4)",
+    "text": "3.11 Homework (due before Session 4)\nGoal: Enhance the EDA report with two features and publish distinct pages for three tickers from tickers_25.csv.\n\n3.11.1 Part A — Add drawdown & simple regime shading\n\nEdit reports/eda.qmd. After computing df[\"log_return\"], compute:\n\ncum_return and drawdown\nA simple volatility regime indicator (e.g., rolling std quantiles)\n\n\n# Add to the \"Tidy & features\" section in eda.qmd\ndf[\"cum_return\"] = df[\"log_return\"].cumsum().fillna(0.0)\npeak = df[\"cum_return\"].cummax()\ndf[\"drawdown\"] = df[\"cum_return\"] - peak\n\n# Regime via rolling volatility terciles\nvol = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).std()\nq1, q2 = vol.quantile([0.33, 0.66])\ndef regime(v):\n    if np.isnan(v): return \"mid\"\n    return \"low\" if v &lt; q1 else (\"high\" if v &gt; q2 else \"mid\")\ndf[\"regime\"] = [regime(v) for v in vol]\ndf[\"regime\"].value_counts().to_frame(\"days\").T\n\nAdd a drawdown plot and shade high‑volatility regimes:\n\n# Drawdown plot\nfig, ax = plt.subplots(figsize=(8,3))\nax.plot(df.index, df[\"drawdown\"])\nax.set_title(f\"{SYMBOL} — Drawdown (log-return cumulative)\")\nax.set_xlabel(\"Date\"); ax.set_ylabel(\"drawdown\")\nfig.tight_layout()\nfigpath = Path(\"reports/figs\")/f\"{SYMBOL}_drawdown.png\"\nfig.savefig(figpath, dpi=144)\nfigpath\n# Price with regime shading (simple)\nfig, ax = plt.subplots(figsize=(8,3))\nax.plot(df.index, df[\"close\"])\nax.set_title(f\"{SYMBOL} — Price with High-Volatility Shading\")\nax.set_xlabel(\"Date\"); ax.set_ylabel(\"Price\")\n\n# Shade where regime == 'high'\nmask = (df[\"regime\"] == \"high\")\n# merge contiguous regions\nin_region = False\nstart = None\nfor i, (ts, is_high) in enumerate(zip(df.index, mask)):\n    if is_high and not in_region:\n        in_region = True\n        start = ts\n    if in_region and (not is_high or i == len(df)-1):\n        end = df.index[i-1] if not is_high else ts\n        ax.axvspan(start, end, alpha=0.15)  # shaded band\n        in_region = False\nfig.tight_layout()\nfigpath = Path(\"reports/figs\")/f\"{SYMBOL}_price_regimes.png\"\nfig.savefig(figpath, dpi=144)\nfigpath\n\n\n3.11.2 Part B — Render three separate pages and link them in the navbar\n\nMake copies of the report source so each produces its own page:\n\nimport shutil\nshutil.copy(\"reports/eda.qmd\", \"reports/eda-AAPL.qmd\")\nshutil.copy(\"reports/eda.qmd\", \"reports/eda-MSFT.qmd\")\nshutil.copy(\"reports/eda.qmd\", \"reports/eda-NVDA.qmd\")\n\nRender each with different parameters:\n\n!quarto render reports/eda-AAPL.qmd -P symbol:AAPL -P start_date:2018-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs/\n!quarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2018-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs/\n!quarto render reports/eda-NVDA.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs/\n\nAdd to the navbar in _quarto.yml and rebuild site:\n\nfrom ruamel.yaml import YAML\nyaml = YAML()\ncfg = yaml.load(open(\"_quarto.yml\"))\ncfg[\"website\"][\"navbar\"][\"left\"].extend([\n  {\"href\": \"reports/eda-AAPL.qmd\", \"text\": \"AAPL\"},\n  {\"href\": \"reports/eda-MSFT.qmd\", \"text\": \"MSFT\"},\n  {\"href\": \"reports/eda-NVDA.qmd\", \"text\": \"NVDA\"},\n])\nwith open(\"_quarto.yml\",\"w\") as f:\n    yaml.dump(cfg, f)\n!quarto render --output-dir docs/\n\nCommit & push (use your short‑lived token as before):\n\n!git add reports/eda-*.qmd reports/figs _quarto.yml docs\n!git commit -m \"feat: EDA enhancements (drawdown/regimes) and pages for AAPL/MSFT/NVDA\"\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token\n\nVerify GitHub Pages shows navbar links and pages load.\n\n\n\n3.11.3 Part C — Makefile convenience targets\nAppend these to your project Makefile:\nreport:\n\\tquarto render reports/eda.qmd --output-dir docs/\n\nreports-trio:\n\\tquarto render reports/eda-AAPL.qmd -P symbol:AAPL -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/\n\\tquarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/\n\\tquarto render reports/eda-NVDA.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/\n\nOn Colab, running make requires make to be available (it is). Otherwise, keep using quarto render commands.\n\n\n\n3.11.4 Grading (pass/revise)\n\nreports/eda.qmd renders with parameters and caching enabled.\nAt least three ticker pages rendered and linked in navbar.\nDrawdown and simple regime shading working on the EDA page(s).\nSite published via GitHub Pages (docs/ present on main and live).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#key-poitns",
+    "href": "lec3.html#key-poitns",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.12 Key poitns",
+    "text": "3.12 Key poitns\n\nParameters make reports reusable; don’t copy‑paste notebooks for each ticker.\nCache for speed; docs/ for Pages.\nKeep figures saved under reports/figs/ and referenced in the report.\nKeep secrets out of the repo; EDA uses public data only.\n\nNext time (Session 4): a quick RStudio Quarto cameo and more report hygiene (citations, figure captions, alt text), then into Unix automation.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#price-over-time",
+    "href": "lec3.html#price-over-time",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.6 Price over time",
+    "text": "3.6 Price over time\n\nfig, ax = plt.subplots(figsize=(8,3))\nax.plot(df.index, df[\"close\"])\nax.set_title(f\"{SYMBOL} — Adjusted Close\")\nax.set_xlabel(\"Date\"); ax.set_ylabel(\"Price\")\nfig.tight_layout()\n# figpath = Path(\"reports/figs\")/f\"{SYMBOL}_price.png\"\nfigpath = Path(\"figs\")/f\"{SYMBOL}_price.png\" #same changes for the rest of the figures\nfig.savefig(figpath, dpi=144)\nfigpath",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#daily-log-returns-histogram",
+    "href": "lec3.html#daily-log-returns-histogram",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.7 Daily log returns — histogram",
+    "text": "3.7 Daily log returns — histogram\n\nfig, ax = plt.subplots(figsize=(6,3))\nax.hist(df[\"log_return\"], bins=50, alpha=0.8)\nax.set_title(f\"{SYMBOL} — Daily Log Return Distribution\")\nax.set_xlabel(\"log return\"); ax.set_ylabel(\"count\")\nfig.tight_layout()\nfigpath = Path(\"figs\")/f\"{SYMBOL}_hist.png\"\nfig.savefig(figpath, dpi=144)\nfigpath",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#rolling-mean-volatility-window-params.rolling",
+    "href": "lec3.html#rolling-mean-volatility-window-params.rolling",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.8 Rolling mean & volatility (window = {params.rolling})",
+    "text": "3.8 Rolling mean & volatility (window = {params.rolling})\n\nfig, ax = plt.subplots(figsize=(8,3))\nax.plot(df.index, df[\"roll_mean\"], label=\"rolling mean\")\nax.plot(df.index, df[\"roll_vol\"],  label=\"rolling std\")\nax.set_title(f\"{SYMBOL} — Rolling Return Stats (window={ROLL})\")\nax.set_xlabel(\"Date\"); ax.set_ylabel(\"value\")\nax.legend()\nfig.tight_layout()\nfigpath = Path(\"figs\")/f\"{SYMBOL}_rolling.png\"\nfig.savefig(figpath, dpi=144)\nfigpath",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#summary-table",
+    "href": "lec3.html#summary-table",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.9 Summary table",
+    "text": "3.9 Summary table\n\nsummary = pd.DataFrame({\n    \"n_days\": [len(df)],\n    \"start\": [df.index.min().date()],\n    \"end\":   [df.index.max().date()],\n    \"mean_daily_ret\": [df[\"log_return\"].mean()],\n    \"std_daily_ret\":  [df[\"log_return\"].std()],\n    \"ann_vol_approx\": [df[\"log_return\"].std()*np.sqrt(252)]\n})\nsummary\n\nNote: Educational use only. This is not trading advice. ““”\n::::\n\n\n```python\nopen(\"reports/eda.qmd\",\"w\").write(eda_qmd)\nprint(\"Wrote reports/eda.qmd\")\n\n3.9.1 4) Render the report for one ticker (AAPL) and put outputs in docs/\n# Single render with defaults (AAPL)\n!quarto render reports/eda.qmd --output-dir docs/\nOpen the produced HTML (Colab file browser → docs/reports/eda.html). If the HTML is under docs/reports/eda.html, that’s expected (Quarto keeps layout mirroring source folders).\n\n\n3.9.2 5) Render for multiple tickers by passing parameters\n# Render for MSFT with custom dates and rolling window\n!quarto render reports/eda.qmd -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs/\n\n# Render for NVDA with a different window\n!quarto render reports/eda.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 -P rolling:60 --output-dir docs/\nThis will create docs/reports/eda.html for the last render (Quarto overwrites the same output path by default). If you want separate pages per ticker, render to different filenames:\n# Example: write MSFT to docs/reports/eda-MSFT.html via project copy\nimport shutil, os\nshutil.copy(\"reports/eda.qmd\", \"reports/eda-MSFT.qmd\")\n!quarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs/\n\n\n3.9.3 6) Add nav links to specific ticker pages (optional)\n# Append MSFT page to navbar\nfrom ruamel.yaml import YAML\nyaml = YAML()\ncfg = yaml.load(open(\"_quarto.yml\"))\ncfg[\"website\"][\"navbar\"][\"left\"].append({\"href\": \"reports/eda-MSFT.qmd\", \"text\": \"MSFT EDA\"})\nwith open(\"_quarto.yml\",\"w\") as f:\n    yaml.dump(cfg, f)\n!quarto render --output-dir docs/\n\n\n3.9.4 7) Commit and push site to GitHub (so Pages can serve docs/)\n!git add _quarto.yml index.qmd reports/eda*.qmd reports/figs docs\n!git status\n!git commit -m \"feat: add parameterized Quarto EDA and publish to docs/\"\n# Push using a short-lived fine-grained token (as in Session 2)\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token\n\n\n3.9.5 8) Enable GitHub Pages (one-time, UI)\n\nOn GitHub: Settings → Pages\n\nSource: Deploy from a branch\nBranch: main\nFolder: /docs\n\nSave. Wait ~1–3 minutes. Your site will be live at the URL GitHub shows (usually https://&lt;owner&gt;.github.io/&lt;repo&gt;/).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
+    "objectID": "lec3.html#download-and-prepare-data",
+    "href": "lec3.html#download-and-prepare-data",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "3.5 Download and prepare data",
+    "text": "3.5 Download and prepare data\n\n# Fetch adjusted OHLCV\ntry:\n    data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)\nexcept Exception as e:\n    print(\"yfinance failed, falling back to synthetic series:\", e)\n    idx = pd.bdate_range(START, END)\n    rng = np.random.default_rng(42)\n    ret = rng.normal(0, 0.01, len(idx))\n    price = 100 * np.exp(np.cumsum(ret))\n    vol = rng.integers(1e5, 5e6, len(idx))\n    data = pd.DataFrame({\"Close\": price, \"Volume\": vol}, index=idx)\n\n# Tidy & features\ndf = data.rename(columns=str.lower).copy()\ndf = df[[\"close\",\"volume\"]].dropna()\ndf[\"log_return\"] = np.log(df[\"close\"]).diff()\ndf[\"roll_mean\"]  = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).mean()\ndf[\"roll_vol\"]   = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).std()\ndf = df.dropna()\ndf.head()",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  }
+]
