@@ -448,5 +448,15 @@
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
     ]
+  },
+  {
+    "objectID": "homework/README.html",
+    "href": "homework/README.html",
+    "title": "STAT 4160: Data Science Productivity Tools",
+    "section": "",
+    "text": "��# Instructions to submit homework  1.  Inside the folder that is linked to your GitHub repo github.comYourRepoName/STAT4160 on your device (local computer or Colab), create a folder named homework if it doesn’t already exist. You should have this folder already if cloned my repository.  2.  Save your homework files in the homework folder. Name it as homework1_&lt;your_init&gt;.ipynb or homework1.qmd, or homework1.png depending on the type of assignment.  3.  Checkout a new branch for your homework submission. You can name it something like homework1/&lt;your_init&gt;.  4.  Add your homework files to the new branch:       bash     git add homework/homework1_&lt;your_init&gt;.ipynb       5.  Commit your changes:       bash     git commit -m \"Submit homework1\"       6.  Push your changes to the remote repository:       bash     git push origin homework1/&lt;your_init&gt;       7.  Create a pull request on GitHub to merge your homework branch into the main branch.  8.  In the pull request description, include any specific instructions or notes for the reviewer.",
+    "crumbs": [
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>README.html</span>"
+    ]
   }
 ]
