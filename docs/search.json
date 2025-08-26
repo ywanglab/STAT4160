@@ -458,5 +458,165 @@
     "crumbs": [
       "<span class='chapter-number'>27</span>  <span class='chapter-title'>README.html</span>"
     ]
+  },
+  {
+    "objectID": "lec4.html#session-4-rstudio-cameo-report-hygiene-75-min",
+    "href": "lec4.html#session-4-rstudio-cameo-report-hygiene-75-min",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.1 Session 4 — RStudio cameo + Report Hygiene (75 min)",
+    "text": "4.1 Session 4 — RStudio cameo + Report Hygiene (75 min)\n\n4.1.1 Learning goals\nBy the end of class, students can:\n\nRender a Python‑only Quarto report from RStudio (or RStudio Cloud) as a proof that Quarto is editor‑agnostic.\nAdd hygiene features to the project: citations (references.bib), figure/table captions + cross‑references, alt text, better site navigation, custom CSS, and freeze/caching for reproducibility.\nProduce a Data Dictionary section that documents columns and dtypes, and reference it from the EDA page.\nRender & publish the cleaned site to GitHub Pages.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#agenda-75-min",
+    "href": "lec4.html#agenda-75-min",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.2 Agenda (75 min)",
+    "text": "4.2 Agenda (75 min)\n\n(10 min) Why report hygiene matters (credibility, accessibility, reusability)\n(15 min) RStudio cameo: Render the Python‑based Quarto report in RStudio\n(30 min) In‑class lab (Colab): add citations, cross‑refs, alt text, freeze/caching, CSS, data dictionary, rebuild site\n(10 min) Wrap‑up + troubleshooting + homework briefing\n(10 min) Buffer (for first‑time installs or Git pushes)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#slides-talking-points",
+    "href": "lec4.html#slides-talking-points",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.3 Slides / talking points",
+    "text": "4.3 Slides / talking points\n\n4.3.1 Why hygiene?\n\nCredibility: citations + model/report lineage\nAccessibility: alt text, readable fonts, color‑safe figures\nReusability: parameters, freeze/caching, stable page links\nAssessability: clear captions, labeled figures & tables, cross‑references\n\n\n\n4.3.2 Quarto features we’ll use\n\nCaptions & labels: #| label: fig-price, #| fig-cap: \"Price over time\" → reference in text with @fig-price\nTables: #| label: tbl-summary, #| tbl-cap: \"Summary statistics\" → reference with @tbl-summary\nAlt text: #| fig-alt: \"One‑sentence description of the figure\"\nCitations: add bibliography: references.bib and cite with [@key]\nFreeze: project‑level freeze: auto for deterministic rebuilds\nCache: execute: cache: true to avoid redoing expensive steps\nCSS: small tweaks to readability (font size, code block width)\n\n\n\n4.3.3 RStudio cameo (no R required)\n\nRStudio integrates Quarto; the Render button runs quarto render under the hood.\nYour .qmd can be Python‑only; RStudio is just the IDE.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#rstudio-cameo-15-min-live-demo-steps",
+    "href": "lec4.html#rstudio-cameo-15-min-live-demo-steps",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.4 RStudio cameo (15 min, live demo steps)",
+    "text": "4.4 RStudio cameo (15 min, live demo steps)\n\nDo this on the projector. Students observe; they can try later on their machines or RStudio Cloud.\n\n\nOpen RStudio (Desktop or Cloud).\nFile → Open Project and select your repo folder (unified-stocks-teamX).\nConfirm Quarto: Help → About Quarto (or run quarto --version in the RStudio terminal).\nOpen reports/eda.qmd. Click Render (or run quarto render reports/eda.qmd).\nShow the generated HTML preview. Note: no R code, just Python chunks.\nMention that RMarkdown is the predecessor; Quarto unifies Python & R (and more). We use Quarto.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#inclass-lab-30-min-colabfriendly",
+    "href": "lec4.html#inclass-lab-30-min-colabfriendly",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.5 In‑class lab (30 min, Colab‑friendly)",
+    "text": "4.5 In‑class lab (30 min, Colab‑friendly)\n\nWe’ll: ensure Quarto CLI is present, upgrade _quarto.yml (freeze, bibliography, CSS), add references.bib, rewrite EDA with captions/labels/alt text, generate a Data Dictionary, re‑render, and push to GitHub.\n\n\n4.5.1 0) Mount Drive, set repo path, and ensure Quarto CLI\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_OWNER = \"YOUR_GITHUB_USERNAME_OR_ORG\"  # &lt;- change\nREPO_NAME  = \"unified-stocks-teamX\"         # &lt;- change\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\nREPO_URL   = f\"https://github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n\nimport pathlib, os\npathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)\n\nif not pathlib.Path(REPO_DIR).exists():\n    !git clone {REPO_URL} {REPO_DIR}\n%cd {REPO_DIR}\n\n# Ensure Quarto CLI\n!quarto --version || (wget -q https://quarto.org/download/latest/quarto-linux-amd64.deb -O /tmp/quarto.deb && dpkg -i /tmp/quarto.deb || (apt-get -y -f install &gt;/dev/null && dpkg -i /tmp/quarto.deb))\n!quarto --version\n\n\n4.5.2 1) Upgrade _quarto.yml: freeze, bibliography, CSS, nav polish\n# Install ruamel.yaml for safe YAML edits\n!pip -q install ruamel.yaml\n\nfrom ruamel.yaml import YAML\nfrom pathlib import Path\n\nyaml = YAML()\ncfg_path = Path(\"_quarto.yml\")\nif cfg_path.exists():\n    cfg = yaml.load(cfg_path.read_text())\nelse:\n    cfg = {\"project\": {\"type\": \"website\", \"output-dir\": \"docs\"},\n           \"website\": {\"title\": \"Unified Stocks\", \"navbar\": {\"left\": [{\"href\":\"index.qmd\",\"text\":\"Home\"}]}},\n           \"format\":{\"html\":{\"theme\":\"cosmo\",\"toc\":True}}}\n\n# Add/ensure features\ncfg.setdefault(\"format\", {}).setdefault(\"html\", {})\ncfg[\"format\"][\"html\"][\"toc\"] = True\ncfg[\"format\"][\"html\"][\"code-fold\"] = False\ncfg[\"format\"][\"html\"][\"toc-depth\"] = 2\ncfg[\"format\"][\"html\"][\"page-navigation\"] = True\ncfg[\"format\"][\"html\"][\"code-tools\"] = True\ncfg[\"format\"][\"html\"][\"fig-cap-location\"] = \"bottom\"\ncfg[\"format\"][\"html\"][\"tbl-cap-location\"] = \"top\"\ncfg[\"format\"][\"html\"][\"css\"] = \"docs/style.css\"\n\ncfg.setdefault(\"execute\", {})\ncfg[\"execute\"][\"echo\"] = True\ncfg[\"execute\"][\"warning\"] = False\ncfg[\"execute\"][\"cache\"] = True\n\n# Freeze: deterministic rebuilds until the source changes\ncfg[\"project\"][\"freeze\"] = \"auto\"\n\n# Bibliography\ncfg[\"bibliography\"] = \"references.bib\"\n\n# Ensure navbar has EDA link\nnav = cfg.setdefault(\"website\", {}).setdefault(\"navbar\", {}).setdefault(\"left\", [])\nif not any(item.get(\"href\") == \"reports/eda.qmd\" for item in nav if isinstance(item, dict)):\n    nav.append({\"href\": \"reports/eda.qmd\", \"text\": \"EDA\"})\n\nyaml.dump(cfg, open(\"_quarto.yml\",\"w\"))\nprint(open(\"_quarto.yml\").read())\n\n\n4.5.3 2) Add references.bib (sample entries; students will refine later)\nrefs = r\"\"\"@book{hyndman-fpp3,\n  title = {Forecasting: Principles and Practice},\n  author = {Hyndman, Rob J. and Athanasopoulos, George},\n  edition = {3},\n  year = {2021},\n  url = {https://otexts.com/fpp3/}\n}\n@misc{quarto-docs,\n  title = {Quarto Documentation},\n  author = {{Posit}},\n  year = {2025},\n  url = {https://quarto.org/}\n}\n@misc{yfinance,\n  title = {yfinance: Yahoo! Finance market data downloader},\n  author = {Ran Aroussi},\n  year = {2024},\n  url = {https://github.com/ranaroussi/yfinance}\n}\n\"\"\"\nopen(\"references.bib\",\"w\").write(refs)\nprint(open(\"references.bib\").read())\n\n\n4.5.4 3) Overwrite reports/eda.qmd with captions, labels, alt text, citations, and cross‑refs\n\nThis replaces the earlier EDA with a hygienic version. Feel free to adjust wording later.\n\nfrom textwrap import dedent\neda = dedent(\"\"\"\\\n---\ntitle: \"Stock EDA\"\nformat:\n  html:\n    toc: true\n    number-sections: false\nexecute:\n  echo: true\n  warning: false\n  cache: true\nparams:\n  symbol: \"AAPL\"\n  start_date: \"2018-01-01\"\n  end_date: \"\"\n  rolling: 20\n---\n\n&gt; *Educational use only — not trading advice.* Data pulled via **yfinance** [@yfinance].\n\nThis page is **parameterized**; see the **Parameters** section for usage.\n\n## Setup\n\n::: {#f81ff73f .cell execution_count=1}\n````` {.python .cell-code}\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport yfinance as yf\nfrom pathlib import Path\n\nSYMBOL = params.get(\"symbol\", \"AAPL\")\nSTART  = params.get(\"start_date\", \"2018-01-01\")\nEND    = params.get(\"end_date\", \"\")\nROLL   = int(params.get(\"rolling\", 20))\nif not END:\n  END = pd.Timestamp.today().strftime(\"%Y-%m-%d\")",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#download-and-tidy",
+    "href": "lec4.html#download-and-tidy",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.6 Download and tidy",
+    "text": "4.6 Download and tidy\n#| echo: true\ntry:\n  data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)\nexcept Exception as e:\n  # Synthetic fallback\n  idx = pd.bdate_range(START, END)\n  rng = np.random.default_rng(42)\n  ret = rng.normal(0, 0.01, len(idx))\n  price = 100 * np.exp(np.cumsum(ret))\n  vol = rng.integers(1e5, 5e6, len(idx))\n  data = pd.DataFrame({\"Close\": price, \"Volume\": vol}, index=idx)\n\ndf = (data.rename(columns=str.lower)[[\"close\",\"volume\"]]\n        .dropna()\n        .assign(log_return=lambda d: np.log(d[\"close\"]).diff()))\ndf[\"roll_mean\"] = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).mean()\ndf[\"roll_vol\"]  = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).std()\ndf = df.dropna()\n:::",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#price-over-time",
+    "href": "lec4.html#price-over-time",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.7 Price over time",
+    "text": "4.7 Price over time\nAs shown in Figure ?fig-price, prices vary over time with changing volatility.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#return-distribution",
+    "href": "lec4.html#return-distribution",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.8 Return distribution",
+    "text": "4.8 Return distribution\nFigure ?fig-hist shows the return distribution; many assets exhibit heavy tails [(hyndman-fpp3?), pp. 20–21].",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#rolling-statistics-window-params.rolling",
+    "href": "lec4.html#rolling-statistics-window-params.rolling",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.9 Rolling statistics (window = {params.rolling})",
+    "text": "4.9 Rolling statistics (window = {params.rolling})",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#summary-table",
+    "href": "lec4.html#summary-table",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.10 Summary table",
+    "text": "4.10 Summary table\nSee Table ?tbl-summary for overall statistics.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#data-dictionary",
+    "href": "lec4.html#data-dictionary",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.11 Data dictionary",
+    "text": "4.11 Data dictionary",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#parameters",
+    "href": "lec4.html#parameters",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.12 Parameters",
+    "text": "4.12 Parameters\nThis page accepts parameters: symbol, start_date, end_date, and rolling. You can re‑render with:\n\nquarto render reports/eda.qmd \\\\\n  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#references",
+    "href": "lec4.html#references",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.13 References",
+    "text": "4.13 References\n“““) open(”reports/eda.qmd”,“w”).write(eda) print(“Wrote reports/eda.qmd with hygiene features.”)\n\n### 4) Add a minimal CSS for readability\n```python\nfrom pathlib import Path\nPath(\"docs\").mkdir(exist_ok=True)\ncss = \"\"\"\\\n/* Increase base font and widen code blocks slightly */\nbody { font-size: 1.02rem; }\npre code { white-space: pre-wrap; }\nimg { max-width: 100%; height: auto; }\n\"\"\"\nopen(\"docs/style.css\",\"w\").write(css)\nprint(\"Wrote docs/style.css\")\n\n4.13.1 5) Render site to docs/ and preview\n!quarto render --output-dir docs/\nOpen docs/reports/eda.html in the Colab file browser to preview. Confirm:\n\nCaptions under figures, tables titled at top\nCross‑refs like “Figure 1”/“Table 1” clickable\n“References” section at bottom with your 2–3 entries\n\n\n\n4.13.2 6) Commit and push (short‑lived token method)\n!git add _quarto.yml references.bib reports/eda.qmd docs/style.css docs/\n!git commit -m \"chore: report hygiene (captions, cross-refs, alt text, freeze, bibliography, CSS)\"\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#wrapup-10-min",
+    "href": "lec4.html#wrapup-10-min",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.14 Wrap‑up (10 min)",
+    "text": "4.14 Wrap‑up (10 min)\n\nYour report now has citations, captions, cross‑refs, alt text, and frozen outputs for stable rebuilds.\nRStudio can render the exact same Python‑based .qmd. Teams can mix editors without friction.\nNext: Unix automation and Makefile targets to run reports end‑to‑end.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#homework-due-before-session-5",
+    "href": "lec4.html#homework-due-before-session-5",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.15 Homework (due before Session 5)",
+    "text": "4.15 Homework (due before Session 5)\nGoal: Extend hygiene and add one analytic section—ACF plot—with proper captions/labels/alt text/citations.\n\n4.15.1 Part A — Add an ACF figure with cross‑ref + alt text\nAppend this code chunk to reports/eda.qmd after the “Rolling statistics” section:\n````python\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token\n\n\n4.15.2 Grading (pass/revise)\n\nEDA page includes ACF figure with caption, label, and alt text; cross‑referenced in text.\nMonthly returns table present with caption/label; referenced in text.\nAt least two new, relevant citations included and rendered under References.\nfreeze and cache enabled; site renders to docs/ and loads on GitHub Pages.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
+    "objectID": "lec4.html#keep-points",
+    "href": "lec4.html#keep-points",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "4.16 Keep points",
+    "text": "4.16 Keep points\n\nAccessibility is part of professionalism: always write alt text, don’t rely on color alone, and keep captions informative.\nCitations are not optional for serious work; treat the report like a short paper.\nFreeze + cache save time and prevent accidental drift.\nRStudio is a comfortable alternative editor for Quarto even in a Python‑only workflow.\n\nNext up (Session 5): Unix for data work—shell power tools and Make automation to glue everything together.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
   }
 ]
