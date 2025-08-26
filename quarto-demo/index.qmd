@@ -1,0 +1,8 @@
+---
+title: "Unified Stocks Project"
+---
+
+Welcome! Use the navigation to view the EDA report.
+
+- **Stock set**: see `tickers_25.csv`
+- **Note**: Educational use only — no trading advice.

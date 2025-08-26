@@ -1,0 +1,63 @@
+---
+title: "Stock EDA"
+format:
+  html:
+    toc: true
+    number-sections: false
+execute:
+  echo: true
+  warning: false
+  cache: false     # keep off while testing params
+jupyter: python3
+---
+
+::: callout-note
+This report is parameterized. Example:
+`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30`.
+:::
+
+## Setup
+
+```{python}
+#| tags: [parameters]
+# Default values (overridden by -P at render time)
+symbol = "AAPL"
+start_date = "2018-01-01"
+end_date = ""          # empty means "open ended"
+rolling = 20
+```
+
+```{python}
+import pandas as pd
+start = pd.to_datetime(start_date) if start_date else None
+end   = pd.to_datetime(end_date) if end_date else None
+roll  = int(rolling)
+print("Using params:", dict(symbol=symbol, start=start, end=end, rolling=roll))
+```
+
+## Price over time for `{python} symbol` (`{python} start_date` → `{python} end_date`)
+
+```{python}
+# TODO: fetch prices using `symbol`, `start`, `end`
+# df = ...
+# ax = df["Close"].plot(title=f"{symbol} closing price")
+# ax.set_xlabel(""); ax.set_ylabel("Price")
+```
+
+## Daily log returns — histogram
+
+```{python}
+# TODO: compute returns from df and plot
+```
+
+## Rolling mean & volatility (window = `{python} roll`)
+
+```{python}
+# TODO: use `roll` for rolling stats
+```
+
+## Summary table
+
+```{python}
+# TODO: build a summary DataFrame and display
+```
