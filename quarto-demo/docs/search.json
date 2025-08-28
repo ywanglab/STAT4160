@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Unified Stocks Project",
+    "section": "",
+    "text": "Welcome! Use the navigation to view the EDA report.\n\nStock set: see tickers_25.csv\nNote: Educational use only — no trading advice."
+  },
+  {
     "objectID": "eda0.html",
     "href": "eda0.html",
     "title": "Stock EDA",
@@ -42,69 +49,6 @@
     "text": "Summary table\n\n# TODO: build a summary DataFrame and display"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Unified Stocks Project",
-    "section": "",
-    "text": "Welcome! Use the navigation to view the EDA report.\n\nStock set: see tickers_25.csv\nNote: Educational use only — no trading advice."
-  },
-  {
-    "objectID": "eda.html",
-    "href": "eda.html",
-    "title": "Stock EDA",
-    "section": "",
-    "text": "Note\n\n\n\nThis report is parameterized. To change inputs without editing code, pass -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30 to quarto render."
-  },
-  {
-    "objectID": "eda.html#setup-if-using-python",
-    "href": "eda.html#setup-if-using-python",
-    "title": "Stock EDA",
-    "section": "Setup if using Python",
-    "text": "Setup if using Python\n\n\n('AAPL', '2018-01-01', '2025-08-26', 20)"
-  },
-  {
-    "objectID": "eda.html#download-and-prepare-data",
-    "href": "eda.html#download-and-prepare-data",
-    "title": "Stock EDA",
-    "section": "Download and prepare data",
-    "text": "Download and prepare data\n\n\n\n\n\n\n\n\nPrice\nclose\nvolume\nlog_return\nroll_mean\nroll_vol\n\n\nTicker\naapl\naapl\n\n\n\n\n\nDate\n\n\n\n\n\n\n\n\n\n2018-01-17\n41.984417\n137547200\n0.016381\n0.003894\n0.007023\n\n\n2018-01-18\n42.021923\n124773600\n0.000893\n0.003621\n0.006724\n\n\n2018-01-19\n41.834404\n129700400\n-0.004472\n0.002947\n0.006823\n\n\n2018-01-22\n41.492134\n108434400\n-0.008215\n0.002088\n0.007229\n\n\n2018-01-23\n41.501514\n130756400\n0.000226\n0.001955\n0.006963"
-  },
-  {
-    "objectID": "eda.html#price-over-time",
-    "href": "eda.html#price-over-time",
-    "title": "Stock EDA",
-    "section": "Price over time",
-    "text": "Price over time\n\n\nWindowsPath('figs/AAPL_price.png')"
-  },
-  {
-    "objectID": "eda.html#daily-log-returns-histogram",
-    "href": "eda.html#daily-log-returns-histogram",
-    "title": "Stock EDA",
-    "section": "Daily log returns — histogram",
-    "text": "Daily log returns — histogram\n\n\nWindowsPath('figs/AAPL_hist.png')"
-  },
-  {
-    "objectID": "eda.html#rolling-mean-volatility-window-params.rolling",
-    "href": "eda.html#rolling-mean-volatility-window-params.rolling",
-    "title": "Stock EDA",
-    "section": "Rolling mean & volatility (window = {params.rolling})",
-    "text": "Rolling mean & volatility (window = {params.rolling})\n\n\nWindowsPath('figs/AAPL_rolling.png')"
-  },
-  {
-    "objectID": "eda.html#summary-table",
-    "href": "eda.html#summary-table",
-    "title": "Stock EDA",
-    "section": "Summary table",
-    "text": "Summary table\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1912\n2018-01-17\n2025-08-25\n0.000892\n0.019672\n0.31228\n\n\n\n\n\n\n\nNote: Educational use only. This is not trading advice."
-  },
-  {
     "objectID": "eda-MSFT.html",
     "href": "eda-MSFT.html",
     "title": "Stock EDA",
@@ -116,14 +60,14 @@
     "href": "eda-MSFT.html#setup-if-using-python",
     "title": "Stock EDA",
     "section": "Setup if using Python",
-    "text": "Setup if using Python\n\n\n('AAPL', '2018-01-01', '2025-08-26', 20)"
+    "text": "Setup if using Python\n\n\n('AAPL', '2018-01-01', '2025-08-28', 20)"
   },
   {
     "objectID": "eda-MSFT.html#download-and-prepare-data",
     "href": "eda-MSFT.html#download-and-prepare-data",
     "title": "Stock EDA",
     "section": "Download and prepare data",
-    "text": "Download and prepare data\n\n\n\n\n\n\n\n\nPrice\nclose\nvolume\nlog_return\nroll_mean\nroll_vol\n\n\nTicker\naapl\naapl\n\n\n\n\n\nDate\n\n\n\n\n\n\n\n\n\n2018-01-17\n41.984425\n137547200\n0.016381\n0.003894\n0.007023\n\n\n2018-01-18\n42.021927\n124773600\n0.000893\n0.003621\n0.006724\n\n\n2018-01-19\n41.834400\n129700400\n-0.004473\n0.002947\n0.006823\n\n\n2018-01-22\n41.492126\n108434400\n-0.008215\n0.002088\n0.007229\n\n\n2018-01-23\n41.501522\n130756400\n0.000226\n0.001955\n0.006963"
+    "text": "Download and prepare data\n\n\n\n\n\n\n\n\nPrice\nclose\nvolume\nlog_return\nroll_mean\nroll_vol\n\n\nTicker\naapl\naapl\n\n\n\n\n\nDate\n\n\n\n\n\n\n\n\n\n2018-01-17\n41.984421\n137547200\n0.016381\n0.003894\n0.007023\n\n\n2018-01-18\n42.021919\n124773600\n0.000893\n0.003621\n0.006724\n\n\n2018-01-19\n41.834385\n129700400\n-0.004473\n0.002947\n0.006823\n\n\n2018-01-22\n41.492142\n108434400\n-0.008215\n0.002088\n0.007229\n\n\n2018-01-23\n41.501522\n130756400\n0.000226\n0.001955\n0.006963"
   },
   {
     "objectID": "eda-MSFT.html#price-over-time",
@@ -151,6 +95,132 @@
     "href": "eda-MSFT.html#summary-table",
     "title": "Stock EDA",
     "section": "Summary table",
-    "text": "Summary table\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1912\n2018-01-17\n2025-08-25\n0.000892\n0.019672\n0.31228\n\n\n\n\n\n\n\nNote: Educational use only. This is not trading advice."
+    "text": "Summary table\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1914\n2018-01-17\n2025-08-27\n0.000898\n0.019663\n0.312136\n\n\n\n\n\n\n\nNote: Educational use only. This is not trading advice."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "eda.html",
+    "href": "eda.html",
+    "title": "Stock EDA",
+    "section": "",
+    "text": "Educational use only — not trading advice. Data pulled via yfinance (Aroussi 2024).\nThis page is parameterized; see the Parameters section for usage."
+  },
+  {
+    "objectID": "eda.html#setup-parameters-if-using-python",
+    "href": "eda.html#setup-parameters-if-using-python",
+    "title": "Stock EDA",
+    "section": "Setup parameters if using Python",
+    "text": "Setup parameters if using Python\n\n# Default values (overridden by -P at render time)\nSYMBOL = \"AAPL\"\nSTART  = \"2018-01-01\"\nEND    = \"\"\nROLL   =  20"
+  },
+  {
+    "objectID": "eda.html#setup",
+    "href": "eda.html#setup",
+    "title": "Stock EDA",
+    "section": "Setup",
+    "text": "Setup\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport yfinance as yf\nfrom pathlib import Path\n\n# SYMBOL = params.get(\"symbol\", \"AAPL\")\n# START  = params.get(\"start_date\", \"2018-01-01\")\n# END    = params.get(\"end_date\", \"\")\n# ROLL   = int(params.get(\"rolling\", 20))\nif not END:\n  END = pd.Timestamp.today().strftime(\"%Y-%m-%d\")"
+  },
+  {
+    "objectID": "eda.html#download-and-tidy",
+    "href": "eda.html#download-and-tidy",
+    "title": "Stock EDA",
+    "section": "Download and tidy",
+    "text": "Download and tidy\n\ntry:\n  data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)\nexcept Exception as e:\n  # Synthetic fallback\n  idx = pd.bdate_range(START, END)\n  rng = np.random.default_rng(42)\n  ret = rng.normal(0, 0.01, len(idx))\n  price = 100 * np.exp(np.cumsum(ret))\n  vol = rng.integers(1e5, 5e6, len(idx))\n  data = pd.DataFrame({\"Close\": price, \"Volume\": vol}, index=idx)\n\ndf = (data.rename(columns=str.lower)[[\"close\",\"volume\"]]\n        .dropna()\n        .assign(log_return=lambda d: np.log(d[\"close\"]).diff()))\ndf[\"roll_mean\"] = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).mean()\ndf[\"roll_vol\"]  = df[\"log_return\"].rolling(ROLL, min_periods=ROLL//2).std()\ndf = df.dropna()"
+  },
+  {
+    "objectID": "eda.html#price-over-time",
+    "href": "eda.html#price-over-time",
+    "title": "Stock EDA",
+    "section": "Price over time",
+    "text": "Price over time\n\n\n\n\n\n\n\n\nFigure 1: {SYMBOL} — Adjusted Close\n\n\n\n\n\nAs shown in Figure Figure 1, prices vary over time with changing volatility."
+  },
+  {
+    "objectID": "eda.html#return-distribution",
+    "href": "eda.html#return-distribution",
+    "title": "Stock EDA",
+    "section": "Return distribution",
+    "text": "Return distribution\n\n\n\n\n\n\n\n\nFigure 2: {SYMBOL} — Daily log return histogram\n\n\n\n\n\nFigure Figure 2 shows the return distribution; many assets exhibit heavy tails [Hyndman and Athanasopoulos (2021), pp. 20–21]."
+  },
+  {
+    "objectID": "eda.html#rolling-statistics-window-params.rolling",
+    "href": "eda.html#rolling-statistics-window-params.rolling",
+    "title": "Stock EDA",
+    "section": "Rolling statistics (window = {params.rolling})",
+    "text": "Rolling statistics (window = {params.rolling})\n\n\n\n\n\n\n\n\nFigure 3: {SYMBOL} — Rolling mean and volatility"
+  },
+  {
+    "objectID": "eda.html#summary-table",
+    "href": "eda.html#summary-table",
+    "title": "Stock EDA",
+    "section": "Summary table",
+    "text": "Summary table\n\n\n\n\nTable 1: Summary statistics for {SYMBOL}.\n\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1914\n2018-01-17\n2025-08-27\n0.000898\n0.019663\n0.312136\n\n\n\n\n\n\n\n\n\n\nSee Table Table 1 for overall statistics."
+  },
+  {
+    "objectID": "eda.html#data-dictionary",
+    "href": "eda.html#data-dictionary",
+    "title": "Stock EDA",
+    "section": "Data dictionary",
+    "text": "Data dictionary\n\n\n\n\nTable 2: Data dictionary for computed columns.\n\n\n\n\n\n\n\n\n\n\ncolumn\ndtype\ndescription\n\n\n\n\n0\nclose\nfloat64\nAdjusted closing price.\n\n\n1\nvolume\nint64\nTrading volume.\n\n\n2\nlog_return\nfloat64\nlog(Close_t) − log(Close_{t−1}).\n\n\n3\nroll_mean\nfloat64\nRolling mean of log returns (window=20).\n\n\n4\nroll_vol\nfloat64\nRolling std of log returns (window=20)."
+  },
+  {
+    "objectID": "eda.html#parameters",
+    "href": "eda.html#parameters",
+    "title": "Stock EDA",
+    "section": "Parameters",
+    "text": "Parameters\nThis page accepts parameters: symbol, start_date, end_date, and rolling. You can re‑render with:\nquarto render reports/eda.qmd \\\\\n  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30"
+  },
+  {
+    "objectID": "eda_3.html",
+    "href": "eda_3.html",
+    "title": "Stock EDA",
+    "section": "",
+    "text": "Note\n\n\n\nThis report is parameterized. To change inputs without editing code, pass -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30 to quarto render."
+  },
+  {
+    "objectID": "eda_3.html#setup-if-using-python",
+    "href": "eda_3.html#setup-if-using-python",
+    "title": "Stock EDA",
+    "section": "Setup if using Python",
+    "text": "Setup if using Python\n\n\n('AAPL', '2018-01-01', '2025-08-28', 20)"
+  },
+  {
+    "objectID": "eda_3.html#download-and-prepare-data",
+    "href": "eda_3.html#download-and-prepare-data",
+    "title": "Stock EDA",
+    "section": "Download and prepare data",
+    "text": "Download and prepare data\n\n\n\n\n\n\n\n\nPrice\nclose\nvolume\nlog_return\nroll_mean\nroll_vol\n\n\nTicker\naapl\naapl\n\n\n\n\n\nDate\n\n\n\n\n\n\n\n\n\n2018-01-17\n41.984425\n137547200\n0.016382\n0.003894\n0.007023\n\n\n2018-01-18\n42.021915\n124773600\n0.000893\n0.003621\n0.006724\n\n\n2018-01-19\n41.834412\n129700400\n-0.004472\n0.002947\n0.006823\n\n\n2018-01-22\n41.492142\n108434400\n-0.008215\n0.002088\n0.007229\n\n\n2018-01-23\n41.501518\n130756400\n0.000226\n0.001955\n0.006963"
+  },
+  {
+    "objectID": "eda_3.html#price-over-time",
+    "href": "eda_3.html#price-over-time",
+    "title": "Stock EDA",
+    "section": "Price over time",
+    "text": "Price over time\n\n\nWindowsPath('figs/AAPL_price.png')"
+  },
+  {
+    "objectID": "eda_3.html#daily-log-returns-histogram",
+    "href": "eda_3.html#daily-log-returns-histogram",
+    "title": "Stock EDA",
+    "section": "Daily log returns — histogram",
+    "text": "Daily log returns — histogram\n\n\nWindowsPath('figs/AAPL_hist.png')"
+  },
+  {
+    "objectID": "eda_3.html#rolling-mean-volatility-window-params.rolling",
+    "href": "eda_3.html#rolling-mean-volatility-window-params.rolling",
+    "title": "Stock EDA",
+    "section": "Rolling mean & volatility (window = {params.rolling})",
+    "text": "Rolling mean & volatility (window = {params.rolling})\n\n\nWindowsPath('figs/AAPL_rolling.png')"
+  },
+  {
+    "objectID": "eda_3.html#summary-table",
+    "href": "eda_3.html#summary-table",
+    "title": "Stock EDA",
+    "section": "Summary table",
+    "text": "Summary table\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1914\n2018-01-17\n2025-08-27\n0.000898\n0.019663\n0.312136\n\n\n\n\n\n\n\nNote: Educational use only. This is not trading advice."
   }
 ]

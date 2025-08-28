@@ -1,0 +1,142 @@
+---
+title: "Stock EDA"
+format:
+  html:
+    toc: true
+    number-sections: false
+
+execute:
+  echo: false
+  warning: false
+  cache: false     # keep off while testing params
+
+jupyter: python3
+params:
+  symbol: "AAPL"
+  start_date: "2018-01-01"
+  end_date: ""
+  rolling: 20
+---
+
+
+::: callout-note
+This report is parameterized. To change inputs without editing code, pass
+`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`.
+:::
+
+## Setup if using Python
+```{python}
+#| tags: [parameters]
+# Default values (overridden by -P at render time)
+SYMBOL = "AAPL"
+START  = "2018-01-01"
+END    = ""
+ROLL   =  20
+```
+```{python}
+import os, pathlib
+pathlib.Path("figs").mkdir(parents=True, exist_ok=True)
+```
+
+``` {python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import yfinance as yf
+from pathlib import Path
+from datetime import datetime
+
+# Read parameters if using R
+# SYMBOL = params.get("symbol", "AAPL")
+# START  = params.get("start_date", "2018-01-01")
+# END    = params.get("end_date", "")
+# ROLL   = int(params.get("rolling", 20))
+
+if not END:
+    END = pd.Timestamp.today().strftime("%Y-%m-%d")
+
+SYMBOL, START, END, ROLL
+```
+
+## Download and prepare data
+
+``` {python}
+# Fetch adjusted OHLCV
+try:
+    data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)
+except Exception as e:
+    print("yfinance failed, falling back to synthetic series:", e)
+    idx = pd.bdate_range(START, END)
+    rng = np.random.default_rng(42)
+    ret = rng.normal(0, 0.01, len(idx))
+    price = 100 * np.exp(np.cumsum(ret))
+    vol = rng.integers(1e5, 5e6, len(idx))
+    data = pd.DataFrame({"Close": price, "Volume": vol}, index=idx)
+
+# Tidy & features
+df = data.rename(columns=str.lower).copy()
+df = df[["close","volume"]].dropna()
+df["log_return"] = np.log(df["close"]).diff()
+df["roll_mean"]  = df["log_return"].rolling(ROLL, min_periods=ROLL//2).mean()
+df["roll_vol"]   = df["log_return"].rolling(ROLL, min_periods=ROLL//2).std()
+df = df.dropna()
+df.head()
+```
+
+## Price over time
+
+``` {python}
+fig, ax = plt.subplots(figsize=(8,3))
+ax.plot(df.index, df["close"])
+ax.set_title(f"{SYMBOL} — Adjusted Close")
+ax.set_xlabel("Date"); ax.set_ylabel("Price")
+fig.tight_layout()
+# figpath = Path("reports/figs")/f"{SYMBOL}_price.png"
+figpath = Path("figs")/f"{SYMBOL}_price.png" #same changes for the rest of the figures
+fig.savefig(figpath, dpi=144)
+figpath
+```
+
+## Daily log returns — histogram
+
+``` {python}
+fig, ax = plt.subplots(figsize=(6,3))
+ax.hist(df["log_return"], bins=50, alpha=0.8)
+ax.set_title(f"{SYMBOL} — Daily Log Return Distribution")
+ax.set_xlabel("log return"); ax.set_ylabel("count")
+fig.tight_layout()
+figpath = Path("figs")/f"{SYMBOL}_hist.png"
+fig.savefig(figpath, dpi=144)
+figpath
+```
+
+## Rolling mean & volatility (window = {params.rolling})
+
+``` {python}
+fig, ax = plt.subplots(figsize=(8,3))
+ax.plot(df.index, df["roll_mean"], label="rolling mean")
+ax.plot(df.index, df["roll_vol"],  label="rolling std")
+ax.set_title(f"{SYMBOL} — Rolling Return Stats (window={ROLL})")
+ax.set_xlabel("Date"); ax.set_ylabel("value")
+ax.legend()
+fig.tight_layout()
+figpath = Path("figs")/f"{SYMBOL}_rolling.png"
+fig.savefig(figpath, dpi=144)
+figpath
+```
+
+## Summary table
+
+``` {python}
+summary = pd.DataFrame({
+    "n_days": [len(df)],
+    "start": [df.index.min().date()],
+    "end":   [df.index.max().date()],
+    "mean_daily_ret": [df["log_return"].mean()],
+    "std_daily_ret":  [df["log_return"].std()],
+    "ann_vol_approx": [df["log_return"].std()*np.sqrt(252)]
+})
+summary
+```
+
+ **Note**: Educational use only. This is not trading advice.
