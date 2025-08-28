@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -340,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">4.1.1</span> Learning goals</a></li>
   </ul></li>
   <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">4.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides-talking-points" id="toc-slides-talking-points" class="nav-link" data-scroll-target="#slides-talking-points"><span class="header-section-number">4.3</span> Slides / talking points</a>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">4.3</span> Slides</a>
   <ul class="collapse">
   <li><a href="#why-hygiene" id="toc-why-hygiene" class="nav-link" data-scroll-target="#why-hygiene"><span class="header-section-number">4.3.1</span> Why hygiene?</a></li>
   <li><a href="#quarto-features-well-use" id="toc-quarto-features-well-use" class="nav-link" data-scroll-target="#quarto-features-well-use"><span class="header-section-number">4.3.2</span> Quarto features we’ll use</a></li>
@@ -353,26 +373,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#upgrade-_quarto.yml-freeze-bibliography-css-nav-polish" id="toc-upgrade-_quarto.yml-freeze-bibliography-css-nav-polish" class="nav-link" data-scroll-target="#upgrade-_quarto.yml-freeze-bibliography-css-nav-polish"><span class="header-section-number">4.5.2</span> 1) Upgrade <code>_quarto.yml</code>: freeze, bibliography, CSS, nav polish</a></li>
   <li><a href="#add-references.bib-sample-entries-students-will-refine-later" id="toc-add-references.bib-sample-entries-students-will-refine-later" class="nav-link" data-scroll-target="#add-references.bib-sample-entries-students-will-refine-later"><span class="header-section-number">4.5.3</span> 2) Add <code>references.bib</code> (sample entries; students will refine later)</a></li>
   <li><a href="#overwrite-reportseda.qmd-with-captions-labels-alt-text-citations-and-crossrefs" id="toc-overwrite-reportseda.qmd-with-captions-labels-alt-text-citations-and-crossrefs" class="nav-link" data-scroll-target="#overwrite-reportseda.qmd-with-captions-labels-alt-text-citations-and-crossrefs"><span class="header-section-number">4.5.4</span> 3) Overwrite <code>reports/eda.qmd</code> with captions, labels, alt text, citations, and cross‑refs</a></li>
+  <li><a href="#add-a-minimal-css-for-readability" id="toc-add-a-minimal-css-for-readability" class="nav-link" data-scroll-target="#add-a-minimal-css-for-readability"><span class="header-section-number">4.5.5</span> 4) Add a minimal CSS for readability</a></li>
+  <li><a href="#render-site-to-docs-and-preview" id="toc-render-site-to-docs-and-preview" class="nav-link" data-scroll-target="#render-site-to-docs-and-preview"><span class="header-section-number">4.5.6</span> 5) Render site to <code>docs/</code> and preview</a></li>
+  <li><a href="#commit-and-push-shortlived-token-method" id="toc-commit-and-push-shortlived-token-method" class="nav-link" data-scroll-target="#commit-and-push-shortlived-token-method"><span class="header-section-number">4.5.7</span> 6) Commit and push (short‑lived token method)</a></li>
   </ul></li>
-  <li><a href="#download-and-tidy" id="toc-download-and-tidy" class="nav-link" data-scroll-target="#download-and-tidy"><span class="header-section-number">4.6</span> Download and tidy</a></li>
-  <li><a href="#price-over-time" id="toc-price-over-time" class="nav-link" data-scroll-target="#price-over-time"><span class="header-section-number">4.7</span> Price over time</a></li>
-  <li><a href="#return-distribution" id="toc-return-distribution" class="nav-link" data-scroll-target="#return-distribution"><span class="header-section-number">4.8</span> Return distribution</a></li>
-  <li><a href="#rolling-statistics-window-params.rolling" id="toc-rolling-statistics-window-params.rolling" class="nav-link" data-scroll-target="#rolling-statistics-window-params.rolling"><span class="header-section-number">4.9</span> Rolling statistics (window = {params.rolling})</a></li>
-  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table"><span class="header-section-number">4.10</span> Summary table</a></li>
-  <li><a href="#data-dictionary" id="toc-data-dictionary" class="nav-link" data-scroll-target="#data-dictionary"><span class="header-section-number">4.11</span> Data dictionary</a></li>
-  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters"><span class="header-section-number">4.12</span> Parameters</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4.13</span> References</a>
+  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">4.6</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#homework-due-before-session-5" id="toc-homework-due-before-session-5" class="nav-link" data-scroll-target="#homework-due-before-session-5"><span class="header-section-number">4.7</span> Homework (due before Session 5)</a>
   <ul class="collapse">
-  <li><a href="#render-site-to-docs-and-preview" id="toc-render-site-to-docs-and-preview" class="nav-link" data-scroll-target="#render-site-to-docs-and-preview"><span class="header-section-number">4.13.1</span> 5) Render site to <code>docs/</code> and preview</a></li>
-  <li><a href="#commit-and-push-shortlived-token-method" id="toc-commit-and-push-shortlived-token-method" class="nav-link" data-scroll-target="#commit-and-push-shortlived-token-method"><span class="header-section-number">4.13.2</span> 6) Commit and push (short‑lived token method)</a></li>
+  <li><a href="#part-a-add-an-acf-figure-with-crossref-alt-text" id="toc-part-a-add-an-acf-figure-with-crossref-alt-text" class="nav-link" data-scroll-target="#part-a-add-an-acf-figure-with-crossref-alt-text"><span class="header-section-number">4.7.1</span> Part A — Add an ACF figure with cross‑ref + alt text</a></li>
+  <li><a href="#part-b-add-a-monthly-returns-table-with-caption-label" id="toc-part-b-add-a-monthly-returns-table-with-caption-label" class="nav-link" data-scroll-target="#part-b-add-a-monthly-returns-table-with-caption-label"><span class="header-section-number">4.7.2</span> Part B — Add a monthly returns table with caption + label</a></li>
+  <li><a href="#part-c-add-two-real-citations-and-tidy-your-references" id="toc-part-c-add-two-real-citations-and-tidy-your-references" class="nav-link" data-scroll-target="#part-c-add-two-real-citations-and-tidy-your-references"><span class="header-section-number">4.7.3</span> Part C — Add two real citations and tidy your references</a></li>
+  <li><a href="#part-d-verify-freeze-and-caching-behavior" id="toc-part-d-verify-freeze-and-caching-behavior" class="nav-link" data-scroll-target="#part-d-verify-freeze-and-caching-behavior"><span class="header-section-number">4.7.4</span> Part D — Verify freeze and caching behavior</a></li>
+  <li><a href="#part-e-commit-push" id="toc-part-e-commit-push" class="nav-link" data-scroll-target="#part-e-commit-push"><span class="header-section-number">4.7.5</span> Part E — Commit &amp; push</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">4.7.6</span> Grading (pass/revise)</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">4.14</span> Wrap‑up (10 min)</a></li>
-  <li><a href="#homework-due-before-session-5" id="toc-homework-due-before-session-5" class="nav-link" data-scroll-target="#homework-due-before-session-5"><span class="header-section-number">4.15</span> Homework (due before Session 5)</a>
-  <ul class="collapse">
-  <li><a href="#part-a-add-an-acf-figure-with-crossref-alt-text" id="toc-part-a-add-an-acf-figure-with-crossref-alt-text" class="nav-link" data-scroll-target="#part-a-add-an-acf-figure-with-crossref-alt-text"><span class="header-section-number">4.15.1</span> Part A — Add an ACF figure with cross‑ref + alt text</a></li>
-  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">4.15.2</span> Grading (pass/revise)</a></li>
-  </ul></li>
-  <li><a href="#keep-points" id="toc-keep-points" class="nav-link" data-scroll-target="#keep-points"><span class="header-section-number">4.16</span> Keep points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">4.8</span> Key points</a></li>
   </ul>
 </nav>
     </div>
@@ -402,7 +417,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Assumptions:</strong></p>
 <ul>
 <li>Students already have a repo (e.g., <code>unified-stocks-teamX</code>) with the Quarto site scaffolding from Sessions 2–3.</li>
-<li>Python‑first course; the <strong>RStudio cameo</strong> demonstrates that Quarto is editor‑agnostic (no R coding required).</li>
+<li>Python‑first; the <strong>RStudio cameo</strong> demonstrates that Quarto is editor‑agnostic (no R coding required).</li>
 </ul>
 </blockquote>
 <hr>
@@ -431,8 +446,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="slides-talking-points" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="slides-talking-points"><span class="header-section-number">4.3</span> Slides / talking points</h2>
+<section id="slides" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">4.3</span> Slides</h2>
 <section id="why-hygiene" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="why-hygiene"><span class="header-section-number">4.3.1</span> Why hygiene?</h3>
 <ul>
@@ -451,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Citations</strong>: add <code>bibliography: references.bib</code> and cite with <code>[@key]</code></li>
 <li><strong>Freeze</strong>: project‑level <code>freeze: auto</code> for deterministic rebuilds</li>
 <li><strong>Cache</strong>: <code>execute: cache: true</code> to avoid redoing expensive steps</li>
-<li><strong>CSS</strong>: small tweaks to readability (font size, code block width)</li>
+<li><strong>CSS</strong>: (cascadfing style sheet) small tweaks to readability (font size, code block width)</li>
 </ul>
 </section>
 <section id="rstudio-cameo-no-r-required" class="level3" data-number="4.3.3">
@@ -465,16 +480,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="rstudio-cameo-15-min-live-demo-steps" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="rstudio-cameo-15-min-live-demo-steps"><span class="header-section-number">4.4</span> RStudio cameo (15 min, live demo steps)</h2>
-<blockquote class="blockquote">
-<p>Do this on the projector. Students observe; they can try later on their machines or RStudio Cloud.</p>
-</blockquote>
 <ol type="1">
 <li><strong>Open RStudio</strong> (Desktop or Cloud).</li>
-<li><strong>File → Open Project</strong> and select your repo folder (<code>unified-stocks-teamX</code>).</li>
+<li><strong>File → Open Project</strong> and select your repo folder (e.g.: <code>unified-stocks-teamX</code>).</li>
 <li>Confirm Quarto: <strong>Help → About Quarto</strong> (or run <code>quarto --version</code> in the RStudio terminal).</li>
 <li>Open <code>reports/eda.qmd</code>. Click <strong>Render</strong> (or run <code>quarto render reports/eda.qmd</code>).</li>
 <li>Show the generated HTML preview. Note: no R code, just Python chunks.</li>
-<li>Mention that <strong>RMarkdown</strong> is the predecessor; <strong>Quarto</strong> unifies Python &amp; R (and more). We use <strong>Quarto</strong>.</li>
+<li><strong>RMarkdown</strong> is the predecessor; <strong>Quarto</strong> unifies Python &amp; R (and more). We use <strong>Quarto</strong>.</li>
 </ol>
 <hr>
 </section>
@@ -539,18 +551,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execute"</span>][<span class="st">"cache"</span>] <span class="op">=</span> <span class="va">True</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Freeze: deterministic rebuilds until the source changes</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"project"</span>][<span class="st">"freeze"</span>] <span class="op">=</span> <span class="st">"auto"</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Bibliography</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"bibliography"</span>] <span class="op">=</span> <span class="st">"references.bib"</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure navbar has EDA link</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>nav <span class="op">=</span> cfg.setdefault(<span class="st">"website"</span>, {}).setdefault(<span class="st">"navbar"</span>, {}).setdefault(<span class="st">"left"</span>, [])</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(item.get(<span class="st">"href"</span>) <span class="op">==</span> <span class="st">"reports/eda.qmd"</span> <span class="cf">for</span> item <span class="kw">in</span> nav <span class="cf">if</span> <span class="bu">isinstance</span>(item, <span class="bu">dict</span>)):</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    nav.append({<span class="st">"href"</span>: <span class="st">"reports/eda.qmd"</span>, <span class="st">"text"</span>: <span class="st">"EDA"</span>})</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>yaml.dump(cfg, <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>))</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># cfg["project"]["freeze"] = "auto"</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execyte"</span>][<span class="st">"freeze"</span>] <span class="op">=</span> <span class="st">"auto"</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Bibliography</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"bibliography"</span>] <span class="op">=</span> <span class="st">"references.bib"</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure navbar has EDA link</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>nav <span class="op">=</span> cfg.setdefault(<span class="st">"website"</span>, {}).setdefault(<span class="st">"navbar"</span>, {}).setdefault(<span class="st">"left"</span>, [])</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(item.get(<span class="st">"href"</span>) <span class="op">==</span> <span class="st">"reports/eda.qmd"</span> <span class="cf">for</span> item <span class="kw">in</span> nav <span class="cf">if</span> <span class="bu">isinstance</span>(item, <span class="bu">dict</span>)):</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    nav.append({<span class="st">"href"</span>: <span class="st">"reports/eda.qmd"</span>, <span class="st">"text"</span>: <span class="st">"EDA"</span>})</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>yaml.dump(cfg, <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>))</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="add-references.bib-sample-entries-students-will-refine-later" class="level3" data-number="4.5.3">
 <h3 data-number="4.5.3" class="anchored" data-anchor-id="add-references.bib-sample-entries-students-will-refine-later"><span class="header-section-number">4.5.3</span> 2) Add <code>references.bib</code> (sample entries; students will refine later)</h3>
@@ -573,121 +586,154 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="vs">  year = </span><span class="sc">{2024}</span><span class="vs">,</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="vs">  url = {https://github.com/ranaroussi/yfinance}</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"references.bib"</span>,<span class="st">"w"</span>).write(refs)</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"references.bib"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="32350db2" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"references.bib"</span>,<span class="st">"w"</span>).write(refs)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"references.bib"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="overwrite-reportseda.qmd-with-captions-labels-alt-text-citations-and-crossrefs" class="level3" data-number="4.5.4">
 <h3 data-number="4.5.4" class="anchored" data-anchor-id="overwrite-reportseda.qmd-with-captions-labels-alt-text-citations-and-crossrefs"><span class="header-section-number">4.5.4</span> 3) Overwrite <code>reports/eda.qmd</code> with captions, labels, alt text, citations, and cross‑refs</h3>
 <blockquote class="blockquote">
 <p>This replaces the earlier EDA with a hygienic version. Feel free to adjust wording later.</p>
 </blockquote>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>eda <span class="op">=</span> dedent(<span class="st">"""</span><span class="ch">\</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">title: "Stock EDA"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">format:</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">  html:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">    toc: true</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">    number-sections: false</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">execute:</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">  echo: true</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">  warning: false</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">  cache: true</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">params:</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">  symbol: "AAPL"</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">  start_date: "2018-01-01"</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">  end_date: ""</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">  rolling: 20</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; *Educational use only — not trading advice.* Data pulled via **yfinance** [@yfinance].</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="st">This page is **parameterized**; see the **Parameters** section for usage.</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="st">## Setup</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="st">::: {#f81ff73f .cell execution_count=1}</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="st">````` {.python .cell-code}</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="st">import pandas as pd</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="st">import numpy as np</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="st">import matplotlib.pyplot as plt</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="st">import yfinance as yf</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="st">from pathlib import Path</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="st">SYMBOL = params.get("symbol", "AAPL")</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="st">START  = params.get("start_date", "2018-01-01")</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="st">END    = params.get("end_date", "")</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="st">ROLL   = int(params.get("rolling", 20))</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="st">if not END:</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="st">  END = pd.Timestamp.today().strftime("%Y-%m-</span><span class="sc">%d</span><span class="st">")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eda <span class="op">=</span> dedent(<span class="vs">r"""\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="vs">title: "Stock EDA"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="vs">format:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  html:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="vs">    toc: true</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="vs">    number-sections: false</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="vs">execute:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="vs">  echo: true</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="vs">  warning: false</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="vs">  cache: true</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="vs">params:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="vs">  symbol: "AAPL"</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="vs">  start_date: "2018-01-01"</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="vs">  end_date: ""</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="vs">  rolling: 20</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="vs">&gt; *Educational use only — not trading advice.* Data pulled via **yfinance** [@yfinance].</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="vs">This page is **parameterized**; see the **Parameters** section for usage.</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="vs">## Setup parameters if using Python</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#b080bd70 .cell tags='["parameters"]' execution_count=2}</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="vs"># Default values (overridden by -P at render time)</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="vs">SYMBOL = "AAPL"</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="vs">START  = "2018-01-01"</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="vs">END    = ""</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="vs">ROLL   =  20</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="vs">:::</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="vs">## Setup</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#4bb7fef7 .cell execution_count=3}</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="vs">import numpy as np</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="vs">import matplotlib.pyplot as plt</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="vs">import yfinance as yf</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="vs"># SYMBOL = params.get("symbol", "AAPL")</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="vs"># START  = params.get("start_date", "2018-01-01")</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="vs"># END    = params.get("end_date", "")</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="vs"># ROLL   = int(params.get("rolling", 20))</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="vs">if not END:</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="vs">  END = pd.Timestamp.today().strftime("%Y-%m-</span><span class="sc">%d</span><span class="vs">")</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="vs">:::</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="vs">## Download and tidy</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#8fc03bae .cell execution_count=4}</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="vs">try:</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="vs">  data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="vs">except Exception as e:</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="vs">  # Synthetic fallback</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="vs">  idx = pd.bdate_range(START, END)</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="vs">  rng = np.random.default_rng(42)</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="vs">  ret = rng.normal(0, 0.01, len(idx))</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="vs">  price = 100 * np.exp(np.cumsum(ret))</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="vs">  vol = rng.integers(1e5, 5e6, len(idx))</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="vs">  data = pd.DataFrame({"Close": price, "Volume": vol}, index=idx)</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="vs">df = (data.rename(columns=str.lower)[["close","volume"]]</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="vs">        .dropna()</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="vs">        .assign(log_return=lambda d: np.log(d["close"]).diff()))</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="vs">df["roll_mean"] = df["log_return"].rolling(ROLL, min_periods=ROLL//2).mean()</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="vs">df["roll_vol"]  = df["log_return"].rolling(ROLL, min_periods=ROLL//2).std()</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="vs">df = df.dropna()</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="vs">:::</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="vs">## Price over time</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="vs">As shown in **Figure @fig-price**, prices vary over time with changing volatility.</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="vs">## Return distribution</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="vs">**Figure @fig-hist** shows the return distribution; many assets exhibit heavy tails \[@hyndman-fpp3, pp. 20–21].</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="vs">## Rolling statistics (window = </span><span class="sc">{params.rolling}</span><span class="vs">)</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="vs">## Summary table</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="vs">See **Table @tbl-summary** for overall statistics.</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="vs">## Data dictionary</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="vs">## Parameters</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="vs">This page accepts parameters: `symbol`, `start_date`, `end_date`, and `rolling`. You can re‑render with:</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="vs">quarto render reports/eda.qmd \\</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="vs">  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="vs">## References</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"reports/eda.qmd"</span>,<span class="st">"w"</span>).write(eda)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote reports/eda.qmd with hygiene features."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
+<section id="add-a-minimal-css-for-readability" class="level3" data-number="4.5.5">
+<h3 data-number="4.5.5" class="anchored" data-anchor-id="add-a-minimal-css-for-readability"><span class="header-section-number">4.5.5</span> 4) Add a minimal CSS for readability</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"docs"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>css <span class="op">=</span> <span class="st">"""</span><span class="ch">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">/* Increase base font and widen code blocks slightly */</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">body { font-size: 1.02rem; }</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">pre code { white-space: pre-wrap; }</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">img { max-width: 100%; height: auto; }</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"docs/style.css"</span>,<span class="st">"w"</span>).write(css)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote docs/style.css"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="download-and-tidy" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="download-and-tidy"><span class="header-section-number">4.6</span> Download and tidy</h2>
-<pre class="{python}"><code>#| echo: true
-try:
-  data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)
-except Exception as e:
-  # Synthetic fallback
-  idx = pd.bdate_range(START, END)
-  rng = np.random.default_rng(42)
-  ret = rng.normal(0, 0.01, len(idx))
-  price = 100 * np.exp(np.cumsum(ret))
-  vol = rng.integers(1e5, 5e6, len(idx))
-  data = pd.DataFrame({"Close": price, "Volume": vol}, index=idx)
-
-df = (data.rename(columns=str.lower)[["close","volume"]]
-        .dropna()
-        .assign(log_return=lambda d: np.log(d["close"]).diff()))
-df["roll_mean"] = df["log_return"].rolling(ROLL, min_periods=ROLL//2).mean()
-df["roll_vol"]  = df["log_return"].rolling(ROLL, min_periods=ROLL//2).std()
-df = df.dropna()</code></pre>
-<p>:::</p>
-</section>
-<section id="price-over-time" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="price-over-time"><span class="header-section-number">4.7</span> Price over time</h2>
-<p>As shown in <strong>Figure <a href="#fig-price" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-price</span></a></strong>, prices vary over time with changing volatility.</p>
-</section>
-<section id="return-distribution" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="return-distribution"><span class="header-section-number">4.8</span> Return distribution</h2>
-<p><strong>Figure <a href="#fig-hist" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-hist</span></a></strong> shows the return distribution; many assets exhibit heavy tails [<span class="citation" data-cites="hyndman-fpp3">(<a href="#ref-hyndman-fpp3" role="doc-biblioref"><strong>hyndman-fpp3?</strong></a>)</span>, pp.&nbsp;20–21].</p>
-</section>
-<section id="rolling-statistics-window-params.rolling" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="rolling-statistics-window-params.rolling"><span class="header-section-number">4.9</span> Rolling statistics (window = {params.rolling})</h2>
-</section>
-<section id="summary-table" class="level2" data-number="4.10">
-<h2 data-number="4.10" class="anchored" data-anchor-id="summary-table"><span class="header-section-number">4.10</span> Summary table</h2>
-<p>See <strong>Table <a href="#tbl-summary" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-summary</span></a></strong> for overall statistics.</p>
-</section>
-<section id="data-dictionary" class="level2" data-number="4.11">
-<h2 data-number="4.11" class="anchored" data-anchor-id="data-dictionary"><span class="header-section-number">4.11</span> Data dictionary</h2>
-</section>
-<section id="parameters" class="level2" data-number="4.12">
-<h2 data-number="4.12" class="anchored" data-anchor-id="parameters"><span class="header-section-number">4.12</span> Parameters</h2>
-<p>This page accepts parameters: <code>symbol</code>, <code>start_date</code>, <code>end_date</code>, and <code>rolling</code>. You can re‑render with:</p>
-<pre><code>
-quarto render reports/eda.qmd \\
-  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30</code></pre>
-</section>
-<section id="references" class="level2" data-number="4.13">
-<h2 data-number="4.13" class="anchored" data-anchor-id="references"><span class="header-section-number">4.13</span> References</h2>
-<p>“““) open(”reports/eda.qmd”,“w”).write(eda) print(“Wrote reports/eda.qmd with hygiene features.”)</p>
-<pre><code>
-### 4) Add a minimal CSS for readability
-```python
-from pathlib import Path
-Path("docs").mkdir(exist_ok=True)
-css = """\
-/* Increase base font and widen code blocks slightly */
-body { font-size: 1.02rem; }
-pre code { white-space: pre-wrap; }
-img { max-width: 100%; height: auto; }
-"""
-open("docs/style.css","w").write(css)
-print("Wrote docs/style.css")</code></pre>
-<section id="render-site-to-docs-and-preview" class="level3" data-number="4.13.1">
-<h3 data-number="4.13.1" class="anchored" data-anchor-id="render-site-to-docs-and-preview"><span class="header-section-number">4.13.1</span> 5) Render site to <code>docs/</code> and preview</h3>
+<section id="render-site-to-docs-and-preview" class="level3" data-number="4.5.6">
+<h3 data-number="4.5.6" class="anchored" data-anchor-id="render-site-to-docs-and-preview"><span class="header-section-number">4.5.6</span> 5) Render site to <code>docs/</code> and preview</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Open <code>docs/reports/eda.html</code> in the Colab file browser to preview. Confirm:</p>
 <ul>
@@ -696,8 +742,8 @@ print("Wrote docs/style.css")</code></pre>
 <li>“References” section at bottom with your 2–3 entries</li>
 </ul>
 </section>
-<section id="commit-and-push-shortlived-token-method" class="level3" data-number="4.13.2">
-<h3 data-number="4.13.2" class="anchored" data-anchor-id="commit-and-push-shortlived-token-method"><span class="header-section-number">4.13.2</span> 6) Commit and push (short‑lived token method)</h3>
+<section id="commit-and-push-shortlived-token-method" class="level3" data-number="4.5.7">
+<h3 data-number="4.5.7" class="anchored" data-anchor-id="commit-and-push-shortlived-token-method"><span class="header-section-number">4.5.7</span> 6) Commit and push (short‑lived token method)</h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add _quarto.yml references.bib reports<span class="op">/</span>eda.qmd docs<span class="op">/</span>style.css docs<span class="op">/</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"chore: report hygiene (captions, cross-refs, alt text, freeze, bibliography, CSS)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
@@ -708,8 +754,8 @@ print("Wrote docs/style.css")</code></pre>
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="4.14">
-<h2 data-number="4.14" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">4.14</span> Wrap‑up (10 min)</h2>
+<section id="wrapup-10-min" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">4.6</span> Wrap‑up (10 min)</h2>
 <ul>
 <li>Your report now has <strong>citations</strong>, <strong>captions</strong>, <strong>cross‑refs</strong>, <strong>alt text</strong>, and <strong>frozen</strong> outputs for stable rebuilds.</li>
 <li>RStudio can render the exact same Python‑based <code>.qmd</code>. Teams can mix editors without friction.</li>
@@ -717,21 +763,57 @@ print("Wrote docs/style.css")</code></pre>
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-5" class="level2" data-number="4.15">
-<h2 data-number="4.15" class="anchored" data-anchor-id="homework-due-before-session-5"><span class="header-section-number">4.15</span> Homework (due before Session 5)</h2>
+<section id="homework-due-before-session-5" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="homework-due-before-session-5"><span class="header-section-number">4.7</span> Homework (due before Session 5)</h2>
 <p><strong>Goal:</strong> Extend hygiene and add one analytic section—<strong>ACF plot</strong>—with proper captions/labels/alt text/citations.</p>
-<section id="part-a-add-an-acf-figure-with-crossref-alt-text" class="level3" data-number="4.15.1">
-<h3 data-number="4.15.1" class="anchored" data-anchor-id="part-a-add-an-acf-figure-with-crossref-alt-text"><span class="header-section-number">4.15.1</span> Part A — Add an ACF figure with cross‑ref + alt text</h3>
+<section id="part-a-add-an-acf-figure-with-crossref-alt-text" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="part-a-add-an-acf-figure-with-crossref-alt-text"><span class="header-section-number">4.7.1</span> Part A — Add an ACF figure with cross‑ref + alt text</h3>
 <p>Append this code chunk to <code>reports/eda.qmd</code> after the “Rolling statistics” section:</p>
-<p>````python</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (not stored): "</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} HEAD:main</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then reference it in the prose:</p>
+<blockquote class="blockquote">
+<p>Short‑memory patterns are visible in <strong>Figure <span class="quarto-unresolved-ref">?fig-acf</span></strong> (see also <span class="citation" data-cites="hyndman-fpp3">(<a href="references.html#ref-hyndman-fpp3" role="doc-biblioref">Hyndman and Athanasopoulos 2021</a>)</span>, Chapter 2).</p>
+</blockquote>
 </section>
-<section id="grading-passrevise" class="level3" data-number="4.15.2">
-<h3 data-number="4.15.2" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">4.15.2</span> Grading (pass/revise)</h3>
+<section id="part-b-add-a-monthly-returns-table-with-caption-label" class="level3" data-number="4.7.2">
+<h3 data-number="4.7.2" class="anchored" data-anchor-id="part-b-add-a-monthly-returns-table-with-caption-label"><span class="header-section-number">4.7.2</span> Part B — Add a monthly returns table with caption + label</h3>
+<p>Add a new section <strong>“Monthly returns”</strong> with a cross‑ref’d table:</p>
+<p>In text: “See <strong>Table <span class="quarto-unresolved-ref">?tbl-monthly</span></strong> for month‑by‑month averages.”</p>
+</section>
+<section id="part-c-add-two-real-citations-and-tidy-your-references" class="level3" data-number="4.7.3">
+<h3 data-number="4.7.3" class="anchored" data-anchor-id="part-c-add-two-real-citations-and-tidy-your-references"><span class="header-section-number">4.7.3</span> Part C — Add two real citations and tidy your references</h3>
+<ol type="1">
+<li>Replace the placeholder references with at least <strong>two</strong> credible sources (textbook, API docs, or peer‑reviewed).<br>
+</li>
+<li>Cite them in relevant sections of <code>eda.qmd</code>.<br>
+</li>
+<li>Ensure <strong>References</strong> renders at the bottom.</li>
+</ol>
+<p><em>(Tip: you can add more <code>@misc{key, title=..., url=...}</code> entries for web docs.)</em></p>
+</section>
+<section id="part-d-verify-freeze-and-caching-behavior" class="level3" data-number="4.7.4">
+<h3 data-number="4.7.4" class="anchored" data-anchor-id="part-d-verify-freeze-and-caching-behavior"><span class="header-section-number">4.7.4</span> Part D — Verify freeze and caching behavior</h3>
+<ul>
+<li><p>In <code>_quarto.yml</code>, ensure:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">execute</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cache</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Re‑render once (<code>quarto render --output-dir docs/</code>), note speed.</p></li>
+<li><p>Change a small line in <code>eda.qmd</code> and re‑render; confirm only affected chunks rebuild.</p></li>
+</ul>
+</section>
+<section id="part-e-commit-push" class="level3" data-number="4.7.5">
+<h3 data-number="4.7.5" class="anchored" data-anchor-id="part-e-commit-push"><span class="header-section-number">4.7.5</span> Part E — Commit &amp; push</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git add reports<span class="op">/</span>eda.qmd references.bib docs<span class="op">/</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git commit <span class="op">-</span>m <span class="st">"feat: ACF figure and monthly returns table; references updated"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> getpass(<span class="st">"GitHub token (not stored): "</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>push_url <span class="op">=</span> <span class="ss">f"https://</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">@github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git push {push_url} HEAD:main</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="grading-passrevise" class="level3" data-number="4.7.6">
+<h3 data-number="4.7.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">4.7.6</span> Grading (pass/revise)</h3>
 <ul>
 <li>EDA page includes <strong>ACF figure</strong> with caption, label, and alt text; cross‑referenced in text.</li>
 <li><strong>Monthly returns</strong> table present with caption/label; referenced in text.</li>
@@ -741,8 +823,8 @@ print("Wrote docs/style.css")</code></pre>
 <hr>
 </section>
 </section>
-<section id="keep-points" class="level2" data-number="4.16">
-<h2 data-number="4.16" class="anchored" data-anchor-id="keep-points"><span class="header-section-number">4.16</span> Keep points</h2>
+<section id="key-points" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="key-points"><span class="header-section-number">4.8</span> Key points</h2>
 <ul>
 <li><strong>Accessibility</strong> is part of professionalism: always write <strong>alt text</strong>, don’t rely on color alone, and keep captions informative.</li>
 <li><strong>Citations</strong> are not optional for serious work; treat the report like a short paper.</li>
@@ -752,6 +834,11 @@ print("Wrote docs/style.css")</code></pre>
 <p>Next up (Session 5): <strong>Unix for data work</strong>—shell power tools and Make automation to glue everything together.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-hyndman-fpp3" class="csl-entry" role="listitem">
+Hyndman, Rob J., and George Athanasopoulos. 2021. <em>Forecasting: Principles and Practice</em>. 3rd ed. <a href="https://otexts.com/fpp3/">https://otexts.com/fpp3/</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
