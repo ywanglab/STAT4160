@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4d21caabf0c80d816cf4ebf0607ebd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6298b6cd933ddc2fa602f911bae516ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,6 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="docs1/style.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -130,34 +131,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="../reports/eda.html"> 
 <span class="menu-text">EDA (parametrized)</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT EDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -488,6 +461,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);

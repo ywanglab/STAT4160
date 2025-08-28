@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>lec4-inclass – Unified Stocks — EDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6298b6cd933ddc2fa602f911bae516ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="docs1/style.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Unified Stocks — EDA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reports/eda.html"> 
+<span class="menu-text">EDA (parametrized)</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<div id="cell-0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756394508239,&quot;user_tz&quot;:300,&quot;elapsed&quot;:2028,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="1a84da5c-8bc2-4475-eec0-259a985380fe" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mounted at /content/drive</code></pre>
+</div>
+</div>
+<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395806182,&quot;user_tz&quot;:300,&quot;elapsed&quot;:6,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust these two for YOUR repo</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"ywanglab"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"STAT4160"</span>   <span class="co"># e.g., unified-stocks-team1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>BASE_DIR   <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>CLONE_DIR  <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>BASE_DIR<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>REPO_URL   <span class="op">=</span> <span class="ss">f"https://github.com/</span><span class="sc">{</span>REPO_OWNER<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>REPO_NAME<span class="sc">}</span><span class="ss">.git"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395808163,&quot;user_tz&quot;:300,&quot;elapsed&quot;:9,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="72594d92-b614-4f57-c2c6-f1be8be26249" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, shutil, pathlib</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(CLONE_DIR).exists():</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>git clone {REPO_URL} {CLONE_DIR}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If the folder exists, just ensure it's a git repo and pull latest</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    os.chdir(CLONE_DIR)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># !git status</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># !git pull --rebase # !git pull --ff-only</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>os.chdir(CLONE_DIR)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Working dir: /content/drive/MyDrive/dspt25/STAT4160</code></pre>
+</div>
+</div>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git pull <span class="op">--</span>rebase <span class="co"># !git pull --ff-only</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756394532033,&quot;user_tz&quot;:300,&quot;elapsed&quot;:14890,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="39fe708e-d6c1-4fb4-f8ae-f03ec5d27fc7" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Quarto CLI (one-time per Colab runtime)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget -q https://quarto.org/download/latest/quarto-linux-amd64.deb -O /tmp/quarto.deb</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !dpkg -i /tmp/quarto.deb || apt-get -y -f install &gt;/dev/null &amp;&amp; dpkg -i /tmp/quarto.deb</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># !quarto --version</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternatively, save it to G-drive, and only need to download the first time. The size of  quarto-linux-amd64.deb is ~125Mb.</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to store the deb package</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>deb_path <span class="op">=</span> <span class="st">"/content/drive/MyDrive/quarto-linux-amd64.deb"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Download only if not already saved</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>test <span class="op">-</span>f $deb_path <span class="op">||</span> wget <span class="op">-</span>q https:<span class="op">//</span>quarto.org<span class="op">/</span>download<span class="op">/</span>latest<span class="op">/</span>quarto<span class="op">-</span>linux<span class="op">-</span>amd64.deb <span class="op">-</span>O $deb_path</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Install from Drive (fast, no re-download)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>dpkg <span class="op">-</span>i $deb_path <span class="op">||</span> apt<span class="op">-</span>get <span class="op">-</span>y <span class="op">-</span>f install <span class="op">&gt;/</span>dev<span class="op">/</span>null <span class="op">&amp;&amp;</span> dpkg <span class="op">-</span>i $deb_path <span class="co">#-f: fix package dependency issues</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto <span class="op">--</span>version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 130482 files and directories currently installed.)
+Preparing to unpack .../MyDrive/quarto-linux-amd64.deb ...
+Unpacking quarto (1.7.33) over (1.7.33) ...
+Setting up quarto (1.7.33) ...
+(Reading database ... 130482 files and directories currently installed.)
+Preparing to unpack .../MyDrive/quarto-linux-amd64.deb ...
+Unpacking quarto (1.7.33) over (1.7.33) ...
+Setting up quarto (1.7.33) ...
+1.7.33</code></pre>
+</div>
+</div>
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395817057,&quot;user_tz&quot;:300,&quot;elapsed&quot;:2912,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install ruamel.yaml for safe YAML edits</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip <span class="op">-</span>q install ruamel.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395820593,&quot;user_tz&quot;:300,&quot;elapsed&quot;:171,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="1a439476-29f3-48a7-f521-13636ef57483" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Install ruamel.yaml for safe YAML edits</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip -q install ruamel.yaml</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ruamel.yaml <span class="im">import</span> YAML</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>yaml <span class="op">=</span> YAML()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>cfg_path <span class="op">=</span> Path(<span class="st">"_quarto.yml"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> cfg_path.exists():</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    cfg <span class="op">=</span> yaml.load(cfg_path.read_text())</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    cfg <span class="op">=</span> {<span class="st">"project"</span>: {<span class="st">"type"</span>: <span class="st">"website"</span>, <span class="st">"output-dir"</span>: <span class="st">"docs"</span>},</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">"website"</span>: {<span class="st">"title"</span>: <span class="st">"Unified Stocks"</span>, <span class="st">"navbar"</span>: {<span class="st">"left"</span>: [{<span class="st">"href"</span>:<span class="st">"index.qmd"</span>,<span class="st">"text"</span>:<span class="st">"Home"</span>}]}},</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">"format"</span>:{<span class="st">"html"</span>:{<span class="st">"theme"</span>:<span class="st">"cosmo"</span>,<span class="st">"toc"</span>:<span class="va">True</span>}}}</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Add/ensure features</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>cfg.setdefault(<span class="st">"format"</span>, {}).setdefault(<span class="st">"html"</span>, {})</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"toc"</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"code-fold"</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"toc-depth"</span>] <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"page-navigation"</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"code-tools"</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"fig-cap-location"</span>] <span class="op">=</span> <span class="st">"bottom"</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"tbl-cap-location"</span>] <span class="op">=</span> <span class="st">"top"</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"format"</span>][<span class="st">"html"</span>][<span class="st">"css"</span>] <span class="op">=</span> <span class="st">"docs1/style.css"</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>cfg.setdefault(<span class="st">"execute"</span>, {})</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execute"</span>][<span class="st">"echo"</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execute"</span>][<span class="st">"warning"</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execute"</span>][<span class="st">"cache"</span>] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Freeze: deterministic rebuilds until the source changes</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># cfg["project"]["freeze"] = "auto"</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"execute"</span>][<span class="st">"freeze"</span>] <span class="op">=</span> <span class="st">"auto"</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Bibliography</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>cfg[<span class="st">"bibliography"</span>] <span class="op">=</span> <span class="st">"references.bib"</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure navbar has EDA link</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>nav <span class="op">=</span> cfg.setdefault(<span class="st">"website"</span>, {}).setdefault(<span class="st">"navbar"</span>, {}).setdefault(<span class="st">"left"</span>, [])</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> <span class="bu">any</span>(item.get(<span class="st">"href"</span>) <span class="op">==</span> <span class="st">"reports/eda.qmd"</span> <span class="cf">for</span> item <span class="kw">in</span> nav <span class="cf">if</span> <span class="bu">isinstance</span>(item, <span class="bu">dict</span>)):</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    nav.append({<span class="st">"href"</span>: <span class="st">"reports/eda.qmd"</span>, <span class="st">"text"</span>: <span class="st">"EDA"</span>})</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>yaml.dump(cfg, <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>))</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>project:
+  type: website
+  output-dir: docs1
+
+website:
+  title: Unified Stocks — EDA
+  navbar:
+    left:
+    - href: index.qmd
+      text: Home
+    - href: reports/eda.qmd
+      text: EDA (parametrized)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: false
+
+    toc-depth: 2
+    page-navigation: true
+    code-tools: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    css: docs1/style.css
+execute:
+  echo: true
+  warning: false
+  cache: true
+  freeze: auto
+bibliography: references.bib
+</code></pre>
+</div>
+</div>
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395829109,&quot;user_tz&quot;:300,&quot;elapsed&quot;:21,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="e224e499-888d-4f04-c1b4-0a27c9a4121e" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>refs <span class="op">=</span> <span class="vs">r"""@book{hyndman-fpp3,</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="vs">  title = {Forecasting: Principles and Practice},</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="vs">  author = {Hyndman, Rob J</span><span class="dv">.</span><span class="vs"> and Athanasopoulos, George},</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="vs">  edition = </span><span class="op">{3}</span><span class="vs">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="vs">  year = </span><span class="op">{2021}</span><span class="vs">,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  url = {https://otexts</span><span class="dv">.</span><span class="vs">com/fpp3/}</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="vs">@misc{quarto-docs,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="vs">  title = {Quarto Documentation},</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="vs">  author = {{Posit}},</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="vs">  year = </span><span class="op">{2025}</span><span class="vs">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="vs">  url = {https://quarto</span><span class="dv">.</span><span class="vs">org/}</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="vs">@misc{yfinance,</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="vs">  title = {yfinance: Yahoo! Finance market data downloader},</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="vs">  author = {Ran Aroussi},</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="vs">  year = </span><span class="op">{2024}</span><span class="vs">,</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="vs">  url = {https://github</span><span class="dv">.</span><span class="vs">com/ranaroussi/yfinance}</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"references.bib"</span>,<span class="st">"w"</span>).write(refs)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"references.bib"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>@book{hyndman-fpp3,
+  title = {Forecasting: Principles and Practice},
+  author = {Hyndman, Rob J. and Athanasopoulos, George},
+  edition = {3},
+  year = {2021},
+  url = {https://otexts.com/fpp3/}
+}
+@misc{quarto-docs,
+  title = {Quarto Documentation},
+  author = {{Posit}},
+  year = {2025},
+  url = {https://quarto.org/}
+}
+@misc{yfinance,
+  title = {yfinance: Yahoo! Finance market data downloader},
+  author = {Ran Aroussi},
+  year = {2024},
+  url = {https://github.com/ranaroussi/yfinance}
+}
+</code></pre>
+</div>
+</div>
+<div id="cell-9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756396002628,&quot;user_tz&quot;:300,&quot;elapsed&quot;:42,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>eda <span class="op">=</span> dedent(<span class="vs">r"""</span><span class="ch">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="vs">title: "Stock EDA"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="vs">format:</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  html:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="vs">    toc: true</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="vs">    number-sections: false</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="vs">execute-dir: "/content/drive/MyDrive/dspt25/STAT4160/reports"</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="vs">execute:</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="vs">  echo: true</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="vs">  warning: false</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="vs">  cache: true</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="vs">jupyter: python3</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="vs">params:</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="vs">  symbol: "AAPL"</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="vs">  start_date: "2018-01-01"</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="vs">  end_date: ""</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="vs">  rolling: 20</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="vs">&gt; </span><span class="op">*</span><span class="vs">Educational use only — not trading advice</span><span class="dv">.</span><span class="op">*</span><span class="vs"> Data pulled via </span><span class="op">**</span><span class="vs">yfinance</span><span class="op">**</span><span class="vs"> </span><span class="pp">[@yfinance]</span><span class="dv">.</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="vs">This page is </span><span class="op">**</span><span class="vs">parameterized</span><span class="op">**</span><span class="vs">; see the </span><span class="op">**</span><span class="vs">Parameters</span><span class="op">**</span><span class="vs"> section for usage</span><span class="dv">.</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co">## Setup parameters if using Python</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [parameters]</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Default values (overridden by -P at render time)</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="vs">SYMBOL = "AAPL"</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="vs">START  = "2018-01-01"</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="vs">END    = ""</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="vs">ROLL   =  20</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="co">## Setup</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="vs">import numpy as np</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="vs">import matplotlib</span><span class="dv">.</span><span class="vs">pyplot as plt</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="vs">import yfinance as yf</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="co"># SYMBOL = params.get("symbol", "AAPL")</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="co"># START  = params.get("start_date", "2018-01-01")</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="co"># END    = params.get("end_date", "")</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="co"># ROLL   = int(params.get("rolling", 20))</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="vs">if not END:</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="vs">  END = pd</span><span class="dv">.</span><span class="vs">Timestamp</span><span class="dv">.</span><span class="vs">today</span><span class="kw">()</span><span class="dv">.</span><span class="vs">strftime</span><span class="kw">(</span><span class="vs">"%Y-%m-%d"</span><span class="kw">)</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="co">## Download and tidy</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="vs">try:</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="vs">  data = yf</span><span class="dv">.</span><span class="vs">download</span><span class="kw">(</span><span class="vs">SYMBOL, start=START, end=END, auto_adjust=True, progress=False</span><span class="kw">)</span></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="vs">except Exception as e:</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a><span class="vs">  </span><span class="co"># Synthetic fallback</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="vs">  idx = pd</span><span class="dv">.</span><span class="vs">bdate_range</span><span class="kw">(</span><span class="vs">START, END</span><span class="kw">)</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="vs">  rng = np</span><span class="dv">.</span><span class="vs">random</span><span class="dv">.</span><span class="vs">default_rng</span><span class="kw">(</span><span class="vs">42</span><span class="kw">)</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="vs">  ret = rng</span><span class="dv">.</span><span class="vs">normal</span><span class="kw">(</span><span class="vs">0, 0</span><span class="dv">.</span><span class="vs">01, len</span><span class="kw">(</span><span class="vs">idx</span><span class="kw">))</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a><span class="vs">  price = 100 </span><span class="op">*</span><span class="vs"> np</span><span class="dv">.</span><span class="vs">exp</span><span class="kw">(</span><span class="vs">np</span><span class="dv">.</span><span class="vs">cumsum</span><span class="kw">(</span><span class="vs">ret</span><span class="kw">))</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="vs">  vol = rng</span><span class="dv">.</span><span class="vs">integers</span><span class="kw">(</span><span class="vs">1e5, 5e6, len</span><span class="kw">(</span><span class="vs">idx</span><span class="kw">))</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="vs">  data = pd</span><span class="dv">.</span><span class="vs">DataFrame</span><span class="kw">(</span><span class="vs">{"Close": price, "Volume": vol}, index=idx</span><span class="kw">)</span></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a><span class="vs">df = </span><span class="kw">(</span><span class="vs">data</span><span class="dv">.</span><span class="vs">rename</span><span class="kw">(</span><span class="vs">columns=str</span><span class="dv">.</span><span class="vs">lower</span><span class="kw">)</span><span class="pp">[["close","volume"]</span><span class="vs">]</span></span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a><span class="vs">        </span><span class="dv">.</span><span class="vs">dropna</span><span class="kw">()</span></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a><span class="vs">        </span><span class="dv">.</span><span class="vs">assign</span><span class="kw">(</span><span class="vs">log_return=lambda d: np</span><span class="dv">.</span><span class="vs">log</span><span class="kw">(</span><span class="vs">d</span><span class="pp">["close"]</span><span class="kw">)</span><span class="dv">.</span><span class="vs">diff</span><span class="kw">()))</span></span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="pp">["roll_mean"]</span><span class="vs"> = df</span><span class="pp">["log_return"]</span><span class="dv">.</span><span class="vs">rolling</span><span class="kw">(</span><span class="vs">ROLL, min_periods=ROLL//2</span><span class="kw">)</span><span class="dv">.</span><span class="vs">mean</span><span class="kw">()</span></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="pp">["roll_vol"]</span><span class="vs">  = df</span><span class="pp">["log_return"]</span><span class="dv">.</span><span class="vs">rolling</span><span class="kw">(</span><span class="vs">ROLL, min_periods=ROLL//2</span><span class="kw">)</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a><span class="vs">df = df</span><span class="dv">.</span><span class="vs">dropna</span><span class="kw">()</span></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a><span class="co">## Price over time</span></span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-price</span></span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "{SYMBOL} — Adjusted Close"</span></span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Line chart showing adjusted close price of the selected stock over time."</span></span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">8,3</span><span class="kw">))</span></span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["close"]</span><span class="kw">)</span></span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"Date"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"Price"</span><span class="kw">)</span></span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a><span class="vs">As shown in </span><span class="op">**</span><span class="vs">Figure @fig-price</span><span class="op">**</span><span class="vs">, prices vary over time with changing volatility</span><span class="dv">.</span></span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a><span class="co">## Return distribution</span></span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-hist</span></span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "{SYMBOL} — Daily log return histogram"</span></span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Histogram of daily log returns."</span></span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">6,3</span><span class="kw">))</span></span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">hist</span><span class="kw">(</span><span class="vs">df</span><span class="pp">["log_return"]</span><span class="vs">, bins=50, alpha=0</span><span class="dv">.</span><span class="vs">85</span><span class="kw">)</span></span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"log return"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"count"</span><span class="kw">)</span></span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a><span class="op">**</span><span class="vs">Figure @fig-hist</span><span class="op">**</span><span class="vs"> shows the return distribution; many assets exhibit heavy tails </span><span class="ch">\[</span><span class="vs">@hyndman-fpp3, pp</span><span class="dv">.</span><span class="vs"> 20–21]</span><span class="dv">.</span></span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a><span class="co">## Rolling statistics (window = {params.rolling})</span></span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-rolling</span></span>
+<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "{SYMBOL} — Rolling mean and volatility"</span></span>
+<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Two line plots of rolling mean and rolling standard deviation of returns."</span></span>
+<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">8,3</span><span class="kw">))</span></span>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["roll_mean"]</span><span class="vs">, label="rolling mean"</span><span class="kw">)</span></span>
+<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["roll_vol"]</span><span class="vs">,  label="rolling std"</span><span class="kw">)</span></span>
+<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"Date"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"value"</span><span class="kw">)</span></span>
+<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">legend</span><span class="kw">()</span></span>
+<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a><span class="co">## Summary table</span></span>
+<span id="cb15-124"><a href="#cb15-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-summary</span></span>
+<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Summary statistics for {SYMBOL}."</span></span>
+<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a><span class="vs">summary = pd</span><span class="dv">.</span><span class="vs">DataFrame</span><span class="kw">(</span><span class="vs">{</span></span>
+<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a><span class="vs">    "n_days": </span><span class="pp">[len(df)]</span><span class="vs">,</span></span>
+<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a><span class="vs">    "start": </span><span class="pp">[df.index.min().date()]</span><span class="vs">,</span></span>
+<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a><span class="vs">    "end":   </span><span class="pp">[df.index.max().date()]</span><span class="vs">,</span></span>
+<span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a><span class="vs">    "mean_daily_ret": </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">mean</span><span class="kw">()</span><span class="vs">],</span></span>
+<span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a><span class="vs">    "std_daily_ret":  </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span><span class="vs">],</span></span>
+<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ann_vol_approx": </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span><span class="op">*</span><span class="vs">np</span><span class="dv">.</span><span class="vs">sqrt</span><span class="kw">(</span><span class="vs">252</span><span class="kw">)</span><span class="vs">]</span></span>
+<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span><span class="kw">)</span></span>
+<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a><span class="vs">summary</span></span>
+<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a><span class="vs">See </span><span class="op">**</span><span class="vs">Table @tbl-summary</span><span class="op">**</span><span class="vs"> for overall statistics</span><span class="dv">.</span></span>
+<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a><span class="co">## Data dictionary</span></span>
+<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-dict</span></span>
+<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Data dictionary for computed columns."</span></span>
+<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a><span class="vs">desc = {</span></span>
+<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a><span class="vs">  "close": "Adjusted closing price</span><span class="dv">.</span><span class="vs">",</span></span>
+<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a><span class="vs">  "volume": "Trading volume</span><span class="dv">.</span><span class="vs">",</span></span>
+<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a><span class="vs">  "log_return": "log</span><span class="kw">(</span><span class="vs">Close_t</span><span class="kw">)</span><span class="vs"> − log</span><span class="kw">(</span><span class="vs">Close_{t−1}</span><span class="kw">)</span><span class="dv">.</span><span class="vs">",</span></span>
+<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a><span class="vs">  "roll_mean": f"Rolling mean of log returns </span><span class="kw">(</span><span class="vs">window={ROLL}</span><span class="kw">)</span><span class="dv">.</span><span class="vs">",</span></span>
+<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a><span class="vs">  "roll_vol": f"Rolling std of log returns </span><span class="kw">(</span><span class="vs">window={ROLL}</span><span class="kw">)</span><span class="dv">.</span><span class="vs">"</span></span>
+<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
+<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a mapping: first-level name -&gt; combined dtype(s)</span></span>
+<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a><span class="co"># dtype_by_price = (</span></span>
+<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a><span class="co">#     df.dtypes                          # Series indexed by (Price, Ticker)</span></span>
+<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a><span class="co">#       .groupby(level=0)                # group by first level "Price"</span></span>
+<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a><span class="co">#       .apply(lambda s: " / ".join(sorted({str(dt) for dt in s})))</span></span>
+<span id="cb15-160"><a href="#cb15-160" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb15-161"><a href="#cb15-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-162"><a href="#cb15-162" aria-hidden="true" tabindex="-1"></a><span class="co"># dd = pd.DataFrame({</span></span>
+<span id="cb15-163"><a href="#cb15-163" aria-hidden="true" tabindex="-1"></a><span class="co">#     "column": list(desc.keys()),</span></span>
+<span id="cb15-164"><a href="#cb15-164" aria-hidden="true" tabindex="-1"></a><span class="co">#     "dtype": [dtype_by_price.get(c, "MISSING") for c in desc.keys()],</span></span>
+<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a><span class="co">#     "description": list(desc.values())</span></span>
+<span id="cb15-166"><a href="#cb15-166" aria-hidden="true" tabindex="-1"></a><span class="co"># })</span></span>
+<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a><span class="co"># dd</span></span>
+<span id="cb15-168"><a href="#cb15-168" aria-hidden="true" tabindex="-1"></a><span class="co"># dd = pd.DataFrame({</span></span>
+<span id="cb15-169"><a href="#cb15-169" aria-hidden="true" tabindex="-1"></a><span class="co">#   "column": list(desc.keys()),</span></span>
+<span id="cb15-170"><a href="#cb15-170" aria-hidden="true" tabindex="-1"></a><span class="co">#   "dtype": [str(df[c].dtype) for c in desc.keys()],</span></span>
+<span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a><span class="co">#   "description": list(desc.values()) })</span></span>
+<span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a><span class="co"># dd</span></span>
+<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a><span class="co">## Parameters</span></span>
+<span id="cb15-176"><a href="#cb15-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a><span class="vs">This page accepts parameters: `symbol`, `start_date`, `end_date`, and `rolling`</span><span class="dv">.</span><span class="vs"> You can re‑render with:</span></span>
+<span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a><span class="vs">quarto render reports/eda</span><span class="dv">.</span><span class="vs">qmd </span><span class="ch">\\</span></span>
+<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a><span class="vs">  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30</span></span>
+<span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
+<span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-184"><a href="#cb15-184" aria-hidden="true" tabindex="-1"></a><span class="co">## References</span></span>
+<span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-186"><a href="#cb15-186" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756396006122,&quot;user_tz&quot;:300,&quot;elapsed&quot;:14,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="0465fc75-3a5b-4550-bcc1-2acb2dedfed9" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"reports/eda.qmd"</span>,<span class="st">"w"</span>).write(eda)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote reports/eda.qmd with hygiene features."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Wrote reports/eda.qmd with hygiene features.</code></pre>
+</div>
+</div>
+<div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395855146,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"docs1"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>css <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="st">/* Increase base font and widen code blocks slightly */</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="st">body { font-size: 1.02rem; }</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">pre code { white-space: pre-wrap; }</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="st">img { max-width: 100%; height: auto; }</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756395857759,&quot;user_tz&quot;:300,&quot;elapsed&quot;:15,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="5973c58f-1713-4e4f-bde8-0cb7b0d7df42" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"docs1/style.css"</span>,<span class="st">"w"</span>).write(css)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote docs1/style.css"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Wrote docs1/style.css</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install jupyter-cache # Run this cell if the package is missing</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install papermill   #Run this cell if papermill is passing.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756396057251,&quot;user_tz&quot;:300,&quot;elapsed&quot;:31234,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="70a33bbe-4ff8-4ac3-ec10-841855ec633d" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>[ 1/28] notebooks/lec4-inclass.ipynb
+
+[ 2/28] notebooks/system_check.ipynb
+
+[ 3/28] notebooks/lec2_hw.ipynb
+
+[ 4/28] notebooks/lec2-hw.ipynb
+
+[ 5/28] notebooks/lec3-inclass.ipynb
+
+[ 6/28] notebooks/lec3_code_inside_QMD_testing.ipynb
+
+[ 7/28] notebooks/testing.ipynb
+
+[ 8/28] notebooks/reproducibility_demo.ipynb
+
+[ 9/28] notebooks/lec2_inclass.ipynb
+
+[10/28] notebooks/lec4_code_in_QMD_testing.ipynb
+
+[11/28] reports/eda-AAPL.qmd
+
+[12/28] reports/eda-MSFT.qmd
+
+[13/28] reports/eda-NVDA.qmd
+
+[14/28] reports/eda.qmd
+
+
+
+Starting python3 kernel...Done
+
+[ColabKernelApp] ERROR | No such comm target registered: quarto_kernel_setup
+
+
+
+Executing 'eda.quarto_ipynb'
+
+  Cell 1/8: ''..............Done
+
+  Cell 2/8: ''..............Done
+
+  Cell 3/8: ''..............Done
+
+  Cell 4/8: 'fig-price'.....Done
+
+  Cell 5/8: 'fig-hist'......Done
+
+  Cell 6/8: 'fig-rolling'...Done
+
+  Cell 7/8: 'tbl-summary'...Done
+
+  Cell 8/8: 'tbl-dict'......
+
+
+
+An error occurred while executing the following cell:
+
+------------------
+
+desc = {
+
+  "close": "Adjusted closing price.",
+
+  "volume": "Trading volume.",
+
+  "log_return": "log(Close_t) − log(Close_{t−1}).",
+
+  "roll_mean": f"Rolling mean of log returns (window={ROLL}).",
+
+  "roll_vol": f"Rolling std of log returns (window={ROLL})."
+
+}
+
+# Build a mapping: first-level name -&gt; combined dtype(s)
+
+# dtype_by_price = (
+
+#     df.dtypes                          # Series indexed by (Price, Ticker)
+
+#       .groupby(level=0)                # group by first level "Price"
+
+#       .apply(lambda s: " / ".join(sorted({str(dt) for dt in s})))
+
+# )
+
+
+
+# dd = pd.DataFrame({
+
+#     "column": list(desc.keys()),
+
+#     "dtype": [dtype_by_price.get(c, "MISSING") for c in desc.keys()],
+
+#     "description": list(desc.values())
+
+# })
+
+# dd
+
+dd = pd.DataFrame({ 
+
+  "column": list(desc.keys()), 
+
+  "dtype": [str(df[c].dtype) for c in desc.keys()], 
+
+  "description": list(desc.values()) }) 
+
+dd
+
+------------------
+
+
+
+
+
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+
+<span class="ansi-green-fg">/tmp/ipython-input-149030541.py</span> in <span class="ansi-cyan-fg">&lt;cell line: 0&gt;</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg ansi-bold">     21</span> dd = pd.DataFrame({ 
+
+<span class="ansi-green-fg ansi-bold">     22</span>   <span class="ansi-blue-fg">"column"</span><span class="ansi-blue-fg">:</span> list<span class="ansi-blue-fg">(</span>desc<span class="ansi-blue-fg">.</span>keys<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">---&gt; 23</span><span class="ansi-red-fg">   </span><span class="ansi-blue-fg">"dtype"</span><span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">(</span>df<span class="ansi-blue-fg">[</span>c<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>dtype<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> c <span class="ansi-green-fg">in</span> desc<span class="ansi-blue-fg">.</span>keys<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg ansi-bold">     24</span>   "description": list(desc.values()) }) 
+
+<span class="ansi-green-fg ansi-bold">     25</span> dd
+
+
+
+<span class="ansi-green-fg">/usr/local/lib/python3.12/dist-packages/pandas/core/generic.py</span> in <span class="ansi-cyan-fg">__getattr__</span><span class="ansi-blue-fg">(self, name)</span>
+
+<span class="ansi-green-fg ansi-bold">   6297</span>         ):
+
+<span class="ansi-green-fg ansi-bold">   6298</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">[</span>name<span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">-&gt; 6299</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> object<span class="ansi-blue-fg">.</span>__getattribute__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> name<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg ansi-bold">   6300</span> 
+
+<span class="ansi-green-fg ansi-bold">   6301</span>     <span class="ansi-blue-fg">@</span>final
+
+
+
+<span class="ansi-red-fg">AttributeError</span>: 'DataFrame' object has no attribute 'dtype'
+
+
+</pre>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

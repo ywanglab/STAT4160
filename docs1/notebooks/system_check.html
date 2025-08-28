@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4d21caabf0c80d816cf4ebf0607ebd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6298b6cd933ddc2fa602f911bae516ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,6 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
+<link rel="stylesheet" href="docs1/style.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -134,34 +135,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../reports/eda.html"> 
 <span class="menu-text">EDA (parametrized)</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT EDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -183,19 +156,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="https://colab.research.google.com/github/ywanglab/STAT4160/blob/main/notebooks/system_check.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a></p>
-<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755697831995,&quot;user_tz&quot;:300,&quot;elapsed&quot;:56265,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="e3627ba2-af73-4ec5-b7ce-4682897f376e">
+<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756127275323,&quot;user_tz&quot;:300,&quot;elapsed&quot;:19985,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="5a480bd2-8416-45b3-a588-d539088a7e42" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mounted at /content/drive</code></pre>
 </div>
 </div>
-<div id="cell-2" class="cell">
+<div id="cell-2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756127285830,&quot;user_tz&quot;:300,&quot;elapsed&quot;:39,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>COURSE_DIR <span class="op">=</span> <span class="st">"/content/drive/MyDrive/dspt25"</span>  <span class="co"># change if you prefer another path</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>PROJECT_NAME <span class="op">=</span> <span class="st">"unified-stocks"</span>               <span class="co"># course project folder/repo name</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755697851948,&quot;user_tz&quot;:300,&quot;elapsed&quot;:774,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="b3475a9b-8a00-4077-f2aa-92acabac4a44">
+<div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756127333696,&quot;user_tz&quot;:300,&quot;elapsed&quot;:7,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="110388aa-15c0-4e4a-b0a8-956b1dcebec9" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: make directories and cd into project folder</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> pathlib.Path(COURSE_DIR)</span>
@@ -210,7 +183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Working in: /content/drive/MyDrive/dspt25/unified-stocks</code></pre>
 </div>
 </div>
-<div id="cell-4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755698127129,&quot;user_tz&quot;:300,&quot;elapsed&quot;:7,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="98067594-f268-4dcf-dcb1-23b1b071a2b7">
+<div id="cell-4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756127366510,&quot;user_tz&quot;:300,&quot;elapsed&quot;:6,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="babe41d8-593b-46e9-e980-420a326ab5f6" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: clone via HTTPS (public or your private; for private, you can upload later instead of pushing from Colab)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>REPO_URL <span class="op">=</span> <span class="st">"https://github.com/ywanglab/STAT4160.git"</span>  <span class="co"># &lt;- change me</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, os</span>
@@ -224,7 +197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Working in: /content/drive/MyDrive/dspt25/STAT4160</code></pre>
 </div>
 </div>
-<div id="cell-6" class="cell">
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756127453235,&quot;user_tz&quot;:300,&quot;elapsed&quot;:5,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust these two for YOUR repo</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"ywanglab"</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"STAT4160"</span>   <span class="co"># e.g., unified-stocks-team1</span></span>
@@ -277,7 +250,7 @@ Working dir: /content/drive/MyDrive/dspt25/STAT4160
 </div>
 </div>
 </div>
-<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755698328214,&quot;user_tz&quot;:300,&quot;elapsed&quot;:11,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="6b543c73-2df2-4cbd-ecaa-08ec31d449f1">
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756128396343,&quot;user_tz&quot;:300,&quot;elapsed&quot;:16,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="71c728f2-4beb-48a5-8168-52b1d86ae25d" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: write a soft-pinned requirements.txt</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>req <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">pandas&gt;=2.2,&lt;3.0</span></span>
@@ -312,7 +285,7 @@ python-dotenv&gt;=1.0,&lt;2.0
 </div>
 </div>
 </div>
-<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755698967787,&quot;user_tz&quot;:300,&quot;elapsed&quot;:7073,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="e9b5a1e7-9a95-4b15-fa50-efb107e15b9c">
+<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756128420853,&quot;user_tz&quot;:300,&quot;elapsed&quot;:5465,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="41b74abf-488b-4df4-8395-667554f926bc" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: environment info + GPU check</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys, platform, json, time</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -341,10 +314,10 @@ python-dotenv&gt;=1.0,&lt;2.0
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"reports/environment.json"</span>,<span class="st">"w"</span>) <span class="im">as</span> f:</span>
 <span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    json.dump(env, f, indent<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'timestamp': '2025-08-20 14:09:32', 'python': '3.12.11 (main, Jun  4 2025, 08:56:18) [GCC 11.4.0]', 'os': 'Linux-6.1.123+-x86_64-with-glibc2.35', 'pandas': '2.2.2', 'numpy': '2.0.2', 'torch': '2.8.0+cu126', 'cuda_available': False, 'cuda_device': 'CPU'}</code></pre>
+<pre><code>{'timestamp': '2025-08-25 13:27:07', 'python': '3.12.11 (main, Jun  4 2025, 08:56:18) [GCC 11.4.0]', 'os': 'Linux-6.1.123+-x86_64-with-glibc2.35', 'pandas': '2.2.2', 'numpy': '2.0.2', 'torch': '2.8.0+cu126', 'cuda_available': False, 'cuda_device': 'CPU'}</code></pre>
 </div>
 </div>
-<div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755699259187,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="e49bcede-8642-42bf-816e-0f9c2e5bfa85">
+<div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756128572072,&quot;user_tz&quot;:300,&quot;elapsed&quot;:7,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="00a46039-254b-4a09-8c1c-8aeb38c3a4af" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: PyTorch check. If not available (rare in Colab), install CPU-only as a fallback.</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> torch</span>
@@ -358,7 +331,7 @@ python-dotenv&gt;=1.0,&lt;2.0
 <pre><code>PyTorch: 2.8.0+cu126</code></pre>
 </div>
 </div>
-<div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755699268610,&quot;user_tz&quot;:300,&quot;elapsed&quot;:95,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="c87d1074-9003-41de-c9d2-395383b36afc">
+<div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756128610136,&quot;user_tz&quot;:300,&quot;elapsed&quot;:66,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="4dafe427-2d1c-4111-e880-e3b034410fc3" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: reproducibility helpers</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -405,7 +378,7 @@ Fingerprint #2: {'numpy': [0.696469, 0.286139, 0.226851, 0.551315, 0.719469, 0.4
 Match: True</code></pre>
 </div>
 </div>
-<div id="cell-13" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755361288695,&quot;user_tz&quot;:300,&quot;elapsed&quot;:469,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="f2da09a3-7a01-4eaa-b254-ea70e8f1408a">
+<div id="cell-13" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756129185602,&quot;user_tz&quot;:300,&quot;elapsed&quot;:13,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="47fbd8bd-7508-4da5-e52c-8c1705f1da13" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: create stock list if it doesn't exist yet</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, os</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>tickers <span class="op">=</span> [</span>
@@ -417,8 +390,8 @@ Match: True</code></pre>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(path):</span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    pd.DataFrame({<span class="st">"ticker"</span>: tickers}).to_csv(path, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>pd.read_csv(path).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<div id="df-90553088-32b7-4845-8ce1-98715fdbc6f0" class="colab-df-container">
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div id="df-0f0c274c-aebc-47b1-a824-b185f0e5ea38" class="colab-df-container">
     <div>
 
 
@@ -457,7 +430,7 @@ Match: True</code></pre>
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-90553088-32b7-4845-8ce1-98715fdbc6f0')" title="Convert this dataframe to an interactive table." style="display:none;">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-0f0c274c-aebc-47b1-a824-b185f0e5ea38')" title="Convert this dataframe to an interactive table." style="display:none;">
 
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
     <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
@@ -507,12 +480,12 @@ Match: True</code></pre>
 
     <script>
       const buttonEl =
-        document.querySelector('#df-90553088-32b7-4845-8ce1-98715fdbc6f0 button.colab-df-convert');
+        document.querySelector('#df-0f0c274c-aebc-47b1-a824-b185f0e5ea38 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-90553088-32b7-4845-8ce1-98715fdbc6f0');
+        const element = document.querySelector('#df-0f0c274c-aebc-47b1-a824-b185f0e5ea38');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -532,8 +505,8 @@ Match: True</code></pre>
   </div>
 
 
-    <div id="df-3acdd229-4ced-4b03-95ae-0afa4314e714">
-      <button class="colab-df-quickchart" onclick="quickchart('df-3acdd229-4ced-4b03-95ae-0afa4314e714')" title="Suggest charts" style="display:none;">
+    <div id="df-fa71c107-16ca-4c53-ab76-dae780a84089">
+      <button class="colab-df-quickchart" onclick="quickchart('df-fa71c107-16ca-4c53-ab76-dae780a84089')" title="Suggest charts" style="display:none;">
 
 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 0 24 24" width="24px">
     <g>
@@ -649,7 +622,7 @@ Match: True</code></pre>
         }
         (() => {
           let quickchartButtonEl =
-            document.querySelector('#df-3acdd229-4ced-4b03-95ae-0afa4314e714 button');
+            document.querySelector('#df-fa71c107-16ca-4c53-ab76-dae780a84089 button');
           quickchartButtonEl.style.display =
             google.colab.kernel.accessAllowed ? 'block' : 'none';
         })();
@@ -660,7 +633,7 @@ Match: True</code></pre>
   </div>
 </div>
 </div>
-<div id="cell-14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755361293136,&quot;user_tz&quot;:300,&quot;elapsed&quot;:192,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="94abbb63-cd21-4717-a857-0db594e14a84">
+<div id="cell-14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756129190032,&quot;user_tz&quot;:300,&quot;elapsed&quot;:161,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="9da092ef-4659-44bb-e8a6-2ebcd62100df" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: tiny GPU smoke test (safe if CUDA available)</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch, time</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -676,7 +649,7 @@ Match: True</code></pre>
 <pre><code>Device: cpu | y shape: torch.Size([1000, 1000]) | mean: 0.963737428188324</code></pre>
 </div>
 </div>
-<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755361297606,&quot;user_tz&quot;:300,&quot;elapsed&quot;:321,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d8cb2c3a-e448-4c13-e57e-27534ed7e14c">
+<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756129437167,&quot;user_tz&quot;:300,&quot;elapsed&quot;:9,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="2bba4ce6-f02c-49a3-d00c-9f09e3a238f8" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell: write a small Markdown summary for humans</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent  <span class="co"># dedent removes the common indentation</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> dedent(<span class="ss">f"""</span></span>
@@ -699,10 +672,10 @@ Match: True</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code># System Check
 
-- Timestamp: 2025-08-16 16:20:34
-- Python: `3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]`
+- Timestamp: 2025-08-25 13:27:07
+- Python: `3.12.11 (main, Jun  4 2025, 08:56:18) [GCC 11.4.0]`
 - OS: `Linux-6.1.123+-x86_64-with-glibc2.35`
-- pandas: `2.2.2` | numpy: `2.0.2` | torch: `2.6.0+cu124`
+- pandas: `2.2.2` | numpy: `2.0.2` | torch: `2.8.0+cu126`
 - CUDA available: `False` | Device: `CPU`
 
 ## RNG Fingerprint
@@ -712,7 +685,7 @@ Match: True</code></pre>
 </div>
 </div>
 <div id="cell-16" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code to save this notebook. (too complicated)</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code to save this notebook. (too complicated, don't bother)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span>  _message</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>notebook_name <span class="op">=</span> <span class="st">"system_check.ipynb"</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the 'notebooks' subdirectory path</span></span>
@@ -929,6 +902,57 @@ FRED_API_KEY=
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);

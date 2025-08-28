@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -39,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4d21caabf0c80d816cf4ebf0607ebd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6298b6cd933ddc2fa602f911bae516ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,6 +107,7 @@ ul.task-list li input[type="checkbox"] {
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
+<link rel="stylesheet" href="docs1/style.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -99,34 +135,6 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../reports/eda.html"> 
 <span class="menu-text">EDA (parametrized)</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT EDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="../reports/eda-NVDA.html" aria-current="page"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -142,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
+  <ul class="collapse">
   <li><a href="#setup-if-using-python" id="toc-setup-if-using-python" class="nav-link active" data-scroll-target="#setup-if-using-python">Setup if using Python</a></li>
   <li><a href="#download-and-prepare-data" id="toc-download-and-prepare-data" class="nav-link" data-scroll-target="#download-and-prepare-data">Download and prepare data</a></li>
   <li><a href="#price-over-time" id="toc-price-over-time" class="nav-link" data-scroll-target="#price-over-time">Price over time</a></li>
@@ -157,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Stock EDA</h1>
+<div class="quarto-title-block"><div><h1 class="title">Stock EDA</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -189,17 +197,17 @@ Note
 </div>
 <section id="setup-if-using-python" class="level2">
 <h2 class="anchored" data-anchor-id="setup-if-using-python">Setup if using Python</h2>
-<div id="c15ac7c3" class="cell" data-execution_count="2">
+<div id="41175b63" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>('AAPL', '2018-01-01', '2025-08-22', 20)</code></pre>
+<pre><code>('AAPL', '2018-01-01', '2025-08-28', 20)</code></pre>
 </div>
 </div>
 </section>
 <section id="download-and-prepare-data" class="level2">
 <h2 class="anchored" data-anchor-id="download-and-prepare-data">Download and prepare data</h2>
-<div id="45df64cb" class="cell" data-execution_count="3">
+<div id="2af9f00e" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display" data-execution_count="3">
-<div id="df-c7327bb3-4006-4fde-865a-f937e0dfb59f" class="colab-df-container">
+<div id="df-45bb5e60-c216-4f82-9a81-259f7272292f" class="colab-df-container">
     <div>
 
 
@@ -233,7 +241,7 @@ Note
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2018-01-17</td>
-<td>41.984417</td>
+<td>41.984428</td>
 <td>137547200</td>
 <td>0.016381</td>
 <td>0.003894</td>
@@ -241,7 +249,7 @@ Note
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2018-01-18</td>
-<td>42.021923</td>
+<td>42.021927</td>
 <td>124773600</td>
 <td>0.000893</td>
 <td>0.003621</td>
@@ -249,7 +257,7 @@ Note
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2018-01-19</td>
-<td>41.834389</td>
+<td>41.834396</td>
 <td>129700400</td>
 <td>-0.004473</td>
 <td>0.002947</td>
@@ -257,9 +265,9 @@ Note
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2018-01-22</td>
-<td>41.492149</td>
+<td>41.492138</td>
 <td>108434400</td>
-<td>-0.008214</td>
+<td>-0.008215</td>
 <td>0.002088</td>
 <td>0.007229</td>
 </tr>
@@ -278,7 +286,7 @@ Note
     <div class="colab-df-buttons">
       
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-c7327bb3-4006-4fde-865a-f937e0dfb59f')" title="Convert this dataframe to an interactive table." style="display:none;">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-45bb5e60-c216-4f82-9a81-259f7272292f')" title="Convert this dataframe to an interactive table." style="display:none;">
       
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
     <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
@@ -328,12 +336,12 @@ Note
 
     <script>
       const buttonEl =
-        document.querySelector('#df-c7327bb3-4006-4fde-865a-f937e0dfb59f button.colab-df-convert');
+        document.querySelector('#df-45bb5e60-c216-4f82-9a81-259f7272292f button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-c7327bb3-4006-4fde-865a-f937e0dfb59f');
+        const element = document.querySelector('#df-45bb5e60-c216-4f82-9a81-259f7272292f');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -359,7 +367,7 @@ Note
 </section>
 <section id="price-over-time" class="level2">
 <h2 class="anchored" data-anchor-id="price-over-time">Price over time</h2>
-<div id="b08ee7ed" class="cell" data-execution_count="4">
+<div id="ac47e626" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>PosixPath('figs/AAPL_price.png')</code></pre>
 </div>
@@ -374,7 +382,7 @@ Note
 </section>
 <section id="daily-log-returns-histogram" class="level2">
 <h2 class="anchored" data-anchor-id="daily-log-returns-histogram">Daily log returns — histogram</h2>
-<div id="da0b6e7e" class="cell" data-execution_count="5">
+<div id="d39f53e8" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>PosixPath('figs/AAPL_hist.png')</code></pre>
 </div>
@@ -389,7 +397,7 @@ Note
 </section>
 <section id="rolling-mean-volatility-window-params.rolling" class="level2">
 <h2 class="anchored" data-anchor-id="rolling-mean-volatility-window-params.rolling">Rolling mean &amp; volatility (window = {params.rolling})</h2>
-<div id="31ec1a1a" class="cell" data-execution_count="6">
+<div id="564f4807" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>PosixPath('figs/AAPL_rolling.png')</code></pre>
 </div>
@@ -404,9 +412,9 @@ Note
 </section>
 <section id="summary-table" class="level2">
 <h2 class="anchored" data-anchor-id="summary-table">Summary table</h2>
-<div id="a6473962" class="cell" data-execution_count="7">
+<div id="2da4081f" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display" data-execution_count="7">
-<div id="df-0a6ddb59-db20-4f41-9b31-00c9732d0c8b" class="colab-df-container">
+<div id="df-591cc6a1-68eb-4e98-9db9-3e5475502f19" class="colab-df-container">
     <div>
 
 
@@ -425,12 +433,12 @@ Note
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>1910</td>
+<td>1914</td>
 <td>2018-01-17</td>
-<td>2025-08-21</td>
-<td>0.000887</td>
-<td>0.01968</td>
-<td>0.312412</td>
+<td>2025-08-27</td>
+<td>0.000898</td>
+<td>0.019663</td>
+<td>0.312136</td>
 </tr>
 </tbody>
 </table>
@@ -439,7 +447,7 @@ Note
     <div class="colab-df-buttons">
       
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-0a6ddb59-db20-4f41-9b31-00c9732d0c8b')" title="Convert this dataframe to an interactive table." style="display:none;">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-591cc6a1-68eb-4e98-9db9-3e5475502f19')" title="Convert this dataframe to an interactive table." style="display:none;">
       
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
     <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
@@ -489,12 +497,12 @@ Note
 
     <script>
       const buttonEl =
-        document.querySelector('#df-0a6ddb59-db20-4f41-9b31-00c9732d0c8b button.colab-df-convert');
+        document.querySelector('#df-591cc6a1-68eb-4e98-9db9-3e5475502f19 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-0a6ddb59-db20-4f41-9b31-00c9732d0c8b');
+        const element = document.querySelector('#df-591cc6a1-68eb-4e98-9db9-3e5475502f19');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -519,6 +527,8 @@ Note
 </div>
 <p><strong>Note</strong>: Educational use only. This is not trading advice.</p>
 
+
+<!-- -->
 
 </section>
 
@@ -592,6 +602,57 @@ Note
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -921,7 +982,147 @@ Note
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Stock EDA"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: false</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="an">execute-dir:</span><span class="co"> "/content/drive/MyDrive/dspt25/STAT4160/reports"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: false</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">  cache: false     # keep off while testing params</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="an">params:</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">  symbol: "AAPL"</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">  start_date: "2018-01-01"</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">  end_date: ""</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">  rolling: 20</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>This report is parameterized. To change inputs without editing code, pass</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="in">`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30`</span> to <span class="in">`quarto render`</span>.</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup if using Python</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [parameters]</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Default values (overridden by -P at render time)</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>SYMBOL <span class="op">=</span> <span class="st">"AAPL"</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>START  <span class="op">=</span> <span class="st">"2018-01-01"</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>END    <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>ROLL   <span class="op">=</span>  <span class="dv">20</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yfinance <span class="im">as</span> yf</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Read parameters if using R</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># SYMBOL = params.get("symbol", "AAPL")</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co"># START  = params.get("start_date", "2018-01-01")</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="re">END</span><span class="co">    = params.get("end_date", "")</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co"># ROLL   = int(params.get("rolling", 20))</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> END:</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    END <span class="op">=</span> pd.Timestamp.today().strftime(<span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>SYMBOL, START, END, ROLL</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Download and prepare data</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch adjusted OHLCV</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> yf.download(SYMBOL, start<span class="op">=</span>START, end<span class="op">=</span>END, auto_adjust<span class="op">=</span><span class="va">True</span>, progress<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"yfinance failed, falling back to synthetic series:"</span>, e)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> pd.bdate_range(START, END)</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    ret <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.01</span>, <span class="bu">len</span>(idx))</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(np.cumsum(ret))</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    vol <span class="op">=</span> rng.integers(<span class="fl">1e5</span>, <span class="fl">5e6</span>, <span class="bu">len</span>(idx))</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> pd.DataFrame({<span class="st">"Close"</span>: price, <span class="st">"Volume"</span>: vol}, index<span class="op">=</span>idx)</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy &amp; features</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> data.rename(columns<span class="op">=</span><span class="bu">str</span>.lower).copy()</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">"close"</span>,<span class="st">"volume"</span>]].dropna()</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"log_return"</span>] <span class="op">=</span> np.log(df[<span class="st">"close"</span>]).diff()</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"roll_mean"</span>]  <span class="op">=</span> df[<span class="st">"log_return"</span>].rolling(ROLL, min_periods<span class="op">=</span>ROLL<span class="op">//</span><span class="dv">2</span>).mean()</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"roll_vol"</span>]   <span class="op">=</span> df[<span class="st">"log_return"</span>].rolling(ROLL, min_periods<span class="op">=</span>ROLL<span class="op">//</span><span class="dv">2</span>).std()</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna()</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>df.head()</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="fu">## Price over time</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">3</span>))</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>ax.plot(df.index, df[<span class="st">"close"</span>])</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss"> — Adjusted Close"</span>)</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Date"</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">"Price"</span>)</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="co"># figpath = Path("reports/figs")/f"{SYMBOL}_price.png"</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>figpath <span class="op">=</span> Path(<span class="st">"figs"</span>)<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss">_price.png"</span> <span class="co">#same changes for the rest of the figures</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>fig.savefig(figpath, dpi<span class="op">=</span><span class="dv">144</span>)</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>figpath</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="fu">## Daily log returns — histogram</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">3</span>))</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>ax.hist(df[<span class="st">"log_return"</span>], bins<span class="op">=</span><span class="dv">50</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss"> — Daily Log Return Distribution"</span>)</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"log return"</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">"count"</span>)</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>figpath <span class="op">=</span> Path(<span class="st">"figs"</span>)<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss">_hist.png"</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>fig.savefig(figpath, dpi<span class="op">=</span><span class="dv">144</span>)</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>figpath</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rolling mean &amp; volatility (window = {params.rolling})</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">3</span>))</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>ax.plot(df.index, df[<span class="st">"roll_mean"</span>], label<span class="op">=</span><span class="st">"rolling mean"</span>)</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>ax.plot(df.index, df[<span class="st">"roll_vol"</span>],  label<span class="op">=</span><span class="st">"rolling std"</span>)</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss"> — Rolling Return Stats (window=</span><span class="sc">{</span>ROLL<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Date"</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">"value"</span>)</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>figpath <span class="op">=</span> Path(<span class="st">"figs"</span>)<span class="op">/</span><span class="ss">f"</span><span class="sc">{</span>SYMBOL<span class="sc">}</span><span class="ss">_rolling.png"</span></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>fig.savefig(figpath, dpi<span class="op">=</span><span class="dv">144</span>)</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>figpath</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary table</span></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="in">``` {python}</span></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>    <span class="st">"n_days"</span>: [<span class="bu">len</span>(df)],</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>    <span class="st">"start"</span>: [df.index.<span class="bu">min</span>().date()],</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>    <span class="st">"end"</span>:   [df.index.<span class="bu">max</span>().date()],</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mean_daily_ret"</span>: [df[<span class="st">"log_return"</span>].mean()],</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>    <span class="st">"std_daily_ret"</span>:  [df[<span class="st">"log_return"</span>].std()],</span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ann_vol_approx"</span>: [df[<span class="st">"log_return"</span>].std()<span class="op">*</span>np.sqrt(<span class="dv">252</span>)]</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>summary</span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a> **Note**: Educational use only. This is not trading advice.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 

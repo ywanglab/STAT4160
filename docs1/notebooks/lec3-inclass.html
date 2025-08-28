@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4d21caabf0c80d816cf4ebf0607ebd66.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6298b6cd933ddc2fa602f911bae516ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,6 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="docs1/style.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -131,34 +132,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../reports/eda.html"> 
 <span class="menu-text">EDA (parametrized)</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT EDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-AAPL.html"> 
-<span class="menu-text">AAPL</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-MSFT.html"> 
-<span class="menu-text">MSFT</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../reports/eda-NVDA.html"> 
-<span class="menu-text">NVDA</span></a>
-  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -174,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
+  <ul class="collapse">
   <li><a href="#homework" id="toc-homework" class="nav-link active" data-scroll-target="#homework">Homework</a></li>
   </ul>
 </nav>
@@ -193,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Drive not mounted, so nothing to flush and unmount.</code></pre>
 </div>
 </div>
-<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755870147717,&quot;user_tz&quot;:300,&quot;elapsed&quot;:24748,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="83e72d46-8ab3-44ae-9512-89101c373409" data-execution_count="1">
+<div id="cell-1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755870147717,&quot;user_tz&quot;:300,&quot;elapsed&quot;:24748,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="83e72d46-8ab3-44ae-9512-89101c373409">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab cell</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -202,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Mounted at /content/drive</code></pre>
 </div>
 </div>
-<div id="cell-2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755870152783,&quot;user_tz&quot;:300,&quot;elapsed&quot;:2179,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="2">
+<div id="cell-2" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust these two for YOUR repo</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>REPO_OWNER <span class="op">=</span> <span class="st">"ywanglab"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>REPO_NAME  <span class="op">=</span> <span class="st">"STAT4160"</span>   <span class="co"># e.g., unified-stocks-team1</span></span>
@@ -214,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>pathlib.Path(BASE_DIR).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755870156917,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="3756d2cc-b66a-4020-b9d4-9c2a5fe71a5b" data-execution_count="3">
+<div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755870156917,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="3756d2cc-b66a-4020-b9d4-9c2a5fe71a5b">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, subprocess, shutil, pathlib</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pathlib.Path(CLONE_DIR).exists():</span>
@@ -231,12 +204,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="cell-4" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-5" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>git pull <span class="op">--</span>rebase <span class="co"># !git pull --ff-only</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755874692036,&quot;user_tz&quot;:300,&quot;elapsed&quot;:20536,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="75b2419a-3568-4b9e-ff89-1bebe6d44f46" data-execution_count="4">
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756217188151,&quot;user_tz&quot;:300,&quot;elapsed&quot;:18499,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d1dffc6e-7625-4fb8-9455-6cfb8feb2b8e">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Quarto CLI (one-time per Colab runtime)</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget -q https://quarto.org/download/latest/quarto-linux-amd64.deb -O /tmp/quarto.deb</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !dpkg -i /tmp/quarto.deb || apt-get -y -f install &gt;/dev/null &amp;&amp; dpkg -i /tmp/quarto.deb</span></span>
@@ -272,7 +246,7 @@ Setting up quarto (1.7.33) ...
 <li><code>dpkg -i packagename.deb</code> → install a <code>.deb</code>.</li>
 <li><code>dpkg -s packagename</code> → show status/details.</li>
 </ul>
-<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755874731857,&quot;user_tz&quot;:300,&quot;elapsed&quot;:259,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="3b84d52a-d079-4cea-b7ed-8d4c386a77ef" data-execution_count="5">
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756217597196,&quot;user_tz&quot;:300,&quot;elapsed&quot;:325,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="56843f90-683f-429c-83d0-d353950302ec">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>qproj <span class="op">=</span> dedent(<span class="st">"""</span><span class="op">\</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">project:</span></span>
@@ -328,7 +302,7 @@ execute:
 </code></pre>
 </div>
 </div>
-<div id="cell-9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755874736533,&quot;user_tz&quot;:300,&quot;elapsed&quot;:310,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="ba1cc7d9-ee81-48ce-f939-3c926991bd16" data-execution_count="6">
+<div id="cell-9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756217603231,&quot;user_tz&quot;:300,&quot;elapsed&quot;:23,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="e888f2cb-2fdf-4a65-ad2e-1eee86b1c2fa">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">title: "Unified Stocks Project"</span></span>
@@ -353,7 +327,7 @@ Welcome! Use the navigation to view the EDA report.
 </code></pre>
 </div>
 </div>
-<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755874748705,&quot;user_tz&quot;:300,&quot;elapsed&quot;:43,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="7">
+<div id="cell-10" class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"reports/figs"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For Python</span></span>
@@ -423,152 +397,152 @@ Welcome! Use the navigation to view the EDA report.
 <span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
 <span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-11" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875923301,&quot;user_tz&quot;:300,&quot;elapsed&quot;:4,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="26">
+<div id="cell-11" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pathlib</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"reports/figs"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eda_qmd <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">title: "Stock EDA"</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="st">format:</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">  html:</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st">    toc: true</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="st">    number-sections: false</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="st">execute-dir: "/content/drive/MyDrive/dspt25/STAT4160/reports"</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="st">execute:</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="st">  echo: false</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="st">  warning: false</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="st">  cache: false     # keep off while testing params</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eda_qmd <span class="op">=</span> <span class="vs">r"""</span><span class="ch">\</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="vs">title: "Stock EDA"</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="vs">format:</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="vs">  html:</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="vs">    toc: true</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="vs">    number-sections: false</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="vs">execute-dir: "/content/drive/MyDrive/dspt25/STAT4160/reports"</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="vs">execute:</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="vs">  echo: false</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="vs">  warning: false</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="vs">  cache: false     </span><span class="co"># keep off while testing params</span></span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="st">jupyter: python3</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="st">params:</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="st">  symbol: "AAPL"</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="st">  start_date: "2018-01-01"</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="st">  end_date: ""</span></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="st">  rolling: 20</span></span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="st">---</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="vs">jupyter: python3</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="vs">params:</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="vs">  symbol: "AAPL"</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="vs">  start_date: "2018-01-01"</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="vs">  end_date: ""</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="vs">  rolling: 20</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="vs">---</span></span>
 <span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="st">::: callout-note</span></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="st">This report is parameterized. To change inputs without editing code, pass</span></span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="st">`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`.</span></span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="vs">::: callout-note</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="vs">This report is parameterized</span><span class="dv">.</span><span class="vs"> To change inputs without editing code, pass</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="vs">`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`</span><span class="dv">.</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="vs">:::</span></span>
 <span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="st">## Setup if using Python</span></span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="sc">{python}</span></span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="st">#| tags: [parameters]</span></span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="st"># Default values (overridden by -P at render time)</span></span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a><span class="st">SYMBOL = "AAPL"</span></span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="st">START  = "2018-01-01"</span></span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="st">END    = ""</span></span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="st">ROLL   =  20</span></span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="co">## Setup parameters if using Python</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="vs">```{python}</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [parameters]</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Default values (overridden by -P at render time)</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a><span class="vs">SYMBOL = "AAPL"</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="vs">START  = "2018-01-01"</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="vs">END    = ""</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="vs">ROLL   =  20</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a><span class="st">import pandas as pd</span></span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="st">import numpy as np</span></span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="st">import matplotlib.pyplot as plt</span></span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="st">import yfinance as yf</span></span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="st">from pathlib import Path</span></span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="st">from datetime import datetime</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="vs">import numpy as np</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="vs">import matplotlib</span><span class="dv">.</span><span class="vs">pyplot as plt</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="vs">import yfinance as yf</span></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="vs">from datetime import datetime</span></span>
 <span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="st"># Read parameters if using R</span></span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="st"># SYMBOL = params.get("symbol", "AAPL")</span></span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="st"># START  = params.get("start_date", "2018-01-01")</span></span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="st"># END    = params.get("end_date", "")</span></span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="st"># ROLL   = int(params.get("rolling", 20))</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Read parameters if using R</span></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="co"># SYMBOL = params.get("symbol", "AAPL")</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="co"># START  = params.get("start_date", "2018-01-01")</span></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="co"># END    = params.get("end_date", "")</span></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="co"># ROLL   = int(params.get("rolling", 20))</span></span>
 <span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="st">if not END:</span></span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a><span class="st">    END = pd.Timestamp.today().strftime("%Y-%m-</span><span class="sc">%d</span><span class="st">")</span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="vs">if not END:</span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a><span class="vs">    END = pd</span><span class="dv">.</span><span class="vs">Timestamp</span><span class="dv">.</span><span class="vs">today</span><span class="kw">()</span><span class="dv">.</span><span class="vs">strftime</span><span class="kw">(</span><span class="vs">"%Y-%m-%d"</span><span class="kw">)</span></span>
 <span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="st">SYMBOL, START, END, ROLL</span></span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="vs">SYMBOL, START, END, ROLL</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="st">## Download and prepare data</span></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="co">## Download and prepare data</span></span>
 <span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="st"># Fetch adjusted OHLCV</span></span>
-<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="st">try:</span></span>
-<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a><span class="st">    data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)</span></span>
-<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="st">except Exception as e:</span></span>
-<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a><span class="st">    print("yfinance failed, falling back to synthetic series:", e)</span></span>
-<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="st">    idx = pd.bdate_range(START, END)</span></span>
-<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="st">    rng = np.random.default_rng(42)</span></span>
-<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a><span class="st">    ret = rng.normal(0, 0.01, len(idx))</span></span>
-<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="st">    price = 100 * np.exp(np.cumsum(ret))</span></span>
-<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a><span class="st">    vol = rng.integers(1e5, 5e6, len(idx))</span></span>
-<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="st">    data = pd.DataFrame({"Close": price, "Volume": vol}, index=idx)</span></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch adjusted OHLCV</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="vs">try:</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a><span class="vs">    data = yf</span><span class="dv">.</span><span class="vs">download</span><span class="kw">(</span><span class="vs">SYMBOL, start=START, end=END, auto_adjust=True, progress=False</span><span class="kw">)</span></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="vs">except Exception as e:</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a><span class="vs">    print</span><span class="kw">(</span><span class="vs">"yfinance failed, falling back to synthetic series:", e</span><span class="kw">)</span></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="vs">    idx = pd</span><span class="dv">.</span><span class="vs">bdate_range</span><span class="kw">(</span><span class="vs">START, END</span><span class="kw">)</span></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="vs">    rng = np</span><span class="dv">.</span><span class="vs">random</span><span class="dv">.</span><span class="vs">default_rng</span><span class="kw">(</span><span class="vs">42</span><span class="kw">)</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a><span class="vs">    ret = rng</span><span class="dv">.</span><span class="vs">normal</span><span class="kw">(</span><span class="vs">0, 0</span><span class="dv">.</span><span class="vs">01, len</span><span class="kw">(</span><span class="vs">idx</span><span class="kw">))</span></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="vs">    price = 100 </span><span class="op">*</span><span class="vs"> np</span><span class="dv">.</span><span class="vs">exp</span><span class="kw">(</span><span class="vs">np</span><span class="dv">.</span><span class="vs">cumsum</span><span class="kw">(</span><span class="vs">ret</span><span class="kw">))</span></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a><span class="vs">    vol = rng</span><span class="dv">.</span><span class="vs">integers</span><span class="kw">(</span><span class="vs">1e5, 5e6, len</span><span class="kw">(</span><span class="vs">idx</span><span class="kw">))</span></span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="vs">    data = pd</span><span class="dv">.</span><span class="vs">DataFrame</span><span class="kw">(</span><span class="vs">{"Close": price, "Volume": vol}, index=idx</span><span class="kw">)</span></span>
 <span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="st"># Tidy &amp; features</span></span>
-<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="st">df = data.rename(columns=str.lower).copy()</span></span>
-<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a><span class="st">df = df[["close","volume"]].dropna()</span></span>
-<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a><span class="st">df["log_return"] = np.log(df["close"]).diff()</span></span>
-<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a><span class="st">df["roll_mean"]  = df["log_return"].rolling(ROLL, min_periods=ROLL//2).mean()</span></span>
-<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a><span class="st">df["roll_vol"]   = df["log_return"].rolling(ROLL, min_periods=ROLL//2).std()</span></span>
-<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a><span class="st">df = df.dropna()</span></span>
-<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a><span class="st">df.head()</span></span>
-<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy &amp; features</span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="vs">df = data</span><span class="dv">.</span><span class="vs">rename</span><span class="kw">(</span><span class="vs">columns=str</span><span class="dv">.</span><span class="vs">lower</span><span class="kw">)</span><span class="dv">.</span><span class="vs">copy</span><span class="kw">()</span></span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a><span class="vs">df = df</span><span class="pp">[["close","volume"]</span><span class="vs">]</span><span class="dv">.</span><span class="vs">dropna</span><span class="kw">()</span></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="pp">["log_return"]</span><span class="vs"> = np</span><span class="dv">.</span><span class="vs">log</span><span class="kw">(</span><span class="vs">df</span><span class="pp">["close"]</span><span class="kw">)</span><span class="dv">.</span><span class="vs">diff</span><span class="kw">()</span></span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="pp">["roll_mean"]</span><span class="vs">  = df</span><span class="pp">["log_return"]</span><span class="dv">.</span><span class="vs">rolling</span><span class="kw">(</span><span class="vs">ROLL, min_periods=ROLL//2</span><span class="kw">)</span><span class="dv">.</span><span class="vs">mean</span><span class="kw">()</span></span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="pp">["roll_vol"]</span><span class="vs">   = df</span><span class="pp">["log_return"]</span><span class="dv">.</span><span class="vs">rolling</span><span class="kw">(</span><span class="vs">ROLL, min_periods=ROLL//2</span><span class="kw">)</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a><span class="vs">df = df</span><span class="dv">.</span><span class="vs">dropna</span><span class="kw">()</span></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a><span class="vs">df</span><span class="dv">.</span><span class="vs">head</span><span class="kw">()</span></span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a><span class="st">## Price over time</span></span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a><span class="co">## Price over time</span></span>
 <span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a><span class="st">fig, ax = plt.subplots(figsize=(8,3))</span></span>
-<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a><span class="st">ax.plot(df.index, df["close"])</span></span>
-<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_title(f"</span><span class="sc">{SYMBOL}</span><span class="st"> — Adjusted Close")</span></span>
-<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_xlabel("Date"); ax.set_ylabel("Price")</span></span>
-<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a><span class="st">fig.tight_layout()</span></span>
-<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="st"># figpath = Path("reports/figs")/f"</span><span class="sc">{SYMBOL}</span><span class="st">_price.png"</span></span>
-<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="st">figpath = Path("figs")/f"</span><span class="sc">{SYMBOL}</span><span class="st">_price.png" #same changes for the rest of the figures</span></span>
-<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a><span class="st">fig.savefig(figpath, dpi=144)</span></span>
-<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="st">figpath</span></span>
-<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">8,3</span><span class="kw">))</span></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["close"]</span><span class="kw">)</span></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_title</span><span class="kw">(</span><span class="vs">f"{SYMBOL} — Adjusted Close"</span><span class="kw">)</span></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"Date"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"Price"</span><span class="kw">)</span></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="co"># figpath = Path("reports/figs")/f"{SYMBOL}_price.png"</span></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath = Path</span><span class="kw">(</span><span class="vs">"figs"</span><span class="kw">)</span><span class="vs">/f"{SYMBOL}_price</span><span class="dv">.</span><span class="vs">png" </span><span class="co">#same changes for the rest of the figures</span></span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">savefig</span><span class="kw">(</span><span class="vs">figpath, dpi=144</span><span class="kw">)</span></span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath</span></span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a><span class="st">## Daily log returns — histogram</span></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a><span class="co">## Daily log returns — histogram</span></span>
 <span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="st">fig, ax = plt.subplots(figsize=(6,3))</span></span>
-<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a><span class="st">ax.hist(df["log_return"], bins=50, alpha=0.8)</span></span>
-<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_title(f"</span><span class="sc">{SYMBOL}</span><span class="st"> — Daily Log Return Distribution")</span></span>
-<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_xlabel("log return"); ax.set_ylabel("count")</span></span>
-<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a><span class="st">fig.tight_layout()</span></span>
-<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a><span class="st">figpath = Path("figs")/f"</span><span class="sc">{SYMBOL}</span><span class="st">_hist.png"</span></span>
-<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a><span class="st">fig.savefig(figpath, dpi=144)</span></span>
-<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a><span class="st">figpath</span></span>
-<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">6,3</span><span class="kw">))</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">hist</span><span class="kw">(</span><span class="vs">df</span><span class="pp">["log_return"]</span><span class="vs">, bins=50, alpha=0</span><span class="dv">.</span><span class="vs">8</span><span class="kw">)</span></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_title</span><span class="kw">(</span><span class="vs">f"{SYMBOL} — Daily Log Return Distribution"</span><span class="kw">)</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"log return"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"count"</span><span class="kw">)</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath = Path</span><span class="kw">(</span><span class="vs">"figs"</span><span class="kw">)</span><span class="vs">/f"{SYMBOL}_hist</span><span class="dv">.</span><span class="vs">png"</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">savefig</span><span class="kw">(</span><span class="vs">figpath, dpi=144</span><span class="kw">)</span></span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath</span></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="st">## Rolling mean &amp; volatility (window = </span><span class="sc">{params.rolling}</span><span class="st">)</span></span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="co">## Rolling mean &amp; volatility (window = {params.rolling})</span></span>
 <span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="st">fig, ax = plt.subplots(figsize=(8,3))</span></span>
-<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a><span class="st">ax.plot(df.index, df["roll_mean"], label="rolling mean")</span></span>
-<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a><span class="st">ax.plot(df.index, df["roll_vol"],  label="rolling std")</span></span>
-<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_title(f"</span><span class="sc">{SYMBOL}</span><span class="st"> — Rolling Return Stats (window=</span><span class="sc">{ROLL}</span><span class="st">)")</span></span>
-<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a><span class="st">ax.set_xlabel("Date"); ax.set_ylabel("value")</span></span>
-<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a><span class="st">ax.legend()</span></span>
-<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a><span class="st">fig.tight_layout()</span></span>
-<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="st">figpath = Path("figs")/f"</span><span class="sc">{SYMBOL}</span><span class="st">_rolling.png"</span></span>
-<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="st">fig.savefig(figpath, dpi=144)</span></span>
-<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="st">figpath</span></span>
-<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="vs">fig, ax = plt</span><span class="dv">.</span><span class="vs">subplots</span><span class="kw">(</span><span class="vs">figsize=</span><span class="kw">(</span><span class="vs">8,3</span><span class="kw">))</span></span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["roll_mean"]</span><span class="vs">, label="rolling mean"</span><span class="kw">)</span></span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">plot</span><span class="kw">(</span><span class="vs">df</span><span class="dv">.</span><span class="vs">index, df</span><span class="pp">["roll_vol"]</span><span class="vs">,  label="rolling std"</span><span class="kw">)</span></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_title</span><span class="kw">(</span><span class="vs">f"{SYMBOL} — Rolling Return Stats </span><span class="kw">(</span><span class="vs">window={ROLL}</span><span class="kw">)</span><span class="vs">"</span><span class="kw">)</span></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">set_xlabel</span><span class="kw">(</span><span class="vs">"Date"</span><span class="kw">)</span><span class="vs">; ax</span><span class="dv">.</span><span class="vs">set_ylabel</span><span class="kw">(</span><span class="vs">"value"</span><span class="kw">)</span></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a><span class="vs">ax</span><span class="dv">.</span><span class="vs">legend</span><span class="kw">()</span></span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">tight_layout</span><span class="kw">()</span></span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath = Path</span><span class="kw">(</span><span class="vs">"figs"</span><span class="kw">)</span><span class="vs">/f"{SYMBOL}_rolling</span><span class="dv">.</span><span class="vs">png"</span></span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="vs">fig</span><span class="dv">.</span><span class="vs">savefig</span><span class="kw">(</span><span class="vs">figpath, dpi=144</span><span class="kw">)</span></span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="vs">figpath</span></span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a><span class="st">## Summary table</span></span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a><span class="co">## Summary table</span></span>
 <span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a><span class="st">``` </span><span class="sc">{python}</span></span>
-<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a><span class="st">summary = pd.DataFrame({</span></span>
-<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="st">    "n_days": [len(df)],</span></span>
-<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="st">    "start": [df.index.min().date()],</span></span>
-<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a><span class="st">    "end":   [df.index.max().date()],</span></span>
-<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a><span class="st">    "mean_daily_ret": [df["log_return"].mean()],</span></span>
-<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a><span class="st">    "std_daily_ret":  [df["log_return"].std()],</span></span>
-<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a><span class="st">    "ann_vol_approx": [df["log_return"].std()*np.sqrt(252)]</span></span>
-<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a><span class="st">})</span></span>
-<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a><span class="st">summary</span></span>
-<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {python}</span></span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a><span class="vs">summary = pd</span><span class="dv">.</span><span class="vs">DataFrame</span><span class="kw">(</span><span class="vs">{</span></span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="vs">    "n_days": </span><span class="pp">[len(df)]</span><span class="vs">,</span></span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="vs">    "start": </span><span class="pp">[df.index.min().date()]</span><span class="vs">,</span></span>
+<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a><span class="vs">    "end":   </span><span class="pp">[df.index.max().date()]</span><span class="vs">,</span></span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a><span class="vs">    "mean_daily_ret": </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">mean</span><span class="kw">()</span><span class="vs">],</span></span>
+<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a><span class="vs">    "std_daily_ret":  </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span><span class="vs">],</span></span>
+<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a><span class="vs">    "ann_vol_approx": </span><span class="pp">[df["log_return"]</span><span class="dv">.</span><span class="vs">std</span><span class="kw">()</span><span class="op">*</span><span class="vs">np</span><span class="dv">.</span><span class="vs">sqrt</span><span class="kw">(</span><span class="vs">252</span><span class="kw">)</span><span class="vs">]</span></span>
+<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span><span class="kw">)</span></span>
+<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a><span class="vs">summary</span></span>
+<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span>
 <span id="cb17-141"><a href="#cb17-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-142"><a href="#cb17-142" aria-hidden="true" tabindex="-1"></a><span class="st"> **Note**: Educational use only. This is not trading advice.</span></span>
-<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-142"><a href="#cb17-142" aria-hidden="true" tabindex="-1"></a><span class="vs"> </span><span class="op">**</span><span class="vs">Note</span><span class="op">**</span><span class="vs">: Educational use only</span><span class="dv">.</span><span class="vs"> This is not trading advice</span><span class="dv">.</span></span>
+<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875928196,&quot;user_tz&quot;:300,&quot;elapsed&quot;:17,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="cb9c3b66-8814-4a8b-8d9c-75f6050a615a" data-execution_count="27">
+<div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756218113140,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="32b51f63-7f82-4522-9c12-c420ee3626b3">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"reports/eda.qmd"</span>,<span class="st">"w"</span>).write(eda_qmd)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote reports/eda.qmd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -579,12 +553,16 @@ Welcome! Use the navigation to view the EDA report.
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install jupyter-cache # Run this cell if the package is missing</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install papermill   #Run this cell if papermill is passing.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875411041,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8244,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="a99ea5a5-6ea9-4bac-9253-66bf901e7899" data-execution_count="20">
+<div id="cell-14" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1756218134020,&quot;user_tz&quot;:300,&quot;elapsed&quot;:17891,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="6d1fa182-accb-46fc-dc96-a59805d08e7f">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single render with defaults (AAPL)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre>Executing 'eda.quarto_ipynb'
+<pre>Starting python3 kernel...Done
+
+
+
+Executing 'eda.quarto_ipynb'
 
   Cell 1/7: ''...Done
 
@@ -655,7 +633,7 @@ Output created: ../docs1/reports/eda.html
 </div>
 </div>
 </div>
-<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875944432,&quot;user_tz&quot;:300,&quot;elapsed&quot;:9244,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d7459221-1894-4508-b47a-aa4d0d58c314" data-execution_count="28">
+<div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875944432,&quot;user_tz&quot;:300,&quot;elapsed&quot;:9244,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d7459221-1894-4508-b47a-aa4d0d58c314">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Render for MSFT with custom dates and rolling window</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !quarto render reports/eda.qmd -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30 --output-dir docs1/</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">-</span>P SYMBOL:MSFT <span class="op">-</span>P START:<span class="dv">2019</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P END:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P ROLL:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span>
@@ -735,7 +713,7 @@ Output created: ../docs1/reports/eda.html
 </div>
 </div>
 </div>
-<div id="cell-16" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875804348,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10554,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="c060d991-04b4-44ab-8999-3bfb309a674f" data-execution_count="22">
+<div id="cell-16" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755875804348,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10554,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="c060d991-04b4-44ab-8999-3bfb309a674f">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Render for NVDA with a different window</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !quarto render reports/eda.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 -P rolling:60 --output-dir docs1/</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda.qmd <span class="op">-</span>P SYMBOL:NVDA <span class="op">-</span>P START:<span class="dv">2018</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P END:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P ROLL:<span class="dv">60</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -818,7 +796,7 @@ Output created: ../docs1/reports/eda.html
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: write MSFT to docs/reports/eda-MSFT.html via project copy</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil, os</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-MSFT.qmd"</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>MSFT.qmd <span class="op">-</span>P symbol:MSFT <span class="op">-</span>P start_date:<span class="dv">2019</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P end_date:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P rolling:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render reports<span class="op">/</span>eda<span class="op">-</span>MSFT.qmd <span class="op">-</span>P SYMBOL:MSFT <span class="op">-</span>P START:<span class="dv">2019</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P END:<span class="dv">2025</span><span class="op">-</span><span class="dv">0</span><span class="er">8</span><span class="op">-</span><span class="dv">0</span><span class="er">1</span> <span class="op">-</span>P ROLL:<span class="dv">30</span> <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>Starting python3 kernel...Done
@@ -898,7 +876,7 @@ Output created: ../docs1/reports/eda-MSFT.html
 </div>
 </div>
 </div>
-<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755876000848,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="04ab7021-b136-4a29-c137-d80873593b16" data-execution_count="29">
+<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755876000848,&quot;user_tz&quot;:300,&quot;elapsed&quot;:8,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="04ab7021-b136-4a29-c137-d80873593b16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'_quarto.yml'</span>) <span class="im">as</span> f:</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -928,7 +906,7 @@ execute:
 </code></pre>
 </div>
 </div>
-<div id="cell-19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755876021804,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10147,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d043efb1-c413-40fe-8ee7-bd953c2de425" data-execution_count="30">
+<div id="cell-19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755876021804,&quot;user_tz&quot;:300,&quot;elapsed&quot;:10147,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="d043efb1-c413-40fe-8ee7-bd953c2de425">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install ruamel.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
@@ -955,7 +933,7 @@ Successfully installed ruamel.yaml-0.18.15 ruamel.yaml.clib-0.2.12
 </div>
 </div>
 </div>
-<div id="cell-20" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755876479623,&quot;user_tz&quot;:300,&quot;elapsed&quot;:275,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-execution_count="31">
+<div id="cell-20" class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Append MSFT page to navbar</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ruamel.yaml <span class="im">import</span> YAML</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>yaml <span class="op">=</span> YAML()</span>
@@ -1052,7 +1030,7 @@ Output created: docs1/index.html
 </div>
 <section id="homework" class="level2">
 <h2 class="anchored" data-anchor-id="homework">Homework</h2>
-<div id="cell-24" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755877600327,&quot;user_tz&quot;:300,&quot;elapsed&quot;:54,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="f8f374e5-9ff5-42c8-c378-17ecee9e70dc" data-execution_count="32">
+<div id="cell-24" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755877600327,&quot;user_tz&quot;:300,&quot;elapsed&quot;:54,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="f8f374e5-9ff5-42c8-c378-17ecee9e70dc">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-AAPL.qmd"</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="st">"reports/eda.qmd"</span>, <span class="st">"reports/eda-MSFT.qmd"</span>)</span>
@@ -1061,7 +1039,7 @@ Output created: docs1/index.html
 <pre><code>'reports/eda-NVDA.qmd'</code></pre>
 </div>
 </div>
-<div id="cell-25" class="cell" data-outputid="9c3c37e9-dce6-48ec-a2f9-9ea998d5f188" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}">
+<div id="cell-25" class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ruamel.yaml <span class="im">import</span> YAML</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>yaml <span class="op">=</span> YAML()</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>cfg <span class="op">=</span> yaml.load(<span class="bu">open</span>(<span class="st">"_quarto.yml"</span>))</span>
@@ -1071,57 +1049,55 @@ Output created: docs1/index.html
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  {<span class="st">"href"</span>: <span class="st">"reports/eda-NVDA.qmd"</span>, <span class="st">"text"</span>: <span class="st">"NVDA"</span>},</span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>])</span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"_quarto.yml"</span>,<span class="st">"w"</span>) <span class="im">as</span> f:</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    yaml.dump(cfg, f)</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre>[ 1/14] notebooks/lec3-inclass.ipynb
-
-[ 2/14] notebooks/lec2-hw.ipynb
-
-[ 3/14] notebooks/lec2_hw.ipynb
-
-[ 4/14] notebooks/testing.ipynb
-
-[ 5/14] notebooks/reproducibility_demo.ipynb
-
-[ 6/14] notebooks/system_check.ipynb
-
-[ 7/14] notebooks/lec2_inclass.ipynb
-
-[ 8/14] notebooks/lec3_code_inside_QMD_testing.ipynb
-
-[ 9/14] reports/system_check.md
-
-[10/14] reports/eda.qmd
-
-
-
-Starting python3 kernel...Done
-
-[ColabKernelApp] ERROR | No such comm target registered: quarto_kernel_setup
-
-
-
-Executing 'eda.quarto_ipynb'
-
-  Cell 1/7: ''...Done
-
-  Cell 2/7: ''...Done
-
-  Cell 3/7: ''...Done
-
-  Cell 4/7: ''...Done
-
-  Cell 5/7: ''...Done
-
-  Cell 6/7: ''...Done
-
-  Cell 7/7: ''...Done
-
-
-</pre>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    yaml.dump(cfg, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>quarto render <span class="op">--</span>output<span class="op">-</span><span class="bu">dir</span> docs1<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-27" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755880155236,&quot;user_tz&quot;:300,&quot;elapsed&quot;:17,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="b460e54b-b494-4a5b-ec78-a0824c5dd253">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create/append Makefile target</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">guard:</span><span class="ch">\n\t</span><span class="st">python tools/guard_large_files.py</span><span class="ch">\n</span><span class="st">"</span> <span class="co"># guard: Makefile target. \t: tab required.</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"""</span><span class="op">\</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="st">report:</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="ch">\t</span><span class="st">quarto render reports/eda.qmd --output-dir docs/</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="st">reports-trio:</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="ch">\t</span><span class="st">quarto render reports/eda-AAPL.qmd -P symbol:AAPL -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="ch">\t</span><span class="st">quarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="ch">\t</span><span class="st">quarto render reports/eda-NVDA.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/"</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Path(<span class="st">"Makefile"</span>) <span class="co"># point to the Makefile</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># p.write_text(p.read_text() + text if p.exists() else text) # if p exists, read exising content and append text and overwrites.</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="co"># the above code will append text everytime, casue error if repeatedly excute.</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> p.exists():</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    content <span class="op">=</span> p.read_text()</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="st">"report:"</span> <span class="kw">and</span> <span class="st">"reports-trio:"</span>) <span class="kw">not</span> <span class="kw">in</span> content:</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>        p.write_text(content <span class="op">+</span> text)</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    p.write_text(text)</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Added 'reports' and 'report-trio' targets to Makefile"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Added 'reports' and 'report-trio' targets to Makefile</code></pre>
+</div>
+</div>
+<div id="cell-28" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1755880180637,&quot;user_tz&quot;:300,&quot;elapsed&quot;:43,&quot;user&quot;:{&quot;displayName&quot;:&quot;David W.&quot;,&quot;userId&quot;:&quot;14633192575819064045&quot;}}}" data-outputid="701a2747-ec22-417f-a82e-f17d4b2751e8">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'Makefile'</span>) <span class="im">as</span> f:</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+guard:
+    python tools/guard_large_files.py
+report:
+    quarto render reports/eda.qmd --output-dir docs/
+
+reports-trio:
+    quarto render reports/eda-AAPL.qmd -P symbol:AAPL -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/
+    quarto render reports/eda-MSFT.qmd -P symbol:MSFT -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/
+    quarto render reports/eda-NVDA.qmd -P symbol:NVDA -P start_date:2018-01-01 -P end_date:2025-08-01 --output-dir docs/"
+</code></pre>
 </div>
 </div>
 
@@ -1198,6 +1174,57 @@ Executing 'eda.quarto_ipynb'
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
