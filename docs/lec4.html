@@ -433,6 +433,8 @@ div.csl-indent {
 <li>Render &amp; publish the cleaned site to <strong>GitHub Pages</strong>.</li>
 </ol>
 <hr>
+<p><strong>Python environment in Rstudio</strong>:<br>
+1. Tools-&gt;Global Options-&gt;Python-&gt;select, then select one available virtual environment (e.g.&nbsp;a conda environment). You might need to <strong>execute one Python code block</strong> before using the “Render” menu button. 2. Click on the “Terminal” dropdown arrow, switch to a “command prompt” Terminal. You might need go to Option-&gt;Terminal-&gt;New terminal open with-&gt; command prompt”. Then activate the virtual environment.</p>
 </section>
 </section>
 <section id="agenda-75-min" class="level2" data-number="4.2">
@@ -587,7 +589,7 @@ div.csl-indent {
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="vs">  url = {https://github.com/ranaroussi/yfinance}</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="vs">}</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="vs">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="fafedd4f" class="cell" data-execution_count="1">
+<div id="c0efbfb2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"references.bib"</span>,<span class="st">"w"</span>).write(refs)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">open</span>(<span class="st">"references.bib"</span>).read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -622,7 +624,7 @@ div.csl-indent {
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="vs">## Setup parameters if using Python</span></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#ed190d8a .cell tags='["parameters"]' execution_count=2}</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#6647aa2b .cell tags='["parameters"]' execution_count=2}</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="vs"># Default values (overridden by -P at render time)</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="vs">SYMBOL = "AAPL"</span></span>
@@ -635,7 +637,7 @@ div.csl-indent {
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="vs">## Setup</span></span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#c87a0160 .cell execution_count=3}</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#22e02001 .cell execution_count=3}</span></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="vs">import pandas as pd</span></span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="vs">import numpy as np</span></span>
@@ -655,7 +657,7 @@ div.csl-indent {
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="vs">## Download and tidy</span></span>
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#33ae1bdb .cell execution_count=4}</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="vs">::: {#6290cb98 .cell execution_count=4}</span></span>
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="vs">``` {.python .cell-code}</span></span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="vs">try:</span></span>
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="vs">  data = yf.download(SYMBOL, start=START, end=END, auto_adjust=True, progress=False)</span></span>
