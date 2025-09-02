@@ -8,7 +8,7 @@ format:
 execute:
   echo: true
   warning: false
-  cache: true
+  cache: false
 
 jupyter: python3
 params:
