@@ -1,3 +1,4 @@
+\
 ---
 title: "Stock EDA"
 format:
@@ -24,7 +25,7 @@ This report is parameterized. To change inputs without editing code, pass
 `-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30` to `quarto render`.
 :::
 
-## Setup if using Python
+## Setup parameters if using Python
 ```{python}
 #| tags: [parameters]
 # Default values (overridden by -P at render time)

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock EDA – Unified Stocks — EDA</title>
+<title>system_check – Unified Stocks — EDA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1c76e95d92e8cbc0dc911c534f8fbc7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-118b530c2d4ea85cb3c6e0beb50971e7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -67,9 +67,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -96,8 +93,12 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../reports/eda.html" aria-current="page"> 
+    <a class="nav-link" href="../reports/eda.html"> 
 <span class="menu-text">EDA (parametrized)</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reports/eda-MSFT.html"> 
+<span class="menu-text">MSFT EDA</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -115,385 +116,38 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup-parameters-if-using-python" id="toc-setup-parameters-if-using-python" class="nav-link active" data-scroll-target="#setup-parameters-if-using-python">Setup parameters if using Python</a></li>
-  <li><a href="#download-and-prepare-data" id="toc-download-and-prepare-data" class="nav-link" data-scroll-target="#download-and-prepare-data">Download and prepare data</a></li>
-  <li><a href="#price-over-time" id="toc-price-over-time" class="nav-link" data-scroll-target="#price-over-time">Price over time</a></li>
-  <li><a href="#daily-log-returns-histogram" id="toc-daily-log-returns-histogram" class="nav-link" data-scroll-target="#daily-log-returns-histogram">Daily log returns — histogram</a></li>
-  <li><a href="#rolling-mean-volatility-window-params.rolling" id="toc-rolling-mean-volatility-window-params.rolling" class="nav-link" data-scroll-target="#rolling-mean-volatility-window-params.rolling">Rolling mean &amp; volatility (window = {params.rolling})</a></li>
-  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary table</a></li>
+  <li><a href="#system-check" id="toc-system-check" class="nav-link active" data-scroll-target="#system-check">System Check</a>
+  <ul class="collapse">
+  <li><a href="#rng-fingerprint" id="toc-rng-fingerprint" class="nav-link" data-scroll-target="#rng-fingerprint">RNG Fingerprint</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Stock EDA</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
+<section id="system-check" class="level1">
+<h1>System Check</h1>
+<ul>
+<li>Timestamp: 2025-08-16 16:20:34</li>
+<li>Python: <code>3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]</code></li>
+<li>OS: <code>Linux-6.1.123+-x86_64-with-glibc2.35</code></li>
+<li>pandas: <code>2.2.2</code> | numpy: <code>2.0.2</code> | torch: <code>2.6.0+cu124</code></li>
+<li>CUDA available: <code>False</code> | Device: <code>CPU</code></li>
+</ul>
+<section id="rng-fingerprint" class="level2">
+<h2 class="anchored" data-anchor-id="rng-fingerprint">RNG Fingerprint</h2>
+<ul>
+<li>Match on repeated seeds: <code>True</code></li>
+<li>numpy: <code>[0.696469, 0.286139, 0.226851, 0.551315, 0.719469, 0.423106]</code></li>
+<li>torch: <code>[0.296112, 0.516562, 0.251671, 0.688557, 0.073972, 0.866522]</code></li>
+</ul>
 
 
-</header>
-
-
-<p><br>
-</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This report is parameterized. To change inputs without editing code, pass <code>-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30</code> to <code>quarto render</code>.</p>
-</div>
-</div>
-<section id="setup-parameters-if-using-python" class="level2">
-<h2 class="anchored" data-anchor-id="setup-parameters-if-using-python">Setup parameters if using Python</h2>
-<div id="2face988" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>('AAPL', '2018-01-01', '2025-09-04', 20)</code></pre>
-</div>
-</div>
 </section>
-<section id="download-and-prepare-data" class="level2">
-<h2 class="anchored" data-anchor-id="download-and-prepare-data">Download and prepare data</h2>
-<div id="bd176172" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="16">
-<div id="df-a9440f18-b516-4ca3-8b54-3b6eb996c2e6" class="colab-df-container">
-    <div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th">Price</th>
-<th data-quarto-table-cell-role="th">close</th>
-<th data-quarto-table-cell-role="th">volume</th>
-<th data-quarto-table-cell-role="th">log_return</th>
-<th data-quarto-table-cell-role="th">roll_mean</th>
-<th data-quarto-table-cell-role="th">roll_vol</th>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Ticker</th>
-<th data-quarto-table-cell-role="th">aapl</th>
-<th data-quarto-table-cell-role="th">aapl</th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-</tr>
-<tr class="header">
-<th data-quarto-table-cell-role="th">Date</th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2018-01-17</td>
-<td>41.984409</td>
-<td>137547200</td>
-<td>0.016381</td>
-<td>0.003894</td>
-<td>0.007023</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">2018-01-18</td>
-<td>42.021935</td>
-<td>124773600</td>
-<td>0.000893</td>
-<td>0.003621</td>
-<td>0.006724</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2018-01-19</td>
-<td>41.834400</td>
-<td>129700400</td>
-<td>-0.004473</td>
-<td>0.002947</td>
-<td>0.006823</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">2018-01-22</td>
-<td>41.492142</td>
-<td>108434400</td>
-<td>-0.008215</td>
-<td>0.002088</td>
-<td>0.007229</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2018-01-23</td>
-<td>41.501514</td>
-<td>130756400</td>
-<td>0.000226</td>
-<td>0.001955</td>
-<td>0.006963</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-    <div class="colab-df-buttons">
-      
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-a9440f18-b516-4ca3-8b54-3b6eb996c2e6')" title="Convert this dataframe to an interactive table." style="display:none;">
-      
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
-  </svg>
-    </button>
-    
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-a9440f18-b516-4ca3-8b54-3b6eb996c2e6 button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-a9440f18-b516-4ca3-8b54-3b6eb996c2e6');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-  
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<section id="price-over-time" class="level2">
-<h2 class="anchored" data-anchor-id="price-over-time">Price over time</h2>
-<div id="d66f3f32" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="17">
-<pre><code>PosixPath('figs/AAPL_price.png')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eda_files/figure-html/cell-5-output-2.png" width="758" height="278" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="daily-log-returns-histogram" class="level2">
-<h2 class="anchored" data-anchor-id="daily-log-returns-histogram">Daily log returns — histogram</h2>
-<div id="8a78e077" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>PosixPath('figs/AAPL_hist.png')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eda_files/figure-html/cell-6-output-2.png" width="565" height="278" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="rolling-mean-volatility-window-params.rolling" class="level2">
-<h2 class="anchored" data-anchor-id="rolling-mean-volatility-window-params.rolling">Rolling mean &amp; volatility (window = {params.rolling})</h2>
-<div id="a6ebd2d2" class="cell" data-execution_count="6">
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>PosixPath('figs/AAPL_rolling.png')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="eda_files/figure-html/cell-7-output-2.png" width="758" height="278" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="summary-table" class="level2">
-<h2 class="anchored" data-anchor-id="summary-table">Summary table</h2>
-<div id="6202fd52" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-display" data-execution_count="20">
-<div id="df-b8a3515b-eada-4d5d-8434-bd14a9ca676f" class="colab-df-container">
-    <div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">n_days</th>
-<th data-quarto-table-cell-role="th">start</th>
-<th data-quarto-table-cell-role="th">end</th>
-<th data-quarto-table-cell-role="th">mean_daily_ret</th>
-<th data-quarto-table-cell-role="th">std_daily_ret</th>
-<th data-quarto-table-cell-role="th">ann_vol_approx</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1918</td>
-<td>2018-01-17</td>
-<td>2025-09-03</td>
-<td>0.000914</td>
-<td>0.019663</td>
-<td>0.312133</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-    <div class="colab-df-buttons">
-      
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-b8a3515b-eada-4d5d-8434-bd14a9ca676f')" title="Convert this dataframe to an interactive table." style="display:none;">
-      
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
-  </svg>
-    </button>
-    
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-b8a3515b-eada-4d5d-8434-bd14a9ca676f button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-b8a3515b-eada-4d5d-8434-bd14a9ca676f');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-  
-    </div>
-  </div>
-</div>
-</div>
-<p><strong>Note</strong>: Educational use only. This is not trading advice.</p>
-
-
 </section>
 
 </main> <!-- /main -->
