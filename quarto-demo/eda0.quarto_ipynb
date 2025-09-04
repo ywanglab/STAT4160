@@ -1,0 +1,147 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Stock EDA\"\n",
+        "format:\n",
+        "  html:\n",
+        "    toc: true\n",
+        "    number-sections: false\n",
+        "execute:\n",
+        "  echo: true\n",
+        "  warning: false\n",
+        "  cache: false     # keep off while testing params\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "::: callout-note\n",
+        "This report is parameterized. Example:\n",
+        "`-P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30`.\n",
+        ":::\n",
+        "\n",
+        "## Setup"
+      ],
+      "id": "e56bb5d1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "parameters"
+        ]
+      },
+      "source": [
+        "# Default values (overridden by -P at render time)\n",
+        "symbol = \"AAPL\"\n",
+        "start_date = \"2018-01-01\"\n",
+        "end_date = \"\"          # empty means \"open ended\"\n",
+        "rolling = 20"
+      ],
+      "id": "a2374819",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "start = pd.to_datetime(start_date) if start_date else None\n",
+        "end   = pd.to_datetime(end_date) if end_date else None\n",
+        "roll  = int(rolling)\n",
+        "print(\"Using params:\", dict(symbol=symbol, start=start, end=end, rolling=roll))"
+      ],
+      "id": "2869a5c4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Price over time for `{python} symbol` (`{python} start_date` → `{python} end_date`)"
+      ],
+      "id": "e54f3699"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# TODO: fetch prices using `symbol`, `start`, `end`\n",
+        "# df = ...\n",
+        "# ax = df[\"Close\"].plot(title=f\"{symbol} closing price\")\n",
+        "# ax.set_xlabel(\"\"); ax.set_ylabel(\"Price\")"
+      ],
+      "id": "e1c32e13",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Daily log returns — histogram"
+      ],
+      "id": "cf86fb04"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# TODO: compute returns from df and plot"
+      ],
+      "id": "14dcfd80",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Rolling mean & volatility (window = `{python} roll`)"
+      ],
+      "id": "eec62d1f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# TODO: use `roll` for rolling stats"
+      ],
+      "id": "81503392",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Summary table"
+      ],
+      "id": "3da54a60"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# TODO: build a summary DataFrame and display"
+      ],
+      "id": "aec63288",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\ywang2\\AppData\\Local\\anaconda3\\envs\\stat4160\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

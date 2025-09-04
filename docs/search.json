@@ -2278,5 +2278,15 @@
     "crumbs": [
       "References"
     ]
+  },
+  {
+    "objectID": "lec5.html#slides",
+    "href": "lec5.html#slides",
+    "title": "5  Session 5 — Unix/Shell Essentials for Data Work",
+    "section": "5.3 Slides",
+    "text": "5.3 Slides\nWhy shell?\n\nFast iteration for data plumbing (ETL glue: Extract,-Transform-Load) and repeatable ops.\nWorks on any POSIX (Portable OS Infterface: IEEE strandard for Unix-like system) host (your laptop, Colab VM, servers).\nLets you compose small tools with pipes: producer | filter | summarize &gt; report.txt.\n\nMental model\n\nStream text through commands. Each command reads STDIN, writes STDOUT; | connects them.\nRedirection: &gt; (truncate to file), &gt;&gt; (append), &lt; (read from file), 2&gt; (errors).\nExit code: 0 success; non‑zero = error. Use && (only if success) and || (if failure).\n\nQuoting\n\n\"double quotes\" expand variables and backslashes;\n'single quotes' are literal (best for regex/cut/sed patterns);\nAlways quote paths that might contain spaces: \"$FILE\".\n\nRegex quick guide\n\n^ start, $ end, . any char, * 0+, + 1+, ? 0/1, [A-Z] class, (foo|bar) alt.\nUse grep -E (ERE) for + and |. Plain grep is basic (BRE).\n\nCSV caution\n\nUnix tools are line‑oriented. They’re fine for simple CSVs (no embedded commas/quotes).\nFor tricky CSVs, prefer Python/pandas. Today’s examples are simple CSVs.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Session 5 — Unix/Shell Essentials for Data Work</span>"
+    ]
   }
 ]

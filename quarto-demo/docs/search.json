@@ -158,7 +158,7 @@
     "href": "eda.html#summary-table",
     "title": "Stock EDA",
     "section": "Summary table",
-    "text": "Summary table\n\n\n\n\nTable 1: Summary statistics for {SYMBOL}.\n\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1916\n2018-01-17\n2025-08-29\n0.000901\n0.019653\n0.311988\n\n\n\n\n\n\n\n\n\n\nSee Table Table 1 for overall statistics."
+    "text": "Summary table\n\n\n\n\nTable 1: Summary statistics for {SYMBOL}.\n\n\n\n\n\n\n\n\n\n\nn_days\nstart\nend\nmean_daily_ret\nstd_daily_ret\nann_vol_approx\n\n\n\n\n0\n1917\n2018-01-17\n2025-09-02\n0.000895\n0.01965\n0.311934\n\n\n\n\n\n\n\n\n\n\nSee Table Table 1 for overall statistics."
   },
   {
     "objectID": "eda.html#data-dictionary",
