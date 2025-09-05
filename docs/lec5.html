@@ -335,35 +335,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-5-unix-for-data-work-75-min" id="toc-session-5-unix-for-data-work-75-min" class="nav-link active" data-scroll-target="#session-5-unix-for-data-work-75-min"><span class="header-section-number">5.1</span> Session 5 — Unix for Data Work (75 min)</a>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals"><span class="header-section-number">5.0.1</span> Learning goals</a></li>
+  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">5.1</span> Agenda (75 min)</a></li>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">5.2</span> Slides</a></li>
+  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">5.3</span> In‑class lab (35 min)</a>
   <ul class="collapse">
-  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">5.1.1</span> Learning goals</a></li>
+  <li><a href="#mount-drive-set-repo-paths-and-cd-into-the-repo" id="toc-mount-drive-set-repo-paths-and-cd-into-the-repo" class="nav-link" data-scroll-target="#mount-drive-set-repo-paths-and-cd-into-the-repo"><span class="header-section-number">5.3.1</span> 0) Mount Drive, set repo paths, and cd into the repo</a></li>
+  <li><a href="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" id="toc-create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" class="nav-link" data-scroll-target="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible"><span class="header-section-number">5.3.2</span> 1) Create a small <strong>synthetic</strong> prices CSV to work with (safe &amp; reproducible)</a></li>
+  <li><a href="#pipes-redirects-warmup" id="toc-pipes-redirects-warmup" class="nav-link" data-scroll-target="#pipes-redirects-warmup"><span class="header-section-number">5.3.3</span> 2) <strong>Pipes &amp; redirects</strong> warm‑up</a></li>
+  <li><a href="#grep-filters-basic-and-extended-regex" id="toc-grep-filters-basic-and-extended-regex" class="nav-link" data-scroll-target="#grep-filters-basic-and-extended-regex"><span class="header-section-number">5.3.4</span> 3) <strong><code>grep</code></strong> filters (basic and extended) + <strong>regex</strong></a></li>
+  <li><a href="#sed-transformations-searchreplace-inplace-edits" id="toc-sed-transformations-searchreplace-inplace-edits" class="nav-link" data-scroll-target="#sed-transformations-searchreplace-inplace-edits"><span class="header-section-number">5.3.5</span> 4) <strong><code>sed</code></strong> transformations (search/replace; in‑place edits)</a></li>
+  <li><a href="#awk-for-csv-summarization" id="toc-awk-for-csv-summarization" class="nav-link" data-scroll-target="#awk-for-csv-summarization"><span class="header-section-number">5.3.6</span> 5) <strong><code>awk</code></strong> for CSV summarization</a></li>
+  <li><a href="#sort-uniq-deduping-and-comm-to-compare-lists" id="toc-sort-uniq-deduping-and-comm-to-compare-lists" class="nav-link" data-scroll-target="#sort-uniq-deduping-and-comm-to-compare-lists"><span class="header-section-number">5.3.7</span> 6) <code>sort | uniq</code> deduping and <strong><code>comm</code></strong> to compare lists</a></li>
+  <li><a href="#find-and-xargs-safe-nullterminated" id="toc-find-and-xargs-safe-nullterminated" class="nav-link" data-scroll-target="#find-and-xargs-safe-nullterminated"><span class="header-section-number">5.3.8</span> 7) <strong><code>find</code></strong> and <strong><code>xargs</code></strong> (safe, null‑terminated)</a></li>
+  <li><a href="#build-a-defensive-csv-qa-script-and-run-it" id="toc-build-a-defensive-csv-qa-script-and-run-it" class="nav-link" data-scroll-target="#build-a-defensive-csv-qa-script-and-run-it"><span class="header-section-number">5.3.9</span> 8) Build a <strong>defensive CSV QA script</strong> and run it</a></li>
   </ul></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">5.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">5.3</span> Slides</a></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">5.4</span> In‑class lab (35 min)</a>
+  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">5.4</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#homework-due-before-session-6" id="toc-homework-due-before-session-6" class="nav-link" data-scroll-target="#homework-due-before-session-6"><span class="header-section-number">5.5</span> Homework (due before Session 6)</a>
   <ul class="collapse">
-  <li><a href="#mount-drive-set-repo-paths-and-cd-into-the-repo" id="toc-mount-drive-set-repo-paths-and-cd-into-the-repo" class="nav-link" data-scroll-target="#mount-drive-set-repo-paths-and-cd-into-the-repo"><span class="header-section-number">5.4.1</span> 0) Mount Drive, set repo paths, and cd into the repo</a></li>
-  <li><a href="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" id="toc-create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" class="nav-link" data-scroll-target="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible"><span class="header-section-number">5.4.2</span> 1) Create a small <strong>synthetic</strong> prices CSV to work with (safe &amp; reproducible)</a></li>
-  <li><a href="#pipes-redirects-warmup" id="toc-pipes-redirects-warmup" class="nav-link" data-scroll-target="#pipes-redirects-warmup"><span class="header-section-number">5.4.3</span> 2) <strong>Pipes &amp; redirects</strong> warm‑up</a></li>
-  <li><a href="#grep-filters-basic-and-extended-regex" id="toc-grep-filters-basic-and-extended-regex" class="nav-link" data-scroll-target="#grep-filters-basic-and-extended-regex"><span class="header-section-number">5.4.4</span> 3) <strong><code>grep</code></strong> filters (basic and extended) + <strong>regex</strong></a></li>
-  <li><a href="#sed-transformations-searchreplace-inplace-edits" id="toc-sed-transformations-searchreplace-inplace-edits" class="nav-link" data-scroll-target="#sed-transformations-searchreplace-inplace-edits"><span class="header-section-number">5.4.5</span> 4) <strong><code>sed</code></strong> transformations (search/replace; in‑place edits)</a></li>
-  <li><a href="#awk-for-csv-summarization" id="toc-awk-for-csv-summarization" class="nav-link" data-scroll-target="#awk-for-csv-summarization"><span class="header-section-number">5.4.6</span> 5) <strong><code>awk</code></strong> for CSV summarization</a></li>
-  <li><a href="#sort-uniq-deduping-and-comm-to-compare-lists" id="toc-sort-uniq-deduping-and-comm-to-compare-lists" class="nav-link" data-scroll-target="#sort-uniq-deduping-and-comm-to-compare-lists"><span class="header-section-number">5.4.7</span> 6) <code>sort | uniq</code> deduping and <strong><code>comm</code></strong> to compare lists</a></li>
-  <li><a href="#find-and-xargs-safe-nullterminated" id="toc-find-and-xargs-safe-nullterminated" class="nav-link" data-scroll-target="#find-and-xargs-safe-nullterminated"><span class="header-section-number">5.4.8</span> 7) <strong><code>find</code></strong> and <strong><code>xargs</code></strong> (safe, null‑terminated)</a></li>
-  <li><a href="#build-a-defensive-csv-qa-script-and-run-it" id="toc-build-a-defensive-csv-qa-script-and-run-it" class="nav-link" data-scroll-target="#build-a-defensive-csv-qa-script-and-run-it"><span class="header-section-number">5.4.9</span> 8) Build a <strong>defensive CSV QA script</strong> and run it</a></li>
+  <li><a href="#part-a-data-stats-pipeline-oneliners-saved-to-files" id="toc-part-a-data-stats-pipeline-oneliners-saved-to-files" class="nav-link" data-scroll-target="#part-a-data-stats-pipeline-oneliners-saved-to-files"><span class="header-section-number">5.5.1</span> Part A — Data stats pipeline (one‑liners saved to files)</a></li>
+  <li><a href="#part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" id="toc-part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" class="nav-link" data-scroll-target="#part-b-split-perticker-csvs-into-datainterimtickerxyz-directories"><span class="header-section-number">5.5.2</span> Part B — Split per‑ticker CSVs into <code>data/interim/ticker=XYZ/</code> directories</a></li>
+  <li><a href="#part-c-add-makefile-targets-for-qa-and-perticker-split" id="toc-part-c-add-makefile-targets-for-qa-and-perticker-split" class="nav-link" data-scroll-target="#part-c-add-makefile-targets-for-qa-and-perticker-split"><span class="header-section-number">5.5.3</span> Part C — Add <strong>Makefile</strong> targets for QA and per‑ticker split</a></li>
+  <li><a href="#part-d-shellonly-mini-eda-report" id="toc-part-d-shellonly-mini-eda-report" class="nav-link" data-scroll-target="#part-d-shellonly-mini-eda-report"><span class="header-section-number">5.5.4</span> Part D — Shell‑only mini EDA report</a></li>
+  <li><a href="#part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" id="toc-part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" class="nav-link" data-scroll-target="#part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2"><span class="header-section-number">5.5.5</span> Part E — Commit &amp; push your changes (use your short‑lived token as in Session 2)</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">5.5.6</span> Grading (pass/revise)</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">5.5</span> Wrap‑up (10 min)</a></li>
-  <li><a href="#homework-due-before-session-6" id="toc-homework-due-before-session-6" class="nav-link" data-scroll-target="#homework-due-before-session-6"><span class="header-section-number">5.6</span> Homework (due before Session 6)</a>
-  <ul class="collapse">
-  <li><a href="#part-a-data-stats-pipeline-oneliners-saved-to-files" id="toc-part-a-data-stats-pipeline-oneliners-saved-to-files" class="nav-link" data-scroll-target="#part-a-data-stats-pipeline-oneliners-saved-to-files"><span class="header-section-number">5.6.1</span> Part A — Data stats pipeline (one‑liners saved to files)</a></li>
-  <li><a href="#part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" id="toc-part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" class="nav-link" data-scroll-target="#part-b-split-perticker-csvs-into-datainterimtickerxyz-directories"><span class="header-section-number">5.6.2</span> Part B — Split per‑ticker CSVs into <code>data/interim/ticker=XYZ/</code> directories</a></li>
-  <li><a href="#part-c-add-makefile-targets-for-qa-and-perticker-split" id="toc-part-c-add-makefile-targets-for-qa-and-perticker-split" class="nav-link" data-scroll-target="#part-c-add-makefile-targets-for-qa-and-perticker-split"><span class="header-section-number">5.6.3</span> Part C — Add <strong>Makefile</strong> targets for QA and per‑ticker split</a></li>
-  <li><a href="#part-d-shellonly-mini-eda-report" id="toc-part-d-shellonly-mini-eda-report" class="nav-link" data-scroll-target="#part-d-shellonly-mini-eda-report"><span class="header-section-number">5.6.4</span> Part D — Shell‑only mini EDA report</a></li>
-  <li><a href="#part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" id="toc-part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" class="nav-link" data-scroll-target="#part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2"><span class="header-section-number">5.6.5</span> Part E — Commit &amp; push your changes (use your short‑lived token as in Session 2)</a></li>
-  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">5.6.6</span> Grading (pass/revise)</a></li>
-  </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">5.7</span> Key points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">5.6</span> Key points</a></li>
   </ul>
 </nav>
     </div>
@@ -390,13 +387,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <blockquote class="blockquote">
-<p><strong>Scope today:</strong> Filesystem navigation, pipes/redirects, <code>grep</code>/<code>sed</code>/<code>awk</code>, <code>sort|uniq|wc|cut|tr|head|tail|tee</code>, <code>find|xargs</code>, regex basics, and a small <strong>shell QA script</strong> for CSV health checks.</p>
+<p><strong>Scope today:</strong> Filesystem navigation, pipes/redirects, <code>grep</code>/<code>sed</code>/<code>awk</code>, <code>sort|uniq|wc|cut|tr|head|tail|tee</code>, <code>find|xargs</code>, regex basics, and a small <strong>shell QA (Quality Assurance) script</strong> for CSV health checks.</p>
 </blockquote>
 <hr>
-<section id="session-5-unix-for-data-work-75-min" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="session-5-unix-for-data-work-75-min"><span class="header-section-number">5.1</span> Session 5 — Unix for Data Work (75 min)</h2>
-<section id="learning-goals" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">5.1.1</span> Learning goals</h3>
+<section id="learning-goals" class="level3" data-number="5.0.1">
+<h3 data-number="5.0.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">5.0.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
 <ol type="1">
 <li>Navigate and manipulate files safely from the shell (relative vs absolute paths, quoting).</li>
@@ -407,9 +402,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-</section>
-<section id="agenda-75-min" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">5.2</span> Agenda (75 min)</h2>
+<section id="agenda-75-min" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">5.1</span> Agenda (75 min)</h2>
 <ul>
 <li><strong>(8 min)</strong> Why shell for data science; mental model of pipelines</li>
 <li><strong>(12 min)</strong> Core commands &amp; patterns: pipes/redirects, quoting, regex, <code>grep</code>/<code>sed</code>/<code>awk</code></li>
@@ -419,12 +413,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="slides" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">5.3</span> Slides</h2>
+<section id="slides" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="slides"><span class="header-section-number">5.2</span> Slides</h2>
 <p><strong>Why shell?</strong></p>
 <ul>
 <li>Fast iteration for <strong>data plumbing</strong> (ETL glue: Extract,-Transform-Load) and <strong>repeatable</strong> ops.</li>
-<li>Works on any POSIX (Portable OS Infterface: IEEE strandard for Unix-like system) host (your laptop, Colab VM, servers).</li>
+<li>Works on any POSIX (Portable OS Interface: IEEE strandard for Unix-like system) host (your laptop, Colab VM, servers).</li>
 <li>Lets you <strong>compose</strong> small tools with pipes: <code>producer | filter | summarize &gt; report.txt</code>.</li>
 </ul>
 <p><strong>Mental model</strong></p>
@@ -442,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Regex quick guide</strong></p>
 <ul>
 <li><code>^</code> start, <code>$</code> end, <code>.</code> any char, <code>*</code> 0+, <code>+</code> 1+, <code>?</code> 0/1, <code>[A-Z]</code> class, <code>(foo|bar)</code> alt.</li>
-<li>Use <strong><code>grep -E</code></strong> (ERE) for <code>+</code> and <code>|</code>. Plain <code>grep</code> is basic (BRE).</li>
+<li>Use <strong><code>grep -E</code></strong> (Extended Regex) for <code>+</code> and <code>|</code>. Plain <code>grep</code> is basic (Basic re).</li>
 </ul>
 <p><strong>CSV caution</strong></p>
 <ul>
@@ -451,13 +445,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">5.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab-35-min" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">5.3</span> In‑class lab (35 min)</h2>
 <blockquote class="blockquote">
-<p><strong>Instructor tip:</strong> Have students run these <em>as separate Colab cells</em>. Cells labeled “Bash” use <code>%%bash</code>. Cells labeled “Python” are only used to <strong>generate a small synthetic CSV</strong> we can play with offline (no API keys needed).</p>
+<p><strong>Instructor tip:</strong> run these <em>as separate Colab cells</em>. Cells labeled “Bash” use <code>%%bash</code>. Cells labeled “Python” are only used to <strong>generate a small synthetic CSV</strong> we can play with offline (no API keys needed).</p>
 </blockquote>
-<section id="mount-drive-set-repo-paths-and-cd-into-the-repo" class="level3" data-number="5.4.1">
-<h3 data-number="5.4.1" class="anchored" data-anchor-id="mount-drive-set-repo-paths-and-cd-into-the-repo"><span class="header-section-number">5.4.1</span> 0) Mount Drive, set repo paths, and cd into the repo</h3>
+<section id="mount-drive-set-repo-paths-and-cd-into-the-repo" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="mount-drive-set-repo-paths-and-cd-into-the-repo"><span class="header-section-number">5.3.1</span> 0) Mount Drive, set repo paths, and cd into the repo</h3>
 <p><strong>Python (Colab)</strong></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
@@ -477,12 +471,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/STAT4160"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-la</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" class="level3" data-number="5.4.2">
-<h3 data-number="5.4.2" class="anchored" data-anchor-id="create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible"><span class="header-section-number">5.4.2</span> 1) Create a small <strong>synthetic</strong> prices CSV to work with (safe &amp; reproducible)</h3>
+<section id="create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible"><span class="header-section-number">5.3.2</span> 1) Create a small <strong>synthetic</strong> prices CSV to work with (safe &amp; reproducible)</h3>
 <p><strong>Python</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generates data/raw/prices.csv with columns: ticker,date,adj_close,volume,log_return</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, os</span>
@@ -509,8 +503,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>out.to_csv(<span class="st">"data/raw/prices.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>out.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="pipes-redirects-warmup" class="level3" data-number="5.4.3">
-<h3 data-number="5.4.3" class="anchored" data-anchor-id="pipes-redirects-warmup"><span class="header-section-number">5.4.3</span> 2) <strong>Pipes &amp; redirects</strong> warm‑up</h3>
+<section id="pipes-redirects-warmup" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="pipes-redirects-warmup"><span class="header-section-number">5.3.3</span> 2) <strong>Pipes &amp; redirects</strong> warm‑up</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -525,8 +519,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Show ticker column only (field 1), excluding header</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-d,</span> <span class="at">-f1</span> data/raw/prices.csv <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="grep-filters-basic-and-extended-regex" class="level3" data-number="5.4.4">
-<h3 data-number="5.4.4" class="anchored" data-anchor-id="grep-filters-basic-and-extended-regex"><span class="header-section-number">5.4.4</span> 3) <strong><code>grep</code></strong> filters (basic and extended) + <strong>regex</strong></h3>
+<section id="grep-filters-basic-and-extended-regex" class="level3" data-number="5.3.4">
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="grep-filters-basic-and-extended-regex"><span class="header-section-number">5.3.4</span> 3) <strong><code>grep</code></strong> filters (basic and extended) + <strong>regex</strong></h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -540,19 +534,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Count rows per ticker quickly (just for demo)</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-d,</span> <span class="at">-f1</span> data/raw/prices.csv <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<blockquote class="blockquote">
-<p><strong>Note:</strong> We anchor <code>^</code> to the start of the line so <code>grep</code> doesn’t match commas later in the row.</p>
-</blockquote>
 </section>
-<section id="sed-transformations-searchreplace-inplace-edits" class="level3" data-number="5.4.5">
-<h3 data-number="5.4.5" class="anchored" data-anchor-id="sed-transformations-searchreplace-inplace-edits"><span class="header-section-number">5.4.5</span> 4) <strong><code>sed</code></strong> transformations (search/replace; in‑place edits)</h3>
+<section id="sed-transformations-searchreplace-inplace-edits" class="level3" data-number="5.3.5">
+<h3 data-number="5.3.5" class="anchored" data-anchor-id="sed-transformations-searchreplace-inplace-edits"><span class="header-section-number">5.3.5</span> 4) <strong><code>sed</code></strong> transformations (search/replace; in‑place edits)</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a copy so we don't touch the raw file</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/raw/prices.csv data/interim <span class="kw">||</span> <span class="fu">mkdir</span> <span class="at">-p</span> data/interim <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> data/raw/prices.csv data/interim</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/raw/prices.csv data/interim/ <span class="kw">||</span> <span class="fu">mkdir</span> <span class="at">-p</span> data/interim <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> data/raw/prices.csv data/interim</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/interim/prices.csv data/interim/prices_copy.csv</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace ISO date dashes with slashes (2020-01-02 -&gt; 2020/01/02) in-place</span></span>
@@ -564,8 +555,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 data/interim/prices_lower.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="awk-for-csv-summarization" class="level3" data-number="5.4.6">
-<h3 data-number="5.4.6" class="anchored" data-anchor-id="awk-for-csv-summarization"><span class="header-section-number">5.4.6</span> 5) <strong><code>awk</code></strong> for CSV summarization</h3>
+<section id="awk-for-csv-summarization" class="level3" data-number="5.3.6">
+<h3 data-number="5.3.6" class="anchored" data-anchor-id="awk-for-csv-summarization"><span class="header-section-number">5.3.6</span> 5) <strong><code>awk</code></strong> for CSV summarization</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -579,15 +570,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F,</span> <span class="st">'NR&gt;1 &amp;&amp; $1=="NVDA" { print $2, $5 }'</span> data/raw/prices.csv <span class="dt">\</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{ if ($2&lt;0) s=-$2; else s=$2; print $1","$2","s }'</span> <span class="dt">\</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t,</span> <span class="at">-k3,3nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Explanation for students</strong></p>
 <ul>
 <li><code>NR&gt;1</code> skips header.</li>
 <li><code>sum[$1]</code> and <code>n[$1]</code> are associative arrays keyed by <strong>ticker</strong>.</li>
 <li>We sort numerically on column 2 (mean) with <code>-k2,2n</code> or <code>nr</code> for descending.</li>
 </ul>
 </section>
-<section id="sort-uniq-deduping-and-comm-to-compare-lists" class="level3" data-number="5.4.7">
-<h3 data-number="5.4.7" class="anchored" data-anchor-id="sort-uniq-deduping-and-comm-to-compare-lists"><span class="header-section-number">5.4.7</span> 6) <code>sort | uniq</code> deduping and <strong><code>comm</code></strong> to compare lists</h3>
+<section id="sort-uniq-deduping-and-comm-to-compare-lists" class="level3" data-number="5.3.7">
+<h3 data-number="5.3.7" class="anchored" data-anchor-id="sort-uniq-deduping-and-comm-to-compare-lists"><span class="header-section-number">5.3.7</span> 6) <code>sort | uniq</code> deduping and <strong><code>comm</code></strong> to compare lists</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -602,8 +592,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Only in data:"</span><span class="kw">;</span> <span class="fu">comm</span> <span class="at">-23</span> data/interim/tickers_in_data.txt data/interim/tickers_25.txt <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^/  /'</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Only in canonical:"</span><span class="kw">;</span> <span class="fu">comm</span> <span class="at">-13</span> data/interim/tickers_in_data.txt data/interim/tickers_25.txt <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^/  /'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="find-and-xargs-safe-nullterminated" class="level3" data-number="5.4.8">
-<h3 data-number="5.4.8" class="anchored" data-anchor-id="find-and-xargs-safe-nullterminated"><span class="header-section-number">5.4.8</span> 7) <strong><code>find</code></strong> and <strong><code>xargs</code></strong> (safe, null‑terminated)</h3>
+<section id="find-and-xargs-safe-nullterminated" class="level3" data-number="5.3.8">
+<h3 data-number="5.3.8" class="anchored" data-anchor-id="find-and-xargs-safe-nullterminated"><span class="header-section-number">5.3.8</span> 7) <strong><code>find</code></strong> and <strong><code>xargs</code></strong> (safe, null‑terminated)</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -621,8 +611,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Pattern:</strong> prefer <code>-print0 | xargs -0</code> to safely handle spaces/newlines in filenames.</p>
 </blockquote>
 </section>
-<section id="build-a-defensive-csv-qa-script-and-run-it" class="level3" data-number="5.4.9">
-<h3 data-number="5.4.9" class="anchored" data-anchor-id="build-a-defensive-csv-qa-script-and-run-it"><span class="header-section-number">5.4.9</span> 8) Build a <strong>defensive CSV QA script</strong> and run it</h3>
+<section id="build-a-defensive-csv-qa-script-and-run-it" class="level3" data-number="5.3.9">
+<h3 data-number="5.3.9" class="anchored" data-anchor-id="build-a-defensive-csv-qa-script-and-run-it"><span class="header-section-number">5.3.9</span> 8) Build a <strong>defensive CSV QA script</strong> and run it</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -681,8 +671,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">5.5</span> Wrap‑up (10 min)</h2>
+<section id="wrapup-10-min" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">5.4</span> Wrap‑up (10 min)</h2>
 <ul>
 <li>Shell is about <strong>composable building blocks</strong>. Learn 15 commands deeply; combine them fluently.</li>
 <li>Prefer <strong>null‑safe</strong> <code>find … -print0 | xargs -0</code> patterns; always quote variables: <code>"$FILE"</code>.</li>
@@ -691,11 +681,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-6" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="homework-due-before-session-6"><span class="header-section-number">5.6</span> Homework (due before Session 6)</h2>
+<section id="homework-due-before-session-6" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="homework-due-before-session-6"><span class="header-section-number">5.5</span> Homework (due before Session 6)</h2>
 <p><strong>Goal:</strong> Practice and codify shell workflows into your project: (1) a <em>data stats</em> pipeline, (2) a <em>per‑ticker split</em> utility, (3) a Makefile target, and (4) a short <strong>shell‑only EDA</strong> text report.</p>
-<section id="part-a-data-stats-pipeline-oneliners-saved-to-files" class="level3" data-number="5.6.1">
-<h3 data-number="5.6.1" class="anchored" data-anchor-id="part-a-data-stats-pipeline-oneliners-saved-to-files"><span class="header-section-number">5.6.1</span> Part A — Data stats pipeline (one‑liners saved to files)</h3>
+<section id="part-a-data-stats-pipeline-oneliners-saved-to-files" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="part-a-data-stats-pipeline-oneliners-saved-to-files"><span class="header-section-number">5.5.1</span> Part A — Data stats pipeline (one‑liners saved to files)</h3>
 <p><strong>Bash (Colab)</strong></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -718,8 +708,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F,</span> <span class="st">'NR&gt;1 { s[$1]+=$5; n[$1]++ } END { OFS=","; print "ticker,mean_log_return"; for(t in s) print t, s[t]/n[t] }'</span> <span class="dt">\</span></span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  data/raw/prices.csv <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t,</span> <span class="at">-k2,2nr</span> <span class="kw">|</span> <span class="fu">tee</span> reports/mean_return_by_ticker.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" class="level3" data-number="5.6.2">
-<h3 data-number="5.6.2" class="anchored" data-anchor-id="part-b-split-perticker-csvs-into-datainterimtickerxyz-directories"><span class="header-section-number">5.6.2</span> Part B — Split per‑ticker CSVs into <code>data/interim/ticker=XYZ/</code> directories</h3>
+<section id="part-b-split-perticker-csvs-into-datainterimtickerxyz-directories" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="part-b-split-perticker-csvs-into-datainterimtickerxyz-directories"><span class="header-section-number">5.5.2</span> Part B — Split per‑ticker CSVs into <code>data/interim/ticker=XYZ/</code> directories</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -741,8 +731,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify one example</span></span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-la</span> data/interim/ticker=AAPL <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-c-add-makefile-targets-for-qa-and-perticker-split" class="level3" data-number="5.6.3">
-<h3 data-number="5.6.3" class="anchored" data-anchor-id="part-c-add-makefile-targets-for-qa-and-perticker-split"><span class="header-section-number">5.6.3</span> Part C — Add <strong>Makefile</strong> targets for QA and per‑ticker split</h3>
+<section id="part-c-add-makefile-targets-for-qa-and-perticker-split" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="part-c-add-makefile-targets-for-qa-and-perticker-split"><span class="header-section-number">5.5.3</span> Part C — Add <strong>Makefile</strong> targets for QA and per‑ticker split</h3>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -766,8 +756,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> qa</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> split-by-ticker</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-d-shellonly-mini-eda-report" class="level3" data-number="5.6.4">
-<h3 data-number="5.6.4" class="anchored" data-anchor-id="part-d-shellonly-mini-eda-report"><span class="header-section-number">5.6.4</span> Part D — Shell‑only mini EDA report</h3>
+<section id="part-d-shellonly-mini-eda-report" class="level3" data-number="5.5.4">
+<h3 data-number="5.5.4" class="anchored" data-anchor-id="part-d-shellonly-mini-eda-report"><span class="header-section-number">5.5.4</span> Part D — Shell‑only mini EDA report</h3>
 <p>Create <code>reports/mini_eda.txt</code> with <strong>three sections</strong>: counts, top moves, mean returns.</p>
 <p><strong>Bash</strong></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
@@ -792,8 +782,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    data/raw/prices.csv <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-t,</span> <span class="at">-k2,2nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 10</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="kw">|</span> <span class="fu">tee</span> reports/mini_eda.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" class="level3" data-number="5.6.5">
-<h3 data-number="5.6.5" class="anchored" data-anchor-id="part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2"><span class="header-section-number">5.6.5</span> Part E — Commit &amp; push your changes (use your short‑lived token as in Session 2)</h3>
+<section id="part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2" class="level3" data-number="5.5.5">
+<h3 data-number="5.5.5" class="anchored" data-anchor-id="part-e-commit-push-your-changes-use-your-shortlived-token-as-in-session-2"><span class="header-section-number">5.5.5</span> Part E — Commit &amp; push your changes (use your short‑lived token as in Session 2)</h3>
 <p><strong>Bash + Python (getpass)</strong></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -811,8 +801,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>subprocess.run([<span class="st">"git"</span>, <span class="st">"push"</span>, push_url, <span class="st">"HEAD:main"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="grading-passrevise" class="level3" data-number="5.6.6">
-<h3 data-number="5.6.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">5.6.6</span> Grading (pass/revise)</h3>
+<section id="grading-passrevise" class="level3" data-number="5.5.6">
+<h3 data-number="5.5.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">5.5.6</span> Grading (pass/revise)</h3>
 <ul>
 <li><code>scripts/qa_csv.sh</code> exists, is executable, and <strong>fails</strong> on malformed CSV, <strong>passes</strong> on clean CSV.</li>
 <li><code>reports/data_counts.txt</code>, <code>reports/top10_abs_moves.csv</code>, <code>reports/mean_return_by_ticker.csv</code>, and <code>reports/mini_eda.txt</code> generated.</li>
@@ -822,11 +812,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">5.7</span> Key points</h2>
+<section id="key-points" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">5.6</span> Key points</h2>
 <ul>
 <li><strong>Quote</strong> variables and paths. Prefer <code>-print0 | xargs -0</code> with <code>find</code>.</li>
-<li><strong>Fail fast</strong> in scripts (<code>set -euo pipefail</code>) and return <strong>non‑zero</strong> exit codes for CI.</li>
+<li><strong>Fail fast</strong> in scripts (<code>set -euo pipefail</code>) and return <strong>non‑zero</strong> exit codes for CI (Continuous Integraion).</li>
 <li>Shell is for <strong>plumbing</strong>—it complements, not replaces, Python.</li>
 </ul>
 <p><strong>Next session (6):</strong> “Make/just, rsync, ssh/tmux (survey)” and we’ll wire <code>make get-data</code> and <code>make report</code> into a reproducible one‑command pipeline.</p>
