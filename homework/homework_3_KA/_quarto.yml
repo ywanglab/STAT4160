@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs1
+
+website:
+  title: Unified Stocks — EDA
+  navbar:
+    left:
+    - href: index.qmd
+      text: Home
+    - href: reports/eda.qmd
+      text: EDA (parametrized)
+
+    - href: reports/eda-MSFT.qmd
+      text: MSFT EDA
+    - href: reports/eda-AAPL.qmd
+      text: AAPL
+    - href: reports/eda-MSFT.qmd
+      text: MSFT
+    - href: reports/eda-NVDA.qmd
+      text: NVDA
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: false
+
+execute:
+  echo: true
+  warning: false
+  cache: true
