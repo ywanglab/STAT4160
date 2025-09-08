@@ -1,0 +1,2 @@
+Lines (incl header): 4501
+Unique tickers: 25
