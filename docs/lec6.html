@@ -463,14 +463,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="6.4" class="anchored" data-anchor-id="inclass-lab-33-min"><span class="header-section-number">6.4</span> In‑class lab (33 min)</h2>
 <p>We’ll create <strong>three tiny scripts</strong> and a <strong>Makefile</strong> that ties them together:</p>
 <ul>
-<li><code>scripts/get_prices.py</code> → <code>data/raw/prices.csv</code> (Yahoo via <code>yfinance</code>, with synthetic fallback)</li>
-<li><code>scripts/build_features.py</code> → <code>data/processed/features.parquet</code></li>
-<li><code>scripts/backup.sh</code> → rsync your artifacts to <code>backups/&lt;timestamp&gt;/</code></li>
-<li><code>Makefile</code> → <code>make all</code> runs end‑to‑end; <code>make report</code> renders Quarto; <code>make backup</code> syncs artifacts.</li>
+<li><p><code>scripts/get_prices.py</code> → <code>data/raw/prices.csv</code> (Yahoo via <code>yfinance</code>, with synthetic fallback)</p></li>
+<li><p><code>scripts/build_features.py</code> → <code>data/processed/features.parquet</code></p></li>
+<li><p><code>scripts/backup.sh</code> → rsync your artifacts to <code>backups/&lt;timestamp&gt;/</code></p></li>
+<li><p><code>Makefile</code> → <code>make all</code> runs end‑to‑end; <code>make report</code> renders Quarto; <code>make backup</code> syncs artifacts.</p></li>
 </ul>
-<blockquote class="blockquote">
-<p><strong>Instructor tip:</strong> Have everyone run each block as a separate Colab cell.</p>
-</blockquote>
 <section id="mount-drive-and-set-repo-path" class="level3" data-number="6.4.1">
 <h3 data-number="6.4.1" class="anchored" data-anchor-id="mount-drive-and-set-repo-path"><span class="header-section-number">6.4.1</span> 0) Mount Drive and set repo path</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
