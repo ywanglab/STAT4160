@@ -2,7 +2,7 @@ _book/
 _freeze/
 .quarto/
 /.quarto/
-_quarto.yml
+# _quarto.yml
 /*.qmd
 /*.png
 /*.ipynb

@@ -2288,5 +2288,15 @@
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Session 5 — Unix/Shell Essentials for Data Work</span>"
     ]
+  },
+  {
+    "objectID": "lec6.html#key-points",
+    "href": "lec6.html#key-points",
+    "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
+    "section": "6.7 Key points:",
+    "text": "6.7 Key points:\n\nMake is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.\nKeep targets idempotent: running twice shouldn’t break; only rebuild on changes.\nUse rsync with care: --delete is powerful—double‑check DEST paths.\nssh/tmux: you’ll want this the first time you run a long model on a remote machine.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
+    ]
   }
 ]
