@@ -1,0 +1,58 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "STAT 4160: Data Science Productivity Tools"
+  author: "Yi Wang"
+  date: "8/13/2025"
+  
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - lec1.qmd
+    - lec2.qmd
+    - lec3.qmd
+    - lec4.qmd
+    - lec5.qmd
+    - lec6.qmd
+    - lec7.qmd
+    - lec8.qmd
+    - lec9.qmd
+    - lec10.qmd
+    - lec11.qmd
+    - lec12.qmd
+    - lec13.qmd
+    - lec14.qmd
+    - lec15.qmd
+    - lec16.qmd
+    - lec17.qmd
+    - lec18.qmd
+    - lec19.qmd
+    - lec20.qmd
+    - lec21.qmd
+    - lec22.qmd
+    - lec23.qmd
+    - lec24.qmd
+    - lec25.qmd
+    - lec26.qmd
+    - homework/README.md
+    - summary.qmd
+    - references.qmd
+
+execute: 
+  eval: false
+ 
+freeze: true
+  
+bibliography: references.bib
+
+
+format:
+  html:
+    theme: cosmo
+  # pdf:
+  #   documentclass: scrreprt
+
+editor: visual
+

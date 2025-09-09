@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: Unified Stocks - EDA
+  navbar:
+    left:
+    - href: index.qmd
+      text: Home
+    - href: eda.qmd
+      text: EDA (parametrized)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: false
+
+    toc-depth: 2
+    page-navigation: true
+    code-tools: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    css: docs1/style.css
+
+execute:
+  echo: true
+  warning: false
+  cache: true
+  freeze: auto
+  
+  
+bibliography: references.bib
