@@ -177,8 +177,7 @@ dd
 This page accepts parameters: `symbol`, `start_date`, `end_date`, and `rolling`. You can re‑render with:
 
 ```
-quarto render reports/eda.qmd \\
-  -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30
+quarto render reports/eda.qmd -P symbol:MSFT -P start_date:2019-01-01 -P end_date:2025-08-01 -P rolling:30
 ```
 
 ## References
