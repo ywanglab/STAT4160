@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.398">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STAT 4160: Data Science Productivity Tools - 7&nbsp; Session 7 — SQL I: SQLite Schemas &amp; Joins</title>
+<title>7&nbsp; Session 7 — SQL I: SQLite Schemas &amp; Joins – STAT 4160: Data Science Productivity Tools</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -96,6 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -111,13 +112,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lec7.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -126,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 4160: Data Science Productivity Tools</a> 
@@ -196,7 +197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> Workflows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; `pandas.read_sql` Workflows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -315,8 +316,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./lec_5_pre.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 5 (Pre) — Linux Basics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -328,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -340,7 +347,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">7.1.1</span> Learning goals</a></li>
   </ul></li>
   <li><a href="#agenda-75-minutes" id="toc-agenda-75-minutes" class="nav-link" data-scroll-target="#agenda-75-minutes"><span class="header-section-number">7.2</span> Agenda (75 minutes)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">7.3</span> Slides</a></li>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">7.3</span> Slides</a>
+  <ul class="collapse">
+  <li><a href="#when-youd-use-each" id="toc-when-youd-use-each" class="nav-link" data-scroll-target="#when-youd-use-each"><span class="header-section-number">7.3.1</span> When you’d use each</a></li>
+  </ul></li>
   <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">7.4</span> In‑class lab (35 min)</a>
   <ul class="collapse">
   <li><a href="#mount-drive-enter-repo" id="toc-mount-drive-enter-repo" class="nav-link" data-scroll-target="#mount-drive-enter-repo"><span class="header-section-number">7.4.1</span> 0) Mount Drive &amp; enter repo</a></li>
@@ -409,8 +419,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="agenda-75-minutes" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="agenda-75-minutes"><span class="header-section-number">7.2</span> Agenda (75 minutes)</h2>
 <ul>
-<li><strong>(10 min)</strong> Why relational databases for DS; SQLite types; PK/constraints; indexes</li>
-<li><strong>(10 min)</strong> DDL overview (CREATE TABLE/INDEX); transactions; parameterized queries</li>
+<li><strong>(10 min)</strong> Why relational databases for DS; SQLite types; PK (Primary Key)/constraints; indexes</li>
+<li><strong>(10 min)</strong> DDL (Data Definition Language) overview (CREATE TABLE/INDEX); transactions; parameterized queries</li>
 <li><strong>(35 min)</strong> <strong>In‑class lab</strong> (Colab): create <code>prices.db</code> → load <code>prices</code> + <code>meta</code> → write joins</li>
 <li><strong>(10 min)</strong> Wrap‑up &amp; homework briefing</li>
 <li><strong>(10 min)</strong> Buffer</li>
@@ -423,14 +433,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Single file DB → easy to version, ship, query; no server admin.</li>
 <li>Stronger <strong>guarantees</strong> than loose CSVs: types, <strong>constraints</strong>, <strong>unique keys</strong>, <strong>foreign keys</strong>.</li>
-<li>Fast <strong>filters/joins</strong> with <strong>indexes</strong>; JIT queries from Python, R, or CLI.</li>
+<li>Fast <strong>filters/joins</strong> with <strong>indexes</strong>; JIT (Just in time) queries from Python, R, or CLI.</li>
 </ul>
 <p><strong>SQLite types &amp; constraints</strong></p>
 <ul>
-<li>SQLite uses <strong>dynamic typing</strong> but honors affinities: <code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>.</li>
-<li>Use <strong>PRIMARY KEY</strong> (uniqueness + index), <strong>NOT NULL</strong>, and <strong>CHECK</strong> (e.g., volume ≥ 0).</li>
-<li>Turn on <strong>foreign keys</strong>: <code>PRAGMA foreign_keys = ON;</code></li>
+<li><p>SQLite uses <strong>dynamic typing</strong> but honors affinities: <code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>.</p></li>
+<li><p>Use <strong>PRIMARY KEY</strong> (uniqueness + index), <strong>NOT NULL</strong>, and <strong>CHECK</strong> (e.g., volume ≥ 0).</p></li>
+<li><p>Turn on <strong>foreign keys</strong>: <code>PRAGMA foreign_keys = ON;</code> In SQLite, <code>PRAGMA</code> is a special command used to change database settings or get internal info.</p></li>
+<li><p><strong>SQLite</strong> → a self-contained <strong>database engine</strong> (embedded, serverless, file-based). Apps link the SQLite library and read/write a <code>.sqlite</code> file. It enforces SQL, transactions, indexes, etc.</p></li>
+<li><p><strong>SQLAlchemy</strong> → a <strong>Python database toolkit/ORM</strong>. It doesn’t store data itself; it generates SQL and talks to engines (SQLite, Postgres, MySQL, DuckDB, etc.).</p></li>
 </ul>
+<section id="when-youd-use-each" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="when-youd-use-each"><span class="header-section-number">7.3.1</span> When you’d use each</h3>
+<ul>
+<li><p>Use <strong>SQLite</strong> when you need a lightweight, zero-admin database bundled with your app (desktop, mobile, edge/IoT, tests).</p></li>
+<li><p>Use <strong>SQLAlchemy</strong> when you’re writing Python and want a high-level, engine-agnostic way to model tables and run queries (ORM or Core SQL). It can point at SQLite (great for local dev) or a server DB in prod.</p></li>
+<li><p>They’re not substitutes: <strong>SQLite = database</strong>, <strong>SQLAlchemy = Python ORM/toolkit</strong>.</p></li>
+<li><p><strong>Overall ubiquity:</strong> SQLite.</p></li>
+<li><p><strong>Within Python ecosystems (as a library):</strong> SQLAlchemy is one of the most widely used database libraries.</p></li>
+</ul>
+<p>ORM = Object–Relational Mapping</p>
+<p>An ORM is a programming technique (and usually a library) that maps database tables ↔︎ objects in your code.</p>
+<p>Instead of writing raw SQL (SELECT … FROM …), you work with classes and objects, and the ORM translates your code into SQL statements under the hood.</p>
 <p><strong>Indexes &amp; performance</strong></p>
 <ul>
 <li>Index columns used in <strong>joins</strong> and <strong>filters</strong>.</li>
@@ -442,6 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>If you must version a small DB, ensure <strong>Git‑LFS</strong> tracks <code>data/*.db</code> (we set this in Session 2).</li>
 </ul>
 <hr>
+</section>
 </section>
 <section id="inclass-lab-35-min" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">7.4</span> In‑class lab (35 min)</h2>
@@ -565,6 +590,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>meta_df <span class="op">=</span> fetch_sector_map(tickers)</span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>meta_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>with</code> context block may not be working in a notebook. If so, simply execute the code outsie a <code>with</code> block.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert meta with parameterized query</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> con:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    con.executemany(</span>
@@ -959,18 +985,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1002,7 +1017,45 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -1037,7 +1090,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1052,38 +1109,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -1092,8 +1139,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
@@ -1316,12 +1369,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./lec6.html" class="pagination-link">
+      <a href="./lec6.html" class="pagination-link" aria-label="Session 6 — Make/Automation + rsync + ssh/tmux (survey)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./lec8.html" class="pagination-link">
+      <a href="./lec8.html" class="pagination-link" aria-label="Session 8 — SQL II: Window Functions &amp; `pandas.read_sql` Workflows">
         <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> Workflows</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
