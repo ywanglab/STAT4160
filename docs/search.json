@@ -10,11 +10,21 @@
     ]
   },
   {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "13‑week plan (2 × 75‑min per week)\nWeek 1 – Setup, Colab, Git/GitHub\nWeek 2 – Reproducible reporting (Quarto) + RStudio cameo\nWeek 3 – Unix for data work + automation\nWeek 4 – SQL I (schemas, joins)\nWeek 5 – pandas for time series\nWeek 6 – APIs & Web scraping (ethics + caching)\nWeek 7 – Quality: tests, lint, minimal CI\nWeek 8 – Time‑series baselines & backtesting\nWeek 9 – Finance‑specific evaluation & leakage control\nWeek 10 – PyTorch fundamentals\nWeek 11 – Transformers for sequences (tiny GPT)\nWeek 12 – Productivity at scale (lightweight)\nWeek 13 – Communication & showcase",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
     "objectID": "intro.html#week-plan-2-75min-per-week",
     "href": "intro.html#week-plan-2-75min-per-week",
     "title": "Introduction",
-    "section": "13‑week plan (2 × 75‑min per week)",
-    "text": "13‑week plan (2 × 75‑min per week)\nWeek 1 – Setup, Colab, Git/GitHub\n\nLec A: Local Python + VS Code; Colab basics (GPU, Drive mount, persistence limits), repo cloning in Colab, requirements.txt, seeds.\nLec B: Git essentials, branching, PRs, code review etiquette, .gitignore, Git‑LFS do’s/don’ts (quota pitfalls).\nDeliverable: Team repo with a Colab notebook that runs and logs environment info; one PR merged.\n\nWeek 2 – Reproducible reporting (Quarto) + RStudio cameo\n\nLec A: Quarto for Python: parameters, caching, citations; publish to GitHub Pages.\nLec B (15–25 min cameo): RStudio + Quarto rendering (so they can read R‑centric docs later), then back to Python.\nDeliverable: Parameterized EDA report (symbol, date range as params).\n\nWeek 3 – Unix for data work + automation\n\nLec A: Shell basics (pipes, redirects), grep/sed/awk, find/xargs, regex.\nLec B: Shell scripts, simple Makefile/justfile targets; rsync, quick SSH/tmux tour.\nDeliverable: make get-data and make report run end‑to‑end.\n\nWeek 4 – SQL I (schemas, joins)\n\nLec A: SQLite in repo; schema design for OHLCV + metadata; SELECT/JOIN/GROUP BY.\nLec B: Window functions; indices; pandas.read_sql pipelines.\nDeliverable: SQL notebook producing a tidy table ready for modeling.\n\nWeek 5 – pandas for time series\n\nLec A: Cleaning, types, missing, merges; groupby, pivot; Parquet I/O.\nLec B: Time‑series ops: resampling, rolling windows, shifting/lagging, calendar effects.\nDeliverable: Cleaned Parquet dataset + feature snapshot.\n\nWeek 6 – APIs & Web scraping (ethics + caching)\n\nLec A: HTTP basics, requests, pagination, auth, retries, backoff; don’t hard‑code keys (python‑dotenv).\nLec B: BeautifulSoup, CSS selectors, robots.txt, throttling; cache raw pulls; persist to SQL/Parquet.\nDeliverable: One external data source ingested with caching & schema checks.\n\nWeek 7 – Quality: tests, lint, minimal CI\n\nLec A: pytest (2–3 meaningful tests), data validation (light Pandera or custom checks), logging, type hints.\nLec B: Pre‑commit (black, ruff, nbstripout), GitHub Actions to run tests + lint on PRs (fast jobs only).\nDeliverable: CI badge green; failing test demonstrates leakage prevention or schema guard.\n\nWeek 8 – Time‑series baselines & backtesting\n\nLec A: Problem framing; horizon, step size; MAE/sMAPE/MASE; rolling‑origin evaluation.\nLec B: Baselines: naive/seasonal‑naive; quick ARIMA/Prophet or sklearn regressor with lags.\nDeliverable: Baseline model card + backtest plot in Quarto.\n\nWeek 9 – Finance‑specific evaluation & leakage control\n\nLec A: Feature timing & label definition (t+1 returns, multi‑step horizons), survivorship bias, look‑ahead traps, data snooping.\nLec B: Walk‑forward / expanding window, embargoed splits, drift detection; error analysis by regime (volatility bins, bull/bear).\nDeliverable: A robust evaluation plan + revised splits; leakage test added to pytest.\n\nWeek 10 – PyTorch fundamentals\n\nLec A: Tensors, autograd, datasets/dataloaders for windows; training loop, early stopping; GPU in Colab; mixed precision.\nLec B: A small LSTM/TCN baseline for forecasting; monitoring loss/metrics; save best weights.\nDeliverable: PyTorch baseline surpasses classical baseline on at least one metric.\n\nWeek 11 – Transformers for sequences (tiny GPT)\n\nLec A: Attention from scratch; tiny char‑level GPT (embeddings, positions, single head → multi‑head), sanity‑check overfitting on toy data.\nLec B: Adapt to time series: window embedding, causal masking, regression head; ablation (context length, heads, dropout) within Colab budget.\nDeliverable: Transformer results + one ablation figure; notes on compute/time.\n\nWeek 12 – Productivity at scale (lightweight)\n\nLec A: Packaging a small library (src/ layout, pyproject.toml), simple CLI (Typer) for batch inference; config via YAML.\nLec B: Optional FastAPI endpoint demo (local only) + reproducibility audit (fresh‑clone run).\nDeliverable: Tagged release v1.0-rc, CLI can score a held‑out period and write a report.\n\nWeek 13 – Communication & showcase\n\nLec A: Poster + abstract workshop; tell the error‑analysis story; figure polish; README & model card.\nLec B: In‑class presentations + final feedback; plan for continuing to the Spring symposium (next‑steps backlog).\nDeliverable: Poster draft, 250‑word abstract, and a reproducible repo ready to extend.",
+    "section": "",
+    "text": "Lec A: Local Python + VS Code; Colab basics (GPU, Drive mount, persistence limits), repo cloning in Colab, requirements.txt, seeds.\nLec B: Git essentials, branching, PRs, code review etiquette, .gitignore, Git‑LFS do’s/don’ts (quota pitfalls).\nDeliverable: Team repo with a Colab notebook that runs and logs environment info; one PR merged.\n\n\n\nLec A: Quarto for Python: parameters, caching, citations; publish to GitHub Pages.\nLec B (15–25 min cameo): RStudio + Quarto rendering (so they can read R‑centric docs later), then back to Python.\nDeliverable: Parameterized EDA report (symbol, date range as params).\n\n\n\nLec A: Shell basics (pipes, redirects), grep/sed/awk, find/xargs, regex.\nLec B: Shell scripts, simple Makefile/justfile targets; rsync, quick SSH/tmux tour.\nDeliverable: make get-data and make report run end‑to‑end.\n\n\n\nLec A: SQLite in repo; schema design for OHLCV + metadata; SELECT/JOIN/GROUP BY.\nLec B: Window functions; indices; pandas.read_sql pipelines.\nDeliverable: SQL notebook producing a tidy table ready for modeling.\n\n\n\nLec A: Cleaning, types, missing, merges; groupby, pivot; Parquet I/O.\nLec B: Time‑series ops: resampling, rolling windows, shifting/lagging, calendar effects.\nDeliverable: Cleaned Parquet dataset + feature snapshot.\n\n\n\nLec A: HTTP basics, requests, pagination, auth, retries, backoff; don’t hard‑code keys (python‑dotenv).\nLec B: BeautifulSoup, CSS selectors, robots.txt, throttling; cache raw pulls; persist to SQL/Parquet.\nDeliverable: One external data source ingested with caching & schema checks.\n\n\n\nLec A: pytest (2–3 meaningful tests), data validation (light Pandera or custom checks), logging, type hints.\nLec B: Pre‑commit (black, ruff, nbstripout), GitHub Actions to run tests + lint on PRs (fast jobs only).\nDeliverable: CI badge green; failing test demonstrates leakage prevention or schema guard.\n\n\n\nLec A: Problem framing; horizon, step size; MAE/sMAPE/MASE; rolling‑origin evaluation.\nLec B: Baselines: naive/seasonal‑naive; quick ARIMA/Prophet or sklearn regressor with lags.\nDeliverable: Baseline model card + backtest plot in Quarto.\n\n\n\nLec A: Feature timing & label definition (t+1 returns, multi‑step horizons), survivorship bias, look‑ahead traps, data snooping.\nLec B: Walk‑forward / expanding window, embargoed splits, drift detection; error analysis by regime (volatility bins, bull/bear).\nDeliverable: A robust evaluation plan + revised splits; leakage test added to pytest.\n\n\n\nLec A: Tensors, autograd, datasets/dataloaders for windows; training loop, early stopping; GPU in Colab; mixed precision.\nLec B: A small LSTM/TCN baseline for forecasting; monitoring loss/metrics; save best weights.\nDeliverable: PyTorch baseline surpasses classical baseline on at least one metric.\n\n\n\nLec A: Attention from scratch; tiny char‑level GPT (embeddings, positions, single head → multi‑head), sanity‑check overfitting on toy data.\nLec B: Adapt to time series: window embedding, causal masking, regression head; ablation (context length, heads, dropout) within Colab budget.\nDeliverable: Transformer results + one ablation figure; notes on compute/time.\n\n\n\nLec A: Packaging a small library (src/ layout, pyproject.toml), simple CLI (Typer) for batch inference; config via YAML.\nLec B: Optional FastAPI endpoint demo (local only) + reproducibility audit (fresh‑clone run).\nDeliverable: Tagged release v1.0-rc, CLI can score a held‑out period and write a report.\n\n\n\nLec A: Poster + abstract workshop; tell the error‑analysis story; figure polish; README & model card.\nLec B: In‑class presentations + final feedback; plan for continuing to the Spring symposium (next‑steps backlog).\nDeliverable: Poster draft, 250‑word abstract, and a reproducible repo ready to extend.",
     "crumbs": [
       "Introduction"
     ]
@@ -30,11 +40,21 @@
     ]
   },
   {
+    "objectID": "lec1.html",
+    "href": "lec1.html",
+    "title": "1  Session 1 — Dev environment & Colab workflow",
+    "section": "",
+    "text": "1.1 Session 1 — Dev environment & Colab workflow",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
+    ]
+  },
+  {
     "objectID": "lec1.html#session-1-dev-environment-colab-workflow",
     "href": "lec1.html#session-1-dev-environment-colab-workflow",
     "title": "1  Session 1 — Dev environment & Colab workflow",
-    "section": "1.1 Session 1 — Dev environment & Colab workflow",
-    "text": "1.1 Session 1 — Dev environment & Colab workflow\n\n1.1.1 Learning goals\nBy the end of class, students can:\n\nMount Google Drive in Colab and work in a persistent course folder.\nClone a GitHub repo into Drive (or create a project folder if no repo yet).\nCreate and install from a soft‑pinned requirements.txt.\nVerify environment info (Python, OS, library versions) and GPU availability.\nUse a reproducibility seed pattern (NumPy + PyTorch) and validate it.\nSave a simple system check report to the repo.",
+    "section": "",
+    "text": "1.1.1 Learning goals\nBy the end of class, students can:\n\nMount Google Drive in Colab and work in a persistent course folder.\nClone a GitHub repo into Drive (or create a project folder if no repo yet).\nCreate and install from a soft‑pinned requirements.txt.\nVerify environment info (Python, OS, library versions) and GPU availability.\nUse a reproducibility seed pattern (NumPy + PyTorch) and validate it.\nSave a simple system check report to the repo.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Session 1 — Dev environment & Colab workflow</span>"
     ]
@@ -100,11 +120,21 @@
     ]
   },
   {
+    "objectID": "lec2.html",
+    "href": "lec2.html",
+    "title": "2  Session 2 — Git essentials & Git‑LFS",
+    "section": "",
+    "text": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
+    ]
+  },
+  {
     "objectID": "lec2.html#session-2-git-essentials-gitlfs-75-min",
     "href": "lec2.html#session-2-git-essentials-gitlfs-75-min",
     "title": "2  Session 2 — Git essentials & Git‑LFS",
-    "section": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)",
-    "text": "2.1 Session 2 — Git essentials & Git‑LFS (75 min)\n\n2.1.1 Learning goals\nBy the end of class, students can:\n\nExplain Git’s mental model: working directory → staging → commit; branches and remotes.\nCreate a feature branch, commit changes, and push to GitHub from Colab safely.\nUse .gitignore to avoid committing generated artifacts and secrets.\nInstall and configure Git‑LFS, track large/binary files, and verify tracking.\nOpen a pull request (PR) and follow review etiquette.",
+    "section": "",
+    "text": "2.1.1 Learning goals\nBy the end of class, students can:\n\nExplain Git’s mental model: working directory → staging → commit; branches and remotes.\nCreate a feature branch, commit changes, and push to GitHub from Colab safely.\nUse .gitignore to avoid committing generated artifacts and secrets.\nInstall and configure Git‑LFS, track large/binary files, and verify tracking.\nOpen a pull request (PR) and follow review etiquette.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Session 2 — Git essentials & Git‑LFS</span>"
     ]
@@ -260,11 +290,21 @@
     ]
   },
   {
+    "objectID": "lec3.html",
+    "href": "lec3.html",
+    "title": "3  Session 3 — Quarto Reports (Python)",
+    "section": "",
+    "text": "3.1 Session 3 — Quarto Reports (Python) — 75 minutes",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
+    ]
+  },
+  {
     "objectID": "lec3.html#session-3-quarto-reports-python-75-minutes",
     "href": "lec3.html#session-3-quarto-reports-python-75-minutes",
     "title": "3  Session 3 — Quarto Reports (Python)",
-    "section": "3.1 Session 3 — Quarto Reports (Python) — 75 minutes",
-    "text": "3.1 Session 3 — Quarto Reports (Python) — 75 minutes\n\n3.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a parameterized Quarto report (.qmd) that runs Python code.\nRender a report from Colab using the Quarto CLI (with caching).\nPass parameters on the command line to re‑render for different tickers/date ranges.\nConfigure a minimal Quarto website that builds to docs/ and publish it via GitHub Pages.",
+    "section": "",
+    "text": "3.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a parameterized Quarto report (.qmd) that runs Python code.\nRender a report from Colab using the Quarto CLI (with caching).\nPass parameters on the command line to re‑render for different tickers/date ranges.\nConfigure a minimal Quarto website that builds to docs/ and publish it via GitHub Pages.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Session 3 — Quarto Reports (Python)</span>"
     ]
@@ -380,11 +420,21 @@
     ]
   },
   {
+    "objectID": "lec4.html",
+    "href": "lec4.html",
+    "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
+    "section": "",
+    "text": "4.1 Session 4 — RStudio cameo + Report Hygiene (75 min)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
+    ]
+  },
+  {
     "objectID": "lec4.html#session-4-rstudio-cameo-report-hygiene-75-min",
     "href": "lec4.html#session-4-rstudio-cameo-report-hygiene-75-min",
     "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
-    "section": "4.1 Session 4 — RStudio cameo + Report Hygiene (75 min)",
-    "text": "4.1 Session 4 — RStudio cameo + Report Hygiene (75 min)\n\n4.1.1 Learning goals\nBy the end of class, students can:\n\nRender a Python‑only Quarto report from RStudio (or RStudio Cloud) as a proof that Quarto is editor‑agnostic.\nAdd hygiene features to the project: citations (references.bib), figure/table captions + cross‑references, alt text, better site navigation, custom CSS, and freeze/caching for reproducibility.\nProduce a Data Dictionary section that documents columns and dtypes, and reference it from the EDA page.\nRender & publish the cleaned site to GitHub Pages.\n\n\nPython environment in Rstudio:\n1. Tools-&gt;Global Options-&gt;Python-&gt;select, then select one available virtual environment (e.g. a conda environment). You might need to execute one Python code block before using the “Render” menu button. If no virtual environment is shown, use conda env list to show all the environments and their paths, then copy the path of the environment you want to use, and add python.exe, e.g., it should look like this: C:/Users/ywang2/.conda/envs/stat1010/python.exe. And this to the Python Interpreter path box. make sure also under the Environment tab, switch R to Python. 2. Click on the “Terminal” dropdown arrow, switch to a “command prompt” Terminal. You might need go to Option-&gt;Terminal-&gt;New terminal open with-&gt; command prompt”. Then activate the virtual environment.",
+    "section": "",
+    "text": "4.1.1 Learning goals\nBy the end of class, students can:\n\nRender a Python‑only Quarto report from RStudio (or RStudio Cloud) as a proof that Quarto is editor‑agnostic.\nAdd hygiene features to the project: citations (references.bib), figure/table captions + cross‑references, alt text, better site navigation, custom CSS, and freeze/caching for reproducibility.\nProduce a Data Dictionary section that documents columns and dtypes, and reference it from the EDA page.\nRender & publish the cleaned site to GitHub Pages.\n\n\nPython environment in Rstudio:\n1. Tools-&gt;Global Options-&gt;Python-&gt;select, then select one available virtual environment (e.g. a conda environment). You might need to execute one Python code block before using the “Render” menu button. If no virtual environment is shown, use conda env list to show all the environments and their paths, then copy the path of the environment you want to use, and add python.exe, e.g., it should look like this: C:/Users/ywang2/.conda/envs/stat1010/python.exe. And this to the Python Interpreter path box. make sure also under the Environment tab, switch R to Python. 2. Click on the “Terminal” dropdown arrow, switch to a “command prompt” Terminal. You might need go to Option-&gt;Terminal-&gt;New terminal open with-&gt; command prompt”. Then activate the virtual environment.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
     ]
@@ -444,7 +494,7 @@
     "href": "lec4.html#homework-due-before-session-5",
     "title": "4  Session 4 — RStudio Quarto cameo + Report Hygiene",
     "section": "4.8 Homework (due before Session 5)",
-    "text": "4.8 Homework (due before Session 5)\nGoal: Extend hygiene and add one analytic section—ACF plot—with proper captions/labels/alt text/citations.\n\n4.8.1 Part A — Add an ACF figure with cross‑ref + alt text\nAppend this code chunk to reports/eda.qmd after the “Rolling statistics” section:\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# simple ACF (biased) up to max_lag\nx = df[\"log_return\"].fillna(0.0).values\nx = x - x.mean()\nmax_lag = 20\nacf = []\nfor k in range(1, max_lag+1):\n    num = np.sum(x[:-k] * x[k:])\n    den = np.sum(x * x)\n    acf.append(num/den if den != 0 else 0.0)\n\nfig, ax = plt.subplots(figsize=(6,3))\nax.bar(range(1, max_lag+1), acf)\nax.axhline(0, linewidth=1)\nax.set_xlabel(\"Lag\"); ax.set_ylabel(\"ACF\")\nfig.tight_layout()\n\n\n\n\n\n\nFigure 4.1\n\n\n\n\nThen reference it in the prose:\n\nShort‑memory patterns are visible in Figure Figure 4.1 (see also (Hyndman and Athanasopoulos 2021), Chapter 2).\n\n\n\n4.8.2 Part B — Add a monthly returns table with caption + label\nAdd a new section “Monthly returns” with a cross‑ref’d table:\n\nmonthly = (df[\"log_return\"]\n           .groupby([df.index.year.rename(\"year\"), df.index.month.rename(\"month\")])\n           .mean()\n           .reset_index()\n           .pivot(index=\"year\", columns=\"month\", values=\"log_return\")\n           .round(4))\nmonthly\n\n\n\nTable 4.1: {SYMBOL} — Monthly mean of daily log returns\n\n\n\n\n\n\n\nIn text: “See Table Table 4.1 for month‑by‑month averages.”\n\n\n4.8.3 Part C — Add two real citations and tidy your references\n\nReplace the placeholder references with at least two credible sources (textbook, API docs, or peer‑reviewed).\n\nCite them in relevant sections of eda.qmd.\n\nEnsure References renders at the bottom.\n\n(Tip: you can add more @misc{key, title=..., url=...} entries for web docs.)\n\n\n4.8.4 Part D — Verify freeze and caching behavior\n\nIn _quarto.yml, ensure:\n\nexecute:\n  cache: true\n  freeze: auto\nRe‑render once (quarto render --output-dir docs/), note speed.\nChange a small line in eda.qmd and re‑render; confirm only affected chunks rebuild.\n\n\n\n4.8.5 Part E — Commit & push\n!git add reports/eda.qmd references.bib docs/\n!git commit -m \"feat: ACF figure and monthly returns table; references updated\"\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token\n\n\n4.8.6 Grading (pass/revise)\n\nEDA page includes ACF figure with caption, label, and alt text; cross‑referenced in text.\nMonthly returns table present with caption/label; referenced in text.\nAt least two new, relevant citations included and rendered under References.\nfreeze and cache enabled; site renders to docs/ and loads on GitHub Pages.",
+    "text": "4.8 Homework (due before Session 5)\nGoal: Extend hygiene and add one analytic section—ACF plot—with proper captions/labels/alt text/citations.\n\n4.8.1 Part A — Add an ACF figure with cross‑ref + alt text\nAppend this code chunk to reports/eda.qmd after the “Rolling statistics” section:\n\n\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# simple ACF (biased) up to max_lag\nx = df[\"log_return\"].fillna(0.0).values\nx = x - x.mean()\nmax_lag = 20\nacf = []\nfor k in range(1, max_lag+1):\n    num = np.sum(x[:-k] * x[k:])\n    den = np.sum(x * x)\n    acf.append(num/den if den != 0 else 0.0)\n\nfig, ax = plt.subplots(figsize=(6,3))\nax.bar(range(1, max_lag+1), acf)\nax.axhline(0, linewidth=1)\nax.set_xlabel(\"Lag\"); ax.set_ylabel(\"ACF\")\nfig.tight_layout()\n\n\nFigure 4.1\n\n\n\nThen reference it in the prose:\n\nShort‑memory patterns are visible in Figure Figure 4.1 (see also (Hyndman and Athanasopoulos 2021), Chapter 2).\n\n\n\n4.8.2 Part B — Add a monthly returns table with caption + label\nAdd a new section “Monthly returns” with a cross‑ref’d table:\n\n\n\nTable 4.1: {SYMBOL} — Monthly mean of daily log returns\n\n\nmonthly = (df[\"log_return\"]\n           .groupby([df.index.year.rename(\"year\"), df.index.month.rename(\"month\")])\n           .mean()\n           .reset_index()\n           .pivot(index=\"year\", columns=\"month\", values=\"log_return\")\n           .round(4))\nmonthly\n\n\n\nIn text: “See Table Table 4.1 for month‑by‑month averages.”\n\n\n4.8.3 Part C — Add two real citations and tidy your references\n\nReplace the placeholder references with at least two credible sources (textbook, API docs, or peer‑reviewed).\n\nCite them in relevant sections of eda.qmd.\n\nEnsure References renders at the bottom.\n\n(Tip: you can add more @misc{key, title=..., url=...} entries for web docs.)\n\n\n4.8.4 Part D — Verify freeze and caching behavior\n\nIn _quarto.yml, ensure:\n\nexecute:\n  cache: true\n  freeze: auto\nRe‑render once (quarto render --output-dir docs/), note speed.\nChange a small line in eda.qmd and re‑render; confirm only affected chunks rebuild.\n\n\n\n4.8.5 Part E — Commit & push\n!git add reports/eda.qmd references.bib docs/\n!git commit -m \"feat: ACF figure and monthly returns table; references updated\"\nfrom getpass import getpass\ntoken = getpass(\"GitHub token (not stored): \")\npush_url = f\"https://{token}@github.com/{REPO_OWNER}/{REPO_NAME}.git\"\n!git push {push_url} HEAD:main\ndel token\n\n\n4.8.6 Grading (pass/revise)\n\nEDA page includes ACF figure with caption, label, and alt text; cross‑referenced in text.\nMonthly returns table present with caption/label; referenced in text.\nAt least two new, relevant citations included and rendered under References.\nfreeze and cache enabled; site renders to docs/ and loads on GitHub Pages.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Session 4 — RStudio Quarto cameo + Report Hygiene</span>"
     ]
@@ -460,11 +510,11 @@
     ]
   },
   {
-    "objectID": "lec5.html#session-5-unix-for-data-work-75-min",
-    "href": "lec5.html#session-5-unix-for-data-work-75-min",
+    "objectID": "lec5.html",
+    "href": "lec5.html",
     "title": "5  Session 5 — Unix/Shell Essentials for Data Work",
-    "section": "5.1 Session 5 — Unix for Data Work (75 min)",
-    "text": "5.1 Session 5 — Unix for Data Work (75 min)\n\n5.1.1 Learning goals\nBy the end of class, students can:\n\nNavigate and manipulate files safely from the shell (relative vs absolute paths, quoting).\nUse pipes and redirection to build composable mini‑pipelines.\nFilter and transform text/CSV data with grep, sed, awk, and friends.\nFind files with find and operate on them with xargs / -exec safely.\nWrite a small, defensive Bash script (set -euo pipefail) that performs data QA checks and returns a non‑zero exit code on failure.",
+    "section": "",
+    "text": "5.0.1 Learning goals\nBy the end of class, students can:",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Session 5 — Unix/Shell Essentials for Data Work</span>"
     ]
@@ -480,11 +530,11 @@
     ]
   },
   {
-    "objectID": "lec5.html#slides-talking-points-put-these-bullets-on-your-slides",
-    "href": "lec5.html#slides-talking-points-put-these-bullets-on-your-slides",
+    "objectID": "lec5.html#slides",
+    "href": "lec5.html#slides",
     "title": "5  Session 5 — Unix/Shell Essentials for Data Work",
-    "section": "5.3 Slides / talking points (put these bullets on your slides)",
-    "text": "5.3 Slides / talking points (put these bullets on your slides)\nWhy shell?\n\nFast iteration for data plumbing (ETL glue) and repeatable ops.\nWorks on any POSIX host (your laptop, Colab VM, servers).\nLets you compose small tools with pipes: producer | filter | summarize &gt; report.txt.\n\nMental model\n\nStream text through commands. Each command reads STDIN, writes STDOUT; | connects them.\nRedirection: &gt; (truncate to file), &gt;&gt; (append), &lt; (read from file), 2&gt; (errors).\nExit code: 0 success; non‑zero = error. Use && (only if success) and || (if failure).\n\nQuoting\n\n\"double quotes\" expand variables and backslashes;\n'single quotes' are literal (best for regex/cut/sed patterns);\nAlways quote paths that might contain spaces: \"$FILE\".\n\nRegex quick guide\n\n^ start, $ end, . any char, * 0+, + 1+, ? 0/1, [A-Z] class, (foo|bar) alt.\nUse grep -E (ERE) for + and |. Plain grep is basic (BRE).\n\nCSV caution\n\nUnix tools are line‑oriented. They’re fine for simple CSVs (no embedded commas/quotes).\nFor tricky CSVs, prefer Python/pandas. Today’s examples are simple CSVs.",
+    "section": "5.2 Slides",
+    "text": "5.2 Slides\nWhy shell?\n\nFast iteration for data plumbing (ETL glue: Extract,-Transform-Load) and repeatable ops.\nWorks on any POSIX (Portable OS Interface: IEEE strandard for Unix-like system) host (your laptop, Colab VM, servers).\nLets you compose small tools with pipes: producer | filter | summarize &gt; report.txt.\n\nMental model\n\nStream text through commands. Each command reads STDIN, writes STDOUT; | connects them.\nRedirection: &gt; (truncate to file), &gt;&gt; (append), &lt; (read from file), 2&gt; (errors).\nExit code: 0 success; non‑zero = error. Use && (only if success) and || (if failure).\n\nQuoting\n\n\"double quotes\" expand variables and backslashes;\n'single quotes' are literal (best for regex/cut/sed patterns);\nAlways quote paths that might contain spaces: \"$FILE\".\n\nRegex quick guide\n\n^ start, $ end, . any char, * 0+, + 1+, ? 0/1, [A-Z] class, (foo|bar) alt.\nUse grep -E (Extended Regex) for + and |. Plain grep is basic (Basic re).\n\nCSV caution\n\nUnix tools are line‑oriented. They’re fine for simple CSVs (no embedded commas/quotes).\nFor tricky CSVs, prefer Python/pandas. Today’s examples are simple CSVs.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Session 5 — Unix/Shell Essentials for Data Work</span>"
     ]
@@ -530,11 +580,21 @@
     ]
   },
   {
+    "objectID": "lec6.html",
+    "href": "lec6.html",
+    "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
+    "section": "",
+    "text": "6.1 Session 6 — Make/Automation + rsync + ssh/tmux (75 min)\nAssumptions: You’re using the same Drive‑mounted repo from prior sessions (e.g., unified-stocks-teamX). No trading advice—this is educational.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
+    ]
+  },
+  {
     "objectID": "lec6.html#session-6-makeautomation-rsync-sshtmux-75-min",
     "href": "lec6.html#session-6-makeautomation-rsync-sshtmux-75-min",
     "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
-    "section": "6.1 Session 6 — Make/Automation + rsync + ssh/tmux (75 min)",
-    "text": "6.1 Session 6 — Make/Automation + rsync + ssh/tmux (75 min)\n\n6.1.1 Learning goals\nStudents will be able to:\n\nExplain how Make turns scripts into a reproducible pipeline via targets, dependencies, and incremental builds.\nCreate and use a Makefile with helpful defaults, variables, and a help target.\nUse rsync to back up project artifacts and understand --delete and exclude patterns.\nUnderstand the ssh key flow and a tmux workflow for long‑running jobs (survey).",
+    "section": "",
+    "text": "6.1.1 Learning goals\nStudents will be able to:\n\nExplain how Make turns scripts into a reproducible pipeline via targets, dependencies, and incremental builds.\nCreate and use a Makefile with helpful defaults, variables, and a help target.\nUse rsync to back up project artifacts and understand --delete and exclude patterns.\nUnderstand the ssh key flow and a tmux workflow for long‑running jobs (survey).",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
     ]
@@ -590,31 +650,31 @@
     ]
   },
   {
-    "objectID": "lec6.html#instructor-checklist-before-class",
-    "href": "lec6.html#instructor-checklist-before-class",
+    "objectID": "lec6.html#key-points",
+    "href": "lec6.html#key-points",
     "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
-    "section": "6.7 Instructor checklist (before class)",
-    "text": "6.7 Instructor checklist (before class)\n\nTest the full lab in a fresh Colab runtime (data fetch, feature build, report render, backup).\nHave one slide that visually shows the dependency graph: prices.csv → features.parquet → report/train.\nPrepare a one‑pager cheat sheet for rsync flags and tmux keystrokes.",
+    "section": "6.7 Key points:",
+    "text": "6.7 Key points:\n\nMake is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.\nKeep targets idempotent: running twice shouldn’t break; only rebuild on changes.\nUse rsync with care: --delete is powerful—double‑check DEST paths.\nssh/tmux: you’ll want this the first time you run a long model on a remote machine.",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
     ]
   },
   {
-    "objectID": "lec6.html#emphasize-while-teaching",
-    "href": "lec6.html#emphasize-while-teaching",
-    "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
-    "section": "6.8 Emphasize while teaching",
-    "text": "6.8 Emphasize while teaching\n\nMake is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.\nKeep targets idempotent: running twice shouldn’t break; only rebuild on changes.\nUse rsync with care: --delete is powerful—double‑check DEST paths.\nssh/tmux: you’ll want this the first time you run a long model on a remote machine.",
+    "objectID": "lec7.html",
+    "href": "lec7.html",
+    "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
+    "section": "",
+    "text": "7.1 Session 7 — SQL I: SQLite Schemas & Joins (75 min)\nAssumptions: You’re continuing in the same Drive‑mounted repo (e.g., unified-stocks-teamX). You have data/raw/prices.csv from prior sessions. If not, the lab includes a fallback generator.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
   },
   {
     "objectID": "lec7.html#session-7-sql-i-sqlite-schemas-joins-75-min",
     "href": "lec7.html#session-7-sql-i-sqlite-schemas-joins-75-min",
     "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.1 Session 7 — SQL I: SQLite Schemas & Joins (75 min)",
-    "text": "7.1 Session 7 — SQL I: SQLite Schemas & Joins (75 min)\n\n7.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a SQLite database with proper tables, primary keys, constraints, and indexes.\nLoad CSV data into SQLite safely (parameterized inserts or pandas.to_sql), avoiding duplicates.\nWrite SELECT queries with WHERE/ORDER/LIMIT and basic JOINs.\nUse parameterized queries from Python to avoid SQL injection.\nBuild a small SQL I/O helper to streamline queries from Python.",
+    "section": "",
+    "text": "7.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a SQLite database with proper tables, primary keys, constraints, and indexes.\nLoad CSV data into SQLite safely (parameterized inserts or pandas.to_sql), avoiding duplicates.\nWrite SELECT queries with WHERE/ORDER/LIMIT and basic JOINs.\nUse parameterized queries from Python to avoid SQL injection.\nBuild a small SQL I/O helper to streamline queries from Python.",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
@@ -624,17 +684,17 @@
     "href": "lec7.html#agenda-75-minutes",
     "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
     "section": "7.2 Agenda (75 minutes)",
-    "text": "7.2 Agenda (75 minutes)\n\n(10 min) Why relational databases for DS; SQLite types; PK/constraints; indexes\n(10 min) DDL overview (CREATE TABLE/INDEX); transactions; parameterized queries\n(35 min) In‑class lab (Colab): create prices.db → load prices + meta → write joins\n(10 min) Wrap‑up & homework briefing\n(10 min) Buffer",
+    "text": "7.2 Agenda (75 minutes)\n\n(10 min) Why relational databases for DS; SQLite types; PK (Primary Key)/constraints; indexes\n(10 min) DDL (Data Definition Language) overview (CREATE TABLE/INDEX); transactions; parameterized queries\n(35 min) In‑class lab (Colab): create prices.db → load prices + meta → write joins\n(10 min) Wrap‑up & homework briefing\n(10 min) Buffer",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
   },
   {
-    "objectID": "lec7.html#slides-talking-points-add-to-your-deck",
-    "href": "lec7.html#slides-talking-points-add-to-your-deck",
+    "objectID": "lec7.html#slides",
+    "href": "lec7.html#slides",
     "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.3 Slides / talking points (add to your deck)",
-    "text": "7.3 Slides / talking points (add to your deck)\nWhy SQLite for DS\n\nSingle file DB → easy to version, ship, query; no server admin.\nStronger guarantees than loose CSVs: types, constraints, unique keys, foreign keys.\nFast filters/joins with indexes; JIT queries from Python, R, or CLI.\n\nSQLite types & constraints\n\nSQLite uses dynamic typing but honors affinities: INTEGER, REAL, TEXT, BLOB.\nUse PRIMARY KEY (uniqueness + index), NOT NULL, and CHECK (e.g., volume ≥ 0).\nTurn on foreign keys: PRAGMA foreign_keys = ON;\n\nIndexes & performance\n\nIndex columns used in joins and filters.\nComposite PK (ticker, date) makes common lookups fast.\n\nWhat NOT to commit\n\nLarge .db files. Keep DB small or regenerate from CSV with a script.\nIf you must version a small DB, ensure Git‑LFS tracks data/*.db (we set this in Session 2).",
+    "section": "7.3 Slides",
+    "text": "7.3 Slides\nWhy SQLite for DS\n\nSingle file DB → easy to version, ship, query; no server admin.\nStronger guarantees than loose CSVs: types, constraints, unique keys, foreign keys.\nFast filters/joins with indexes; JIT (Just in time) queries from Python, R, or CLI.\n\nSQLite types & constraints\n\nSQLite uses dynamic typing but honors affinities: INTEGER, REAL, TEXT, BLOB.\nUse PRIMARY KEY (uniqueness + index), NOT NULL, and CHECK (e.g., volume ≥ 0).\nTurn on foreign keys: PRAGMA foreign_keys = ON; In SQLite, PRAGMA is a special command used to change database settings or get internal info.\nSQLite → a self-contained database engine (embedded, serverless, file-based). Apps link the SQLite library and read/write a .sqlite file. It enforces SQL, transactions, indexes, etc.\nSQLAlchemy → a Python database toolkit/ORM. It doesn’t store data itself; it generates SQL and talks to engines (SQLite, Postgres, MySQL, DuckDB, etc.).\n\n\n7.3.1 When you’d use each\n\nUse SQLite when you need a lightweight, zero-admin database bundled with your app (desktop, mobile, edge/IoT, tests).\nUse SQLAlchemy when you’re writing Python and want a high-level, engine-agnostic way to model tables and run queries (ORM or Core SQL). It can point at SQLite (great for local dev) or a server DB in prod.\nThey’re not substitutes: SQLite = database, SQLAlchemy = Python ORM/toolkit.\nOverall ubiquity: SQLite.\nWithin Python ecosystems (as a library): SQLAlchemy is one of the most widely used database libraries.\n\nORM = Object–Relational Mapping\nAn ORM is a programming technique (and usually a library) that maps database tables ↔︎ objects in your code.\nInstead of writing raw SQL (SELECT … FROM …), you work with classes and objects, and the ORM translates your code into SQL statements under the hood.\nIndexes & performance\n\nIndex columns used in joins and filters.\nComposite PK (ticker, date) makes common lookups fast.\n\nWhat NOT to commit\n\nLarge .db files. Keep DB small or regenerate from CSV with a script.\nIf you must version a small DB, ensure Git‑LFS tracks data/*.db (we set this in Session 2).",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
@@ -644,7 +704,7 @@
     "href": "lec7.html#inclass-lab-35-min",
     "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
     "section": "7.4 In‑class lab (35 min)",
-    "text": "7.4 In‑class lab (35 min)\n\n7.4.1 0) Mount Drive & enter repo\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_OWNER = \"YOUR_GITHUB_USERNAME_OR_ORG\"   # &lt;- change\nREPO_NAME  = \"unified-stocks-teamX\"          # &lt;- change\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, pandas as pd, numpy as np\npathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)\nassert pathlib.Path(REPO_DIR).exists(), \"Repo not found in Drive. Clone it first.\"\nos.chdir(REPO_DIR)\nprint(\"Working dir:\", os.getcwd())\n\n\n7.4.2 1) Ensure prerequisites & create a small prices.csv if missing\n# Ensure pandas and sqlite3 are available (sqlite3 is in stdlib)\nimport pandas as pd, sqlite3, numpy as np, os\nfrom pathlib import Path\n\nPath(\"data/raw\").mkdir(parents=True, exist_ok=True)\nif not Path(\"data/raw/prices.csv\").exists():\n    print(\"No prices.csv found; generating a small synthetic one.\")\n    tickers = [\"AAPL\",\"MSFT\",\"NVDA\",\"AMZN\",\"GOOGL\"]\n    dates = pd.bdate_range(\"2022-01-03\", periods=120)\n    rng = np.random.default_rng(7)\n    frames=[]\n    for t in tickers:\n        r = rng.normal(0, 0.01, len(dates))\n        price = 100*np.exp(np.cumsum(r))\n        vol = rng.integers(1e5, 5e6, len(dates))\n        df = pd.DataFrame({\"ticker\": t, \"date\": dates, \"adj_close\": price, \"volume\": vol})\n        df[\"log_return\"] = np.log(df[\"adj_close\"]).diff().fillna(0)\n        frames.append(df)\n    pd.concat(frames, ignore_index=True).to_csv(\"data/raw/prices.csv\", index=False)\n\n# Show a peek\npd.read_csv(\"data/raw/prices.csv\").head()\n\n\n7.4.3 2) Design schema & create the database data/prices.db\nWe’ll use two tables:\n\nmeta(ticker TEXT PRIMARY KEY, name TEXT, sector TEXT NOT NULL)\nprices(ticker TEXT NOT NULL, date TEXT NOT NULL, adj_close REAL NOT NULL, volume INTEGER NOT NULL, log_return REAL NOT NULL, PRIMARY KEY (ticker,date), FOREIGN KEY (ticker) REFERENCES meta(ticker))\n\nimport sqlite3, textwrap, os\nfrom pathlib import Path\n\ndb_path = Path(\"data/prices.db\")\nif db_path.exists(): db_path.unlink()  # start fresh for class; remove this in real life\ncon = sqlite3.connect(db_path)\ncur = con.cursor()\n\n# Turn on foreign keys\ncur.execute(\"PRAGMA foreign_keys = ON;\")\n# (Optional) WAL can help concurrency; not critical here\ncur.execute(\"PRAGMA journal_mode = WAL;\")\n\nddl = textwrap.dedent(\"\"\"\nCREATE TABLE meta (\n  ticker TEXT PRIMARY KEY,\n  name   TEXT,\n  sector TEXT NOT NULL\n);\n\nCREATE TABLE prices (\n  ticker     TEXT NOT NULL,\n  date       TEXT NOT NULL,               -- ISO 'YYYY-MM-DD'\n  adj_close  REAL NOT NULL CHECK (adj_close &gt;= 0),\n  volume     INTEGER NOT NULL CHECK (volume &gt;= 0),\n  log_return REAL NOT NULL,\n  PRIMARY KEY (ticker, date),\n  FOREIGN KEY (ticker) REFERENCES meta(ticker)\n);\n\n-- Index to speed up date-range scans across all tickers\nCREATE INDEX IF NOT EXISTS idx_prices_date ON prices(date);\n\"\"\")\ncur.executescript(ddl)\ncon.commit()\nprint(\"Created:\", db_path)\n\n\n7.4.4 3) Populate meta (try yfinance sector; fallback to synthetic)\nimport pandas as pd, numpy as np\nimport warnings\nwarnings.filterwarnings(\"ignore\")\n\n# Read tickers (from existing CSV or fallback)\nif Path(\"tickers_25.csv\").exists():\n    tickers = pd.read_csv(\"tickers_25.csv\")[\"ticker\"].dropna().unique().tolist()\nelse:\n    tickers = pd.read_csv(\"data/raw/prices.csv\")[\"ticker\"].dropna().unique().tolist()\n\ndef fetch_sector_map(tickers):\n    try:\n        import yfinance as yf\n        out=[]\n        for t in tickers:\n            info = yf.Ticker(t).info or {}\n            name  = info.get(\"shortName\") or info.get(\"longName\") or t\n            sector= info.get(\"sector\") or \"Unknown\"\n            out.append({\"ticker\": t, \"name\": name, \"sector\": sector})\n        return pd.DataFrame(out)\n    except Exception:\n        pass\n    # Fallback: deterministic synthetic sectors\n    sectors = [\"Technology\",\"Financials\",\"Healthcare\",\"Energy\",\"Consumer\"]\n    rng = np.random.default_rng(42)\n    return pd.DataFrame({\n        \"ticker\": tickers,\n        \"name\": tickers,\n        \"sector\": [sectors[i % len(sectors)] for i in range(len(tickers))]\n    })\n\nmeta_df = fetch_sector_map(tickers)\nmeta_df.head()\n# Insert meta with parameterized query\nwith con:\n    con.executemany(\n        \"INSERT INTO meta(ticker, name, sector) VALUES(?, ?, ?)\",\n        meta_df[[\"ticker\",\"name\",\"sector\"]].itertuples(index=False, name=None)\n    )\nprint(pd.read_sql_query(\"SELECT * FROM meta LIMIT 5;\", con))\n\n\n7.4.5 4) Load data/raw/prices.csv into a staging DataFrame and insert into prices\nWe’ll use parameterized bulk insert (executemany) which is fast and safe.\nprices = pd.read_csv(\"data/raw/prices.csv\", parse_dates=[\"date\"])\n# Normalize date to ISO text\nprices[\"date\"] = prices[\"date\"].dt.strftime(\"%Y-%m-%d\")\n# Keep only needed columns and ensure order matches table\nprices = prices[[\"ticker\",\"date\",\"adj_close\",\"volume\",\"log_return\"]]\n\n# Optional: drop duplicates to respect PK before insert\nprices = prices.drop_duplicates(subset=[\"ticker\",\"date\"]).reset_index(drop=True)\nlen(prices)\n# Bulk insert inside one transaction; ignore rows violating FK or PK (e.g., duplicates)\nwith con:\n    con.executemany(\n        \"INSERT OR IGNORE INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)\",\n        prices.itertuples(index=False, name=None)\n    )\n\n# Quick counts\nprint(pd.read_sql_query(\"SELECT COUNT(*) AS nrows FROM prices;\", con))\nprint(pd.read_sql_query(\"SELECT ticker, COUNT(*) AS n FROM prices GROUP BY ticker ORDER BY n DESC LIMIT 5;\", con))\n\n\n7.4.6 5) Sanity queries (filters, order, limit)\nq1 = \"\"\"\nSELECT ticker, date, adj_close, volume\nFROM prices\nWHERE ticker = ? AND date BETWEEN ? AND ?\nORDER BY date ASC\nLIMIT 5;\n\"\"\"\nprint(pd.read_sql_query(q1, con, params=[\"AAPL\",\"2022-03-01\",\"2022-06-30\"]))\n# Top 10 absolute daily moves for a chosen ticker\nq2 = \"\"\"\nSELECT p.ticker, p.date, p.log_return, ABS(p.log_return) AS abs_move\nFROM prices AS p\nWHERE p.ticker = ?\nORDER BY abs_move DESC\nLIMIT 10;\n\"\"\"\nprint(pd.read_sql_query(q2, con, params=[\"NVDA\"]))\n\n\n7.4.7 6) JOIN with meta (per‑sector summaries)\n# Mean |std| of daily returns per sector over a date range\nq3 = \"\"\"\nSELECT m.sector,\n       AVG(ABS(p.log_return)) AS mean_abs_return,\n       AVG(p.log_return)      AS mean_return,\n       STDDEV(p.log_return)   AS std_return\nFROM prices p\nJOIN meta   m ON p.ticker = m.ticker\nWHERE p.date BETWEEN ? AND ?\nGROUP BY m.sector\nORDER BY mean_abs_return DESC;\n\"\"\"\n# SQLite doesn't have STDDEV by default; fallback using variance formula via window? We'll compute in pandas:\ndf = pd.read_sql_query(\"\"\"\nSELECT m.sector, p.log_return\nFROM prices p JOIN meta m ON p.ticker = m.ticker\nWHERE p.date BETWEEN ? AND ?;\n\"\"\", con, params=[\"2022-01-01\",\"2025-08-01\"])\nagg = (df.assign(abs=lambda d: d[\"log_return\"].abs())\n         .groupby(\"sector\")\n         .agg(mean_abs_return=(\"abs\",\"mean\"),\n              mean_return=(\"log_return\",\"mean\"),\n              std_return=(\"log_return\",\"std\"))\n         .sort_values(\"mean_abs_return\", ascending=False))\nagg\n\n\n7.4.8 7) Create a view for convenience & test uniqueness constraint\n# View: latest available date per ticker\nwith con:\n    con.execute(\"\"\"\n    CREATE VIEW IF NOT EXISTS latest_prices AS\n    SELECT p.*\n    FROM prices p\n    JOIN (\n      SELECT ticker, MAX(date) AS max_date\n      FROM prices\n      GROUP BY ticker\n    ) t ON p.ticker = t.ticker AND p.date = t.max_date;\n    \"\"\")\npd.read_sql_query(\"SELECT * FROM latest_prices ORDER BY ticker LIMIT 10;\", con)\n# Demonstrate the UNIQUE/PK constraint: inserting a duplicate row should be ignored or fail\nimport sqlite3\nrow = pd.read_sql_query(\"SELECT * FROM prices LIMIT 1;\", con).iloc[0].to_dict()\ntry:\n    with con:\n        con.execute(\n            \"INSERT INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)\",\n            (row[\"ticker\"], row[\"date\"], row[\"adj_close\"], row[\"volume\"], row[\"log_return\"])\n        )\n    print(\"Unexpected: duplicate insert succeeded (should not).\")\nexcept sqlite3.IntegrityError as e:\n    print(\"IntegrityError as expected:\", e)\n\n\n7.4.9 8) A tiny SQL I/O helper for your project\nfrom pathlib import Path\nPath(\"src\").mkdir(exist_ok=True)\nPath(\"src/projectname\").mkdir(parents=True, exist_ok=True)\n\nsqlio_py = \"\"\"\\\nfrom __future__ import annotations\nimport sqlite3\nimport pandas as pd\nfrom contextlib import contextmanager\nfrom pathlib import Path\n\nDB_PATH = Path(\"data/prices.db\")\n\n@contextmanager\ndef connect(db_path: str | Path = DB_PATH):\n    con = sqlite3.connect(str(db_path))\n    con.execute(\"PRAGMA foreign_keys = ON;\")\n    try:\n        yield con\n    finally:\n        con.close()\n\ndef query_df(sql: str, params: tuple | list | None = None, db_path: str | Path = DB_PATH) -&gt; pd.DataFrame:\n    with connect(db_path) as con:\n        return pd.read_sql_query(sql, con, params=params)\n\ndef sector_summary(start: str, end: str, db_path: str | Path = DB_PATH) -&gt; pd.DataFrame:\n    sql = '''\n    SELECT m.sector, p.log_return\n    FROM prices p JOIN meta m ON p.ticker = m.ticker\n    WHERE p.date BETWEEN ? AND ?;\n    '''\n    df = query_df(sql, [start, end], db_path)\n    if df.empty:\n        return df\n    g = df.assign(abs=lambda d: d[\"log_return\"].abs()).groupby(\"sector\")\n    return g.agg(mean_abs_return=(\"abs\",\"mean\"),\n                 mean_return=(\"log_return\",\"mean\"),\n                 std_return=(\"log_return\",\"std\")).reset_index()\n\"\"\"\nopen(\"src/projectname/sqlio.py\",\"w\").write(sqlio_py)\nprint(\"Wrote src/projectname/sqlio.py\")\nQuick test:\nfrom src.projectname.sqlio import sector_summary\nsector_summary(\"2022-01-01\",\"2025-08-01\").head()\n\nNote on versioning: If data/prices.db stays small (a few MB), you may commit it via Git‑LFS (we tracked data/*.db in Session 2). Otherwise, do not commit—rebuild from CSV with a script (homework).",
+    "text": "7.4 In‑class lab (35 min)\n\n7.4.1 0) Mount Drive & enter repo\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_OWNER = \"YOUR_GITHUB_USERNAME_OR_ORG\"   # &lt;- change\nREPO_NAME  = \"unified-stocks-teamX\"          # &lt;- change\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, pandas as pd, numpy as np\npathlib.Path(BASE_DIR).mkdir(parents=True, exist_ok=True)\nassert pathlib.Path(REPO_DIR).exists(), \"Repo not found in Drive. Clone it first.\"\nos.chdir(REPO_DIR)\nprint(\"Working dir:\", os.getcwd())\n\n\n7.4.2 1) Ensure prerequisites & create a small prices.csv if missing\n# Ensure pandas and sqlite3 are available (sqlite3 is in stdlib)\nimport pandas as pd, sqlite3, numpy as np, os\nfrom pathlib import Path\n\nPath(\"data/raw\").mkdir(parents=True, exist_ok=True)\nif not Path(\"data/raw/prices.csv\").exists():\n    print(\"No prices.csv found; generating a small synthetic one.\")\n    tickers = [\"AAPL\",\"MSFT\",\"NVDA\",\"AMZN\",\"GOOGL\"]\n    dates = pd.bdate_range(\"2022-01-03\", periods=120)\n    rng = np.random.default_rng(7)\n    frames=[]\n    for t in tickers:\n        r = rng.normal(0, 0.01, len(dates))\n        price = 100*np.exp(np.cumsum(r))\n        vol = rng.integers(1e5, 5e6, len(dates))\n        df = pd.DataFrame({\"ticker\": t, \"date\": dates, \"adj_close\": price, \"volume\": vol})\n        df[\"log_return\"] = np.log(df[\"adj_close\"]).diff().fillna(0)\n        frames.append(df)\n    pd.concat(frames, ignore_index=True).to_csv(\"data/raw/prices.csv\", index=False)\n\n# Show a peek\npd.read_csv(\"data/raw/prices.csv\").head()\n\n\n7.4.3 2) Design schema & create the database data/prices.db\nWe’ll use two tables:\n\nmeta(ticker TEXT PRIMARY KEY, name TEXT, sector TEXT NOT NULL)\nprices(ticker TEXT NOT NULL, date TEXT NOT NULL, adj_close REAL NOT NULL, volume INTEGER NOT NULL, log_return REAL NOT NULL, PRIMARY KEY (ticker,date), FOREIGN KEY (ticker) REFERENCES meta(ticker))\n\nimport sqlite3, textwrap, os\nfrom pathlib import Path\n\ndb_path = Path(\"data/prices.db\")\nif db_path.exists(): db_path.unlink()  # start fresh for class; remove this in real life\ncon = sqlite3.connect(db_path)\ncur = con.cursor()\n\n# Turn on foreign keys\ncur.execute(\"PRAGMA foreign_keys = ON;\")\n# (Optional) WAL can help concurrency; not critical here\ncur.execute(\"PRAGMA journal_mode = WAL;\")\n\nddl = textwrap.dedent(\"\"\"\nCREATE TABLE meta (\n  ticker TEXT PRIMARY KEY,\n  name   TEXT,\n  sector TEXT NOT NULL\n);\n\nCREATE TABLE prices (\n  ticker     TEXT NOT NULL,\n  date       TEXT NOT NULL,               -- ISO 'YYYY-MM-DD'\n  adj_close  REAL NOT NULL CHECK (adj_close &gt;= 0),\n  volume     INTEGER NOT NULL CHECK (volume &gt;= 0),\n  log_return REAL NOT NULL,\n  PRIMARY KEY (ticker, date),\n  FOREIGN KEY (ticker) REFERENCES meta(ticker)\n);\n\n-- Index to speed up date-range scans across all tickers\nCREATE INDEX IF NOT EXISTS idx_prices_date ON prices(date);\n\"\"\")\ncur.executescript(ddl)\ncon.commit()\nprint(\"Created:\", db_path)\n\n\n7.4.4 3) Populate meta (try yfinance sector; fallback to synthetic)\nimport pandas as pd, numpy as np\nimport warnings\nwarnings.filterwarnings(\"ignore\")\n\n# Read tickers (from existing CSV or fallback)\nif Path(\"tickers_25.csv\").exists():\n    tickers = pd.read_csv(\"tickers_25.csv\")[\"ticker\"].dropna().unique().tolist()\nelse:\n    tickers = pd.read_csv(\"data/raw/prices.csv\")[\"ticker\"].dropna().unique().tolist()\n\ndef fetch_sector_map(tickers):\n    try:\n        import yfinance as yf\n        out=[]\n        for t in tickers:\n            info = yf.Ticker(t).info or {}\n            name  = info.get(\"shortName\") or info.get(\"longName\") or t\n            sector= info.get(\"sector\") or \"Unknown\"\n            out.append({\"ticker\": t, \"name\": name, \"sector\": sector})\n        return pd.DataFrame(out)\n    except Exception:\n        pass\n    # Fallback: deterministic synthetic sectors\n    sectors = [\"Technology\",\"Financials\",\"Healthcare\",\"Energy\",\"Consumer\"]\n    rng = np.random.default_rng(42)\n    return pd.DataFrame({\n        \"ticker\": tickers,\n        \"name\": tickers,\n        \"sector\": [sectors[i % len(sectors)] for i in range(len(tickers))]\n    })\n\nmeta_df = fetch_sector_map(tickers)\nmeta_df.head()\nThe with context block may not be working in a notebook. If so, simply execute the code outsie a with block.\n# Insert meta with parameterized query\nwith con:\n    con.executemany(\n        \"INSERT INTO meta(ticker, name, sector) VALUES(?, ?, ?)\",\n        meta_df[[\"ticker\",\"name\",\"sector\"]].itertuples(index=False, name=None)\n    )\nprint(pd.read_sql_query(\"SELECT * FROM meta LIMIT 5;\", con))\n\n\n7.4.5 4) Load data/raw/prices.csv into a staging DataFrame and insert into prices\nWe’ll use parameterized bulk insert (executemany) which is fast and safe.\nprices = pd.read_csv(\"data/raw/prices.csv\", parse_dates=[\"date\"])\n# Normalize date to ISO text\nprices[\"date\"] = prices[\"date\"].dt.strftime(\"%Y-%m-%d\")\n# Keep only needed columns and ensure order matches table\nprices = prices[[\"ticker\",\"date\",\"adj_close\",\"volume\",\"log_return\"]]\n\n# Optional: drop duplicates to respect PK before insert\nprices = prices.drop_duplicates(subset=[\"ticker\",\"date\"]).reset_index(drop=True)\nlen(prices)\n# Bulk insert inside one transaction; ignore rows violating FK or PK (e.g., duplicates)\nwith con:\n    con.executemany(\n        \"INSERT OR IGNORE INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)\",\n        prices.itertuples(index=False, name=None)\n    )\n\n# Quick counts\nprint(pd.read_sql_query(\"SELECT COUNT(*) AS nrows FROM prices;\", con))\nprint(pd.read_sql_query(\"SELECT ticker, COUNT(*) AS n FROM prices GROUP BY ticker ORDER BY n DESC LIMIT 5;\", con))\n\n\n7.4.6 5) Sanity queries (filters, order, limit)\nq1 = \"\"\"\nSELECT ticker, date, adj_close, volume\nFROM prices\nWHERE ticker = ? AND date BETWEEN ? AND ?\nORDER BY date ASC\nLIMIT 5;\n\"\"\"\nprint(pd.read_sql_query(q1, con, params=[\"AAPL\",\"2022-03-01\",\"2022-06-30\"]))\n# Top 10 absolute daily moves for a chosen ticker\nq2 = \"\"\"\nSELECT p.ticker, p.date, p.log_return, ABS(p.log_return) AS abs_move\nFROM prices AS p\nWHERE p.ticker = ?\nORDER BY abs_move DESC\nLIMIT 10;\n\"\"\"\nprint(pd.read_sql_query(q2, con, params=[\"NVDA\"]))\n\n\n7.4.7 6) JOIN with meta (per‑sector summaries)\n# Mean |std| of daily returns per sector over a date range\nq3 = \"\"\"\nSELECT m.sector,\n       AVG(ABS(p.log_return)) AS mean_abs_return,\n       AVG(p.log_return)      AS mean_return,\n       STDDEV(p.log_return)   AS std_return\nFROM prices p\nJOIN meta   m ON p.ticker = m.ticker\nWHERE p.date BETWEEN ? AND ?\nGROUP BY m.sector\nORDER BY mean_abs_return DESC;\n\"\"\"\n# SQLite doesn't have STDDEV by default; fallback using variance formula via window? We'll compute in pandas:\ndf = pd.read_sql_query(\"\"\"\nSELECT m.sector, p.log_return\nFROM prices p JOIN meta m ON p.ticker = m.ticker\nWHERE p.date BETWEEN ? AND ?;\n\"\"\", con, params=[\"2022-01-01\",\"2025-08-01\"])\nagg = (df.assign(abs=lambda d: d[\"log_return\"].abs())\n         .groupby(\"sector\")\n         .agg(mean_abs_return=(\"abs\",\"mean\"),\n              mean_return=(\"log_return\",\"mean\"),\n              std_return=(\"log_return\",\"std\"))\n         .sort_values(\"mean_abs_return\", ascending=False))\nagg\n\n\n7.4.8 7) Create a view for convenience & test uniqueness constraint\n# View: latest available date per ticker\nwith con:\n    con.execute(\"\"\"\n    CREATE VIEW IF NOT EXISTS latest_prices AS\n    SELECT p.*\n    FROM prices p\n    JOIN (\n      SELECT ticker, MAX(date) AS max_date\n      FROM prices\n      GROUP BY ticker\n    ) t ON p.ticker = t.ticker AND p.date = t.max_date;\n    \"\"\")\npd.read_sql_query(\"SELECT * FROM latest_prices ORDER BY ticker LIMIT 10;\", con)\n# Demonstrate the UNIQUE/PK constraint: inserting a duplicate row should be ignored or fail\nimport sqlite3\nrow = pd.read_sql_query(\"SELECT * FROM prices LIMIT 1;\", con).iloc[0].to_dict()\ntry:\n    with con:\n        con.execute(\n            \"INSERT INTO prices(ticker,date,adj_close,volume,log_return) VALUES(?,?,?,?,?)\",\n            (row[\"ticker\"], row[\"date\"], row[\"adj_close\"], row[\"volume\"], row[\"log_return\"])\n        )\n    print(\"Unexpected: duplicate insert succeeded (should not).\")\nexcept sqlite3.IntegrityError as e:\n    print(\"IntegrityError as expected:\", e)\n\n\n7.4.9 8) A tiny SQL I/O helper for your project\nfrom pathlib import Path\nPath(\"src\").mkdir(exist_ok=True)\nPath(\"src/projectname\").mkdir(parents=True, exist_ok=True)\n\nsqlio_py = \"\"\"\\\nfrom __future__ import annotations\nimport sqlite3\nimport pandas as pd\nfrom contextlib import contextmanager\nfrom pathlib import Path\n\nDB_PATH = Path(\"data/prices.db\")\n\n@contextmanager\ndef connect(db_path: str | Path = DB_PATH):\n    con = sqlite3.connect(str(db_path))\n    con.execute(\"PRAGMA foreign_keys = ON;\")\n    try:\n        yield con\n    finally:\n        con.close()\n\ndef query_df(sql: str, params: tuple | list | None = None, db_path: str | Path = DB_PATH) -&gt; pd.DataFrame:\n    with connect(db_path) as con:\n        return pd.read_sql_query(sql, con, params=params)\n\ndef sector_summary(start: str, end: str, db_path: str | Path = DB_PATH) -&gt; pd.DataFrame:\n    sql = '''\n    SELECT m.sector, p.log_return\n    FROM prices p JOIN meta m ON p.ticker = m.ticker\n    WHERE p.date BETWEEN ? AND ?;\n    '''\n    df = query_df(sql, [start, end], db_path)\n    if df.empty:\n        return df\n    g = df.assign(abs=lambda d: d[\"log_return\"].abs()).groupby(\"sector\")\n    return g.agg(mean_abs_return=(\"abs\",\"mean\"),\n                 mean_return=(\"log_return\",\"mean\"),\n                 std_return=(\"log_return\",\"std\")).reset_index()\n\"\"\"\nopen(\"src/projectname/sqlio.py\",\"w\").write(sqlio_py)\nprint(\"Wrote src/projectname/sqlio.py\")\nQuick test:\nfrom src.projectname.sqlio import sector_summary\nsector_summary(\"2022-01-01\",\"2025-08-01\").head()\n\nNote on versioning: If data/prices.db stays small (a few MB), you may commit it via Git‑LFS (we tracked data/*.db in Session 2). Otherwise, do not commit—rebuild from CSV with a script (homework).",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
@@ -670,31 +730,31 @@
     ]
   },
   {
-    "objectID": "lec7.html#instructor-checklist-before-class",
-    "href": "lec7.html#instructor-checklist-before-class",
+    "objectID": "lec7.html#key-points",
+    "href": "lec7.html#key-points",
     "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.7 Instructor checklist (before class)",
-    "text": "7.7 Instructor checklist (before class)\n\nRun the entire lab once in a fresh Colab runtime with a small synthetic prices.csv to ensure speed.\nPrepare a one‑slide schema diagram (meta ⟷ prices) and a slide showing an index scan vs table scan (EXPLAIN output optional).\nRemind students: don’t commit big DBs; keep build_db.py as the source of truth.",
+    "section": "7.7 Key points",
+    "text": "7.7 Key points\n\nSchema first: clean DDL prevents downstream headaches.\nConstraints are your guardrails; test them (we did with a duplicate insert).\nParameterize queries; never string‑concat user inputs into SQL.\nKeep SQLite for analysis; push heavy analytics to Python/Polars when needed.\n\nNext time (Session 8): SQL II — Window functions & pandas.read_sql workflows (LAG/LEAD, rolling stats, and SQL↔︎pandas round‑trips).",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
   },
   {
-    "objectID": "lec7.html#emphasize-while-teaching",
-    "href": "lec7.html#emphasize-while-teaching",
-    "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.8 Emphasize while teaching",
-    "text": "7.8 Emphasize while teaching\n\nSchema first: clean DDL prevents downstream headaches.\nConstraints are your guardrails; test them (we did with a duplicate insert).\nParameterize queries; never string‑concat user inputs into SQL.\nKeep SQLite for analysis; push heavy analytics to Python/Polars when needed.\n\nNext time (Session 8): SQL II — Window functions & pandas.read_sql workflows (LAG/LEAD, rolling stats, and SQL↔︎pandas round‑trips).",
+    "objectID": "lec8.html",
+    "href": "lec8.html",
+    "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
+    "section": "",
+    "text": "8.1 Session 8 — SQL II: Window Functions & pandas.read_sql (75 min)\nToday you’ll compute lags, leads, rolling stats, and top‑k queries in SQLite using window functions, then pull results into pandas for downstream use.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
     ]
   },
   {
     "objectID": "lec8.html#session-8-sql-ii-window-functions-pandas.read_sql-75-min",
     "href": "lec8.html#session-8-sql-ii-window-functions-pandas.read_sql-75-min",
     "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.1 Session 8 — SQL II: Window Functions & pandas.read_sql (75 min)",
-    "text": "8.1 Session 8 — SQL II: Window Functions & pandas.read_sql (75 min)\n\n8.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and use window functions: LAG, LEAD, ROW_NUMBER, and aggregates with OVER (PARTITION BY … ORDER BY … ROWS …).\nCompute rolling means/variance and multi‑lag features per ticker without leakage.\nUse WINDOW named frames to avoid repetition and errors.\nRun parameterized SQL from Python with pandas.read_sql_query, and optionally register a custom SQL function (e.g., SQRT).\nEvaluate query performance basics with EXPLAIN QUERY PLAN.",
+    "section": "",
+    "text": "8.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and use window functions: LAG, LEAD, ROW_NUMBER, and aggregates with OVER (PARTITION BY … ORDER BY … ROWS …).\nCompute rolling means/variance and multi‑lag features per ticker without leakage.\nUse WINDOW named frames to avoid repetition and errors.\nRun parameterized SQL from Python with pandas.read_sql_query, and optionally register a custom SQL function (e.g., SQRT).\nEvaluate query performance basics with EXPLAIN QUERY PLAN.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
     ]
@@ -750,31 +810,31 @@
     ]
   },
   {
-    "objectID": "lec8.html#instructor-checklist-before-class",
-    "href": "lec8.html#instructor-checklist-before-class",
+    "objectID": "lec8.html#key-points",
+    "href": "lec8.html#key-points",
     "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.7 Instructor checklist (before class)",
-    "text": "8.7 Instructor checklist (before class)\n\nTest the in‑class lab once in a fresh Colab runtime; ensure SQLite version ≥ 3.25 (window functions).\nIf a student’s runtime is older (rare), advise upgrading Colab or running the Python fallback path.\nKeep one slide showing the difference between ROWS BETWEEN 19 PRECEDING AND CURRENT ROW and off‑by‑one mistakes.",
+    "section": "8.7 Key Points:",
+    "text": "8.7 Key Points:\n\nNo leakage: features must come from LAG, not LEAD.\nRolling stats with windows are declarative and fast; avoid reinventing in pandas unless needed.\nUse WINDOW names to reduce errors and duplication.\nCheck query plans and add indexes purposefully.\n\nNext up (Session 9): Finance‑specific evaluation & leakage control — walk‑forward splits, embargo, and regime‑aware error analysis.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
     ]
   },
   {
-    "objectID": "lec8.html#emphasize-while-teaching",
-    "href": "lec8.html#emphasize-while-teaching",
-    "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.8 Emphasize while teaching",
-    "text": "8.8 Emphasize while teaching\n\nNo leakage: features must come from LAG, not LEAD.\nRolling stats with windows are declarative and fast; avoid reinventing in pandas unless needed.\nUse WINDOW names to reduce errors and duplication.\nCheck query plans and add indexes purposefully.\n\nNext up (Session 9): Finance‑specific evaluation & leakage control — walk‑forward splits, embargo, and regime‑aware error analysis.",
+    "objectID": "lec9.html",
+    "href": "lec9.html",
+    "title": "9  Session 9 — Cleaning, Joins, and Parquet",
+    "section": "",
+    "text": "9.1 Session 9 — Cleaning, Joins, Parquet (75 min)\nBelow is a complete lecture package for Session 9 — Cleaning, Joins, and Parquet (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You’ll clean & merge multi‑ticker data, standardize dtypes (including pandas nullable ints and categoricals), and write tidy Parquet—including a partitioned‑by‑ticker dataset.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
     ]
   },
   {
     "objectID": "lec9.html#session-9-cleaning-joins-parquet-75-min",
     "href": "lec9.html#session-9-cleaning-joins-parquet-75-min",
     "title": "9  Session 9 — Cleaning, Joins, and Parquet",
-    "section": "9.1 Session 9 — Cleaning, Joins, Parquet (75 min)",
-    "text": "9.1 Session 9 — Cleaning, Joins, Parquet (75 min)\n\n9.1.1 Learning goals\nBy the end of class, students can:\n\nUse merge, assign, and pipe to write clean, testable data‑wrangling code.\nChoose sensible dtypes for analytics and storage: category, pandas nullable integers (Int64, Int32, …), and string.\nWrite Parquet with compression and read it back; understand partitioning by ticker and how to filter efficiently.",
+    "section": "",
+    "text": "9.1.1 Learning goals\nBy the end of class, students can:\n\nUse merge, assign, and pipe to write clean, testable data‑wrangling code.\nChoose sensible dtypes for analytics and storage: category, pandas nullable integers (Int64, Int32, …), and string.\nWrite Parquet with compression and read it back; understand partitioning by ticker and how to filter efficiently.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
     ]
@@ -844,7 +904,7 @@
     "href": "lec10.html",
     "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
     "section": "",
-    "text": "11 Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)",
+    "text": "11 Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)\nFantastic—thanks for pasting the full course plan. Below are three complete 75‑minute lecture packages for Sessions 10, 11, and 12, each with: a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. They assume you completed Session 9 and have data/processed/prices.parquet and data/processed/returns.parquet. Every lab includes fallbacks so you can run them even if files are missing.",
     "crumbs": [
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
     ]
@@ -1030,11 +1090,21 @@
     ]
   },
   {
+    "objectID": "lec13.html",
+    "href": "lec13.html",
+    "title": "13  Session 13",
+    "section": "",
+    "text": "13.1 Session 13 — pytest + Data Validation (75 min)\nBelow is a complete lecture package for Session 13 — pytest + Data Validation (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You’ll add high‑value tests around your features and a Pandera (optional) schema, practice logging, and wire everything so tests run fast and deterministically.",
+    "crumbs": [
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13</span>"
+    ]
+  },
+  {
     "objectID": "lec13.html#session-13-pytest-data-validation-75-min",
     "href": "lec13.html#session-13-pytest-data-validation-75-min",
     "title": "13  Session 13",
-    "section": "13.1 Session 13 — pytest + Data Validation (75 min)",
-    "text": "13.1 Session 13 — pytest + Data Validation (75 min)\n\n13.1.1 Learning goals\nBy the end of class, students can:\n\nWrite fast, high‑signal tests for data pipelines (shapes, dtypes, nulls, no look‑ahead).\nValidate a DataFrame with Pandera (schema + value checks) or custom checks only.\nUse logging effectively and capture logs in tests.\nRun tests in Colab / locally and prepare for CI in Session 14.",
+    "section": "",
+    "text": "13.1.1 Learning goals\nBy the end of class, students can:\n\nWrite fast, high‑signal tests for data pipelines (shapes, dtypes, nulls, no look‑ahead).\nValidate a DataFrame with Pandera (schema + value checks) or custom checks only.\nUse logging effectively and capture logs in tests.\nRun tests in Colab / locally and prepare for CI in Session 14.",
     "crumbs": [
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13</span>"
     ]
@@ -1120,11 +1190,21 @@
     ]
   },
   {
+    "objectID": "lec14.html",
+    "href": "lec14.html",
+    "title": "14  pre‑commit & GitHub Actions CI",
+    "section": "",
+    "text": "14.1 Session 14 — pre‑commit & GitHub Actions CI (75 min)\nBelow is a complete lecture package for Session 14 — pre‑commit & GitHub Actions CI (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. By the end, your repo will (1) enforce style and lint automatically with pre‑commit (Black, Ruff, nbstripout), and (2) run CI on every PR with a fast GitHub Actions workflow that lints and runs tests in under ~3–4 minutes.",
+    "crumbs": [
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
+    ]
+  },
+  {
     "objectID": "lec14.html#session-14-precommit-github-actions-ci-75-min",
     "href": "lec14.html#session-14-precommit-github-actions-ci-75-min",
     "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.1 Session 14 — pre‑commit & GitHub Actions CI (75 min)",
-    "text": "14.1 Session 14 — pre‑commit & GitHub Actions CI (75 min)\n\n14.1.1 Learning goals\nStudents will be able to:\n\nConfigure pre‑commit to run Black, Ruff (lint + import sort), and nbstripout on every commit.\nKeep commits clean and notebook outputs stripped.\nAdd a fast GitHub Actions CI workflow that runs pre‑commit hooks and pytest on each PR.\nKeep CI runtime under ~3–4 minutes with caching and a lean dependency set.",
+    "section": "",
+    "text": "14.1.1 Learning goals\nStudents will be able to:\n\nConfigure pre‑commit to run Black, Ruff (lint + import sort), and nbstripout on every commit.\nKeep commits clean and notebook outputs stripped.\nAdd a fast GitHub Actions CI workflow that runs pre‑commit hooks and pytest on each PR.\nKeep CI runtime under ~3–4 minutes with caching and a lean dependency set.",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
@@ -1200,11 +1280,21 @@
     ]
   },
   {
+    "objectID": "lec15.html",
+    "href": "lec15.html",
+    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
+    "section": "",
+    "text": "15.1 Session 15 — Framing & Metrics (75 min)\nBelow is a complete lecture package for Session 15 — Framing & Metrics (Rolling‑Origin Evaluation) (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You’ll formalize the forecasting problem (horizon/step), implement a rolling‑origin splitter (a.k.a. walk‑forward), and evaluate naive and seasonal‑naive baselines with MAE, sMAPE, MASE, aggregated across tickers (macro vs micro/weighted).",
+    "crumbs": [
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
+    ]
+  },
+  {
     "objectID": "lec15.html#session-15-framing-metrics-75-min",
     "href": "lec15.html#session-15-framing-metrics-75-min",
     "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.1 Session 15 — Framing & Metrics (75 min)",
-    "text": "15.1 Session 15 — Framing & Metrics (75 min)\n\n15.1.1 Learning goals\nBy the end of class, students can:\n\nSpecify forecast horizon \\(H\\), step (stride), and choose between expanding vs sliding rolling‑origin evaluation with an embargo gap.\nImplement a date‑based splitter that yields (train_idx, val_idx) for all tickers at once.\nCompute MAE, sMAPE, MASE (with a proper training‑window scale), and aggregate per‑ticker and across tickers (macro vs micro/weighted).\nProduce a tidy CSV of baseline results to serve as your course’s ground truth.",
+    "section": "",
+    "text": "15.1.1 Learning goals\nBy the end of class, students can:\n\nSpecify forecast horizon \\(H\\), step (stride), and choose between expanding vs sliding rolling‑origin evaluation with an embargo gap.\nImplement a date‑based splitter that yields (train_idx, val_idx) for all tickers at once.\nCompute MAE, sMAPE, MASE (with a proper training‑window scale), and aggregate per‑ticker and across tickers (macro vs micro/weighted).\nProduce a tidy CSV of baseline results to serve as your course’s ground truth.",
     "crumbs": [
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
     ]
@@ -1290,11 +1380,21 @@
     ]
   },
   {
+    "objectID": "lec16.html",
+    "href": "lec16.html",
+    "title": "16  Session 16",
+    "section": "",
+    "text": "16.1 Session 16 — Classical baselines (75 min)\nBelow is a complete lecture package for Session 16 — Classical Baselines (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. In class you’ll train a lags‑only linear regressor per ticker and compare it to the naive and seasonal‑naive baselines from Session 15. You’ll also see a short, optional ARIMA demo and log results in a consistent schema for future comparison.",
+    "crumbs": [
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
+    ]
+  },
+  {
     "objectID": "lec16.html#session-16-classical-baselines-75-min",
     "href": "lec16.html#session-16-classical-baselines-75-min",
     "title": "16  Session 16",
-    "section": "16.1 Session 16 — Classical baselines (75 min)",
-    "text": "16.1 Session 16 — Classical baselines (75 min)\n\n16.1.1 Learning goals\nBy the end of class, students can:\n\nFit a per‑ticker lags‑only linear regressor to predict next‑day log return \\(r_{t+1}\\).\nEvaluate models with MAE, sMAPE, MASE using the rolling‑origin splits (with embargo) from Session 15.\nLog results in a consistent table schema for per‑ticker and split‑level summaries.\nUnderstand ARIMA at a glance and its common pitfalls (optional demo).",
+    "section": "",
+    "text": "16.1.1 Learning goals\nBy the end of class, students can:\n\nFit a per‑ticker lags‑only linear regressor to predict next‑day log return \\(r_{t+1}\\).\nEvaluate models with MAE, sMAPE, MASE using the rolling‑origin splits (with embargo) from Session 15.\nLog results in a consistent table schema for per‑ticker and split‑level summaries.\nUnderstand ARIMA at a glance and its common pitfalls (optional demo).",
     "crumbs": [
       "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
     ]
@@ -1390,11 +1490,21 @@
     ]
   },
   {
+    "objectID": "lec17.html",
+    "href": "lec17.html",
+    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
+    "section": "",
+    "text": "17.1 Session 17 — Feature Timing, Biases & Leakage (75 min)\nBelow is a complete lecture package for Session 17 — Feature Timing, Biases & Leakage (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. In class you’ll freeze a static ticker universe (avoid survivorship bias), formalize label definitions (t+1 and multi‑step), and add a leakage test suite that fails if any feature at time t uses information from t+1 or later.",
+    "crumbs": [
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
+    ]
+  },
+  {
     "objectID": "lec17.html#session-17-feature-timing-biases-leakage-75-min",
     "href": "lec17.html#session-17-feature-timing-biases-leakage-75-min",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.1 Session 17 — Feature Timing, Biases & Leakage (75 min)",
-    "text": "17.1 Session 17 — Feature Timing, Biases & Leakage (75 min)\n\n17.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and avoid look‑ahead and survivorship biases.\nFreeze and use a static ticker universe chosen from the train window (not the whole history).\nDefine labels correctly (e.g., t+1 and t+5) and verify them with tests.\nAdd leakage tests that recompute trusted features and fail on any future‑peek.",
+    "section": "",
+    "text": "17.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and avoid look‑ahead and survivorship biases.\nFreeze and use a static ticker universe chosen from the train window (not the whole history).\nDefine labels correctly (e.g., t+1 and t+5) and verify them with tests.\nAdd leakage tests that recompute trusted features and fail on any future‑peek.",
     "crumbs": [
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
@@ -1480,11 +1590,21 @@
     ]
   },
   {
+    "objectID": "lec18.html",
+    "href": "lec18.html",
+    "title": "18  Session 18 — Walk‑forward + Regime Analysi",
+    "section": "",
+    "text": "18.1 Session 18 — Walk‑forward + Regime Analysis (75 min)\nBelow is a complete lecture package for Session 18 — Walk‑forward + Regime Analysis (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You’ll add volatility regimes to your rolling‑origin evaluation (with embargo), compute metrics by regime, and produce calibration plots that reveal where baselines over/under‑predict.",
+    "crumbs": [
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Session 18 — Walk‑forward + Regime Analysi</span>"
+    ]
+  },
+  {
     "objectID": "lec18.html#session-18-walkforward-regime-analysis-75-min",
     "href": "lec18.html#session-18-walkforward-regime-analysis-75-min",
     "title": "18  Session 18 — Walk‑forward + Regime Analysi",
-    "section": "18.1 Session 18 — Walk‑forward + Regime Analysis (75 min)",
-    "text": "18.1 Session 18 — Walk‑forward + Regime Analysis (75 min)\n\n18.1.1 Learning goals\nBy the end of class, students can:\n\nUse embargoed rolling‑origin splits (Session 15) and apply a static universe (Session 17) consistently.\nConstruct volatility regimes (low/med/high) from rolling volatility computed causally (≤ t), and set regime thresholds using training‑only data per split.\nEvaluate MAE, sMAPE, MASE by regime, with macro and micro aggregation.\nMake calibration plots (binned predicted vs. realized returns) by regime and interpret them.",
+    "section": "",
+    "text": "18.1.1 Learning goals\nBy the end of class, students can:\n\nUse embargoed rolling‑origin splits (Session 15) and apply a static universe (Session 17) consistently.\nConstruct volatility regimes (low/med/high) from rolling volatility computed causally (≤ t), and set regime thresholds using training‑only data per split.\nEvaluate MAE, sMAPE, MASE by regime, with macro and micro aggregation.\nMake calibration plots (binned predicted vs. realized returns) by regime and interpret them.",
     "crumbs": [
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Session 18 — Walk‑forward + Regime Analysi</span>"
     ]
@@ -1570,11 +1690,21 @@
     ]
   },
   {
+    "objectID": "lec19.html",
+    "href": "lec19.html",
+    "title": "19  Session 19 — Tensors, Datasets, Training Loop",
+    "section": "",
+    "text": "19.1 Session 19 — Tensors, Datasets, Training Loop (75 min)\nBelow is a complete lecture package for Session 19 — Tensors, Datasets, Training Loop (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You will build a windowed multi‑ticker dataset for next‑day return prediction, write a minimal PyTorch training loop with early stopping, and save/load checkpoints. We’ll keep it CPU‑friendly and optionally accelerate with GPU/Mixed Precision on Colab.",
+    "crumbs": [
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Session 19 — Tensors, Datasets, Training Loop</span>"
+    ]
+  },
+  {
     "objectID": "lec19.html#session-19-tensors-datasets-training-loop-75-min",
     "href": "lec19.html#session-19-tensors-datasets-training-loop-75-min",
     "title": "19  Session 19 — Tensors, Datasets, Training Loop",
-    "section": "19.1 Session 19 — Tensors, Datasets, Training Loop (75 min)",
-    "text": "19.1 Session 19 — Tensors, Datasets, Training Loop (75 min)\n\n19.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a windowed sequence dataset across multiple tickers with shape (B, T, F) → predict r_1d at time t+1.\nUse Dataset/DataLoader correctly: pin memory, worker seeding, and efficient slicing.\nWrite a minimal training loop with early stopping, AMP (mixed precision on GPU), and checkpoint save/load.\nProduce a tidy validation metrics CSV to compare later models.",
+    "section": "",
+    "text": "19.1.1 Learning goals\nBy the end of class, students can:\n\nCreate a windowed sequence dataset across multiple tickers with shape (B, T, F) → predict r_1d at time t+1.\nUse Dataset/DataLoader correctly: pin memory, worker seeding, and efficient slicing.\nWrite a minimal training loop with early stopping, AMP (mixed precision on GPU), and checkpoint save/load.\nProduce a tidy validation metrics CSV to compare later models.",
     "crumbs": [
       "<span class='chapter-number'>19</span>  <span class='chapter-title'>Session 19 — Tensors, Datasets, Training Loop</span>"
     ]
@@ -1660,11 +1790,21 @@
     ]
   },
   {
+    "objectID": "lec20.html",
+    "href": "lec20.html",
+    "title": "20  Session 20 — Multi‑asset training (unified model",
+    "section": "",
+    "text": "20.1 Session 20 — Multi‑asset training (unified model) (75 min)\nBelow is a complete lecture package for Session 20 — Multi‑asset training (unified model) (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. In class you’ll add a ticker_id embedding (and optional sector embedding) to a sequence model so one model learns across all tickers.",
+    "crumbs": [
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Session 20 — Multi‑asset training (unified model</span>"
+    ]
+  },
+  {
     "objectID": "lec20.html#session-20-multiasset-training-unified-model-75-min",
     "href": "lec20.html#session-20-multiasset-training-unified-model-75-min",
     "title": "20  Session 20 — Multi‑asset training (unified model",
-    "section": "20.1 Session 20 — Multi‑asset training (unified model) (75 min)",
-    "text": "20.1 Session 20 — Multi‑asset training (unified model) (75 min)\n\n20.1.1 Learning goals\nBy the end of class, students can:\n\nTrain one unified model across many tickers instead of one model per ticker.\nAdd a ticker_id embedding (and optional sector embedding) and concatenate it to sequence inputs.\nBatch mixed tickers safely (respecting the same time‑based splits and embargo from Session 15).\nLog overall validation metrics and per‑ticker metrics for fair comparison later.",
+    "section": "",
+    "text": "20.1.1 Learning goals\nBy the end of class, students can:\n\nTrain one unified model across many tickers instead of one model per ticker.\nAdd a ticker_id embedding (and optional sector embedding) and concatenate it to sequence inputs.\nBatch mixed tickers safely (respecting the same time‑based splits and embargo from Session 15).\nLog overall validation metrics and per‑ticker metrics for fair comparison later.",
     "crumbs": [
       "<span class='chapter-number'>20</span>  <span class='chapter-title'>Session 20 — Multi‑asset training (unified model</span>"
     ]
@@ -1740,11 +1880,21 @@
     ]
   },
   {
+    "objectID": "lec21.html",
+    "href": "lec21.html",
+    "title": "21  Session 21 — Attention & Tiny GPT on Toy Data",
+    "section": "",
+    "text": "21.1 Session 21 — Attention & Tiny GPT on Toy Data (75 min)\nBelow is a complete lecture package for Session 21 — Attention & Tiny GPT on Toy Data (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. In class you’ll implement a tiny GPT (token + positional embeddings → stacked Transformer blocks → LM head) and verify learning on a toy character‑level next‑token task.",
+    "crumbs": [
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Session 21 — Attention & Tiny GPT on Toy Data</span>"
+    ]
+  },
+  {
     "objectID": "lec21.html#session-21-attention-tiny-gpt-on-toy-data-75-min",
     "href": "lec21.html#session-21-attention-tiny-gpt-on-toy-data-75-min",
     "title": "21  Session 21 — Attention & Tiny GPT on Toy Data",
-    "section": "21.1 Session 21 — Attention & Tiny GPT on Toy Data (75 min)",
-    "text": "21.1 Session 21 — Attention & Tiny GPT on Toy Data (75 min)\n\n21.1.1 Learning goals\nBy the end of class, students can:\n\nExplain the core pieces of GPT: token embeddings, positional embeddings, multi‑head causal self‑attention, MLP, residual + LayerNorm.\nImplement a causal mask (no look‑ahead).\nTrain a tiny GPT (≈100–300k parameters) on a toy corpus and monitor loss/perplexity.\nGenerate text samples and diagnose calibration/overfit qualitatively.",
+    "section": "",
+    "text": "21.1.1 Learning goals\nBy the end of class, students can:\n\nExplain the core pieces of GPT: token embeddings, positional embeddings, multi‑head causal self‑attention, MLP, residual + LayerNorm.\nImplement a causal mask (no look‑ahead).\nTrain a tiny GPT (≈100–300k parameters) on a toy corpus and monitor loss/perplexity.\nGenerate text samples and diagnose calibration/overfit qualitatively.",
     "crumbs": [
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Session 21 — Attention & Tiny GPT on Toy Data</span>"
     ]
@@ -1830,11 +1980,21 @@
     ]
   },
   {
+    "objectID": "lec22.html",
+    "href": "lec22.html",
+    "title": "22  Session 22 — Adapting GPT to Time Series",
+    "section": "",
+    "text": "22.1 Session 22 — Adapting GPT to Time Series (75 min)\nBelow is a complete lecture package for Session 22 — Adapting GPT to Time Series (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. In class you’ll replace token embeddings with a linear projection of real‑valued features, keep positional embeddings and a causal mask, and train a tiny Transformer (GPT‑style) to predict next‑day return.",
+    "crumbs": [
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Session 22 — Adapting GPT to Time Series</span>"
+    ]
+  },
+  {
     "objectID": "lec22.html#session-22-adapting-gpt-to-time-series-75-min",
     "href": "lec22.html#session-22-adapting-gpt-to-time-series-75-min",
     "title": "22  Session 22 — Adapting GPT to Time Series",
-    "section": "22.1 Session 22 — Adapting GPT to Time Series (75 min)",
-    "text": "22.1 Session 22 — Adapting GPT to Time Series (75 min)\n\n22.1.1 Learning goals\nBy the end of class, students can:\n\nConvert a window of real‑valued features into a sequence input for a GPT‑style model.\nUse positional embeddings and causal self‑attention for sequence‑to‑one regression (predict r_1d[t] from x[≤t]).\nTrain with MAE/Huber loss, early stopping, and AMP (optional on CUDA).\nSave reproducible artifacts (checkpoint + metrics CSV) and produce a quick loss plot.",
+    "section": "",
+    "text": "22.1.1 Learning goals\nBy the end of class, students can:\n\nConvert a window of real‑valued features into a sequence input for a GPT‑style model.\nUse positional embeddings and causal self‑attention for sequence‑to‑one regression (predict r_1d[t] from x[≤t]).\nTrain with MAE/Huber loss, early stopping, and AMP (optional on CUDA).\nSave reproducible artifacts (checkpoint + metrics CSV) and produce a quick loss plot.",
     "crumbs": [
       "<span class='chapter-number'>22</span>  <span class='chapter-title'>Session 22 — Adapting GPT to Time Series</span>"
     ]
@@ -1920,11 +2080,21 @@
     ]
   },
   {
+    "objectID": "lec23.html",
+    "href": "lec23.html",
+    "title": "23  Session 23 — Packaging & CLI (Typer)",
+    "section": "",
+    "text": "23.1 Session 23 — Packaging & CLI (Typer) (75 min)\nBelow is a complete lecture package for Session 23 — Packaging & CLI (Typer) (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. You’ll package your repo into a proper Python project using a src/ layout, add a minimal Typer CLI, and wire it to score models over a date range using your existing features Parquet and saved checkpoints.",
+    "crumbs": [
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Session 23 — Packaging & CLI (Typer)</span>"
+    ]
+  },
+  {
     "objectID": "lec23.html#session-23-packaging-cli-typer-75-min",
     "href": "lec23.html#session-23-packaging-cli-typer-75-min",
     "title": "23  Session 23 — Packaging & CLI (Typer)",
-    "section": "23.1 Session 23 — Packaging & CLI (Typer) (75 min)",
-    "text": "23.1 Session 23 — Packaging & CLI (Typer) (75 min)\n\n23.1.1 Learning goals\nBy the end, students can:\n\nConvert a research repo into an installable package with a src/ layout and pyproject.toml.\nCreate a Typer CLI (python -m projectname.cli …) that reads config, loads data, and scores a model over a date range.\nCentralize config in YAML, keep paths tidy, and write results to reports/.\nRun a fresh‑clone smoke test: make env && pip install -e . && python -m projectname.cli score ….",
+    "section": "",
+    "text": "23.1.1 Learning goals\nBy the end, students can:\n\nConvert a research repo into an installable package with a src/ layout and pyproject.toml.\nCreate a Typer CLI (python -m projectname.cli …) that reads config, loads data, and scores a model over a date range.\nCentralize config in YAML, keep paths tidy, and write results to reports/.\nRun a fresh‑clone smoke test: make env && pip install -e . && python -m projectname.cli score ….",
     "crumbs": [
       "<span class='chapter-number'>23</span>  <span class='chapter-title'>Session 23 — Packaging & CLI (Typer)</span>"
     ]
@@ -2000,11 +2170,21 @@
     ]
   },
   {
+    "objectID": "lec24.html",
+    "href": "lec24.html",
+    "title": "24  Session 24 — Reproducibility audit & optional FastAPI",
+    "section": "",
+    "text": "24.1 Session 24 — Reproducibility audit & optional FastAPI (75 min)\nBelow is a complete lecture package for Session 24 — Reproducibility audit & optional FastAPI (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, a lightweight reproducibility audit script, and homework with code (tagging v1.0-rc + a simple changelog generator + optional FastAPI “hello score” service).",
+    "crumbs": [
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Session 24 — Reproducibility audit & optional FastAPI</span>"
+    ]
+  },
+  {
     "objectID": "lec24.html#session-24-reproducibility-audit-optional-fastapi-75-min",
     "href": "lec24.html#session-24-reproducibility-audit-optional-fastapi-75-min",
     "title": "24  Session 24 — Reproducibility audit & optional FastAPI",
-    "section": "24.1 Session 24 — Reproducibility audit & optional FastAPI (75 min)",
-    "text": "24.1 Session 24 — Reproducibility audit & optional FastAPI (75 min)\n\n24.1.1 Learning goals\nBy the end, students can:\n\nVerify end‑to‑end reproducibility from a clean environment using a checklist and an automated script.\nCreate and persist a run manifest (commit hash, env, data checksums, seeds).\n(Optional) Stand up a FastAPI “hello score” endpoint that wraps the package scoring logic.",
+    "section": "",
+    "text": "24.1.1 Learning goals\nBy the end, students can:\n\nVerify end‑to‑end reproducibility from a clean environment using a checklist and an automated script.\nCreate and persist a run manifest (commit hash, env, data checksums, seeds).\n(Optional) Stand up a FastAPI “hello score” endpoint that wraps the package scoring logic.",
     "crumbs": [
       "<span class='chapter-number'>24</span>  <span class='chapter-title'>Session 24 — Reproducibility audit & optional FastAPI</span>"
     ]
@@ -2090,11 +2270,21 @@
     ]
   },
   {
+    "objectID": "lec25.html",
+    "href": "lec25.html",
+    "title": "25  Session 25 — Poster + Abstract Workshop",
+    "section": "",
+    "text": "25.1 Session 25 — Poster + Abstract Workshop (75 min)\nBelow is a complete lecture package for Session 25 — Poster + Abstract Workshop (75 minutes). It includes a timed agenda, instructor talking points (slides outline), a Colab‑friendly in‑class lab with copy‑paste code that generates three polished figures and a Quarto poster skeleton, plus homework with copy‑paste code to validate the abstract length and render a draft poster.",
+    "crumbs": [
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Session 25 — Poster + Abstract Workshop</span>"
+    ]
+  },
+  {
     "objectID": "lec25.html#session-25-poster-abstract-workshop-75-min",
     "href": "lec25.html#session-25-poster-abstract-workshop-75-min",
     "title": "25  Session 25 — Poster + Abstract Workshop",
-    "section": "25.1 Session 25 — Poster + Abstract Workshop (75 min)",
-    "text": "25.1 Session 25 — Poster + Abstract Workshop (75 min)\n\n25.1.1 Learning goals\nBy the end of class, students can:\n\nCraft a concise story arc (Problem → Data → Method → Evaluation → Results → Limits → Takeaways).\nProduce and polish three key figures:\n\nModel comparison (baseline vs LSTM/GRU vs tiny‑Transformer/TS‑GPT).\nRegime breakdown (errors by volatility regime).\nAblation (TS‑GPT hyperparam sweep).\n\nAssemble a one‑page poster (Quarto HTML or PDF) and draft a 250‑word abstract.",
+    "section": "",
+    "text": "25.1.1 Learning goals\nBy the end of class, students can:\n\nCraft a concise story arc (Problem → Data → Method → Evaluation → Results → Limits → Takeaways).\nProduce and polish three key figures:\n\nModel comparison (baseline vs LSTM/GRU vs tiny‑Transformer/TS‑GPT).\nRegime breakdown (errors by volatility regime).\nAblation (TS‑GPT hyperparam sweep).\n\nAssemble a one‑page poster (Quarto HTML or PDF) and draft a 250‑word abstract.",
     "crumbs": [
       "<span class='chapter-number'>25</span>  <span class='chapter-title'>Session 25 — Poster + Abstract Workshop</span>"
     ]
@@ -2170,11 +2360,21 @@
     ]
   },
   {
+    "objectID": "lec26.html",
+    "href": "lec26.html",
+    "title": "26  Session 26 — In‑class Presentations & Continuation Pla",
+    "section": "",
+    "text": "26.1 Session 26 — In‑class Presentations & Continuation Plan (75 min)\nBelow is a complete lecture package for Session 26 — In‑class Presentations & Continuation Plan (75 minutes). It includes a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code (presentation checklists, peer‑feedback forms, automated backlog builder, issue templates, and a hand‑off zip), plus homework with code to tag v1.0, publish a continuation backlog, and prepare for Spring symposium work.",
+    "crumbs": [
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Session 26 — In‑class Presentations & Continuation Pla</span>"
+    ]
+  },
+  {
     "objectID": "lec26.html#session-26-inclass-presentations-continuation-plan-75-min",
     "href": "lec26.html#session-26-inclass-presentations-continuation-plan-75-min",
     "title": "26  Session 26 — In‑class Presentations & Continuation Pla",
-    "section": "26.1 Session 26 — In‑class Presentations & Continuation Plan (75 min)",
-    "text": "26.1 Session 26 — In‑class Presentations & Continuation Plan (75 min)\n\n26.1.1 Learning goals\nBy the end of class, students can:\n\nDeliver a focused 10‑minute talk that communicates problem, methods, results, and limits.\nProvide / receive actionable peer feedback.\nConvert results into a prioritized backlog (issues + milestones) to continue toward the symposium.\nProduce a handoff bundle (poster, abstract, artifacts, manifest, backlog) and finalize v1.0.",
+    "section": "",
+    "text": "26.1.1 Learning goals\nBy the end of class, students can:\n\nDeliver a focused 10‑minute talk that communicates problem, methods, results, and limits.\nProvide / receive actionable peer feedback.\nConvert results into a prioritized backlog (issues + milestones) to continue toward the symposium.\nProduce a handoff bundle (poster, abstract, artifacts, manifest, backlog) and finalize v1.0.",
     "crumbs": [
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Session 26 — In‑class Presentations & Continuation Pla</span>"
     ]
@@ -2254,19 +2454,149 @@
     "href": "homework/README.html",
     "title": "STAT 4160: Data Science Productivity Tools",
     "section": "",
-    "text": "��--- title: Instructions to submit homework --- # Instructions to submit homework 1.  Inside the folder that is linked to your GitHub repo github.comYourRepoName/STAT4160 on your device (local computer or Colab), create a folder named homework if it doesn’t already exist. You should have this folder already if cloned my repository.  2.  Save your homework files in the homework folder. Name it as homework1_&lt;your_init&gt;.ipynb or homework1.qmd, or homework1.png depending on the type of assignment. If you need to submit multiple files for one assignment, first create a subfolder (e.g. homework_1_yw) by mkdir homework/homework_1_yw. Then save your multiple files in this subfolder.  3.  Checkout a new branch for your homework submission. You can name it something like   bash git checkout -b homework1/&lt;your_init&gt;   4.  Add your homework files to the new branch:       bash     git add homework/homework1_&lt;your_init&gt;.ipynb  # this is the path to the homework file or folder       5.  Commit your changes:       bash     git commit -m \"Submit homework1 from &lt;your_init&gt;\"       6.  Push your changes to the remote repository:       bash     git push -u origin homework1/&lt;your_init&gt;       7.  Create a pull request (PR) on GitHub to merge your homework branch into the main branch.  8.  In the pull request description, include any specific instructions or notes for the reviewer.",
+    "text": "��--- title: Instructions to submit homework ---   1.  Inside the folder that is linked to your GitHub repo github.comYourRepoName/STAT4160 on your device (local computer or Colab), create a folder named homework if it doesn’t already exist. You should have this folder already if cloned my repository.  2.  Save your homework files in the homework folder. Name it as homework1_&lt;your_init&gt;.ipynb or homework1.qmd, or homework1.png depending on the type of assignment. If you need to submit multiple files for one assignment, first create a subfolder (e.g. homework_1_yw) by mkdir homework/homework_1_yw. Then save your multiple files in this subfolder.  3.  Checkout a new branch for your homework submission. You can name it something like   bash git checkout -b homework1/&lt;your_init&gt;   4.  Add your homework files to the new branch:       bash     git add homework/homework1_&lt;your_init&gt;.ipynb  # this is the path to the homework file or folder       5.  Commit your changes:       bash     git commit -m \"Submit homework1 from &lt;your_init&gt;\"       6.  Push your changes to the remote repository:       bash     git push -u origin homework1/&lt;your_init&gt;       7.  Create a pull request (PR) on GitHub to merge your homework branch into the main branch.  8.  In the pull request description, include any specific instructions or notes for the reviewer.",
     "crumbs": [
       "<span class='chapter-number'>27</span>  <span class='chapter-title'>README.html</span>"
     ]
   },
   {
+    "objectID": "lec_5_pre.html",
+    "href": "lec_5_pre.html",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "",
+    "text": "29 Linux Basics — 75‑Minute Lecture (Colab Edition, using vim)\nAudience: Absolute beginners to Linux\nFormat: using ! (line) or %%bash (cell) magics. Editing demo uses vim",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#learning-outcomes",
+    "href": "lec_5_pre.html#learning-outcomes",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.1 Learning Outcomes",
+    "text": "29.1 Learning Outcomes\nBy the end, students will be able to:\n\nExplain what Linux, the shell, and the filesystem are\nNavigate directories and inspect files\nCreate, copy, move, and delete files/directories safely\nUse wildcards, pipes, and redirection to combine commands\nUnderstand permissions and make a script executable\nEdit a text file in vim (open, insert, save, quit)\nRun shell scripts in Colab and install packages (apt/pip)",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#colab-setup-23-min",
+    "href": "lec_5_pre.html#colab-setup-23-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.2 Colab Setup (2–3 min)",
+    "text": "29.2 Colab Setup (2–3 min)\nColab uses a Linux VM with a working directory at /content. To run shell commands in Colab:\n\nOne‑liner: prefix with !\nMulti‑line: start a cell with %%bash\n\n# Verify we’re on Linux\n!uname -a\n!lsb_release -a || cat /etc/os-release\n# Where are we?\n!pwd\n!ls -lah\n\nPersistence: Colab VMs reset. To keep files between sessions, mount Google Drive:\n\nfrom google.colab import drive\ndrive.mount('/content/drive')\n!ls -lah /content/drive/MyDrive",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#agenda-timeboxed",
+    "href": "lec_5_pre.html#agenda-timeboxed",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.3 Agenda (timeboxed)",
+    "text": "29.3 Agenda (timeboxed)\n\n(0–10) What is Linux? Shell vs kernel. Filesystem anatomy.\n(10–25) Navigation + basic file ops\n(25–35) Permissions & ownership (Colab nuances)\n(35–50) Redirection, pipes, text tools (grep, sort, wc, cut)\n(50–60) vim crash course (editing in a real terminal)\n(60–70) Shell scripts, variables, PATH\n(70–75) Packages (apt/pip) + help/man + wrap‑up",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#what-is-linux-010-min",
+    "href": "lec_5_pre.html#what-is-linux-010-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.4 1) What is Linux? (0–10 min)",
+    "text": "29.4 1) What is Linux? (0–10 min)\n\nKernel: talks to hardware; Userland: tools (bash, ls, vim, etc.)\nShell: the program that reads your commands (default in Colab: bash).\nFilesystem: a tree with root / (not “C:”), home ~, current . and parent ...\nCommon paths: /bin, /usr/bin (programs), /home/… (homes), /etc (config), /var (logs), /tmp (temp). In Colab, workspace is /content and you often store persistent data under /content/drive/MyDrive/....\n\nMini‑lab:\n!echo $SHELL\n!whoami\n!pwd\n!ls -lah /",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#navigation-basic-file-operations-1025-min",
+    "href": "lec_5_pre.html#navigation-basic-file-operations-1025-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.5 2) Navigation & Basic File Operations (10–25 min)",
+    "text": "29.5 2) Navigation & Basic File Operations (10–25 min)\nCommands\n\npwd (print working directory)\nls -lah (list with details; -a all, -l long, -h human sizes)\ncd DIR (change dir). cd .. (up one), cd ~ (home)\nmkdir -p PATH (make dir; -p to create parents)\ntouch file (create empty file or update timestamp)\ncp SRC DST (copy), mv SRC DST (move/rename)\nrm file (remove), rm -r dir (recursive), rm -i (confirm)\nView files: cat, less, head, tail -n 20\n\nColab demo (use a sandbox folder):\n!mkdir -p /content/play && cd /content/play && pwd\n!touch a.txt b.txt && ls -l\n!echo \"hello\" &gt; a.txt\n!cp a.txt c.txt && mv b.txt docs.txt && ls -l\n!head -n 1 a.txt && tail -n +1 c.txt\n!rm -i c.txt  # you can skip -i in automated runs\n!ls -l\nGlobbing (wildcards)\n\n* any string; ? single char; [abc] any of set; {foo,bar} brace expansion.\n\n!ls -1 /bin/ba* | head\nSearching\n\nfind . -name \"*.txt\"\ngrep -R \"pattern\" .",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#permissions-ownership-2535-min",
+    "href": "lec_5_pre.html#permissions-ownership-2535-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.6 3) Permissions & Ownership (25–35 min)",
+    "text": "29.6 3) Permissions & Ownership (25–35 min)\nls -l output: -rwxr-xr--  1 owner group size date name\n\nFirst char - file / d directory\nTriplets rwx for user/group/others (read/write/execute)\nChange mode: chmod u+x script.sh (add execute for user)\n\n\nColab note: you usually run as root, so ownership quirks differ from multi‑user systems. Still practice chmod and safe deletions.\n\nMini‑lab:\n%%bash\ncd /content/play\ncat &gt; hello.sh &lt;&lt;'EOF'\n#!/usr/bin/env bash\necho \"Hello from a script\"\nEOF\nls -l hello.sh\nchmod u+x hello.sh\n./hello.sh",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#redirection-pipes-essential-text-tools-3550-min",
+    "href": "lec_5_pre.html#redirection-pipes-essential-text-tools-3550-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.7 4) Redirection, Pipes, & Essential Text Tools (35–50 min)",
+    "text": "29.7 4) Redirection, Pipes, & Essential Text Tools (35–50 min)\nRedirection\n\n&gt; overwrite, &gt;&gt; append, 2&gt; stderr, &&gt; stdout+stderr\n| pipe: feed output of left command into right command\n\nTools\n\ngrep PATTERN (search); -n show line numbers, -i case‑insensitive\nwc -l (line count), sort, uniq -c, cut -d, -f1, tr, tee\n\nMini‑lab:\n%%bash\ncd /content/play\n# Make a small CSV\ncat &gt; stocks.csv &lt;&lt;'EOF'\nticker,price\nAAPL,180\nMSFT,420\nAAPL,181\nNVDA,120\nAAPL,182\nEOF\n# Count rows, list unique tickers with counts\nwc -l stocks.csv\ncut -d, -f1 stocks.csv | tail -n +2 | sort | uniq -c | sort -nr\n# Filter rows with AAPL and take last 2\ngrep '^AAPL,' stocks.csv | tail -n 2",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#vim-crash-course-5060-min",
+    "href": "lec_5_pre.html#vim-crash-course-5060-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.8 5) vim Crash Course (50–60 min)",
+    "text": "29.8 5) vim Crash Course (50–60 min)\nGoal: basic edits: open → insert → save → quit.\nInstall (if needed):\n!apt-get update -qq && apt-get install -y -qq vim\n\nColab caution: vim is fully interactive; works best in a Terminal session (Colab’s Connect to a terminal feature or a local terminal/WSL). If you can’t open a real terminal, use the heredoc technique shown earlier to create/edit files.\n\nvim basics\n\nLaunch: vim hello.txt\nModes: Normal (default), Insert (i), Command (:)\nInsert text: press i, type; ESC to leave insert\nSave & quit: :wq • Quit without saving: :q! • Save: :w\nNavigation: arrows or h j k l; jump to line :42\nSearch: /pattern then n/N\n\nExercise (in a real terminal):\n\nvim notes.txt\nPress i, type a few lines\nESC, then :wq\ncat notes.txt",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#shell-scripts-variables-path-6070-min",
+    "href": "lec_5_pre.html#shell-scripts-variables-path-6070-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.9 6) Shell Scripts, Variables, PATH (60–70 min)",
+    "text": "29.9 6) Shell Scripts, Variables, PATH (60–70 min)\nVariables\nNAME=Alice\necho \"Hi $NAME\"\nScript + shebang\n#!/usr/bin/env bash\nset -euo pipefail\nNAME=${1:-World}\necho \"Hello, $NAME!\"\nColab demo:\n%%bash\ncd /content/play\ncat &gt; greet.sh &lt;&lt;'EOF'\n#!/usr/bin/env bash\nset -euo pipefail\nNAME=${1:-World}\necho \"Hello, $NAME!\"\nEOF\nchmod u+x greet.sh\n./greet.sh\n./greet.sh Linux\nPATH\n\nShows where the shell looks for executables.\n\n!echo $PATH\n!which python\n\nRun from current dir with ./script.sh (current dir isn’t automatically in PATH).",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#packages-help-7075-min",
+    "href": "lec_5_pre.html#packages-help-7075-min",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.10 7) Packages & Help (70–75 min)",
+    "text": "29.10 7) Packages & Help (70–75 min)\nSystem packages (apt)\n!apt-get update -qq\n!apt-get install -y -qq tree  # example\n!tree -L 2 /content/play\nPython packages (pip)\n%pip install -q pandas\npython -c \"import pandas as pd; print(pd.__version__)\"\nGetting help\n\ncmd --help (portable) • man cmd (manual; may be minimal in Colab)\napropos to search manuals; tldr if installed for concise examples",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#minilabs-for-practice-homework",
+    "href": "lec_5_pre.html#minilabs-for-practice-homework",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.11 Mini‑Labs (for practice / homework)",
+    "text": "29.11 Mini‑Labs (for practice / homework)\n\nFind & count: In /usr/bin, count how many programs start with g.\n!ls -1 /usr/bin/g* 2&gt;/dev/null | wc -l\nCSV pipeline: From stocks.csv, output the max price per ticker.\n%%bash\ncd /content/play\nawk -F, 'NR&gt;1 {max[$1] = ($2&gt;max[$1] ? $2 : max[$1])} END {for (k in max) print k \",\" max[k]}' stocks.csv | sort\nPermissions: Make a script that fails without execute bit; then add it and rerun.\nvim: Create todo.txt with three lines and save.",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
+    "objectID": "lec_5_pre.html#onepage-cheat-sheet",
+    "href": "lec_5_pre.html#onepage-cheat-sheet",
+    "title": "28  Lecture 5 (Pre) — Linux Basics",
+    "section": "29.12 One‑Page Cheat Sheet",
+    "text": "29.12 One‑Page Cheat Sheet\nNavigation: pwd, ls -lah, cd, mkdir -p, tree (optional)\nFiles: touch, cp, mv, rm [-r], cat, less, head, tail, find, grep -R\nGlobs: *, ?, [abc], {a,b}\nPipes/Redirection: |, &gt;, &gt;&gt;, 2&gt;, &&gt;; tee\nText tools: grep, sort, uniq -c, wc -l, cut, tr, awk\nPermissions: ls -l, chmod u+x, umask\nProcesses: ps aux, top -bn1, kill PID\nEditing (vim): i insert, ESC normal, :w save, :q quit, :wq save+quit, :q! force quit\nScripts: #!/usr/bin/env bash, chmod +x, ./script.sh\nPackages: apt-get update, apt-get install -y PKG; Python: %pip install PKG\nHelp: cmd --help, man cmd, which cmd, type cmd",
+    "crumbs": [
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Lecture 5 (Pre) — Linux Basics</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "28  Summary",
+    "title": "29  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1",
     "crumbs": [
-      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -2277,46 +2607,6 @@
     "text": "Hyndman, Rob J., and George Athanasopoulos. 2021. Forecasting:\nPrinciples and Practice. 3rd ed. https://otexts.com/fpp3/.",
     "crumbs": [
       "References"
-    ]
-  },
-  {
-    "objectID": "lec5.html#slides",
-    "href": "lec5.html#slides",
-    "title": "5  Session 5 — Unix/Shell Essentials for Data Work",
-    "section": "5.2 Slides",
-    "text": "5.2 Slides\nWhy shell?\n\nFast iteration for data plumbing (ETL glue: Extract,-Transform-Load) and repeatable ops.\nWorks on any POSIX (Portable OS Interface: IEEE strandard for Unix-like system) host (your laptop, Colab VM, servers).\nLets you compose small tools with pipes: producer | filter | summarize &gt; report.txt.\n\nMental model\n\nStream text through commands. Each command reads STDIN, writes STDOUT; | connects them.\nRedirection: &gt; (truncate to file), &gt;&gt; (append), &lt; (read from file), 2&gt; (errors).\nExit code: 0 success; non‑zero = error. Use && (only if success) and || (if failure).\n\nQuoting\n\n\"double quotes\" expand variables and backslashes;\n'single quotes' are literal (best for regex/cut/sed patterns);\nAlways quote paths that might contain spaces: \"$FILE\".\n\nRegex quick guide\n\n^ start, $ end, . any char, * 0+, + 1+, ? 0/1, [A-Z] class, (foo|bar) alt.\nUse grep -E (Extended Regex) for + and |. Plain grep is basic (Basic re).\n\nCSV caution\n\nUnix tools are line‑oriented. They’re fine for simple CSVs (no embedded commas/quotes).\nFor tricky CSVs, prefer Python/pandas. Today’s examples are simple CSVs.",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Session 5 — Unix/Shell Essentials for Data Work</span>"
-    ]
-  },
-  {
-    "objectID": "lec6.html#key-points",
-    "href": "lec6.html#key-points",
-    "title": "6  Session 6 — Make/Automation + rsync + ssh/tmux (survey)",
-    "section": "6.7 Key points:",
-    "text": "6.7 Key points:\n\nMake is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.\nKeep targets idempotent: running twice shouldn’t break; only rebuild on changes.\nUse rsync with care: --delete is powerful—double‑check DEST paths.\nssh/tmux: you’ll want this the first time you run a long model on a remote machine.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span>"
-    ]
-  },
-  {
-    "objectID": "lec7.html#slides",
-    "href": "lec7.html#slides",
-    "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.3 Slides",
-    "text": "7.3 Slides\nWhy SQLite for DS\n\nSingle file DB → easy to version, ship, query; no server admin.\nStronger guarantees than loose CSVs: types, constraints, unique keys, foreign keys.\nFast filters/joins with indexes; JIT queries from Python, R, or CLI.\n\nSQLite types & constraints\n\nSQLite uses dynamic typing but honors affinities: INTEGER, REAL, TEXT, BLOB.\nUse PRIMARY KEY (uniqueness + index), NOT NULL, and CHECK (e.g., volume ≥ 0).\nTurn on foreign keys: PRAGMA foreign_keys = ON;\n\nIndexes & performance\n\nIndex columns used in joins and filters.\nComposite PK (ticker, date) makes common lookups fast.\n\nWhat NOT to commit\n\nLarge .db files. Keep DB small or regenerate from CSV with a script.\nIf you must version a small DB, ensure Git‑LFS tracks data/*.db (we set this in Session 2).",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
-    ]
-  },
-  {
-    "objectID": "lec7.html#key-points",
-    "href": "lec7.html#key-points",
-    "title": "7  Session 7 — SQL I: SQLite Schemas & Joins",
-    "section": "7.7 Key points",
-    "text": "7.7 Key points\n\nSchema first: clean DDL prevents downstream headaches.\nConstraints are your guardrails; test them (we did with a duplicate insert).\nParameterize queries; never string‑concat user inputs into SQL.\nKeep SQLite for analysis; push heavy analytics to Python/Polars when needed.\n\nNext time (Session 8): SQL II — Window functions & pandas.read_sql workflows (LAG/LEAD, rolling stats, and SQL↔︎pandas round‑trips).",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Session 7 — SQL I: SQLite Schemas & Joins</span>"
     ]
   }
 ]
