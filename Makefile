@@ -1,6 +1,8 @@
 # Makefile — unified-stocks
 SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
+.ONESHELL:
+
 
 PY := python
 QUARTO := quarto
@@ -57,3 +59,29 @@ clean: ## Remove intermediate artifacts (safe)
 clobber: clean ## Remove generated reports and backups (dangerous)
 	rm -rf docs/reports || true
 	rm -rf backups || true
+
+DB := data/prices.db
+
+.PHONY: db sql-report
+db: ## Build/refresh SQLite database from CSVs
+	python scripts/build_db.py --db $(DB) --tickers tickers_25.csv --prices data/raw/prices.csv
+
+sql-report: db ## Generate a simple SQL-driven CSV summary
+	$(PY) - <<-'PY'
+	import pandas as pd, sqlite3, os
+	con = sqlite3.connect("data/prices.db")
+	df = pd.read_sql_query("""
+	SELECT m.sector,
+	       COUNT(*) AS n_obs,
+	       AVG(ABS(p.log_return)) AS mean_abs_return
+	FROM prices p
+	JOIN meta m ON p.ticker = m.ticker
+	GROUP BY m.sector
+	ORDER BY n_obs DESC;
+	""", con)
+	os.makedirs("reports", exist_ok=True)
+	df.to_csv("reports/sql_sector_summary.csv", index=False)
+	print(df.head())
+	con.close()
+	PY
+
