@@ -904,7 +904,7 @@
     "href": "lec10.html",
     "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
     "section": "",
-    "text": "11 Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)\nFantastic—thanks for pasting the full course plan. Below are three complete 75‑minute lecture packages for Sessions 10, 11, and 12, each with: a timed agenda, slide talking points, a Colab‑friendly in‑class lab with copy‑paste code, and homework with copy‑paste code. They assume you completed Session 9 and have data/processed/prices.parquet and data/processed/returns.parquet. Every lab includes fallbacks so you can run them even if files are missing.",
+    "text": "11 Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features\nEducational use only — not trading advice. Python‑only. Colab + Drive assumed. If you don’t already have the repo and folders used below, the first cells create them.",
     "crumbs": [
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
     ]
@@ -2637,6 +2637,16 @@
     "text": "9.3 Slides\n\n9.3.1 Tidy schema for price data\n\nOne row = one ticker‑day.\nMinimal columns (snake_case): date (datetime64[ns]), ticker (category), open/high/low/close/adj_close (float32/64), volume (Int64).\nOptional metadata (from a separate table): name (string), sector (category).\n\n\n\n9.3.2 Idiomatic pandas: merge, assign, pipe\n\nmerge: combine frames by keys (e.g., prices ⟵left join⟶ tickers).\nassign: add/transform columns without breaking the chain: df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close'])).\npipe: compose small, testable transforms: df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta)).\n\n\n\n9.3.3 Dtypes that help\n\nCategorical (category): compact & fast for low‑cardinality strings (ticker, sector).\nNullable integers (Int64, Int32): keep missing values and integer semantics (volume).\nString (string[python]): consistent string semantics (avoid object).\nFloats: float32 can halve memory, but consider numeric precision.\n\n\n\n9.3.4 Parquet: why & how\n\nColumnar, compressed, preserves schema better than CSV.\nFilters & projection: read only needed columns/rows (esp. with partitioned datasets).\nPartitioning by ticker/ yields fast reads of a subset (e.g., a single ticker).\nTypical settings: engine=pyarrow, compression=zstd or snappy.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
+    ]
+  },
+  {
+    "objectID": "lec10.html#slide",
+    "href": "lec10.html#slide",
+    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
+    "section": "11.2 Slide",
+    "text": "11.2 Slide\nFeature timing = everything\n\nPredict \\(r_{t+1}\\) using info up to and including time t.\nRule: compute any rolling stat at \\(t\\) from data \\(\\le t\\), then shift by 1 if that stat includes the current target variable.\n\nCore pandas patterns\n\nLags: s.shift(k) (past), never negative shifts.\nRolling: s.rolling(W, min_periods=W).agg(...) and then no extra shift if the rolling window ends at \\(t\\).\nExpanding: long‑memory features (e.g., expanding mean).\nEWM: s.ewm(span=W, adjust=False).mean() for decayed memory.\n\nResampling safely\n\nUse groupby('ticker').resample('W-FRI', on='date') then aggregate:\n\nOHLC: first/open, max/high, min/low, last/adj_close\nVolume: sum\nReturns: compound via np.log(prod(1+r)) or sum of log returns.\n\n\nDtypes\n\nticker = category; calendar ints int8; features float32 (fine for class).",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
     ]
   }
 ]

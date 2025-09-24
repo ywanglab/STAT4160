@@ -373,11 +373,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-10-rolling-windows-resampling-and-leakagesafe-features-75-min" id="toc-session-10-rolling-windows-resampling-and-leakagesafe-features-75-min" class="nav-link active" data-scroll-target="#session-10-rolling-windows-resampling-and-leakagesafe-features-75-min"><span class="header-section-number">11</span> <strong>Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)</strong></a>
+  <li><a href="#session-10-rolling-windows-resampling-and-leakagesafe-features" id="toc-session-10-rolling-windows-resampling-and-leakagesafe-features" class="nav-link active" data-scroll-target="#session-10-rolling-windows-resampling-and-leakagesafe-features"><span class="header-section-number">11</span> <strong>Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features</strong></a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">11.0.1</span> Learning goals</a></li>
   <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">11.1</span> Agenda (75 min)</a></li>
-  <li><a href="#slide-talking-points" id="toc-slide-talking-points" class="nav-link" data-scroll-target="#slide-talking-points"><span class="header-section-number">11.2</span> Slide talking points</a></li>
+  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">11.2</span> Slide</a></li>
   <li><a href="#inclass-lab-colabfriendly" id="toc-inclass-lab-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-colabfriendly"><span class="header-section-number">11.3</span> In‑class lab (Colab‑friendly)</a>
   <ul class="collapse">
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">11.3.1</span> 0) Setup</a></li>
@@ -418,13 +418,10 @@ window.Quarto = {
 </header>
 
 
-<p>Fantastic—thanks for pasting the full course plan. Below are <strong>three complete 75‑minute lecture packages</strong> for <strong>Sessions 10, 11, and 12</strong>, each with: a timed agenda, slide talking points, a <strong>Colab‑friendly in‑class lab with copy‑paste code</strong>, and <strong>homework with copy‑paste code</strong>. They assume you completed Session 9 and have <code>data/processed/prices.parquet</code> and <code>data/processed/returns.parquet</code>. Every lab includes fallbacks so you can run them even if files are missing.</p>
-<blockquote class="blockquote">
 <p><strong>Educational use only — not trading advice.</strong> Python‑only. Colab + Drive assumed. If you don’t already have the repo and folders used below, the first cells create them.</p>
-</blockquote>
 <hr>
-<section id="session-10-rolling-windows-resampling-and-leakagesafe-features-75-min" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> <strong>Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features (75 min)</strong></h1>
+<section id="session-10-rolling-windows-resampling-and-leakagesafe-features" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> <strong>Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features</strong></h1>
 <section id="learning-goals" class="level3" data-number="11.0.1">
 <h3 data-number="11.0.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">11.0.1</span> Learning goals</h3>
 <p>By the end of class students can:</p>
@@ -446,8 +443,8 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="slide-talking-points" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="slide-talking-points"><span class="header-section-number">11.2</span> Slide talking points</h2>
+<section id="slide" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="slide"><span class="header-section-number">11.2</span> Slide</h2>
 <p><strong>Feature timing = everything</strong></p>
 <ul>
 <li>Predict <span class="math inline">\(r_{t+1}\)</span> using info up to and including <strong>time t</strong>.</li>
