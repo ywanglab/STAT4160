@@ -85,3 +85,23 @@ sql-report: db ## Generate a simple SQL-driven CSV summary
 	con.close()
 	PY
 
+.PHONY: prices-parquet returns-parquet
+prices-parquet:  ## Clean raw prices and save processed Parquet(s)
+	python - <<'PY'
+	import pandas as pd, glob, pathlib, numpy as np, re, json
+	from pathlib import Path
+	# (Paste the functions from the lab: standardize_columns, clean_prices, join_meta)
+	# Then read raw -> clean -> write parquet as in the lab
+	PY
+
+returns-parquet: ## Build returns.parquet with r_1d + calendar features
+	python - <<'PY'
+	import pandas as pd, numpy as np
+	p="data/processed/prices.parquet"; r=pd.read_parquet(p).sort_values(["ticker","date"])
+	r["log_return"]=r.groupby("ticker")["adj_close"].apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True)
+	r["r_1d"]=r.groupby("ticker")["log_return"].shift(-1)
+	r["weekday"]=r["date"].dt.weekday.astype("int8"); r["month"]=r["date"].dt.month.astype("int8")
+	r[["date","ticker","log_return","r_1d","weekday","month"]].to_parquet("data/processed/returns.parquet", compression="zstd", index=False)
+	print("Wrote data/processed/returns.parquet")
+	PY
+
