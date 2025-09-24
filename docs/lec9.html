@@ -697,7 +697,7 @@ window.Quarto = {
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> ds.dataset(<span class="st">"data/processed/prices_by_ticker"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"parquet"</span>, partitioning<span class="op">=</span><span class="st">"hive"</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose a ticker present in the data</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>one_ticker <span class="op">=</span> <span class="bu">str</span>(prices[<span class="st">"ticker"</span>].cat.categories[<span class="dv">0</span>])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>one_ticker <span class="op">=</span> <span class="bu">str</span>(prices[<span class="st">"ticker"</span>].astype(<span class="st">"category"</span>).cat.categories[<span class="dv">0</span>])</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>flt <span class="op">=</span> (ds.field(<span class="st">"ticker"</span>) <span class="op">==</span> one_ticker)</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>tbl <span class="op">=</span> dataset.to_table(<span class="bu">filter</span><span class="op">=</span>flt, columns<span class="op">=</span>[<span class="st">"date"</span>,<span class="st">"adj_close"</span>,<span class="st">"volume"</span>])</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>df_one <span class="op">=</span> tbl.to_pandas()</span>
@@ -818,12 +818,12 @@ window.Quarto = {
 <li><strong>Nullable ints</strong>: <code>astype("Int64")</code> keeps NAs; plain <code>int64</code> will fail if NAs exist.</li>
 <li><strong>Categoricals &amp; partitions</strong>: When reading partitioned Parquet, <code>ticker</code> may come back as <code>object</code>. Re‑cast to <code>category</code> after read if needed.</li>
 <li><strong>Compression choice</strong>: <code>zstd</code> gives good ratio/speed; <code>snappy</code> is more ubiquitous.</li>
-<li><strong>Precision</strong>: <code>float32</code> is fine for teaching; for production finance, consider <code>float64</code> and explicit rounding.</li>
+<li><strong>Precision</strong>: <code>float32</code> is fine; for production finance, consider <code>float64</code> and explicit rounding.</li>
 </ul>
 <hr>
 <section id="optional-for-your-makefile-later" class="level3" data-number="9.7.1">
 <h3 data-number="9.7.1" class="anchored" data-anchor-id="optional-for-your-makefile-later"><span class="header-section-number">9.7.1</span> Optional (for your Makefile later)</h3>
-<p>Add quick targets:</p>
+<p>Add quick targets: (if directly editing Makefile in Colab: removing python, and indent all lines below the target by four spaces).</p>
 <pre class="make"><code>.PHONY: prices-parquet returns-parquet
 prices-parquet:  ## Clean raw prices and save processed Parquet(s)
 \tpython - &lt;&lt;'PY'
