@@ -2648,5 +2648,15 @@
     "crumbs": [
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
     ]
+  },
+  {
+    "objectID": "lec11.html#slide",
+    "href": "lec11.html#slide",
+    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
+    "section": "12.2 Slide",
+    "text": "12.2 Slide\nRequests pattern\n\nSession + HTTPAdapter + Retry → robust.\nValidate: status code, content type; guard against partial data.\n\nSecrets\n\n.env.template committed; .env untracked.\nLoad with dotenv.load_dotenv(). Access via os.getenv(\"FRED_API_KEY\").\n\nCaching\n\nFile cache: key by URL+params hash.\nDB cache: cache (key TEXT PRIMARY KEY, value BLOB, fetched_at).\n\nAlignment\n\nAfter download, normalize to date and join on date.\nStore to SQLite table with a composite key (series_id, date).",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
+    ]
   }
 ]
