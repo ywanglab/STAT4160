@@ -1,0 +1,5 @@
+{
+  "model": "linear(lag1,lag2,lag3)",
+  "test_mae": 0.007950903336381838,
+  "n_test": 7275
+}
