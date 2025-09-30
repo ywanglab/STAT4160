@@ -344,25 +344,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-11-apis-with-requests-secrets-retries-and-caching-75-min" id="toc-session-11-apis-with-requests-secrets-retries-and-caching-75-min" class="nav-link active" data-scroll-target="#session-11-apis-with-requests-secrets-retries-and-caching-75-min"><span class="header-section-number">12</span> <strong>Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching (75 min)</strong></a>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals"><span class="header-section-number">11.1</span> Learning goals</a></li>
+  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">11.2</span> Agenda (75 min)</a></li>
+  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">11.3</span> Slide</a></li>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">11.4</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">12.0.1</span> Learning goals</a></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">12.1</span> Agenda (75 min)</a></li>
-  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">12.2</span> Slide</a></li>
-  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">12.3</span> In‑class lab</a>
-  <ul class="collapse">
-  <li><a href="#setup-folders-and-templates" id="toc-setup-folders-and-templates" class="nav-link" data-scroll-target="#setup-folders-and-templates"><span class="header-section-number">12.3.1</span> 0) Setup, folders, and templates</a></li>
-  <li><a href="#robust-get-with-retry-file-cache" id="toc-robust-get-with-retry-file-cache" class="nav-link" data-scroll-target="#robust-get-with-retry-file-cache"><span class="header-section-number">12.3.2</span> 1) Robust GET with retry + file cache</a></li>
-  <li><a href="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" id="toc-fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="nav-link" data-scroll-target="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">12.3.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</a></li>
-  <li><a href="#join-macro-series-to-daily-returnsfeatures-by-date" id="toc-join-macro-series-to-daily-returnsfeatures-by-date" class="nav-link" data-scroll-target="#join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">12.3.4</span> 3) Join macro series to daily returns/features by <code>date</code></a></li>
+  <li><a href="#setup-folders-and-templates" id="toc-setup-folders-and-templates" class="nav-link" data-scroll-target="#setup-folders-and-templates"><span class="header-section-number">11.4.1</span> 0) Setup, folders, and templates</a></li>
+  <li><a href="#robust-get-with-retry-file-cache" id="toc-robust-get-with-retry-file-cache" class="nav-link" data-scroll-target="#robust-get-with-retry-file-cache"><span class="header-section-number">11.4.2</span> 1) Robust GET with retry + file cache</a></li>
+  <li><a href="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" id="toc-fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="nav-link" data-scroll-target="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.4.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</a></li>
+  <li><a href="#join-macro-series-to-daily-returnsfeatures-by-date" id="toc-join-macro-series-to-daily-returnsfeatures-by-date" class="nav-link" data-scroll-target="#join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.4.4</span> 3) Join macro series to daily returns/features by <code>date</code></a></li>
   </ul></li>
-  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">12.4</span> Wrap‑up</a></li>
-  <li><a href="#homework-due-before-session-12" id="toc-homework-due-before-session-12" class="nav-link" data-scroll-target="#homework-due-before-session-12"><span class="header-section-number">12.5</span> Homework (due before Session 12)</a>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">11.5</span> Wrap‑up</a></li>
+  <li><a href="#homework-due-before-session-12" id="toc-homework-due-before-session-12" class="nav-link" data-scroll-target="#homework-due-before-session-12"><span class="header-section-number">11.6</span> Homework (due before Session 12)</a>
   <ul class="collapse">
-  <li><a href="#a.-script-scriptsget_macro.py" id="toc-a.-script-scriptsget_macro.py" class="nav-link" data-scroll-target="#a.-script-scriptsget_macro.py"><span class="header-section-number">12.5.1</span> A. Script: <code>scripts/get_macro.py</code></a></li>
-  <li><a href="#b.-enrich-features-with-your-new-series" id="toc-b.-enrich-features-with-your-new-series" class="nav-link" data-scroll-target="#b.-enrich-features-with-your-new-series"><span class="header-section-number">12.5.2</span> B. Enrich features with your new series</a></li>
-  <li><a href="#c.-short-test-teststest_macro_join.py" id="toc-c.-short-test-teststest_macro_join.py" class="nav-link" data-scroll-target="#c.-short-test-teststest_macro_join.py"><span class="header-section-number">12.5.3</span> C. Short test: <code>tests/test_macro_join.py</code></a></li>
-  </ul></li>
+  <li><a href="#a.-script-scriptsget_macro.py" id="toc-a.-script-scriptsget_macro.py" class="nav-link" data-scroll-target="#a.-script-scriptsget_macro.py"><span class="header-section-number">11.6.1</span> A. Script: <code>scripts/get_macro.py</code></a></li>
+  <li><a href="#b.-enrich-features-with-your-new-series" id="toc-b.-enrich-features-with-your-new-series" class="nav-link" data-scroll-target="#b.-enrich-features-with-your-new-series"><span class="header-section-number">11.6.2</span> B. Enrich features with your new series</a></li>
+  <li><a href="#c.-short-test-teststest_macro_join.py" id="toc-c.-short-test-teststest_macro_join.py" class="nav-link" data-scroll-target="#c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.6.3</span> C. Short test: <code>tests/test_macro_join.py</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -389,10 +386,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="session-11-apis-with-requests-secrets-retries-and-caching-75-min" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> <strong>Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching (75 min)</strong></h1>
-<section id="learning-goals" class="level3" data-number="12.0.1">
-<h3 data-number="12.0.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">12.0.1</span> Learning goals</h3>
+<section id="learning-goals" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">11.1</span> Learning goals</h2>
 <p>Students will be able to:</p>
 <ol type="1">
 <li>Call a REST API with <code>requests</code> + robust retry/backoff.</li>
@@ -402,8 +397,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="agenda-75-min" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">12.1</span> Agenda (75 min)</h2>
+<section id="agenda-75-min" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">11.2</span> Agenda (75 min)</h2>
 <ul>
 <li><strong>(10 min)</strong> Slides: anatomy of a GET; query params; JSON; status codes</li>
 <li><strong>(10 min)</strong> Slides: secrets (<code>python-dotenv</code>), file layout (<code>.env</code>, <code>.env.template</code>), <code>.gitignore</code></li>
@@ -413,8 +408,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="slide" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="slide"><span class="header-section-number">12.2</span> Slide</h2>
+<section id="slide" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="slide"><span class="header-section-number">11.3</span> Slide</h2>
 <p><strong>Requests pattern</strong></p>
 <ul>
 <li><code>Session</code> + <code>HTTPAdapter</code> + <code>Retry</code> → robust.</li>
@@ -437,10 +432,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">12.3</span> In‑class lab</h2>
-<section id="setup-folders-and-templates" class="level3" data-number="12.3.1">
-<h3 data-number="12.3.1" class="anchored" data-anchor-id="setup-folders-and-templates"><span class="header-section-number">12.3.1</span> 0) Setup, folders, and templates</h3>
+<section id="inclass-lab" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">11.4</span> In‑class lab</h2>
+<section id="setup-folders-and-templates" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="setup-folders-and-templates"><span class="header-section-number">11.4.1</span> 0) Setup, folders, and templates</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -469,8 +464,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>gi.write_text(gi_txt)</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ready. Fill your FRED key in a local .env (do not commit)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="robust-get-with-retry-file-cache" class="level3" data-number="12.3.2">
-<h3 data-number="12.3.2" class="anchored" data-anchor-id="robust-get-with-retry-file-cache"><span class="header-section-number">12.3.2</span> 1) Robust GET with retry + file cache</h3>
+<section id="robust-get-with-retry-file-cache" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="robust-get-with-retry-file-cache"><span class="header-section-number">11.4.2</span> 1) Robust GET with retry + file cache</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, requests</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib3.util.retry <span class="im">import</span> Retry</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> requests.adapters <span class="im">import</span> HTTPAdapter</span>
@@ -501,8 +496,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    path.write_text(json.dumps(data))</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="level3" data-number="12.3.3">
-<h3 data-number="12.3.3" class="anchored" data-anchor-id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">12.3.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</h3>
+<section id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="level3" data-number="11.4.3">
+<h3 data-number="11.4.3" class="anchored" data-anchor-id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.4.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>API_KEY <span class="op">=</span> os.getenv(<span class="st">"FRED_API_KEY"</span>, <span class="st">""</span>).strip()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> API_KEY:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"WARNING: No FRED_API_KEY in .env; continuing with unauthenticated request may fail on FRED. Add your key to use in class."</span>)</span>
@@ -535,8 +530,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>vix.head(), fed.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="join-macro-series-to-daily-returnsfeatures-by-date" class="level3" data-number="12.3.4">
-<h3 data-number="12.3.4" class="anchored" data-anchor-id="join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">12.3.4</span> 3) Join macro series to daily returns/features by <code>date</code></h3>
+<section id="join-macro-series-to-daily-returnsfeatures-by-date" class="level3" data-number="11.4.4">
+<h3 data-number="11.4.4" class="anchored" data-anchor-id="join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.4.4</span> 3) Join macro series to daily returns/features by <code>date</code></h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load features (build if missing)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fvpath <span class="op">=</span> Path(<span class="st">"data/processed/features_v1.parquet"</span>)</span>
@@ -560,8 +555,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup" class="level2" data-number="12.4">
-<h2 data-number="12.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">12.4</span> Wrap‑up</h2>
+<section id="wrapup" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">11.5</span> Wrap‑up</h2>
 <ul>
 <li>You built a <strong>retrying, cached</strong> API client, stored macro data in <strong>SQLite</strong>, and aligned it by date.</li>
 <li>Secrets live in <strong><code>.env</code></strong> (never committed).</li>
@@ -569,11 +564,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-12" class="level2" data-number="12.5">
-<h2 data-number="12.5" class="anchored" data-anchor-id="homework-due-before-session-12"><span class="header-section-number">12.5</span> Homework (due before Session 12)</h2>
+<section id="homework-due-before-session-12" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="homework-due-before-session-12"><span class="header-section-number">11.6</span> Homework (due before Session 12)</h2>
 <p><strong>Goal:</strong> Add <strong>one more external series</strong> (your choice) via FRED and keep everything cached and reproducible.</p>
-<section id="a.-script-scriptsget_macro.py" class="level3" data-number="12.5.1">
-<h3 data-number="12.5.1" class="anchored" data-anchor-id="a.-script-scriptsget_macro.py"><span class="header-section-number">12.5.1</span> A. Script: <code>scripts/get_macro.py</code></h3>
+<section id="a.-script-scriptsget_macro.py" class="level3" data-number="11.6.1">
+<h3 data-number="11.6.1" class="anchored" data-anchor-id="a.-script-scriptsget_macro.py"><span class="header-section-number">11.6.1</span> A. Script: <code>scripts/get_macro.py</code></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, json, time, hashlib, pandas <span class="im">as</span> pd, sqlite3</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -599,44 +594,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cached_get(url, params, ttl<span class="op">=</span><span class="dv">86400</span>):</span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> ckey(url, params)<span class="op">;</span> p <span class="op">=</span> Path(<span class="ss">f".cache/api/</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">.json"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p.exists() <span class="kw">and</span> (time.time() <span class="op">-</span> p.stat().st_mtime <span class="op">&lt;</span> ttl):</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.loads(p.read_text())</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> sess().get(url, params<span class="op">=</span>params, timeout<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span> r.raise_for_status()</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> r.json()<span class="op">;</span> p.write_text(json.dumps(data))<span class="op">;</span> <span class="cf">return</span> data</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_series(series_id, start<span class="op">=</span><span class="st">"2015-01-01"</span>):</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> API_KEY: <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"Set FRED_API_KEY in .env"</span>)</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {<span class="st">"series_id"</span>:series_id, <span class="st">"api_key"</span>:API_KEY, <span class="st">"file_type"</span>:<span class="st">"json"</span>, <span class="st">"observation_start"</span>:start}</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> cached_get(BASE, params)</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(data[<span class="st">"observations"</span>])[[<span class="st">"date"</span>,<span class="st">"value"</span>]]</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"date"</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">"date"</span>])</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"value"</span>] <span class="op">=</span> pd.to_numeric(df[<span class="st">"value"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"series_id"</span>] <span class="op">=</span> series_id</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.dropna()</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(series_id):</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> fetch_series(series_id)</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"data/prices.db"</span>)</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"""CREATE TABLE IF NOT EXISTS macro_series(</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="st">        series_id TEXT, date TEXT, value REAL, PRIMARY KEY(series_id,date))"""</span>)</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    df.to_sql(<span class="st">"macro_series"</span>, con, if_exists<span class="op">=</span><span class="st">"append"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    con.commit()<span class="op">;</span> con.close()</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Stored </span><span class="sc">{</span>series_id<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss"> rows"</span>)</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> argparse</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    ap <span class="op">=</span> argparse.ArgumentParser()</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--series-id"</span>, required<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--start"</span>, default<span class="op">=</span><span class="st">"2015-01-01"</span>)</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> ap.parse_args()</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    main(args.series_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    p.parent.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p.exists() <span class="kw">and</span> (time.time() <span class="op">-</span> p.stat().st_mtime <span class="op">&lt;</span> ttl):</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.loads(p.read_text())</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> sess().get(url, params<span class="op">=</span>params, timeout<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span> r.raise_for_status()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> r.json()<span class="op">;</span> p.write_text(json.dumps(data))<span class="op">;</span> <span class="cf">return</span> data</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_series(series_id, start<span class="op">=</span><span class="st">"2015-01-01"</span>):</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> API_KEY: <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"Set FRED_API_KEY in .env"</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {<span class="st">"series_id"</span>:series_id, <span class="st">"api_key"</span>:API_KEY, <span class="st">"file_type"</span>:<span class="st">"json"</span>, <span class="st">"observation_start"</span>:start}</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> cached_get(BASE, params)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(data[<span class="st">"observations"</span>])[[<span class="st">"date"</span>,<span class="st">"value"</span>]]</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"date"</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">"date"</span>]).dt.strftime(<span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">"</span>)  <span class="co"># store as TEXT YYYY-MM-DD</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"value"</span>] <span class="op">=</span> pd.to_numeric(df[<span class="st">"value"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"series_id"</span>] <span class="op">=</span> series_id</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.dropna(subset<span class="op">=</span>[<span class="st">"value"</span>])</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ensure_schema(con):</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"""</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="st">        CREATE TABLE IF NOT EXISTS macro_series(</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="st">            series_id TEXT,</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="st">            date      TEXT,</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="st">            value     REAL,</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="st">            PRIMARY KEY(series_id, date)</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="st">        )</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span>)</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Optional: index on date for faster slicing across all series</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"CREATE INDEX IF NOT EXISTS idx_macro_series_date ON macro_series(date)"</span>)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> upsert_dataframe(con, df):</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    sql <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="st">        INSERT INTO macro_series(series_id, date, value)</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="st">        VALUES (?, ?, ?)</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="st">        ON CONFLICT(series_id, date) DO UPDATE SET</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="st">            value = excluded.value</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> <span class="bu">list</span>(df[[<span class="st">"series_id"</span>,<span class="st">"date"</span>,<span class="st">"value"</span>]].itertuples(index<span class="op">=</span><span class="va">False</span>, name<span class="op">=</span><span class="va">None</span>))</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    con.executemany(sql, rows)</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(series_id, start<span class="op">=</span><span class="st">"2015-01-01"</span>):</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> fetch_series(series_id, start<span class="op">=</span>start)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"data/prices.db"</span>)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>        ensure_schema(con)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>        upsert_dataframe(con, df)</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>        con.commit()</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">finally</span>:</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>        con.close()</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Upserted </span><span class="sc">{</span>series_id<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss"> rows from </span><span class="sc">{</span>start<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> argparse</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>    ap <span class="op">=</span> argparse.ArgumentParser()</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--series-id"</span>, default<span class="op">=</span><span class="st">"VIXCLS"</span>)</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--start"</span>, default<span class="op">=</span><span class="st">"2015-01-01"</span>)</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    args, _ <span class="op">=</span> ap.parse_known_args()</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    main(args.series_id, start<span class="op">=</span>args.start)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Run example:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/get_macro.py</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/get_macro.py <span class="at">--series-id</span> DGS10   <span class="co"># 10‑Year Treasury Constant Maturity Rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="b.-enrich-features-with-your-new-series" class="level3" data-number="12.5.2">
-<h3 data-number="12.5.2" class="anchored" data-anchor-id="b.-enrich-features-with-your-new-series"><span class="header-section-number">12.5.2</span> B. Enrich features with your new series</h3>
+<section id="b.-enrich-features-with-your-new-series" class="level3" data-number="11.6.2">
+<h3 data-number="11.6.2" class="anchored" data-anchor-id="b.-enrich-features-with-your-new-series"><span class="header-section-number">11.6.2</span> B. Enrich features with your new series</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, sqlite3</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fv <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/features_v1.parquet"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"data/prices.db"</span>)</span>
@@ -647,8 +667,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>out.to_parquet(<span class="st">"data/processed/features_v1_ext.parquet"</span>, compression<span class="op">=</span><span class="st">"zstd"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote features_v1_ext.parquet with extra series:"</span>, out.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="c.-short-test-teststest_macro_join.py" class="level3" data-number="12.5.3">
-<h3 data-number="12.5.3" class="anchored" data-anchor-id="c.-short-test-teststest_macro_join.py"><span class="header-section-number">12.5.3</span> C. Short test: <code>tests/test_macro_join.py</code></h3>
+<section id="c.-short-test-teststest_macro_join.py" class="level3" data-number="11.6.3">
+<h3 data-number="11.6.3" class="anchored" data-anchor-id="c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.6.3</span> C. Short test: <code>tests/test_macro_join.py</code></h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_enriched_has_macro():</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/features_v1_ext.parquet"</span>)</span>
@@ -660,7 +680,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 
 
-</section>
 </section>
 </section>
 
