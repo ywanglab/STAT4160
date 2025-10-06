@@ -344,37 +344,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-13-pytest-data-validation-75-min" id="toc-session-13-pytest-data-validation-75-min" class="nav-link active" data-scroll-target="#session-13-pytest-data-validation-75-min"><span class="header-section-number">13.1</span> Session 13 — pytest + Data Validation (75 min)</a>
+  <li><a href="#session-13-pytest-data-validation" id="toc-session-13-pytest-data-validation" class="nav-link active" data-scroll-target="#session-13-pytest-data-validation"><span class="header-section-number">13.1</span> Session 13 — pytest + Data Validation</a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">13.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">13.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">13.3</span> Slides</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">13.2</span> Agenda</a>
   <ul class="collapse">
-  <li><a href="#what-to-test-fast-crisp" id="toc-what-to-test-fast-crisp" class="nav-link" data-scroll-target="#what-to-test-fast-crisp"><span class="header-section-number">13.3.1</span> What to test (fast, crisp)</a></li>
-  <li><a href="#pandera-vs-custom-checks" id="toc-pandera-vs-custom-checks" class="nav-link" data-scroll-target="#pandera-vs-custom-checks"><span class="header-section-number">13.3.2</span> Pandera vs custom checks</a></li>
-  <li><a href="#logging-basics" id="toc-logging-basics" class="nav-link" data-scroll-target="#logging-basics"><span class="header-section-number">13.3.3</span> Logging basics</a></li>
+  <li><a href="#what-to-test-fast-crisp" id="toc-what-to-test-fast-crisp" class="nav-link" data-scroll-target="#what-to-test-fast-crisp"><span class="header-section-number">13.2.1</span> What to test (fast, crisp)</a></li>
+  <li><a href="#pandera-vs-custom-checks" id="toc-pandera-vs-custom-checks" class="nav-link" data-scroll-target="#pandera-vs-custom-checks"><span class="header-section-number">13.2.2</span> Pandera vs custom checks</a></li>
+  <li><a href="#logging-basics" id="toc-logging-basics" class="nav-link" data-scroll-target="#logging-basics"><span class="header-section-number">13.2.3</span> Logging basics</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">13.4</span> In‑class lab (35 min)</a>
+  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">13.3</span> In‑class lab (35 min)</a>
   <ul class="collapse">
-  <li><a href="#setup-mount-folders" id="toc-setup-mount-folders" class="nav-link" data-scroll-target="#setup-mount-folders"><span class="header-section-number">13.4.1</span> 0) Setup: mount &amp; folders</a></li>
-  <li><a href="#optional-install-testtime-helpers-pandera" id="toc-optional-install-testtime-helpers-pandera" class="nav-link" data-scroll-target="#optional-install-testtime-helpers-pandera"><span class="header-section-number">13.4.2</span> 1) (Optional) Install test‑time helpers (Pandera)</a></li>
-  <li><a href="#put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" id="toc-put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" class="nav-link" data-scroll-target="#put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests"><span class="header-section-number">13.4.3</span> 2) Put a tiny <strong>logging helper</strong> in your repo (used by build scripts &amp; tests)</a></li>
-  <li><a href="#create-pytest-config-and-a-fixture-with-safe-fallback-data" id="toc-create-pytest-config-and-a-fixture-with-safe-fallback-data" class="nav-link" data-scroll-target="#create-pytest-config-and-a-fixture-with-safe-fallback-data"><span class="header-section-number">13.4.4</span> 3) Create <strong>pytest config</strong> and a fixture (with safe fallback data)</a></li>
-  <li><a href="#highvalue-tests-shapes-nulls-lookahead-ban-as-requested" id="toc-highvalue-tests-shapes-nulls-lookahead-ban-as-requested" class="nav-link" data-scroll-target="#highvalue-tests-shapes-nulls-lookahead-ban-as-requested"><span class="header-section-number">13.4.5</span> 4) <strong>High‑value tests</strong>: shapes, nulls, look‑ahead ban (as requested)</a></li>
-  <li><a href="#optional-pandera-schema-test-declarative" id="toc-optional-pandera-schema-test-declarative" class="nav-link" data-scroll-target="#optional-pandera-schema-test-declarative"><span class="header-section-number">13.4.6</span> 5) <strong>Optional</strong> Pandera schema test (declarative)</a></li>
-  <li><a href="#logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" id="toc-logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" class="nav-link" data-scroll-target="#logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo"><span class="header-section-number">13.4.7</span> 6) <strong>Logging</strong> test: assert a warning is emitted on duplicates (toy demo)</a></li>
-  <li><a href="#run-tests-now" id="toc-run-tests-now" class="nav-link" data-scroll-target="#run-tests-now"><span class="header-section-number">13.4.8</span> 7) Run tests now</a></li>
+  <li><a href="#setup-mount-folders" id="toc-setup-mount-folders" class="nav-link" data-scroll-target="#setup-mount-folders"><span class="header-section-number">13.3.1</span> 0) Setup: mount &amp; folders</a></li>
+  <li><a href="#optional-install-testtime-helpers-pandera" id="toc-optional-install-testtime-helpers-pandera" class="nav-link" data-scroll-target="#optional-install-testtime-helpers-pandera"><span class="header-section-number">13.3.2</span> 1) (Optional) Install test‑time helpers (Pandera)</a></li>
+  <li><a href="#put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" id="toc-put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" class="nav-link" data-scroll-target="#put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests"><span class="header-section-number">13.3.3</span> 2) Put a tiny <strong>logging helper</strong> in your repo (used by build scripts &amp; tests)</a></li>
+  <li><a href="#create-pytest-config-and-a-fixture-with-safe-fallback-data" id="toc-create-pytest-config-and-a-fixture-with-safe-fallback-data" class="nav-link" data-scroll-target="#create-pytest-config-and-a-fixture-with-safe-fallback-data"><span class="header-section-number">13.3.4</span> 3) Create <strong>pytest config</strong> and a fixture (with safe fallback data)</a></li>
+  <li><a href="#highvalue-tests-shapes-nulls-lookahead-ban-as-requested" id="toc-highvalue-tests-shapes-nulls-lookahead-ban-as-requested" class="nav-link" data-scroll-target="#highvalue-tests-shapes-nulls-lookahead-ban-as-requested"><span class="header-section-number">13.3.5</span> 4) <strong>High‑value tests</strong>: shapes, nulls, look‑ahead ban (as requested)</a></li>
+  <li><a href="#optional-pandera-schema-test-declarative" id="toc-optional-pandera-schema-test-declarative" class="nav-link" data-scroll-target="#optional-pandera-schema-test-declarative"><span class="header-section-number">13.3.6</span> 5) <strong>Optional</strong> Pandera schema test (declarative)</a></li>
+  <li><a href="#logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" id="toc-logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" class="nav-link" data-scroll-target="#logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo"><span class="header-section-number">13.3.7</span> 6) <strong>Logging</strong> test: assert a warning is emitted on duplicates (toy demo)</a></li>
+  <li><a href="#run-tests-now" id="toc-run-tests-now" class="nav-link" data-scroll-target="#run-tests-now"><span class="header-section-number">13.3.8</span> 7) Run tests now</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">13.5</span> Wrap‑up (10 min)</a></li>
-  <li><a href="#homework-due-before-session-14" id="toc-homework-due-before-session-14" class="nav-link" data-scroll-target="#homework-due-before-session-14"><span class="header-section-number">13.6</span> Homework (due before Session 14)</a>
+  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">13.4</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#homework-due-before-session-14" id="toc-homework-due-before-session-14" class="nav-link" data-scroll-target="#homework-due-before-session-14"><span class="header-section-number">13.5</span> Homework (due before Session 14)</a>
   <ul class="collapse">
-  <li><a href="#part-a-build-a-reusable-health-module" id="toc-part-a-build-a-reusable-health-module" class="nav-link" data-scroll-target="#part-a-build-a-reusable-health-module"><span class="header-section-number">13.6.1</span> Part A — Build a reusable <strong>health</strong> module</a></li>
-  <li><a href="#part-b-health-check-notebook-reportshealth.ipynb" id="toc-part-b-health-check-notebook-reportshealth.ipynb" class="nav-link" data-scroll-target="#part-b-health-check-notebook-reportshealth.ipynb"><span class="header-section-number">13.6.2</span> Part B — <strong>Health Check notebook</strong> (<code>reports/health.ipynb</code>)</a></li>
-  <li><a href="#part-c-include-health-output-in-your-quarto-report" id="toc-part-c-include-health-output-in-your-quarto-report" class="nav-link" data-scroll-target="#part-c-include-health-output-in-your-quarto-report"><span class="header-section-number">13.6.3</span> Part C — Include health output in your <strong>Quarto report</strong></a></li>
+  <li><a href="#part-a-build-a-reusable-health-module" id="toc-part-a-build-a-reusable-health-module" class="nav-link" data-scroll-target="#part-a-build-a-reusable-health-module"><span class="header-section-number">13.5.1</span> Part A — Build a reusable <strong>health</strong> module</a></li>
+  <li><a href="#part-b-health-check-notebook-reportshealth.ipynb" id="toc-part-b-health-check-notebook-reportshealth.ipynb" class="nav-link" data-scroll-target="#part-b-health-check-notebook-reportshealth.ipynb"><span class="header-section-number">13.5.2</span> Part B — <strong>Health Check notebook</strong> (<code>reports/health.ipynb</code>)</a></li>
+  <li><a href="#part-c-include-health-output-in-your-quarto-report" id="toc-part-c-include-health-output-in-your-quarto-report" class="nav-link" data-scroll-target="#part-c-include-health-output-in-your-quarto-report"><span class="header-section-number">13.5.3</span> Part C — Include health output in your <strong>Quarto report</strong></a></li>
+  <li><a href="#part-d-add-a-makefile-target-and-a-quick-test" id="toc-part-d-add-a-makefile-target-and-a-quick-test" class="nav-link" data-scroll-target="#part-d-add-a-makefile-target-and-a-quick-test"><span class="header-section-number">13.5.4</span> Part D — Add a <strong>Makefile</strong> target and a quick test</a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">13.7</span> Key points:</a></li>
-  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">13.8</span> Grading (pass/revise)</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">13.6</span> Key points:</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">13.7</span> Grading (pass/revise)</a></li>
   </ul>
 </nav>
     </div>
@@ -402,8 +402,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p><strong>Assumptions:</strong> You completed Session 9–12 and have <code>data/processed/features_v1.parquet</code> (or <code>features_v1_ext.parquet</code>). If a file is missing, the lab provides a small synthetic fallback so tests still run. <strong>Goal today:</strong> Make it <strong>hard to ship bad data</strong> by adding precise, fast tests.</p>
 <hr>
-<section id="session-13-pytest-data-validation-75-min" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="session-13-pytest-data-validation-75-min"><span class="header-section-number">13.1</span> Session 13 — pytest + Data Validation (75 min)</h2>
+<section id="session-13-pytest-data-validation" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="session-13-pytest-data-validation"><span class="header-section-number">13.1</span> Session 13 — pytest + Data Validation</h2>
 <section id="learning-goals" class="level3" data-number="13.1.1">
 <h3 data-number="13.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">13.1.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
@@ -416,21 +416,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="agenda-75-min" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">13.2</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">13.2</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Slides: What to test (and not), “data tests” vs unit tests, speed budget</li>
-<li><strong>(10 min)</strong> Slides: Pandera schemas &amp; custom checks; tolerance and stability</li>
-<li><strong>(10 min)</strong> Slides: Logging basics (<code>logging</code>, levels, handlers); testing logs with <code>caplog</code></li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: add <code>tests/test_features.py</code> (+ optional Pandera test), fixtures, config; run &amp; fix</li>
-<li><strong>(10 min)</strong> Wrap‑up + homework briefing</li>
+<li>What to test (and not), “data tests” vs unit tests, speed budget</li>
+<li>Pandera schemas &amp; custom checks; tolerance and stability</li>
+<li>Logging basics (<code>logging</code>, levels, handlers); testing logs with <code>caplog</code></li>
+<li><strong>In‑class lab</strong>: add <code>tests/test_features.py</code> (+ optional Pandera test), fixtures, config; run &amp; fix</li>
+<li>Wrap‑up + homework briefing</li>
 </ul>
 <hr>
-</section>
-<section id="slides" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">13.3</span> Slides</h2>
-<section id="what-to-test-fast-crisp" class="level3" data-number="13.3.1">
-<h3 data-number="13.3.1" class="anchored" data-anchor-id="what-to-test-fast-crisp"><span class="header-section-number">13.3.1</span> What to test (fast, crisp)</h3>
+<section id="what-to-test-fast-crisp" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="what-to-test-fast-crisp"><span class="header-section-number">13.2.1</span> What to test (fast, crisp)</h3>
 <ul>
 <li><p><strong>Contract tests</strong> for data:</p>
 <ul>
@@ -442,15 +439,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Keep tests <strong>under ~5s total</strong> (CI budget). Avoid long recomputations; sample/take head.</p></li>
 </ul>
 </section>
-<section id="pandera-vs-custom-checks" class="level3" data-number="13.3.2">
-<h3 data-number="13.3.2" class="anchored" data-anchor-id="pandera-vs-custom-checks"><span class="header-section-number">13.3.2</span> Pandera vs custom checks</h3>
+<section id="pandera-vs-custom-checks" class="level3" data-number="13.2.2">
+<h3 data-number="13.2.2" class="anchored" data-anchor-id="pandera-vs-custom-checks"><span class="header-section-number">13.2.2</span> Pandera vs custom checks</h3>
 <ul>
 <li><strong>Pandera</strong>: declarative schema; optional dependency; good for <strong>column existence + ranges</strong>.</li>
 <li><strong>Custom</strong>: essential for <strong>domain logic</strong> (look‑ahead bans, exact rolling formulas).</li>
 </ul>
 </section>
-<section id="logging-basics" class="level3" data-number="13.3.3">
-<h3 data-number="13.3.3" class="anchored" data-anchor-id="logging-basics"><span class="header-section-number">13.3.3</span> Logging basics</h3>
+<section id="logging-basics" class="level3" data-number="13.2.3">
+<h3 data-number="13.2.3" class="anchored" data-anchor-id="logging-basics"><span class="header-section-number">13.2.3</span> Logging basics</h3>
 <ul>
 <li>Use <code>logging.getLogger(__name__)</code>; set level via env (<code>LOGLEVEL=INFO</code>).</li>
 <li>Log <strong>counts, ranges, and any data drops</strong> inside build scripts.</li>
@@ -459,13 +456,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">13.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab-35-min" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">13.3</span> In‑class lab (35 min)</h2>
 <blockquote class="blockquote">
 <p>Run each block as its <strong>own Colab cell</strong>. Adjust <code>REPO_NAME</code> as needed.</p>
 </blockquote>
-<section id="setup-mount-folders" class="level3" data-number="13.4.1">
-<h3 data-number="13.4.1" class="anchored" data-anchor-id="setup-mount-folders"><span class="header-section-number">13.4.1</span> 0) Setup: mount &amp; folders</h3>
+<section id="setup-mount-folders" class="level3" data-number="13.3.1">
+<h3 data-number="13.3.1" class="anchored" data-anchor-id="setup-mount-folders"><span class="header-section-number">13.3.1</span> 0) Setup: mount &amp; folders</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -480,12 +477,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    pathlib.Path(p).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="optional-install-testtime-helpers-pandera" class="level3" data-number="13.4.2">
-<h3 data-number="13.4.2" class="anchored" data-anchor-id="optional-install-testtime-helpers-pandera"><span class="header-section-number">13.4.2</span> 1) (Optional) Install test‑time helpers (Pandera)</h3>
+<section id="optional-install-testtime-helpers-pandera" class="level3" data-number="13.3.2">
+<h3 data-number="13.3.2" class="anchored" data-anchor-id="optional-install-testtime-helpers-pandera"><span class="header-section-number">13.3.2</span> 1) (Optional) Install test‑time helpers (Pandera)</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip <span class="op">-</span>q install pytest pandera pyarrow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" class="level3" data-number="13.4.3">
-<h3 data-number="13.4.3" class="anchored" data-anchor-id="put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests"><span class="header-section-number">13.4.3</span> 2) Put a tiny <strong>logging helper</strong> in your repo (used by build scripts &amp; tests)</h3>
+<section id="put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests" class="level3" data-number="13.3.3">
+<h3 data-number="13.3.3" class="anchored" data-anchor-id="put-a-tiny-logging-helper-in-your-repo-used-by-build-scripts-tests"><span class="header-section-number">13.3.3</span> 2) Put a tiny <strong>logging helper</strong> in your repo (used by build scripts &amp; tests)</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scripts/logsetup.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> annotations</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging, os</span>
@@ -501,8 +498,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    logger.setLevel(level)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> logger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="create-pytest-config-and-a-fixture-with-safe-fallback-data" class="level3" data-number="13.4.4">
-<h3 data-number="13.4.4" class="anchored" data-anchor-id="create-pytest-config-and-a-fixture-with-safe-fallback-data"><span class="header-section-number">13.4.4</span> 3) Create <strong>pytest config</strong> and a fixture (with safe fallback data)</h3>
+<section id="create-pytest-config-and-a-fixture-with-safe-fallback-data" class="level3" data-number="13.3.4">
+<h3 data-number="13.3.4" class="anchored" data-anchor-id="create-pytest-config-and-a-fixture-with-safe-fallback-data"><span class="header-section-number">13.3.4</span> 3) Create <strong>pytest config</strong> and a fixture (with safe fallback data)</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pytest.ini</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"pytest.ini"</span>).write_text(<span class="st">"""[pytest]</span></span>
@@ -555,8 +552,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fallback</span></span>
 <span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> _synth_features().sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="highvalue-tests-shapes-nulls-lookahead-ban-as-requested" class="level3" data-number="13.4.5">
-<h3 data-number="13.4.5" class="anchored" data-anchor-id="highvalue-tests-shapes-nulls-lookahead-ban-as-requested"><span class="header-section-number">13.4.5</span> 4) <strong>High‑value tests</strong>: shapes, nulls, look‑ahead ban (as requested)</h3>
+<section id="highvalue-tests-shapes-nulls-lookahead-ban-as-requested" class="level3" data-number="13.3.5">
+<h3 data-number="13.3.5" class="anchored" data-anchor-id="highvalue-tests-shapes-nulls-lookahead-ban-as-requested"><span class="header-section-number">13.3.5</span> 4) <strong>High‑value tests</strong>: shapes, nulls, look‑ahead ban (as requested)</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_features.py</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest</span>
@@ -605,33 +602,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        diff <span class="op">=</span> (g[<span class="ss">f"roll_mean_</span><span class="sc">{</span>W<span class="sc">}</span><span class="ss">"</span>][mask] <span class="op">-</span> rm[mask]).<span class="bu">abs</span>().<span class="bu">max</span>()</span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">float</span>(diff) <span class="op">&lt;=</span> <span class="fl">1e-7</span>, <span class="ss">f"roll_mean_</span><span class="sc">{</span>W<span class="sc">}</span><span class="ss"> mismatch for </span><span class="sc">{</span>tkr<span class="sc">}</span><span class="ss"> (max diff </span><span class="sc">{</span>diff<span class="sc">}</span><span class="ss">)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="optional-pandera-schema-test-declarative" class="level3" data-number="13.4.6">
-<h3 data-number="13.4.6" class="anchored" data-anchor-id="optional-pandera-schema-test-declarative"><span class="header-section-number">13.4.6</span> 5) <strong>Optional</strong> Pandera schema test (declarative)</h3>
+<section id="optional-pandera-schema-test-declarative" class="level3" data-number="13.3.6">
+<h3 data-number="13.3.6" class="anchored" data-anchor-id="optional-pandera-schema-test-declarative"><span class="header-section-number">13.3.6</span> 5) <strong>Optional</strong> Pandera schema test (declarative)</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_schema_pandera.py</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest, pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pandera <span class="im">as</span> pa</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pandera.pandas <span class="im">as</span> pa</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> pandera <span class="im">import</span> Column, Check, DataFrameSchema</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span>:</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    pytest.skip(<span class="st">"pandera not installed"</span>, allow_module_level<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>schema <span class="op">=</span> pa.DataFrameSchema({</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:    Column(pa.DateTime, nullable<span class="op">=</span><span class="va">False</span>),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ticker"</span>:  Column(pa.String, nullable<span class="op">=</span><span class="va">False</span>, <span class="bu">coerce</span><span class="op">=</span><span class="va">True</span>, checks<span class="op">=</span>Check.str_length(<span class="dv">1</span>, <span class="dv">12</span>)),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"log_return"</span>: Column(pa.Float, nullable<span class="op">=</span><span class="va">False</span>, checks<span class="op">=</span>Check.is_finite()),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"r_1d"</span>:       Column(pa.Float, nullable<span class="op">=</span><span class="va">False</span>, checks<span class="op">=</span>Check.is_finite()),</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday"</span>:    Column(pa.Int8,  checks<span class="op">=</span>Check.in_range(<span class="dv">0</span>, <span class="dv">6</span>)),</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"month"</span>:      Column(pa.Int8,  checks<span class="op">=</span>Check.in_range(<span class="dv">1</span>, <span class="dv">12</span>)),</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>}, <span class="bu">coerce</span><span class="op">=</span><span class="va">True</span>, strict<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_schema_validate(features_df):</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cast ticker to string for schema validation; categorical is ok → string</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> features_df.copy()</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"ticker"</span>] <span class="op">=</span> df[<span class="st">"ticker"</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    schema.validate(df[[<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"log_return"</span>,<span class="st">"r_1d"</span>,<span class="st">"weekday"</span>,<span class="st">"month"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:     Column(pa.DateTime, nullable<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ticker"</span>:   Column(pa.String,  nullable<span class="op">=</span><span class="va">False</span>, <span class="bu">coerce</span><span class="op">=</span><span class="va">True</span>, checks<span class="op">=</span>Check.str_length(<span class="dv">1</span>, <span class="dv">12</span>)),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"log_return"</span>: Column(pa.Float, nullable<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                         checks<span class="op">=</span>Check(<span class="kw">lambda</span> s: np.isfinite(s).<span class="bu">all</span>(), error<span class="op">=</span><span class="st">"log_return must be finite"</span>)),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"r_1d"</span>:       Column(pa.Float, nullable<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                         checks<span class="op">=</span>Check(<span class="kw">lambda</span> s: np.isfinite(s).<span class="bu">all</span>(), error<span class="op">=</span><span class="st">"r_1d must be finite"</span>)),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday"</span>:  Column(pa.Int8, checks<span class="op">=</span>Check.isin(<span class="bu">range</span>(<span class="dv">7</span>))),                 <span class="co"># 0..6</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"month"</span>:    Column(pa.Int8, checks<span class="op">=</span>Check.in_range(<span class="dv">1</span>, <span class="dv">12</span>, inclusive<span class="op">=</span><span class="st">"both"</span>)),</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_schema_validate(features_df):</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cast ticker to string for schema validation; categorical is ok → string</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> features_df.copy()</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"ticker"</span>] <span class="op">=</span> df[<span class="st">"ticker"</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    schema.validate(df[[<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"log_return"</span>,<span class="st">"r_1d"</span>,<span class="st">"weekday"</span>,<span class="st">"month"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" class="level3" data-number="13.4.7">
-<h3 data-number="13.4.7" class="anchored" data-anchor-id="logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo"><span class="header-section-number">13.4.7</span> 6) <strong>Logging</strong> test: assert a warning is emitted on duplicates (toy demo)</h3>
+<section id="logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo" class="level3" data-number="13.3.7">
+<h3 data-number="13.3.7" class="anchored" data-anchor-id="logging-test-assert-a-warning-is-emitted-on-duplicates-toy-demo"><span class="header-section-number">13.3.7</span> 6) <strong>Logging</strong> test: assert a warning is emitted on duplicates (toy demo)</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_logging.py</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging, pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, pytest</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scripts.logsetup <span class="im">import</span> setup_logging</span>
@@ -650,8 +649,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> dups <span class="op">==</span> <span class="dv">1</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">any</span>(<span class="st">"duplicate"</span> <span class="kw">in</span> rec.message <span class="cf">for</span> rec <span class="kw">in</span> caplog.records)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="run-tests-now" class="level3" data-number="13.4.8">
-<h3 data-number="13.4.8" class="anchored" data-anchor-id="run-tests-now"><span class="header-section-number">13.4.8</span> 7) Run tests now</h3>
+<section id="run-tests-now" class="level3" data-number="13.3.8">
+<h3 data-number="13.3.8" class="anchored" data-anchor-id="run-tests-now"><span class="header-section-number">13.3.8</span> 7) Run tests now</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pytest <span class="op">-</span>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <blockquote class="blockquote">
 <p>If a test fails on your real data, fix your pipeline (e.g., regenerate <code>features_v1.parquet</code>) and re‑run. <strong>Do not</strong> relax the test without understanding the failure.</p>
@@ -659,8 +658,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="13.5">
-<h2 data-number="13.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">13.5</span> Wrap‑up (10 min)</h2>
+<section id="wrapup-10-min" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">13.4</span> Wrap‑up (10 min)</h2>
 <ul>
 <li>You now have <strong>tests that fail loudly</strong> if labels leak, required columns/keys break, or schemas drift.</li>
 <li>Pandera provides a declarative baseline; custom tests encode your <strong>domain logic</strong>.</li>
@@ -668,11 +667,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-14" class="level2" data-number="13.6">
-<h2 data-number="13.6" class="anchored" data-anchor-id="homework-due-before-session-14"><span class="header-section-number">13.6</span> Homework (due before Session 14)</h2>
+<section id="homework-due-before-session-14" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="homework-due-before-session-14"><span class="header-section-number">13.5</span> Homework (due before Session 14)</h2>
 <p><strong>Goal:</strong> Create a <strong>Health Check</strong> notebook that prints key diagnostics and is easy to include in your Quarto report.</p>
-<section id="part-a-build-a-reusable-health-module" class="level3" data-number="13.6.1">
-<h3 data-number="13.6.1" class="anchored" data-anchor-id="part-a-build-a-reusable-health-module"><span class="header-section-number">13.6.1</span> Part A — Build a reusable <strong>health</strong> module</h3>
+<section id="part-a-build-a-reusable-health-module" class="level3" data-number="13.5.1">
+<h3 data-number="13.5.1" class="anchored" data-anchor-id="part-a-build-a-reusable-health-module"><span class="header-section-number">13.5.1</span> Part A — Build a reusable <strong>health</strong> module</h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scripts/health.py</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> annotations</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, json</span>
@@ -721,8 +720,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Run once to generate the files:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python scripts<span class="op">/</span>health.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-b-health-check-notebook-reportshealth.ipynb" class="level3" data-number="13.6.2">
-<h3 data-number="13.6.2" class="anchored" data-anchor-id="part-b-health-check-notebook-reportshealth.ipynb"><span class="header-section-number">13.6.2</span> Part B — <strong>Health Check notebook</strong> (<code>reports/health.ipynb</code>)</h3>
+<section id="part-b-health-check-notebook-reportshealth.ipynb" class="level3" data-number="13.5.2">
+<h3 data-number="13.5.2" class="anchored" data-anchor-id="part-b-health-check-notebook-reportshealth.ipynb"><span class="header-section-number">13.5.2</span> Part B — <strong>Health Check notebook</strong> (<code>reports/health.ipynb</code>)</h3>
 <p>Create a new notebook <code>reports/health.ipynb</code> with <strong>two cells</strong>:</p>
 <p><strong>Cell 1 (setup):</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
@@ -736,56 +735,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Commit the notebook. It will be light and re‑usable. You’ll include its output in Quarto below.</p>
 </blockquote>
 </section>
-<section id="part-c-include-health-output-in-your-quarto-report" class="level3" data-number="13.6.3">
-<h3 data-number="13.6.3" class="anchored" data-anchor-id="part-c-include-health-output-in-your-quarto-report"><span class="header-section-number">13.6.3</span> Part C — Include health output in your <strong>Quarto report</strong></h3>
+<section id="part-c-include-health-output-in-your-quarto-report" class="level3" data-number="13.5.3">
+<h3 data-number="13.5.3" class="anchored" data-anchor-id="part-c-include-health-output-in-your-quarto-report"><span class="header-section-number">13.5.3</span> Part C — Include health output in your <strong>Quarto report</strong></h3>
 <p>In <code>reports/eda.qmd</code>, add a section:</p>
-<p>````markdown ## Data Health (auto-generated)</p>
-<div id="40ae7d55" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Path(<span class="st">"reports/health.md"</span>).read_text())</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Render EDA:</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>quarto render reports<span class="op">/</span>eda.qmd</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">### Part D — Add a **Makefile** target and a quick test</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="op">**</span>Makefile append:<span class="op">**</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>.PHONY: health test</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>health: <span class="co">## Generate health.json and health.md from the current features parquet</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>\tpython scripts<span class="op">/</span>health.py</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>test: <span class="co">## Run fast tests</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>\tpytest <span class="op">-</span>q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Health (auto-generated)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>::: {#384d252a .cell execution_count=1}</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Path(<span class="st">"reports/health.md"</span>).read_text())</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Render EDA: quarto render reports/eda.qmd</p>
+</section>
+<section id="part-d-add-a-makefile-target-and-a-quick-test" class="level3" data-number="13.5.4">
+<h3 data-number="13.5.4" class="anchored" data-anchor-id="part-d-add-a-makefile-target-and-a-quick-test"><span class="header-section-number">13.5.4</span> Part D — Add a <strong>Makefile</strong> target and a quick test</h3>
+<p><strong>Makefile append:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.PHONY:</span> health test</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">health:</span> <span class="co">## Generate health.json and health.md from the current features parquet</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">python</span> scripts/health.py</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">pytest</span> <span class="at">-q</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">test:</span> pytest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Test that health files exist:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_health_outputs.py</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, json</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_health_files_exist():</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> os.path.exists(<span class="st">"reports/health.json"</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> os.path.exists(<span class="st">"reports/health.md"</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># json is valid</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> json</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    json.load(<span class="bu">open</span>(<span class="st">"reports/health.json"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_health_outputs.py</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, json</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_health_files_exist():</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> os.path.exists(<span class="st">"reports/health.json"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> os.path.exists(<span class="st">"reports/health.md"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># json is valid</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> json</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    json.load(<span class="bu">open</span>(<span class="st">"reports/health.json"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Run:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> health</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> health</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> health</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> health</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="13.7">
-<h2 data-number="13.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">13.7</span> Key points:</h2>
+<section id="key-points" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">13.6</span> Key points:</h2>
 <ul>
 <li><strong>Fast tests only</strong> for CI; keep heavy, long recomputations out.</li>
 <li><strong>No look‑ahead</strong> and <strong>unique (ticker,date)</strong> are non‑negotiable contracts.</li>
 <li>Logging is a first‑class tool—tests can assert on <strong>warnings</strong> you emit.</li>
 </ul>
 </section>
-<section id="grading-passrevise" class="level2" data-number="13.8">
-<h2 data-number="13.8" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">13.8</span> Grading (pass/revise)</h2>
+<section id="grading-passrevise" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">13.7</span> Grading (pass/revise)</h2>
 <ul>
 <li><code>tests/test_features.py</code> present with <strong>shapes, nulls, look‑ahead ban</strong> (and rolling check).</li>
 <li>Tests pass locally (<code>pytest -q</code>).</li>
