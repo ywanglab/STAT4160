@@ -135,5 +135,12 @@ summary = pd.DataFrame({
 })
 summary
 ```
+## Data Health (auto-generated)
+
+```{python}
+from pathlib import Path
+print(Path("reports/health.md").read_text())
+```
+
 
  **Note**: Educational use only. This is not trading advice.
