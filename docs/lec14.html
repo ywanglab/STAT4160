@@ -407,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Configure <strong>pre‑commit</strong> to run <strong>Black</strong>, <strong>Ruff</strong> (lint + import sort), and <strong>nbstripout</strong> on every commit.</li>
 <li>Keep commits clean and <strong>notebook outputs stripped</strong>.</li>
-<li>Add a fast <strong>GitHub Actions</strong> CI workflow that runs pre‑commit hooks and <strong>pytest</strong> on each PR.</li>
+<li>Add a fast <strong>GitHub Actions</strong> CI workflow that runs pre‑commit hooks and <strong>pytest</strong> on each PR (Pull Request).</li>
 <li>Keep CI runtime <strong>under ~3–4 minutes</strong> with caching and a lean dependency set.</li>
 </ol>
 <hr>
@@ -530,7 +530,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">    rev: 24.4.2</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">    hooks:</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">      - id: black</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">        language_version: python3.11</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">        language_version: python3.12  #match the python version of your system or leave it blank</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">  - repo: https://github.com/astral-sh/ruff-pre-commit</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">    rev: v0.5.0</span></span>
