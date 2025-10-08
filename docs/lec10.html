@@ -258,7 +258,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -376,23 +376,22 @@ window.Quarto = {
   <li><a href="#session-10-rolling-windows-resampling-and-leakagesafe-features" id="toc-session-10-rolling-windows-resampling-and-leakagesafe-features" class="nav-link active" data-scroll-target="#session-10-rolling-windows-resampling-and-leakagesafe-features"><span class="header-section-number">11</span> <strong>Session 10 — Rolling Windows, Resampling, and Leakage‑Safe Features</strong></a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">11.0.1</span> Learning goals</a></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">11.1</span> Agenda (75 min)</a></li>
-  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">11.2</span> Slide</a></li>
-  <li><a href="#inclass-lab-colabfriendly" id="toc-inclass-lab-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-colabfriendly"><span class="header-section-number">11.3</span> In‑class lab (Colab‑friendly)</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">11.1</span> Agenda</a></li>
+  <li><a href="#inclass-lab-colabfriendly" id="toc-inclass-lab-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-colabfriendly"><span class="header-section-number">11.2</span> In‑class lab (Colab‑friendly)</a>
   <ul class="collapse">
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">11.3.1</span> 0) Setup</a></li>
-  <li><a href="#load-inputs-or-build-small-fallbacks" id="toc-load-inputs-or-build-small-fallbacks" class="nav-link" data-scroll-target="#load-inputs-or-build-small-fallbacks"><span class="header-section-number">11.3.2</span> 1) Load inputs or build small fallbacks</a></li>
-  <li><a href="#rolling-lag-expanding-ewm-features-no-leakage" id="toc-rolling-lag-expanding-ewm-features-no-leakage" class="nav-link" data-scroll-target="#rolling-lag-expanding-ewm-features-no-leakage"><span class="header-section-number">11.3.3</span> 2) Rolling, lag, expanding, ewm features (no leakage)</a></li>
-  <li><a href="#optional-weekly-resampling-demo-ohlcv-returns" id="toc-optional-weekly-resampling-demo-ohlcv-returns" class="nav-link" data-scroll-target="#optional-weekly-resampling-demo-ohlcv-returns"><span class="header-section-number">11.3.4</span> 3) (Optional) Weekly resampling demo (OHLCV + returns)</a></li>
-  <li><a href="#save-features_v1.parquet-optional-partition-by-ticker" id="toc-save-features_v1.parquet-optional-partition-by-ticker" class="nav-link" data-scroll-target="#save-features_v1.parquet-optional-partition-by-ticker"><span class="header-section-number">11.3.5</span> 4) Save <code>features_v1.parquet</code> (+ optional partition by ticker)</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">11.2.1</span> 0) Setup</a></li>
+  <li><a href="#load-inputs-or-build-small-fallbacks" id="toc-load-inputs-or-build-small-fallbacks" class="nav-link" data-scroll-target="#load-inputs-or-build-small-fallbacks"><span class="header-section-number">11.2.2</span> 1) Load inputs or build small fallbacks</a></li>
+  <li><a href="#rolling-lag-expanding-ewm-features-no-leakage" id="toc-rolling-lag-expanding-ewm-features-no-leakage" class="nav-link" data-scroll-target="#rolling-lag-expanding-ewm-features-no-leakage"><span class="header-section-number">11.2.3</span> 2) Rolling, lag, expanding, ewm features (no leakage)</a></li>
+  <li><a href="#optional-weekly-resampling-demo-ohlcv-returns" id="toc-optional-weekly-resampling-demo-ohlcv-returns" class="nav-link" data-scroll-target="#optional-weekly-resampling-demo-ohlcv-returns"><span class="header-section-number">11.2.4</span> 3) (Optional) Weekly resampling demo (OHLCV + returns)</a></li>
+  <li><a href="#save-features_v1.parquet-optional-partition-by-ticker" id="toc-save-features_v1.parquet-optional-partition-by-ticker" class="nav-link" data-scroll-target="#save-features_v1.parquet-optional-partition-by-ticker"><span class="header-section-number">11.2.5</span> 4) Save <code>features_v1.parquet</code> (+ optional partition by ticker)</a></li>
   </ul></li>
-  <li><a href="#wrapup-what-to-emphasize" id="toc-wrapup-what-to-emphasize" class="nav-link" data-scroll-target="#wrapup-what-to-emphasize"><span class="header-section-number">11.4</span> Wrap‑up (what to emphasize)</a></li>
-  <li><a href="#homework-due-before-session-11" id="toc-homework-due-before-session-11" class="nav-link" data-scroll-target="#homework-due-before-session-11"><span class="header-section-number">11.5</span> Homework (due before Session 11)</a>
+  <li><a href="#wrapup-what-to-emphasize" id="toc-wrapup-what-to-emphasize" class="nav-link" data-scroll-target="#wrapup-what-to-emphasize"><span class="header-section-number">11.3</span> Wrap‑up (what to emphasize)</a></li>
+  <li><a href="#homework-due-before-session-11" id="toc-homework-due-before-session-11" class="nav-link" data-scroll-target="#homework-due-before-session-11"><span class="header-section-number">11.4</span> Homework (due before Session 11)</a>
   <ul class="collapse">
-  <li><a href="#a.-script-scriptsbuild_features_v1.py" id="toc-a.-script-scriptsbuild_features_v1.py" class="nav-link" data-scroll-target="#a.-script-scriptsbuild_features_v1.py"><span class="header-section-number">11.5.1</span> A. Script: <code>scripts/build_features_v1.py</code></a></li>
-  <li><a href="#b.-test-teststest_no_lookahead.py" id="toc-b.-test-teststest_no_lookahead.py" class="nav-link" data-scroll-target="#b.-test-teststest_no_lookahead.py"><span class="header-section-number">11.5.2</span> B. Test: <code>tests/test_no_lookahead.py</code></a></li>
+  <li><a href="#a.-script-scriptsbuild_features_v1.py" id="toc-a.-script-scriptsbuild_features_v1.py" class="nav-link" data-scroll-target="#a.-script-scriptsbuild_features_v1.py"><span class="header-section-number">11.4.1</span> A. Script: <code>scripts/build_features_v1.py</code></a></li>
+  <li><a href="#b.-test-teststest_no_lookahead.py" id="toc-b.-test-teststest_no_lookahead.py" class="nav-link" data-scroll-target="#b.-test-teststest_no_lookahead.py"><span class="header-section-number">11.4.2</span> B. Test: <code>tests/test_no_lookahead.py</code></a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">11.6</span> Key points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">11.5</span> Key points</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -433,19 +432,16 @@ window.Quarto = {
 </ol>
 <hr>
 </section>
-<section id="agenda-75-min" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">11.1</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="agenda"><span class="header-section-number">11.1</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Slides: leakage‑free features; lags vs rolling; resampling patterns</li>
-<li><strong>(10 min)</strong> Slides: common pitfalls (min_periods, alignment, mixed frequencies)</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: load returns → build features → (optional) weekly aggregates → write <code>features_v1.parquet</code></li>
-<li><strong>(10 min)</strong> Wrap‑up + homework brief</li>
-<li><strong>(10 min)</strong> Buffer</li>
+<li>leakage‑free features; lags vs rolling; resampling patterns</li>
+<li>common pitfalls (min_periods, alignment, mixed frequencies)</li>
+<li><strong>In‑class lab</strong>: load returns → build features → (optional) weekly aggregates → write <code>features_v1.parquet</code></li>
+<li>Wrap‑up + homework brief</li>
+<li>Buffer</li>
 </ul>
 <hr>
-</section>
-<section id="slide" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="slide"><span class="header-section-number">11.2</span> Slide</h2>
 <p><strong>Feature timing = everything</strong></p>
 <ul>
 <li>Predict <span class="math inline">\(r_{t+1}\)</span> using info up to and including <strong>time t</strong>.</li>
@@ -473,13 +469,13 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="inclass-lab-colabfriendly" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="inclass-lab-colabfriendly"><span class="header-section-number">11.3</span> In‑class lab (Colab‑friendly)</h2>
+<section id="inclass-lab-colabfriendly" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="inclass-lab-colabfriendly"><span class="header-section-number">11.2</span> In‑class lab (Colab‑friendly)</h2>
 <blockquote class="blockquote">
 <p>Run each block as its own cell. Adjust <code>REPO_NAME</code> as needed.</p>
 </blockquote>
-<section id="setup" class="level3" data-number="11.3.1">
-<h3 data-number="11.3.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">11.3.1</span> 0) Setup</h3>
+<section id="setup" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">11.2.1</span> 0) Setup</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -494,8 +490,8 @@ window.Quarto = {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    pathlib.Path(p).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="load-inputs-or-build-small-fallbacks" class="level3" data-number="11.3.2">
-<h3 data-number="11.3.2" class="anchored" data-anchor-id="load-inputs-or-build-small-fallbacks"><span class="header-section-number">11.3.2</span> 1) Load inputs or build small fallbacks</h3>
+<section id="load-inputs-or-build-small-fallbacks" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="load-inputs-or-build-small-fallbacks"><span class="header-section-number">11.2.2</span> 1) Load inputs or build small fallbacks</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -540,8 +536,8 @@ window.Quarto = {
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>prices.head(<span class="dv">3</span>), returns.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="rolling-lag-expanding-ewm-features-no-leakage" class="level3" data-number="11.3.3">
-<h3 data-number="11.3.3" class="anchored" data-anchor-id="rolling-lag-expanding-ewm-features-no-leakage"><span class="header-section-number">11.3.3</span> 2) Rolling, lag, expanding, ewm features (no leakage)</h3>
+<section id="rolling-lag-expanding-ewm-features-no-leakage" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="rolling-lag-expanding-ewm-features-no-leakage"><span class="header-section-number">11.2.3</span> 2) Rolling, lag, expanding, ewm features (no leakage)</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_features(ret: pd.DataFrame, windows<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>), add_rsi<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> ret.sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).groupby(<span class="st">"ticker"</span>, group_keys<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> ret.copy()</span>
@@ -590,8 +586,8 @@ window.Quarto = {
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> build_features(ret2, windows<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>), add_rsi<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>features.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="optional-weekly-resampling-demo-ohlcv-returns" class="level3" data-number="11.3.4">
-<h3 data-number="11.3.4" class="anchored" data-anchor-id="optional-weekly-resampling-demo-ohlcv-returns"><span class="header-section-number">11.3.4</span> 3) (Optional) Weekly resampling demo (OHLCV + returns)</h3>
+<section id="optional-weekly-resampling-demo-ohlcv-returns" class="level3" data-number="11.2.4">
+<h3 data-number="11.2.4" class="anchored" data-anchor-id="optional-weekly-resampling-demo-ohlcv-returns"><span class="header-section-number">11.2.4</span> 3) (Optional) Weekly resampling demo (OHLCV + returns)</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Safe weekly resample per ticker, aggregating OHLCV and log returns</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weekly_ohlcv(df):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).copy()</span>
@@ -610,8 +606,8 @@ window.Quarto = {
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>weekly <span class="op">=</span> weekly_ohlcv(prices[[<span class="st">"ticker"</span>,<span class="st">"date"</span>,<span class="st">"adj_close"</span>,<span class="st">"volume"</span>]])</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>weekly.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="save-features_v1.parquet-optional-partition-by-ticker" class="level3" data-number="11.3.5">
-<h3 data-number="11.3.5" class="anchored" data-anchor-id="save-features_v1.parquet-optional-partition-by-ticker"><span class="header-section-number">11.3.5</span> 4) Save <code>features_v1.parquet</code> (+ optional partition by ticker)</h3>
+<section id="save-features_v1.parquet-optional-partition-by-ticker" class="level3" data-number="11.2.5">
+<h3 data-number="11.2.5" class="anchored" data-anchor-id="save-features_v1.parquet-optional-partition-by-ticker"><span class="header-section-number">11.2.5</span> 4) Save <code>features_v1.parquet</code> (+ optional partition by ticker)</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a compact set to start with</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>keep <span class="op">=</span> [<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"log_return"</span>,<span class="st">"r_1d"</span>,<span class="st">"weekday"</span>,<span class="st">"month"</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lag1"</span>,<span class="st">"lag2"</span>,<span class="st">"lag3"</span>,</span>
@@ -641,8 +637,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="wrapup-what-to-emphasize" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="wrapup-what-to-emphasize"><span class="header-section-number">11.4</span> Wrap‑up (what to emphasize)</h2>
+<section id="wrapup-what-to-emphasize" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="wrapup-what-to-emphasize"><span class="header-section-number">11.3</span> Wrap‑up (what to emphasize)</h2>
 <ul>
 <li>For <strong>next‑day</strong> targets <span class="math inline">\(r_{t+1}\)</span>, rolling stats up to <strong>t</strong> are fine; never use future rows.</li>
 <li>Be explicit about <strong><code>min_periods</code></strong> to avoid unstable early rows.</li>
@@ -650,11 +646,11 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-11" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="homework-due-before-session-11"><span class="header-section-number">11.5</span> Homework (due before Session 11)</h2>
+<section id="homework-due-before-session-11" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="homework-due-before-session-11"><span class="header-section-number">11.4</span> Homework (due before Session 11)</h2>
 <p><strong>Goal:</strong> Add an <strong>automated leakage check</strong> and re‑run feature build.</p>
-<section id="a.-script-scriptsbuild_features_v1.py" class="level3" data-number="11.5.1">
-<h3 data-number="11.5.1" class="anchored" data-anchor-id="a.-script-scriptsbuild_features_v1.py"><span class="header-section-number">11.5.1</span> A. Script: <code>scripts/build_features_v1.py</code></h3>
+<section id="a.-script-scriptsbuild_features_v1.py" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="a.-script-scriptsbuild_features_v1.py"><span class="header-section-number">11.4.1</span> A. Script: <code>scripts/build_features_v1.py</code></h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd, pathlib</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build():</span>
@@ -680,8 +676,8 @@ window.Quarto = {
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/build_features_v1.py</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/build_features_v1.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="b.-test-teststest_no_lookahead.py" class="level3" data-number="11.5.2">
-<h3 data-number="11.5.2" class="anchored" data-anchor-id="b.-test-teststest_no_lookahead.py"><span class="header-section-number">11.5.2</span> B. Test: <code>tests/test_no_lookahead.py</code></h3>
+<section id="b.-test-teststest_no_lookahead.py" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="b.-test-teststest_no_lookahead.py"><span class="header-section-number">11.4.2</span> B. Test: <code>tests/test_no_lookahead.py</code></h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_features_no_lookahead():</span>
@@ -701,8 +697,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">11.6</span> Key points</h2>
+<section id="key-points" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="key-points"><span class="header-section-number">11.5</span> Key points</h2>
 <ul>
 <li>Keep a one‑page “<strong>no leakage</strong>” checklist handy and point to it often.</li>
 </ul>
