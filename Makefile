@@ -114,3 +114,13 @@ pytest:
 test: pytest
 
 
+
+
+.PHONY: lint test ci-local
+lint: ## Run pre-commit hooks on all files
+	pre-commit run --all-files
+
+test: ## Run fast tests
+	pytest -q --maxfail=1
+
+ci-local: lint test ## Simulate CI locally
