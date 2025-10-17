@@ -47,3 +47,6 @@ logs/
 .Rproj.user/
 .Rproj
 
+# Github
+.github/workflows
+
