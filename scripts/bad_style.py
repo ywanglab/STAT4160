@@ -1,5 +1,5 @@
-import os,sys
+import os, sys
 
 
-def add(a,b):
-  return(a +  b)
+def add(a, b):
+    return a + b

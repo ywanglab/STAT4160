@@ -124,3 +124,8 @@ test: ## Run fast tests
 	pytest -q --maxfail=1
 
 ci-local: lint test ## Simulate CI locally
+
+
+.PHONY: baselines
+baselines: ## Evaluate naive & seasonal-naive baselines across all splits
+	python scripts/baselines_eval.py --seasonality 5
