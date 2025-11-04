@@ -384,7 +384,7 @@ window.Quarto = {
   <li><a href="#arima-60second-pitfall-tour" id="toc-arima-60second-pitfall-tour" class="nav-link" data-scroll-target="#arima-60second-pitfall-tour"><span class="header-section-number">16.2.3</span> ARIMA 60‑second pitfall tour</a></li>
   <li><a href="#results-table-schema-consistent-across-sessions" id="toc-results-table-schema-consistent-across-sessions" class="nav-link" data-scroll-target="#results-table-schema-consistent-across-sessions"><span class="header-section-number">16.2.4</span> Results table schema (consistent across sessions)</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min-colabfriendly" id="toc-inclass-lab-35-min-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-35-min-colabfriendly"><span class="header-section-number">16.3</span> In‑class lab (35 min, Colab‑friendly)</a>
+  <li><a href="#inclass-lab-colabfriendly" id="toc-inclass-lab-colabfriendly" class="nav-link" data-scroll-target="#inclass-lab-colabfriendly"><span class="header-section-number">16.3</span> In‑class lab (Colab‑friendly)</a>
   <ul class="collapse">
   <li><a href="#setup-data-with-fallbacks" id="toc-setup-data-with-fallbacks" class="nav-link" data-scroll-target="#setup-data-with-fallbacks"><span class="header-section-number">16.3.1</span> 0) Setup &amp; data (with fallbacks)</a></li>
   <li><a href="#rollingorigin-date-splits-reuse-session-15-logic" id="toc-rollingorigin-date-splits-reuse-session-15-logic" class="nav-link" data-scroll-target="#rollingorigin-date-splits-reuse-session-15-logic"><span class="header-section-number">16.3.2</span> 1) Rolling‑origin date splits (reuse Session 15 logic)</a></li>
@@ -398,15 +398,11 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#part-a-cli-script-to-evaluate-linearlags-across-all-splits" id="toc-part-a-cli-script-to-evaluate-linearlags-across-all-splits" class="nav-link" data-scroll-target="#part-a-cli-script-to-evaluate-linearlags-across-all-splits"><span class="header-section-number">16.5.1</span> Part A — CLI script to evaluate Linear‑Lags across <em>all</em> splits</a></li>
   <li><a href="#part-b-quarto-model-card-for-the-linearlags-baseline" id="toc-part-b-quarto-model-card-for-the-linearlags-baseline" class="nav-link" data-scroll-target="#part-b-quarto-model-card-for-the-linearlags-baseline"><span class="header-section-number">16.5.2</span> Part B — Quarto <strong>Model Card</strong> for the Linear‑Lags baseline</a></li>
+  <li><a href="#part-c-quick-test-to-safeguard-results-shape" id="toc-part-c-quick-test-to-safeguard-results-shape" class="nav-link" data-scroll-target="#part-c-quick-test-to-safeguard-results-shape"><span class="header-section-number">16.5.3</span> Part C — Quick test to safeguard results shape</a></li>
+  <li><a href="#part-d-optional-extend-features-or-add-ridge" id="toc-part-d-optional-extend-features-or-add-ridge" class="nav-link" data-scroll-target="#part-d-optional-extend-features-or-add-ridge"><span class="header-section-number">16.5.4</span> Part D — (Optional) Extend features or add Ridge</a></li>
   </ul></li>
-  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">16.6</span> Discussion</a>
-  <ul class="collapse">
-  <li><a href="#part-c-quick-test-to-safeguard-results-shape" id="toc-part-c-quick-test-to-safeguard-results-shape" class="nav-link" data-scroll-target="#part-c-quick-test-to-safeguard-results-shape"><span class="header-section-number">16.6.1</span> Part C — Quick test to safeguard results shape</a></li>
-  <li><a href="#part-d-optional-extend-features-or-add-ridge" id="toc-part-d-optional-extend-features-or-add-ridge" class="nav-link" data-scroll-target="#part-d-optional-extend-features-or-add-ridge"><span class="header-section-number">16.6.2</span> Part D — (Optional) Extend features or add Ridge</a></li>
-  </ul></li>
-  <li><a href="#instructor-checklist-before-class" id="toc-instructor-checklist-before-class" class="nav-link" data-scroll-target="#instructor-checklist-before-class"><span class="header-section-number">16.7</span> Instructor checklist (before class)</a></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">16.8</span> Key Points</a></li>
-  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">16.9</span> Grading (pass/revise)</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">16.6</span> Key Points</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">16.7</span> Grading (pass/revise)</a></li>
   </ul>
 </nav>
     </div>
@@ -490,8 +486,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min-colabfriendly" class="level2" data-number="16.3">
-<h2 data-number="16.3" class="anchored" data-anchor-id="inclass-lab-35-min-colabfriendly"><span class="header-section-number">16.3</span> In‑class lab (35 min, Colab‑friendly)</h2>
+<section id="inclass-lab-colabfriendly" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="inclass-lab-colabfriendly"><span class="header-section-number">16.3</span> In‑class lab (Colab‑friendly)</h2>
 <blockquote class="blockquote">
 <p>Run each block as its <strong>own cell</strong>. Update <code>REPO_NAME</code> if needed.</p>
 </blockquote>
@@ -652,40 +648,41 @@ window.Quarto = {
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Per-ticker metrics</span></span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    pt_lin <span class="op">=</span> per_ticker_metrics(val_pred, tr, <span class="st">"yhat_linlags"</span>)<span class="op">;</span> pt_lin[<span class="st">"model"</span>] <span class="op">=</span> <span class="st">"lin_lags"</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    pt_nav <span class="op">=</span> per_ticker_metrics(val_pred.rename(columns<span class="op">=</span>{<span class="st">"yhat_naive"</span>:<span class="st">"yhat_linlags"</span>}), tr, <span class="st">"yhat_linlags"</span>)<span class="op">;</span> pt_nav[<span class="st">"model"</span>]<span class="op">=</span><span class="st">"naive"</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    pt_sea <span class="op">=</span> per_ticker_metrics(val_pred.rename(columns<span class="op">=</span>{<span class="st">"yhat_s"</span>:<span class="st">"yhat_linlags"</span>}), tr, <span class="st">"yhat_linlags"</span>)<span class="op">;</span> pt_sea[<span class="st">"model"</span>]<span class="op">=</span><span class="ss">f"s</span><span class="sc">{</span>seasonality<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save per-ticker</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    out_pt <span class="op">=</span> pd.concat([pt_lin.assign(split<span class="op">=</span>sid), pt_nav.assign(split<span class="op">=</span>sid), pt_sea.assign(split<span class="op">=</span>sid)], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    out_pt.to_csv(<span class="ss">f"reports/</span><span class="sc">{</span>save_prefix<span class="sc">}</span><span class="ss">_per_ticker_split</span><span class="sc">{</span>sid<span class="sc">}</span><span class="ss">.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Aggregate</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> agg(df):</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df.empty: </span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> {<span class="st">"macro_mae"</span>:np.nan,<span class="st">"macro_smape"</span>:np.nan,<span class="st">"macro_mase"</span>:np.nan,<span class="st">"micro_mae"</span>:np.nan,<span class="st">"micro_smape"</span>:np.nan,<span class="st">"micro_mase"</span>:np.nan}</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> df[[<span class="st">"mae"</span>,<span class="st">"smape"</span>,<span class="st">"mase"</span>]].mean().to_dict()</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> df[<span class="st">"n"</span>].to_numpy()</span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        micro <span class="op">=</span> {<span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"mase"</span>], weights<span class="op">=</span>w))}</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>:<span class="bu">float</span>(v) <span class="cf">for</span> k,v <span class="kw">in</span> macro.items()} <span class="op">|</span> micro</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, pt <span class="kw">in</span> [(<span class="st">"lin_lags"</span>, pt_lin), (<span class="st">"naive"</span>, pt_nav), (<span class="ss">f"s</span><span class="sc">{</span>seasonality<span class="sc">}</span><span class="ss">"</span>, pt_sea)]:</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"split"</span>:sid, <span class="st">"train_range"</span>: <span class="ss">f"</span><span class="sc">{</span>a<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>b<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"val_range"</span>: <span class="ss">f"</span><span class="sc">{</span>c<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>d<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"model"</span>:name, <span class="op">**</span>agg(pt)})</span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Run on first 2 splits in class</span></span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>summary_frames<span class="op">=</span>[]</span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sid, split <span class="kw">in</span> <span class="bu">enumerate</span>(splits[:<span class="dv">2</span>], start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    sf <span class="op">=</span> summarize_split(feats_baseline, sid, split, save_prefix<span class="op">=</span><span class="st">"linlags"</span>)</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    summary_frames.append(sf)</span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.concat(summary_frames, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>summary.to_csv(<span class="st">"reports/linlags_summary_splits12.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    pt_nav <span class="op">=</span> per_ticker_metrics(val_pred, tr, <span class="st">"yhat_naive"</span>)<span class="op">;</span>    pt_nav[<span class="st">"model"</span>] <span class="op">=</span> <span class="st">"naive"</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    pt_sea <span class="op">=</span> per_ticker_metrics(val_pred, tr, <span class="st">"yhat_s"</span>)<span class="op">;</span>        pt_sea[<span class="st">"model"</span>] <span class="op">=</span> <span class="ss">f"s</span><span class="sc">{</span>seasonality<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save per-ticker</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    out_pt <span class="op">=</span> pd.concat([pt_lin.assign(split<span class="op">=</span>sid), pt_nav.assign(split<span class="op">=</span>sid), pt_sea.assign(split<span class="op">=</span>sid)], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    out_pt.to_csv(<span class="ss">f"reports/</span><span class="sc">{</span>save_prefix<span class="sc">}</span><span class="ss">_per_ticker_split</span><span class="sc">{</span>sid<span class="sc">}</span><span class="ss">.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Aggregate</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> agg(df):</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df.empty: </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> {<span class="st">"macro_mae"</span>:np.nan,<span class="st">"macro_smape"</span>:np.nan,<span class="st">"macro_mase"</span>:np.nan,<span class="st">"micro_mae"</span>:np.nan,<span class="st">"micro_smape"</span>:np.nan,<span class="st">"micro_mase"</span>:np.nan}</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> df[[<span class="st">"mae"</span>,<span class="st">"smape"</span>,<span class="st">"mase"</span>]].mean().to_dict()</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> df[<span class="st">"n"</span>].to_numpy()</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        micro <span class="op">=</span> {<span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(df[<span class="st">"mase"</span>], weights<span class="op">=</span>w))}</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>:<span class="bu">float</span>(v) <span class="cf">for</span> k,v <span class="kw">in</span> macro.items()} <span class="op">|</span> micro</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, pt <span class="kw">in</span> [(<span class="st">"lin_lags"</span>, pt_lin), (<span class="st">"naive"</span>, pt_nav), (<span class="ss">f"s</span><span class="sc">{</span>seasonality<span class="sc">}</span><span class="ss">"</span>, pt_sea)]:</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"split"</span>:sid, <span class="st">"train_range"</span>: <span class="ss">f"</span><span class="sc">{</span>a<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>b<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"val_range"</span>: <span class="ss">f"</span><span class="sc">{</span>c<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>d<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"model"</span>:name, <span class="op">**</span>agg(pt)})</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Run on first 2 splits in class</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>summary_frames<span class="op">=</span>[]</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sid, split <span class="kw">in</span> <span class="bu">enumerate</span>(splits[:<span class="dv">2</span>], start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    sf <span class="op">=</span> summarize_split(feats_baseline, sid, split, save_prefix<span class="op">=</span><span class="st">"linlags"</span>)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    summary_frames.append(sf)</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.concat(summary_frames, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>summary.to_csv(<span class="st">"reports/linlags_summary_splits12.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="optional-tiny-arima-demo-on-one-ticker-for-the-first-split" class="level3" data-number="16.3.6">
 <h3 data-number="16.3.6" class="anchored" data-anchor-id="optional-tiny-arima-demo-on-one-ticker-for-the-first-split"><span class="header-section-number">16.3.6</span> 5) (Optional) Tiny ARIMA demo on <strong>one ticker</strong> for the first split</h3>
@@ -852,38 +849,38 @@ window.Quarto = {
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">  data: "features_v1.parquet"</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Educational use only — not trading advice.** Predicts next‑day log return </span><span class="sc">\(</span><span class="at">r_{t+1}</span><span class="sc">\)</span><span class="at"> using past lags.</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Model:** Per‑ticker linear regression with features: <span class="in">`lag1`</span>, <span class="in">`lag2`</span>, <span class="in">`lag3`</span>.</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Data:** <span class="in">`features_v1.parquet`</span> (Session 10).  </span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Splits:** Expanding, quarterly val, 5‑day embargo (Session 15).  </span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Baselines:** Naive and seasonal‑naive <span class="sc">\(</span>s=5<span class="sc">\)</span>.</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Metrics (across splits)</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>::: {#8762202b .cell execution_count=1}</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="in">````` {.python .cell-code}</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"reports/linlags_summary.csv"</span>)</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Educational use only — not trading advice.** Predicts next‑day log return </span><span class="sc">\(</span><span class="at">r_{t+1}</span><span class="sc">\)</span><span class="at"> using past lags.</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Model:** Per‑ticker linear regression with features: <span class="in">`lag1`</span>, <span class="in">`lag2`</span>, <span class="in">`lag3`</span>.</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Data:** <span class="in">`features_v1.parquet`</span> (Session 10).  </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Splits:** Expanding, quarterly val, 5‑day embargo (Session 15).  </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Baselines:** Naive and seasonal‑naive <span class="sc">\(</span>s=5<span class="sc">\)</span>.</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Metrics (across splits)</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>::: {#7cd202ff .cell execution_count=1}</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"reports/linlags_summary.csv"</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>df</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discussion</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Assumptions:** Linear relation to recent returns; stationarity at return level.</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Strengths:** Fast, interpretable, leakage‑resistant with proper splits.</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Failure modes:** Regime shifts; volatility spikes; nonlinearity.</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>**Ethics:** Educational; not suitable for trading.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Render (if Quarto is available):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render docs/model_card_linear.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-</section>
-<section id="discussion" class="level2" data-number="16.6">
-<h2 data-number="16.6" class="anchored" data-anchor-id="discussion"><span class="header-section-number">16.6</span> Discussion</h2>
-<ul>
-<li><strong>Assumptions:</strong> Linear relation to recent returns; stationarity at return level.</li>
-<li><strong>Strengths:</strong> Fast, interpretable, leakage‑resistant with proper splits.</li>
-<li><strong>Failure modes:</strong> Regime shifts; volatility spikes; nonlinearity.</li>
-<li><strong>Ethics:</strong> Educational; not suitable for trading.</li>
-</ul>
-<pre><code>
-Render (if Quarto is available):
-```bash
-quarto render docs/model_card_linear.qmd</code></pre>
-<section id="part-c-quick-test-to-safeguard-results-shape" class="level3" data-number="16.6.1">
-<h3 data-number="16.6.1" class="anchored" data-anchor-id="part-c-quick-test-to-safeguard-results-shape"><span class="header-section-number">16.6.1</span> Part C — Quick test to safeguard results shape</h3>
+<section id="part-c-quick-test-to-safeguard-results-shape" class="level3" data-number="16.5.3">
+<h3 data-number="16.5.3" class="anchored" data-anchor-id="part-c-quick-test-to-safeguard-results-shape"><span class="header-section-number">16.5.3</span> Part C — Quick test to safeguard results shape</h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_linlags_results.py</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, os</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -892,13 +889,12 @@ quarto render docs/model_card_linear.qmd</code></pre>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(<span class="st">"reports/linlags_summary.csv"</span>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    need <span class="op">=</span> {<span class="st">"split"</span>,<span class="st">"model"</span>,<span class="st">"macro_mae"</span>,<span class="st">"micro_mae"</span>}</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> need.issubset(df.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p>
 <p>Run:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> linlags_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-d-optional-extend-features-or-add-ridge" class="level3" data-number="16.6.2">
-<h3 data-number="16.6.2" class="anchored" data-anchor-id="part-d-optional-extend-features-or-add-ridge"><span class="header-section-number">16.6.2</span> Part D — (Optional) Extend features or add Ridge</h3>
+<section id="part-d-optional-extend-features-or-add-ridge" class="level3" data-number="16.5.4">
+<h3 data-number="16.5.4" class="anchored" data-anchor-id="part-d-optional-extend-features-or-add-ridge"><span class="header-section-number">16.5.4</span> Part D — (Optional) Extend features or add Ridge</h3>
 <ul>
 <li>Try <code>--xcols lag1 lag2 lag3 roll_std_20 zscore_20</code> (if present in <code>features_v1</code>).</li>
 <li>Swap <code>LinearRegression</code> for <code>Ridge(alpha=1.0)</code>; log and compare.</li>
@@ -906,24 +902,16 @@ quarto render docs/model_card_linear.qmd</code></pre>
 <hr>
 </section>
 </section>
-<section id="instructor-checklist-before-class" class="level2" data-number="16.7">
-<h2 data-number="16.7" class="anchored" data-anchor-id="instructor-checklist-before-class"><span class="header-section-number">16.7</span> Instructor checklist (before class)</h2>
-<ul>
-<li>Verify <code>features_v1.parquet</code> has <code>lag1..lag3</code> or the fallback cell creates them.</li>
-<li>Dry‑run the 2‑split demo; ensure total runtime &lt; 5–6 minutes.</li>
-<li>Optionally prepare an ARIMA demo on <strong>one</strong> ticker to illustrate pitfalls.</li>
-</ul>
-</section>
-<section id="key-points" class="level2" data-number="16.8">
-<h2 data-number="16.8" class="anchored" data-anchor-id="key-points"><span class="header-section-number">16.8</span> Key Points</h2>
+<section id="key-points" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">16.6</span> Key Points</h2>
 <ul>
 <li>Keep <strong>splits identical</strong> across models for fair comparison.</li>
 <li><strong>MASE &lt; 1</strong> ⇒ your model beats naive on train‑scale; report macro &amp; micro.</li>
 <li>Linear lags are a <strong>transparent baseline</strong>—use them to validate your entire pipeline.</li>
 </ul>
 </section>
-<section id="grading-passrevise" class="level2" data-number="16.9">
-<h2 data-number="16.9" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">16.9</span> Grading (pass/revise)</h2>
+<section id="grading-passrevise" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">16.7</span> Grading (pass/revise)</h2>
 <ul>
 <li><code>scripts/eval_linlags.py</code> runs and writes <code>reports/linlags_summary.csv</code> + per‑ticker CSVs.</li>
 <li>Model card exists and renders (locally or in CI artifact).</li>
