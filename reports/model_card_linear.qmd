@@ -1,0 +1,37 @@
+---
+title: "Model Card — Linear Lags (Per‑Ticker)"
+format:
+  html:
+    theme: cosmo
+    toc: true
+execute:
+  dir: file
+params:
+  model_name: "Linear Lags (per‑ticker)"
+  data: "features_v1.parquet"
+---
+> **Educational use only — not trading advice.** Predicts next‑day log return $r_{t+1}$ using past lags.
+
+## Overview
+
+- **Model:** Per‑ticker linear regression with features: `lag1`, `lag2`, `lag3`.
+- **Data:** `features_v1.parquet` (Session 10).  
+- **Splits:** Expanding, quarterly val, 5‑day embargo (Session 15).  
+- **Baselines:** Naive and seasonal‑naive \(s=5\).
+
+## Metrics (across splits)
+
+```{python}
+import pandas as pd
+df = pd.read_csv("linlags_summary_splits12.csv")
+
+
+df
+```
+
+## Discussion
+
+* **Assumptions:** Linear relation to recent returns; stationarity at return level.
+* **Strengths:** Fast, interpretable, leakage‑resistant with proper splits.
+* **Failure modes:** Regime shifts; volatility spikes; nonlinearity.
+* **Ethics:** Educational; not suitable for trading.
