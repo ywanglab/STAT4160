@@ -129,3 +129,9 @@ ci-local: lint test ## Simulate CI locally
 .PHONY: baselines
 baselines: ## Evaluate naive & seasonal-naive baselines across all splits
 	python scripts/baselines_eval.py --seasonality 5
+
+
+.PHONY: leakage-audit
+leakage-audit: ## Run leakage & label tests; write eval protocol
+	pytest -q tests/test_leakage_features.py tests/test_labels_multistep.py
+	python scripts/write_eval_protocol.py
