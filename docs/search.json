@@ -753,8 +753,8 @@
     "objectID": "lec8.html#session-8-sql-ii-window-functions-pandas.read_sql-75-min",
     "href": "lec8.html#session-8-sql-ii-window-functions-pandas.read_sql-75-min",
     "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.1 Session 8 — SQL II: Window Functions & pandas.read_sql (75 min)",
-    "text": "8.1 Session 8 — SQL II: Window Functions & pandas.read_sql (75 min)\n\n8.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and use window functions: LAG, LEAD, ROW_NUMBER, and aggregates with OVER (PARTITION BY … ORDER BY … ROWS …).\nCompute rolling means/variance and multi‑lag features per ticker without leakage.\nUse WINDOW named frames to avoid repetition and errors.\nRun parameterized SQL from Python with pandas.read_sql_query, and optionally register a custom SQL function (e.g., SQRT).\nEvaluate query performance basics with EXPLAIN QUERY PLAN.",
+    "section": "",
+    "text": "8.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and use window functions: LAG, LEAD, ROW_NUMBER, and aggregates with OVER (PARTITION BY … ORDER BY … ROWS …).\nCompute rolling means/variance and multi‑lag features per ticker without leakage.\nUse WINDOW named frames to avoid repetition and errors.\nRun parameterized SQL from Python with pandas.read_sql_query, and optionally register a custom SQL function (e.g., SQRT).\nEvaluate query performance basics with EXPLAIN QUERY PLAN.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
     ]
@@ -770,11 +770,11 @@
     ]
   },
   {
-    "objectID": "lec8.html#slides-talking-points",
-    "href": "lec8.html#slides-talking-points",
+    "objectID": "lec8.html#slides",
+    "href": "lec8.html#slides",
     "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.3 Slides / talking points",
-    "text": "8.3 Slides / talking points\nWhat’s a window?\n\nA window lets an aggregate or analytic function see a row + its neighbors without collapsing rows.\nTemplate:\nfunc(expr) OVER (\n   PARTITION BY key\n   ORDER BY time\n   ROWS BETWEEN N PRECEDING AND CURRENT ROW\n)\nPARTITION BY = per‑group window; ORDER BY = sequence; ROWS = how many rows to include.\n\nWindow vs GROUP BY\n\nGROUP BY returns one row per group; OVER (…) returns one row per input row with extra columns.\n\nTime‑series patterns\n\nLags: LAG(x, k) → previous k rows ⇒ features at t that use only info ≤ t.\nLeads: LEAD(x, k) → future k rows ⇒ labels (don’t leak into features).\nRolling stats: AVG(x) OVER (… ROWS BETWEEN w-1 PRECEDING AND CURRENT ROW); rolling variance via AVG(x*x) - AVG(x)^2.\nTop‑k per group: compute ROW_NUMBER() OVER (PARTITION BY key ORDER BY score DESC) and filter WHERE rn&lt;=k.\n\nROWS vs RANGE\n\nUse ROWS for fixed‑length windows on ordered rows (what we need).\nTime‑based windows (e.g., last 30 calendar days) require different techniques in SQLite (correlated subquery); we’ll note but not use today.",
+    "section": "8.3 Slides",
+    "text": "8.3 Slides\nWhat’s a window?\n\nA window lets an aggregate or analytic function see a row + its neighbors without collapsing rows.\nTemplate:\nfunc(expr) OVER (\n   PARTITION BY key\n   ORDER BY time\n   ROWS BETWEEN N PRECEDING AND CURRENT ROW\n)\nPARTITION BY = per‑group window; ORDER BY = sequence; ROWS = how many rows to include.\n\nWindow vs GROUP BY\n\nGROUP BY returns one row per group; OVER (…) returns one row per input row with extra columns.\n\nTime‑series patterns\n\nLags: LAG(x, k) → previous k rows ⇒ features at t that use only info ≤ t.\nLeads: LEAD(x, k) → future k rows ⇒ labels (don’t leak into features).\nRolling stats: AVG(x) OVER (… ROWS BETWEEN w-1 PRECEDING AND CURRENT ROW); rolling variance via AVG(x*x) - AVG(x)^2.\nTop‑k per group: compute ROW_NUMBER() OVER (PARTITION BY key ORDER BY score DESC) and filter WHERE rn&lt;=k.\n\nROWS vs RANGE\n\nUse ROWS for fixed‑length windows on ordered rows (what we need).\nTime‑based windows (e.g., last 30 calendar days) require different techniques in SQLite (correlated subquery); we’ll note but not use today.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
     ]
@@ -850,11 +850,11 @@
     ]
   },
   {
-    "objectID": "lec9.html#slides-talking-points-paste-these-bullets-into-your-deck",
-    "href": "lec9.html#slides-talking-points-paste-these-bullets-into-your-deck",
+    "objectID": "lec9.html#slides",
+    "href": "lec9.html#slides",
     "title": "9  Session 9 — Cleaning, Joins, and Parquet",
-    "section": "9.3 Slides / talking points (paste these bullets into your deck)",
-    "text": "9.3 Slides / talking points (paste these bullets into your deck)\n\n9.3.1 Tidy schema for price data\n\nOne row = one ticker‑day.\nMinimal columns (snake_case): date (datetime64[ns]), ticker (category), open/high/low/close/adj_close (float32/64), volume (Int64).\nOptional metadata (from a separate table): name (string), sector (category).\n\n\n\n9.3.2 Idiomatic pandas: merge, assign, pipe\n\nmerge: combine frames by keys (e.g., prices ⟵left join⟶ tickers).\nassign: add/transform columns without breaking the chain: df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close'])).\npipe: compose small, testable transforms: df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta)).\n\n\n\n9.3.3 Dtypes that help\n\nCategorical (category): compact & fast for low‑cardinality strings (ticker, sector).\nNullable integers (Int64, Int32): keep missing values and integer semantics (volume).\nString (string[python]): consistent string semantics (avoid object).\nFloats: float32 can halve memory, but consider numeric precision.\n\n\n\n9.3.4 Parquet: why & how\n\nColumnar, compressed, preserves schema better than CSV.\nFilters & projection: read only needed columns/rows (esp. with partitioned datasets).\nPartitioning by ticker/ yields fast reads of a subset (e.g., a single ticker).\nTypical settings: engine=pyarrow, compression=zstd or snappy.",
+    "section": "9.3 Slides",
+    "text": "9.3 Slides\n\n9.3.1 Tidy schema for price data\n\nOne row = one ticker‑day.\nMinimal columns (snake_case): date (datetime64[ns]), ticker (category), open/high/low/close/adj_close (float32/64), volume (Int64).\nOptional metadata (from a separate table): name (string), sector (category).\n\n\n\n9.3.2 Idiomatic pandas: merge, assign, pipe\n\nmerge: combine frames by keys (e.g., prices ⟵left join⟶ tickers).\nassign: add/transform columns without breaking the chain: df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close'])).\npipe: compose small, testable transforms: df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta)).\n\n\n\n9.3.3 Dtypes that help\n\nCategorical (category): compact & fast for low‑cardinality strings (ticker, sector).\nNullable integers (Int64, Int32): keep missing values and integer semantics (volume).\nString (string[python]): consistent string semantics (avoid object).\nFloats: float32 can halve memory, but consider numeric precision.\n\n\n\n9.3.4 Parquet: why & how\n\nColumnar, compressed, preserves schema better than CSV.\nFilters & projection: read only needed columns/rows (esp. with partitioned datasets).\nPartitioning by ticker/ yields fast reads of a subset (e.g., a single ticker).\nTypical settings: engine=pyarrow, compression=zstd or snappy.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
     ]
@@ -890,11 +890,11 @@
     ]
   },
   {
-    "objectID": "lec9.html#instructor-notes-gotchas-to-watch-for",
-    "href": "lec9.html#instructor-notes-gotchas-to-watch-for",
+    "objectID": "lec9.html#key-points",
+    "href": "lec9.html#key-points",
     "title": "9  Session 9 — Cleaning, Joins, and Parquet",
-    "section": "9.7 Instructor notes / gotchas to watch for",
-    "text": "9.7 Instructor notes / gotchas to watch for\n\nNullable ints: astype(\"Int64\") keeps NAs; plain int64 will fail if NAs exist.\nCategoricals & partitions: When reading partitioned Parquet, ticker may come back as object. Re‑cast to category after read if needed.\nCompression choice: zstd gives good ratio/speed; snappy is more ubiquitous.\nPrecision: float32 is fine for teaching; for production finance, consider float64 and explicit rounding.\n\n\n\n9.7.1 Optional (for your Makefile later)\nAdd quick targets:\n.PHONY: prices-parquet returns-parquet\nprices-parquet:  ## Clean raw prices and save processed Parquet(s)\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, glob, pathlib, numpy as np, re, json\nfrom pathlib import Path\n# (Paste the functions from the lab: standardize_columns, clean_prices, join_meta)\n# Then read raw -&gt; clean -&gt; write parquet as in the lab\nPY\n\nreturns-parquet: ## Build returns.parquet with r_1d + calendar features\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, numpy as np\np=\"data/processed/prices.parquet\"; r=pd.read_parquet(p).sort_values([\"ticker\",\"date\"])\nr[\"log_return\"]=r.groupby(\"ticker\")[\"adj_close\"].apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True)\nr[\"r_1d\"]=r.groupby(\"ticker\")[\"log_return\"].shift(-1)\nr[\"weekday\"]=r[\"date\"].dt.weekday.astype(\"int8\"); r[\"month\"]=r[\"date\"].dt.month.astype(\"int8\")\nr[[\"date\",\"ticker\",\"log_return\",\"r_1d\",\"weekday\",\"month\"]].to_parquet(\"data/processed/returns.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/returns.parquet\")\nPY\nYou now have a clean, tidy Parquet foundation the later sessions (evaluation & modeling) can rely on.",
+    "section": "9.7 Key Points",
+    "text": "9.7 Key Points\n\nNullable ints: astype(\"Int64\") keeps NAs; plain int64 will fail if NAs exist.\nCategoricals & partitions: When reading partitioned Parquet, ticker may come back as object. Re‑cast to category after read if needed.\nCompression choice: zstd gives good ratio/speed; snappy is more ubiquitous.\nPrecision: float32 is fine; for production finance, consider float64 and explicit rounding.\n\n\n\n9.7.1 Optional (for your Makefile later)\nAdd quick targets: (if directly editing Makefile in Colab: removing python, and indent all lines below the target by four spaces).\n.PHONY: prices-parquet returns-parquet\nprices-parquet:  ## Clean raw prices and save processed Parquet(s)\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, glob, pathlib, numpy as np, re, json\nfrom pathlib import Path\n# (Paste the functions from the lab: standardize_columns, clean_prices, join_meta)\n# Then read raw -&gt; clean -&gt; write parquet as in the lab\nPY\n\nreturns-parquet: ## Build returns.parquet with r_1d + calendar features\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, numpy as np\np=\"data/processed/prices.parquet\"; r=pd.read_parquet(p).sort_values([\"ticker\",\"date\"])\nr[\"log_return\"]=r.groupby(\"ticker\")[\"adj_close\"].apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True)\nr[\"r_1d\"]=r.groupby(\"ticker\")[\"log_return\"].shift(-1)\nr[\"weekday\"]=r[\"date\"].dt.weekday.astype(\"int8\"); r[\"month\"]=r[\"date\"].dt.month.astype(\"int8\")\nr[[\"date\",\"ticker\",\"log_return\",\"r_1d\",\"weekday\",\"month\"]].to_parquet(\"data/processed/returns.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/returns.parquet\")\nPY\nYou now have a clean, tidy Parquet foundation the later sessions (evaluation & modeling) can rely on.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
     ]
@@ -910,21 +910,11 @@
     ]
   },
   {
-    "objectID": "lec10.html#agenda-75-min",
-    "href": "lec10.html#agenda-75-min",
+    "objectID": "lec10.html#agenda",
+    "href": "lec10.html#agenda",
     "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
-    "section": "11.1 Agenda (75 min)",
-    "text": "11.1 Agenda (75 min)\n\n(10 min) Slides: leakage‑free features; lags vs rolling; resampling patterns\n(10 min) Slides: common pitfalls (min_periods, alignment, mixed frequencies)\n(35 min) In‑class lab: load returns → build features → (optional) weekly aggregates → write features_v1.parquet\n(10 min) Wrap‑up + homework brief\n(10 min) Buffer",
-    "crumbs": [
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
-    ]
-  },
-  {
-    "objectID": "lec10.html#slide-talking-points",
-    "href": "lec10.html#slide-talking-points",
-    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
-    "section": "11.2 Slide talking points",
-    "text": "11.2 Slide talking points\nFeature timing = everything\n\nPredict \\(r_{t+1}\\) using info up to and including time t.\nRule: compute any rolling stat at \\(t\\) from data \\(\\le t\\), then shift by 1 if that stat includes the current target variable.\n\nCore pandas patterns\n\nLags: s.shift(k) (past), never negative shifts.\nRolling: s.rolling(W, min_periods=W).agg(...) and then no extra shift if the rolling window ends at \\(t\\).\nExpanding: long‑memory features (e.g., expanding mean).\nEWM: s.ewm(span=W, adjust=False).mean() for decayed memory.\n\nResampling safely\n\nUse groupby('ticker').resample('W-FRI', on='date') then aggregate:\n\nOHLC: first/open, max/high, min/low, last/adj_close\nVolume: sum\nReturns: compound via np.log(prod(1+r)) or sum of log returns.\n\n\nDtypes\n\nticker = category; calendar ints int8; features float32 (fine for class).",
+    "section": "11.1 Agenda",
+    "text": "11.1 Agenda\n\nleakage‑free features; lags vs rolling; resampling patterns\ncommon pitfalls (min_periods, alignment, mixed frequencies)\nIn‑class lab: load returns → build features → (optional) weekly aggregates → write features_v1.parquet\nWrap‑up + homework brief\nBuffer\n\n\nFeature timing = everything\n\nPredict \\(r_{t+1}\\) using info up to and including time t.\nRule: compute any rolling stat at \\(t\\) from data \\(\\le t\\), then shift by 1 if that stat includes the current target variable.\n\nCore pandas patterns\n\nLags: s.shift(k) (past), never negative shifts.\nRolling: s.rolling(W, min_periods=W).agg(...) and then no extra shift if the rolling window ends at \\(t\\).\nExpanding: long‑memory features (e.g., expanding mean).\nEWM: s.ewm(span=W, adjust=False).mean() for decayed memory.\n\nResampling safely\n\nUse groupby('ticker').resample('W-FRI', on='date') then aggregate:\n\nOHLC: first/open, max/high, min/low, last/adj_close\nVolume: sum\nReturns: compound via np.log(prod(1+r)) or sum of log returns.\n\n\nDtypes\n\nticker = category; calendar ints int8; features float32 (fine for class).",
     "crumbs": [
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
     ]
@@ -960,11 +950,31 @@
     ]
   },
   {
+    "objectID": "lec10.html#key-points",
+    "href": "lec10.html#key-points",
+    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
+    "section": "11.5 Key points",
+    "text": "11.5 Key points\n\nKeep a one‑page “no leakage” checklist handy and point to it often.",
+    "crumbs": [
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
+    ]
+  },
+  {
     "objectID": "lec11.html",
     "href": "lec11.html",
     "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
     "section": "",
     "text": "11.1 Learning goals\nStudents will be able to:",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
+    ]
+  },
+  {
+    "objectID": "lec11.html#learning-goals",
+    "href": "lec11.html#learning-goals",
+    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
+    "section": "",
+    "text": "Call a REST API with requests + robust retry/backoff.\nManage secrets with .env and never commit keys.\nCache responses (file or SQLite) and align external series by date.\nSave enriched data to SQLite and Parquet.",
     "crumbs": [
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
     ]
@@ -980,11 +990,11 @@
     ]
   },
   {
-    "objectID": "lec11.html#slide-talking-points",
-    "href": "lec11.html#slide-talking-points",
+    "objectID": "lec11.html#slide",
+    "href": "lec11.html#slide",
     "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
-    "section": "12.2 Slide talking points",
-    "text": "12.2 Slide talking points\nRequests pattern\n\nSession + HTTPAdapter + Retry → robust.\nValidate: status code, content type; guard against partial data.\n\nSecrets\n\n.env.template committed; .env untracked.\nLoad with dotenv.load_dotenv(). Access via os.getenv(\"FRED_API_KEY\").\n\nCaching\n\nFile cache: key by URL+params hash.\nDB cache: cache (key TEXT PRIMARY KEY, value BLOB, fetched_at).\n\nAlignment\n\nAfter download, normalize to date and join on date.\nStore to SQLite table with a composite key (series_id, date).",
+    "section": "11.3 Slide",
+    "text": "11.3 Slide\nRequests pattern\n\nSession + HTTPAdapter + Retry → robust.\nValidate: status code, content type; guard against partial data.\n\nSecrets\n\n.env.template committed; .env untracked.\nLoad with dotenv.load_dotenv(). Access via os.getenv(\"FRED_API_KEY\").\n\nCaching\n\nFile cache: key by URL+params hash.\nDB cache: cache (key TEXT PRIMARY KEY, value BLOB, fetched_at).\n\nAlignment\n\nAfter download, normalize to date and join on date.\nStore to SQLite table with a composite key (series_id, date).",
     "crumbs": [
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
     ]
@@ -1020,6 +1030,16 @@
     ]
   },
   {
+    "objectID": "lec11.html#key-points",
+    "href": "lec11.html#key-points",
+    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
+    "section": "11.7 Key points",
+    "text": "11.7 Key points\n\nHavehave a prepared .env with a working FRED key to avoid classroom delays.",
+    "crumbs": [
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
+    ]
+  },
+  {
     "objectID": "lec12.html",
     "href": "lec12.html",
     "title": "12  Session 12 — HTML Scraping: Ethics & Resilience",
@@ -1040,11 +1060,11 @@
     ]
   },
   {
-    "objectID": "lec12.html#slide-talking-points",
-    "href": "lec12.html#slide-talking-points",
+    "objectID": "lec12.html#slide",
+    "href": "lec12.html#slide",
     "title": "12  Session 12 — HTML Scraping: Ethics & Resilience",
-    "section": "13.2 Slide talking points",
-    "text": "13.2 Slide talking points\nEthics + resilience\n\nCheck robots.txt; identify disallow rules.\nSet a clear User‑Agent and sleep between requests.\nCache HTML locally; don’t hammer sites.\nExpect structure to change; write defensive code.\n\nParsing patterns\n\nPrefer table selectors; use read_html for well‑formed tables.\nClean headers → snake_case; drop footnotes; trim whitespace.\nNormalize keys (e.g., ticker symbols: map . ↔︎ - if needed).\n\nProvenance\n\nSave source_url, fetched_at, and a checksum alongside the CSV.",
+    "section": "12.2 Slide",
+    "text": "12.2 Slide\nEthics + resilience\n\nCheck robots.txt; identify disallow rules.\nSet a clear User‑Agent and sleep between requests.\nCache HTML locally; don’t hammer sites.\nExpect structure to change; write defensive code.\n\nParsing patterns\n\nPrefer table selectors; use read_html for well‑formed tables.\nClean headers → snake_case; drop footnotes; trim whitespace.\nNormalize keys (e.g., ticker symbols: map . ↔︎ - if needed).\n\nProvenance\n\nSave source_url, fetched_at, and a checksum alongside the CSV.",
     "crumbs": [
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Session 12 — HTML Scraping: Ethics & Resilience</span>"
     ]
@@ -1080,11 +1100,11 @@
     ]
   },
   {
-    "objectID": "lec12.html#instructor-tips-for-all-three-sessions",
-    "href": "lec12.html#instructor-tips-for-all-three-sessions",
+    "objectID": "lec12.html#key-points",
+    "href": "lec12.html#key-points",
     "title": "12  Session 12 — HTML Scraping: Ethics & Resilience",
-    "section": "13.6 Instructor tips (for all three sessions)",
-    "text": "13.6 Instructor tips (for all three sessions)\n\nKeep a one‑page “no leakage” checklist handy and point to it often.\nFor Session 11, have a prepared .env with a working FRED key to avoid classroom delays.\nFor Session 12, if Wikipedia blocks requests, switch to pandas.read_html (shown) or use a small pre‑saved HTML in data/static/ to demonstrate parsing.\n\nThese three sessions carry you from solid feature engineering → external data integration → web scraping with ethics, setting up a strong foundation for the testing/CI weeks that follow.",
+    "section": "12.6 Key points",
+    "text": "12.6 Key points\n\nIf Wikipedia blocks requests, switch to pandas.read_html (shown) or use a small pre‑saved HTML in data/static/ to demonstrate parsing.\n\nThe sessions 10-12 carry you from solid feature engineering → external data integration → web scraping with ethics, setting up a strong foundation for the testing/CI weeks that follow.",
     "crumbs": [
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Session 12 — HTML Scraping: Ethics & Resilience</span>"
     ]
@@ -1100,8 +1120,8 @@
     ]
   },
   {
-    "objectID": "lec13.html#session-13-pytest-data-validation-75-min",
-    "href": "lec13.html#session-13-pytest-data-validation-75-min",
+    "objectID": "lec13.html#session-13-pytest-data-validation",
+    "href": "lec13.html#session-13-pytest-data-validation",
     "title": "13  Session 13: pytest + Data Validation",
     "section": "",
     "text": "13.1.1 Learning goals\nBy the end of class, students can:\n\nWrite fast, high‑signal tests for data pipelines (shapes, dtypes, nulls, no look‑ahead).\nValidate a DataFrame with Pandera (schema + value checks) or custom checks only.\nUse logging effectively and capture logs in tests.\nRun tests in Colab / locally and prepare for CI in Session 14.",
@@ -1110,23 +1130,13 @@
     ]
   },
   {
-    "objectID": "lec13.html#agenda-75-min",
-    "href": "lec13.html#agenda-75-min",
+    "objectID": "lec13.html#agenda",
+    "href": "lec13.html#agenda",
     "title": "13  Session 13: pytest + Data Validation",
-    "section": "13.2 Agenda (75 min)",
-    "text": "13.2 Agenda (75 min)\n\n(10 min) Slides: What to test (and not), “data tests” vs unit tests, speed budget\n(10 min) Slides: Pandera schemas & custom checks; tolerance and stability\n(10 min) Slides: Logging basics (logging, levels, handlers); testing logs with caplog\n(35 min) In‑class lab: add tests/test_features.py (+ optional Pandera test), fixtures, config; run & fix\n(10 min) Wrap‑up + homework briefing",
+    "section": "13.2 Agenda",
+    "text": "13.2 Agenda\n\nWhat to test (and not), “data tests” vs unit tests, speed budget\nPandera schemas & custom checks; tolerance and stability\nLogging basics (logging, levels, handlers); testing logs with caplog\nIn‑class lab: add tests/test_features.py (+ optional Pandera test), fixtures, config; run & fix\nWrap‑up + homework briefing\n\n\n\n13.2.1 What to test (fast, crisp)\n\nContract tests for data:\n\nSchema: required columns exist; dtypes sane (ticker categorical, calendar ints).\nNulls: no NAs in training‑critical cols.\nSemantics: r_1d is lead of log_return; rolling features computed from past only.\nKeys: no duplicate (ticker, date); dates strictly increasing within ticker.\n\nKeep tests under ~5s total (CI budget). Avoid long recomputations; sample/take head.\n\n\n\n13.2.2 Pandera vs custom checks\n\nPandera: declarative schema; optional dependency; good for column existence + ranges.\nCustom: essential for domain logic (look‑ahead bans, exact rolling formulas).\n\n\n\n13.2.3 Logging basics\n\nUse logging.getLogger(__name__); set level via env (LOGLEVEL=INFO).\nLog counts, ranges, and any data drops inside build scripts.\nIn tests: use caplog to assert a warning is emitted for suspicious conditions.",
     "crumbs": [
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#slides-talking-points-drop-into-your-deck",
-    "href": "lec13.html#slides-talking-points-drop-into-your-deck",
-    "title": "13  Session 13",
-    "section": "13.3 Slides / talking points (drop into your deck)",
-    "text": "13.3 Slides / talking points (drop into your deck)\n\n13.3.1 What to test (fast, crisp)\n\nContract tests for data:\n\nSchema: required columns exist; dtypes sane (ticker categorical, calendar ints).\nNulls: no NAs in training‑critical cols.\nSemantics: r_1d is lead of log_return; rolling features computed from past only.\nKeys: no duplicate (ticker, date); dates strictly increasing within ticker.\n\nKeep tests under ~5s total (CI budget). Avoid long recomputations; sample/take head.\n\n\n\n13.3.2 Pandera vs custom checks\n\nPandera: declarative schema; optional dependency; good for column existence + ranges.\nCustom: essential for domain logic (look‑ahead bans, exact rolling formulas).\n\n\n\n13.3.3 Logging basics\n\nUse logging.getLogger(__name__); set level via env (LOGLEVEL=INFO).\nLog counts, ranges, and any data drops inside build scripts.\nIn tests: use caplog to assert a warning is emitted for suspicious conditions.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13</span>"
     ]
   },
   {
@@ -1160,23 +1170,13 @@
     ]
   },
   {
-    "objectID": "lec13.html#instructor-checklist-before-class",
-    "href": "lec13.html#instructor-checklist-before-class",
-    "title": "13  Session 13",
-    "section": "13.7 Instructor checklist (before class)",
-    "text": "13.7 Instructor checklist (before class)\n\nEnsure features_v1.parquet exists or the fixture’s synthetic fallback works.\nDry‑run pytest -q in a fresh runtime; keep total time &lt; 5s.\nPrepare 2–3 “expected failures” you can toggle (e.g., edit one feature column to NaN) to show tests catching bugs.",
+    "objectID": "lec13.html#key-points",
+    "href": "lec13.html#key-points",
+    "title": "13  Session 13: pytest + Data Validation",
+    "section": "13.6 Key points:",
+    "text": "13.6 Key points:\n\nFast tests only for CI; keep heavy, long recomputations out.\nNo look‑ahead and unique (ticker,date) are non‑negotiable contracts.\nLogging is a first‑class tool—tests can assert on warnings you emit.",
     "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#emphasize-while-teaching",
-    "href": "lec13.html#emphasize-while-teaching",
-    "title": "13  Session 13",
-    "section": "13.8 Emphasize while teaching",
-    "text": "13.8 Emphasize while teaching\n\nFast tests only for CI; keep heavy, long recomputations out.\nNo look‑ahead and unique (ticker,date) are non‑negotiable contracts.\nLogging is a first‑class tool—tests can assert on warnings you emit.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
     ]
   },
   {
@@ -1200,21 +1200,21 @@
     ]
   },
   {
-    "objectID": "lec14.html#session-14-precommit-github-actions-ci-75-min",
-    "href": "lec14.html#session-14-precommit-github-actions-ci-75-min",
+    "objectID": "lec14.html#session-14-precommit-github-actions-ci",
+    "href": "lec14.html#session-14-precommit-github-actions-ci",
     "title": "14  pre‑commit & GitHub Actions CI",
     "section": "",
-    "text": "14.1.1 Learning goals\nStudents will be able to:\n\nConfigure pre‑commit to run Black, Ruff (lint + import sort), and nbstripout on every commit.\nKeep commits clean and notebook outputs stripped.\nAdd a fast GitHub Actions CI workflow that runs pre‑commit hooks and pytest on each PR.\nKeep CI runtime under ~3–4 minutes with caching and a lean dependency set.",
+    "text": "14.1.1 Learning goals\nStudents will be able to:\n\nConfigure pre‑commit to run Black, Ruff (lint + import sort), and nbstripout on every commit.\nKeep commits clean and notebook outputs stripped.\nAdd a fast GitHub Actions CI workflow that runs pre‑commit hooks and pytest on each PR (Pull Request).\nKeep CI runtime under ~3–4 minutes with caching and a lean dependency set.",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
   },
   {
-    "objectID": "lec14.html#agenda-75-min",
-    "href": "lec14.html#agenda-75-min",
+    "objectID": "lec14.html#agenda",
+    "href": "lec14.html#agenda",
     "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.2 Agenda (75 min)",
-    "text": "14.2 Agenda (75 min)\n\n(10 min) Slides: why pre‑commit; the “quality gate”; anatomy of a fast CI\n(10 min) Slides: Black vs Ruff; when nbstripout matters; what belongs in CI\n(35 min) In‑class lab: configure pre‑commit (Black, Ruff, nbstripout) → run locally → add CI workflow → local dry‑run\n(10 min) Wrap‑up + homework briefing\n(10 min) Buffer",
+    "section": "14.2 Agenda",
+    "text": "14.2 Agenda\n\nwhy pre‑commit; the “quality gate”; anatomy of a fast CI\nBlack vs Ruff; when nbstripout matters; what belongs in CI\nIn‑class lab: configure pre‑commit (Black, Ruff, nbstripout) → run locally → add CI workflow → local dry‑run\nWrap‑up + homework briefing\nBuffer",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
@@ -1230,21 +1230,21 @@
     ]
   },
   {
-    "objectID": "lec14.html#inclass-lab-35-min-colabfriendly",
-    "href": "lec14.html#inclass-lab-35-min-colabfriendly",
+    "objectID": "lec14.html#inclass-lab-colabfriendly",
+    "href": "lec14.html#inclass-lab-colabfriendly",
     "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.4 In‑class lab (35 min, Colab‑friendly)",
-    "text": "14.4 In‑class lab (35 min, Colab‑friendly)\n\nRun each block as its own Colab cell. Update REPO_NAME to your repo. The cells create and modify files inside your repo.\n\n\n14.4.1 0) Mount Drive & go to repo\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\".github/workflows\",\"tests\",\"scripts\",\"reports\"]:\n    pathlib.Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n\n14.4.2 1) Install tools locally (for this Colab runtime)\n!pip -q install pre-commit black ruff nbstripout pytest\n\n\n14.4.3 2) Add tool config to pyproject.toml (Black + Ruff)\n\nIf you don’t have a pyproject.toml, this cell will create a minimal one; otherwise it appends/updates sections.\n\nfrom pathlib import Path\nimport textwrap, re\n\npyproj = Path(\"pyproject.toml\")\nexisting = pyproj.read_text() if pyproj.exists() else \"\"\n\ndef upsert(section_header, body):\n    global existing\n    pattern = rf\"(?ms)^\\[{re.escape(section_header)}\\]\\s*.*?(?=^\\[|\\Z)\"\n    if re.search(pattern, existing):\n        existing = re.sub(pattern, f\"[{section_header}]\\n{body}\\n\", existing)\n    else:\n        existing += f\"\\n[{section_header}]\\n{body}\\n\"\n\n# Black\nupsert(\"tool.black\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = [\"py311\"]\n\"\"\").strip())\n\n# Ruff (modern layout)\nupsert(\"tool.ruff\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = \"py311\"\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint\", textwrap.dedent(\"\"\"\nselect = [\"E\",\"F\",\"I\"]  # flake8 errors, pyflakes, import sort\nignore = [\"E501\"]       # let Black handle line length\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint.isort\", textwrap.dedent(\"\"\"\nknown-first-party = [\"projectname\"]\n\"\"\").strip())\n\npyproj.write_text(existing.strip()+\"\\n\")\nprint(pyproj.read_text())\n\n\n14.4.4 3) Create .pre-commit-config.yaml with hooks (Black, Ruff, nbstripout)\n\nVersions below are stable at time of writing—feel free to bump later.\n\nfrom pathlib import Path\ncfg = Path(\".pre-commit-config.yaml\")\ncfg.write_text(\"\"\"repos:\n  - repo: https://github.com/psf/black\n    rev: 24.4.2\n    hooks:\n      - id: black\n        language_version: python3.11\n\n  - repo: https://github.com/astral-sh/ruff-pre-commit\n    rev: v0.5.0\n    hooks:\n      - id: ruff\n        args: [--fix, --exit-non-zero-on-fix]\n      - id: ruff-format\n\n  - repo: https://github.com/kynan/nbstripout\n    rev: 0.7.1\n    hooks:\n      - id: nbstripout\n        files: \\\\.ipynb$\n\n  - repo: https://github.com/pre-commit/pre-commit-hooks\n    rev: v4.6.0\n    hooks:\n      - id: end-of-file-fixer\n      - id: trailing-whitespace\n      - id: check-yaml\n      - id: check-added-large-files\n\"\"\")\nprint(cfg.read_text())\n\n\n14.4.5 4) Install the local git hook & run on all files\n!pre-commit install\n!pre-commit run --all-files\n\nThe first run will download hook toolchains (Black, Ruff, etc.), format files, and strip notebook outputs. Commit changes after verifying.\n\n\n\n14.4.6 5) (Optional) Also install git filter for nbstripout\n\nThis is an extra layer; pre‑commit hook above already strips outputs. Use this to guarantee outputs are removed even when bypassing pre‑commit.\n\n!nbstripout --install --attributes .gitattributes\nprint(open(\".gitattributes\").read())\n\n\n14.4.7 6) Add a tiny “bad style” file to see hooks in action\nfrom pathlib import Path\np = Path(\"scripts/bad_style.py\")\np.write_text(\"import os,sys\\n\\n\\ndef add(a,b):\\n  return(a +  b)\\n\")\nprint(\"Wrote:\", p)\n\n# Run hooks just on this file\n!pre-commit run --files scripts/bad_style.py\nprint(open(\"scripts/bad_style.py\").read())\n\nYou should see Black and Ruff fix spacing/imports; trailing whitespace hooks may also fire.\n\n\n\n14.4.8 7) Add a fast GitHub Actions CI workflow (.github/workflows/ci.yml)\n\nThis runs pre‑commit and your tests on Ubuntu with Python 3.11, with pip caching.\n\nfrom pathlib import Path\nwf = Path(\".github/workflows/ci.yml\")\nwf.write_text(\"\"\"name: CI\non:\n  push:\n    branches: [ main, master, develop ]\n  pull_request:\n    branches: [ main, master, develop ]\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\njobs:\n  build:\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - uses: actions/checkout@v4\n\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n          cache: 'pip'\n          cache-dependency-path: |\n            requirements.txt\n            pyproject.toml\n\n      - name: Install dependencies\n        run: |\n          python -m pip install --upgrade pip\n          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi\n          pip install pre-commit pytest\n\n      # Run pre-commit (Black, Ruff, nbstripout, etc.)\n      - name: pre-commit\n        uses: pre-commit/action@v3.0.1\n\n      # Run tests (fast only)\n      - name: pytest\n        run: pytest -q --maxfail=1\n\"\"\")\nprint(wf.read_text())\n\n\n14.4.9 8) Add a Makefile convenience (optional but nice)\nfrom pathlib import Path\nmk = Path(\"Makefile\")\ntext = mk.read_text() if mk.exists() else \"\"\nif \"lint\" not in text:\n    text += \"\"\"\n\n.PHONY: lint test ci-local\nlint: ## Run pre-commit hooks on all files\n\\tpre-commit run --all-files\n\ntest: ## Run fast tests\n\\tpytest -q --maxfail=1\n\nci-local: lint test ## Simulate CI locally\n\"\"\"\n    mk.write_text(text)\nprint(mk.read_text())",
+    "section": "14.4 In‑class lab (Colab‑friendly)",
+    "text": "14.4 In‑class lab (Colab‑friendly)\n\nRun each block as its own Colab cell. Update REPO_NAME to your repo. The cells create and modify files inside your repo.\n\n\n14.4.1 0) Mount Drive & go to repo\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\".github/workflows\",\"tests\",\"scripts\",\"reports\"]:\n    pathlib.Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n\n14.4.2 1) Install tools locally (for this Colab runtime)\n!pip -q install pre-commit black ruff nbstripout pytest\n\n\n14.4.3 2) Add tool config to pyproject.toml (Black + Ruff)\n\nIf you don’t have a pyproject.toml, this cell will create a minimal one; otherwise it appends/updates sections.\n\nfrom pathlib import Path\nimport textwrap, re\n\npyproj = Path(\"pyproject.toml\")\nexisting = pyproj.read_text() if pyproj.exists() else \"\"\n\ndef upsert(section_header, body):\n    global existing\n    pattern = rf\"(?ms)^\\[{re.escape(section_header)}\\]\\s*.*?(?=^\\[|\\Z)\"\n    if re.search(pattern, existing):\n        existing = re.sub(pattern, f\"[{section_header}]\\n{body}\\n\", existing)\n    else:\n        existing += f\"\\n[{section_header}]\\n{body}\\n\"\n\n# Black\nupsert(\"tool.black\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = [\"py311\"]\n\"\"\").strip())\n\n# Ruff (modern layout)\nupsert(\"tool.ruff\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = \"py311\"\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint\", textwrap.dedent(\"\"\"\nselect = [\"E\",\"F\",\"I\"]  # flake8 errors, pyflakes, import sort\nignore = [\"E501\"]       # let Black handle line length\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint.isort\", textwrap.dedent(\"\"\"\nknown-first-party = [\"projectname\"]\n\"\"\").strip())\n\npyproj.write_text(existing.strip()+\"\\n\")\nprint(pyproj.read_text())\n\n\n14.4.4 3) Create .pre-commit-config.yaml with hooks (Black, Ruff, nbstripout)\n\nVersions below are stable at time of writing—feel free to bump later.\n\nfrom pathlib import Path\ncfg = Path(\".pre-commit-config.yaml\")\ncfg.write_text(\"\"\"repos:\n  - repo: https://github.com/psf/black\n    rev: 24.4.2\n    hooks:\n      - id: black\n        language_version: python3.12  #match the python version of your system or leave it blank\n\n  - repo: https://github.com/astral-sh/ruff-pre-commit\n    rev: v0.5.0\n    hooks:\n      - id: ruff\n        args: [--fix, --exit-non-zero-on-fix]\n      - id: ruff-format\n\n  - repo: https://github.com/kynan/nbstripout\n    rev: 0.7.1\n    hooks:\n      - id: nbstripout\n        files: \\\\.ipynb$\n\n  - repo: https://github.com/pre-commit/pre-commit-hooks\n    rev: v4.6.0\n    hooks:\n      - id: end-of-file-fixer\n      - id: trailing-whitespace\n      - id: check-yaml\n      - id: check-added-large-files\n\"\"\")\nprint(cfg.read_text())\n\n\n14.4.5 4) Install the local git hook & run on all files\n!pre-commit install\n!pre-commit run --all-files\n\nThe first run will download hook toolchains (Black, Ruff, etc.), format files, and strip notebook outputs. Commit changes after verifying.\n\n\n\n14.4.6 5) (Optional) Also install git filter for nbstripout\n\nThis is an extra layer; pre‑commit hook above already strips outputs. Use this to guarantee outputs are removed even when bypassing pre‑commit.\n\n!nbstripout --install --attributes .gitattributes\nprint(open(\".gitattributes\").read())\n\n\n14.4.7 6) Add a tiny “bad style” file to see hooks in action\nfrom pathlib import Path\np = Path(\"scripts/bad_style.py\")\np.write_text(\"import os,sys\\n\\n\\ndef add(a,b):\\n  return(a +  b)\\n\")\nprint(\"Wrote:\", p)\n\n# Run hooks just on this file\n!pre-commit run --files scripts/bad_style.py\nprint(open(\"scripts/bad_style.py\").read())\n\nYou should see Black and Ruff fix spacing/imports; trailing whitespace hooks may also fire.\n\n\n\n14.4.8 7) Add a fast GitHub Actions CI workflow (.github/workflows/ci.yml)\n\nThis runs pre‑commit and your tests on Ubuntu with Python 3.11, with pip caching.\n\nfrom pathlib import Path\nwf_dir = Path(\".github/workflows\")\nwf_dir.mkdir(parents=True, exist_ok=True)\n\nwf = wf_dir / \"ci.yml\"\nwf.write_text(\"\"\"name: CI\non:\n  push:\n    branches: [ main, master, develop ]\n  pull_request:\n    branches: [ main, master, develop ]\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\njobs:\n  build:\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - uses: actions/checkout@v4\n\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n          cache: 'pip'\n          cache-dependency-path: |\n            requirements.txt\n            pyproject.toml\n\n      - name: Install dependencies\n        run: |\n          python -m pip install --upgrade pip\n          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi\n          pip install pre-commit pytest\n\n      # Run pre-commit (Black, Ruff, nbstripout, etc.)\n      - name: pre-commit\n        uses: pre-commit/action@v3.0.1\n\n      # Run tests (fast only)\n      - name: pytest\n        run: pytest -q --maxfail=1\n\"\"\")\nprint(wf.read_text())\n\n\n14.4.9 8) Add a Makefile convenience (optional but nice)\nfrom pathlib import Path\nmk = Path(\"Makefile\")\ntext = mk.read_text() if mk.exists() else \"\"\nif \"lint\" not in text:\n    text += \"\"\"\n\n.PHONY: lint test ci-local\nlint: ## Run pre-commit hooks on all files\n\\tpre-commit run --all-files\n\ntest: ## Run fast tests\n\\tpytest -q --maxfail=1\n\nci-local: lint test ## Simulate CI locally\n\"\"\"\n    mk.write_text(text)\nprint(mk.read_text())",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
   },
   {
-    "objectID": "lec14.html#wrapup-10-min",
-    "href": "lec14.html#wrapup-10-min",
+    "objectID": "lec14.html#wrapup",
+    "href": "lec14.html#wrapup",
     "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.5 Wrap‑up (10 min)",
-    "text": "14.5 Wrap‑up (10 min)\n\nYou configured pre‑commit with Black, Ruff (lint + import sort), and nbstripout to keep the repo clean.\nYou added a fast CI that runs the same hooks plus pytest on every PR.\nCI time stays small due to caching and a lean dependency set; tests are fast by design (Session 13).",
+    "section": "14.5 Wrap‑up",
+    "text": "14.5 Wrap‑up\n\nYou configured pre‑commit with Black, Ruff (lint + import sort), and nbstripout to keep the repo clean.\nYou added a fast CI that runs the same hooks plus pytest on every PR.\nCI time stays small due to caching and a lean dependency set; tests are fast by design (Session 13).",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
@@ -1270,11 +1270,11 @@
     ]
   },
   {
-    "objectID": "lec14.html#instructor-tips-gotchas",
-    "href": "lec14.html#instructor-tips-gotchas",
+    "objectID": "lec14.html#key-points",
+    "href": "lec14.html#key-points",
     "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.8 Instructor tips / gotchas",
-    "text": "14.8 Instructor tips / gotchas\n\nIf pre‑commit says “no files to check” for nbstripout, ensure your file matcher files: \\.ipynb$ is correct and that notebooks are tracked.\nIf Ruff conflicts with Black on formatting: keep Black as the authority, disable E501 in Ruff, and let Ruff handle imports (I) and errors (E, F).\nCI failures from missing deps: ensure your requirements.txt (or pyproject.toml with [project.dependencies]) includes pandas, pyarrow, and pytest if your tests read Parquet.\nKeep CI lean: no data downloads or training; use fixtures and tiny synthetic datasets (Session 13 pattern).\n\nYou now have an automated quality gate—style, lint, and tests run locally and in CI—so your future PRs start green and stay green.",
+    "section": "14.8 Key points:",
+    "text": "14.8 Key points:\n\nIf pre‑commit says “no files to check” for nbstripout, ensure your file matcher files: \\.ipynb$ is correct and that notebooks are tracked.\nIf Ruff conflicts with Black on formatting: keep Black as the authority, disable E501 in Ruff, and let Ruff handle imports (I) and errors (E, F).\nCI failures from missing deps: ensure your requirements.txt (or pyproject.toml with [project.dependencies]) includes pandas, pyarrow, and pytest if your tests read Parquet.\nKeep CI lean: no data downloads or training; use fixtures and tiny synthetic datasets (Session 13 pattern).\n\nYou now have an automated quality gate—style, lint, and tests run locally and in CI—so your future PRs start green and stay green.",
     "crumbs": [
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
     ]
@@ -1290,8 +1290,8 @@
     ]
   },
   {
-    "objectID": "lec15.html#session-15-framing-metrics-75-min",
-    "href": "lec15.html#session-15-framing-metrics-75-min",
+    "objectID": "lec15.html#session-15-framing-metrics",
+    "href": "lec15.html#session-15-framing-metrics",
     "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
     "section": "",
     "text": "15.1.1 Learning goals\nBy the end of class, students can:\n\nSpecify forecast horizon \\(H\\), step (stride), and choose between expanding vs sliding rolling‑origin evaluation with an embargo gap.\nImplement a date‑based splitter that yields (train_idx, val_idx) for all tickers at once.\nCompute MAE, sMAPE, MASE (with a proper training‑window scale), and aggregate per‑ticker and across tickers (macro vs micro/weighted).\nProduce a tidy CSV of baseline results to serve as your course’s ground truth.",
@@ -1300,21 +1300,11 @@
     ]
   },
   {
-    "objectID": "lec15.html#agenda-75-min",
-    "href": "lec15.html#agenda-75-min",
+    "objectID": "lec15.html#agenda",
+    "href": "lec15.html#agenda",
     "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.2 Agenda (75 min)",
-    "text": "15.2 Agenda (75 min)\n\n(10 min) Slides: forecasting setup — horizon \\(H\\), step, rolling‑origin (expanding vs sliding), embargo\n(10 min) Slides: metrics — MAE, sMAPE, MASE; aggregation across tickers (macro vs micro/weighted)\n(35 min) In‑class lab: implement a date‑based splitter → compute naive & seasonal‑naive baselines → MAE/sMAPE/MASE per split/ticker → save reports\n(10 min) Wrap‑up & homework brief\n(10 min) Buffer",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#slides-talking-points-add-these-bullets-to-your-deck",
-    "href": "lec15.html#slides-talking-points-add-these-bullets-to-your-deck",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.3 Slides / talking points (add these bullets to your deck)",
-    "text": "15.3 Slides / talking points (add these bullets to your deck)\n\n15.3.1 Framing the forecast\n\nTarget: next‑day log return \\(r_{t+1}\\) (you built this as r_1d).\nHorizon \\(H\\): 1 business day.\nStep (stride): how far the origin moves forward each split (e.g., 63 trading days ≈ a quarter).\nRolling‑origin schemes\n\nExpanding: train start fixed; train grows over time.\nSliding (rolling): fixed‑length train window slides forward.\n\nEmbargo: small gap (e.g., 5 days) between train end and validation start to avoid adjacency leakage.\n\n\n\n15.3.2 Metrics (scalar, easy to compare)\n\nMAE: \\(\\frac{1}{n}\\sum |y - \\hat{y}|\\) — robust & interpretable.\nsMAPE: \\(\\frac{2}{n}\\sum \\frac{|y - \\hat{y}|}{(|y| + |\\hat{y}| + \\epsilon)}\\) — scale‑free, safe for near‑zero returns with \\(\\epsilon\\).\nMASE: \\(\\text{MASE}=\\frac{\\text{MAE}_\\text{model}}{\\text{MAE}_\\text{naive (train)}}\\) — &lt;1 means better than naive.\n\nFor seasonality \\(s\\), the naive comparator predicts \\(y_{t+1} \\approx y_{t+1-s}\\) (we’ll use \\(s=5\\) for day‑of‑week seasonality on business days).\nScale is computed on the training window only, per ticker.\n\n\n\n\n15.3.3 Aggregation across tickers\n\nPer‑ticker metrics first → then aggregate.\nMacro average: mean of per‑ticker metrics (each ticker equal weight).\nMicro/weighted: pool all rows (or weight tickers by sample count); for MAE, pooled MAE equals sample‑count weighted average of per‑ticker MAEs.",
+    "section": "15.2 Agenda",
+    "text": "15.2 Agenda\n\nforecasting setup — horizon \\(H\\), step, rolling‑origin (expanding vs sliding), embargo\nmetrics — MAE, sMAPE, MASE; aggregation across tickers (macro vs micro/weighted)\nIn‑class lab: implement a date‑based splitter → compute naive & seasonal‑naive baselines → MAE/sMAPE/MASE per split/ticker → save reports\nWrap‑up & homework brief\nBuffer\n\n\n\n15.2.1 Framing the forecast\n\nTarget: next‑day log return \\(r_{t+1}\\) (you built this as r_1d).\nHorizon \\(H\\): 1 business day.\nStep (stride): how far the origin moves forward each split (e.g., 63 trading days ≈ a quarter).\nRolling‑origin schemes\n\nExpanding: train start fixed; train grows over time.\nSliding (rolling): fixed‑length train window slides forward.\n\nEmbargo: small gap (e.g., 5 days) between train end and validation start to avoid adjacency leakage.\n\n\n\n15.2.2 Metrics (scalar, easy to compare)\n\nMAE: \\(\\frac{1}{n}\\sum |y - \\hat{y}|\\) — robust & interpretable.\nsMAPE: \\(\\frac{2}{n}\\sum \\frac{|y - \\hat{y}|}{(|y| + |\\hat{y}| + \\epsilon)}\\) — scale‑free, safe for near‑zero returns with \\(\\epsilon\\).\nMASE: \\(\\text{MASE}=\\frac{\\text{MAE}_\\text{model}}{\\text{MAE}_\\text{naive (train)}}\\) — &lt;1 means better than naive.\n\nFor seasonality \\(s\\), the naive comparator predicts \\(y_{t+1} \\approx y_{t+1-s}\\) (we’ll use \\(s=5\\) for day‑of‑week seasonality on business days).\nScale is computed on the training window only, per ticker.\n\n\n\n\n15.2.3 Aggregation across tickers\n\nPer‑ticker metrics first → then aggregate.\nMacro average: mean of per‑ticker metrics (each ticker equal weight).\nMicro/weighted: pool all rows (or weight tickers by sample count); for MAE, pooled MAE equals sample‑count weighted average of per‑ticker MAEs.",
     "crumbs": [
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
     ]
@@ -1330,11 +1320,11 @@
     ]
   },
   {
-    "objectID": "lec15.html#wrapup-10-min",
-    "href": "lec15.html#wrapup-10-min",
+    "objectID": "lec15.html#wrapup",
+    "href": "lec15.html#wrapup",
     "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.5 Wrap‑up (10 min)",
-    "text": "15.5 Wrap‑up (10 min)\n\nYou now have a date‑based rolling‑origin splitter with an embargo, and baseline metrics that set a credible reference.\nMASE uses a training‑window naive as scale (per ticker), so you can read “&lt;1 is better than naive” at a glance.\nAggregation: report both macro (per‑ticker average) and micro/weighted (pooled).",
+    "section": "15.4 Wrap‑up",
+    "text": "15.4 Wrap‑up\n\nYou now have a date‑based rolling‑origin splitter with an embargo, and baseline metrics that set a credible reference.\nMASE uses a training‑window naive as scale (per ticker), so you can read “&lt;1 is better than naive” at a glance.\nAggregation: report both macro (per‑ticker average) and micro/weighted (pooled).",
     "crumbs": [
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
     ]
@@ -1350,21 +1340,11 @@
     ]
   },
   {
-    "objectID": "lec15.html#instructor-checklist-before-class",
-    "href": "lec15.html#instructor-checklist-before-class",
+    "objectID": "lec15.html#key-points",
+    "href": "lec15.html#key-points",
     "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.7 Instructor checklist (before class)",
-    "text": "15.7 Instructor checklist (before class)\n\nEnsure returns.parquet exists or fallback works.\nBe ready to whiteboard why the seasonal naïve for daily data uses s=5.\nEmphasize MASE scale from TRAIN and macro vs micro aggregation.",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#emphasize-while-teaching",
-    "href": "lec15.html#emphasize-while-teaching",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.8 Emphasize while teaching",
-    "text": "15.8 Emphasize while teaching\n\nDefine the problem first (H, step, splits); metrics only make sense after framing.\nMASE &lt; 1 ⇒ better than naïve; report both macro & micro.\nEmbargo helps mitigate adjacency leakage; keep it small but nonzero.",
+    "section": "15.6 Key points",
+    "text": "15.6 Key points\n\nDefine the problem first (H, step, splits); metrics only make sense after framing.\nMASE &lt; 1 ⇒ better than naïve; report both macro & micro.\nEmbargo helps mitigate adjacency leakage; keep it small but nonzero.",
     "crumbs": [
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
     ]
@@ -1390,53 +1370,43 @@
     ]
   },
   {
-    "objectID": "lec16.html#session-16-classical-baselines-75-min",
-    "href": "lec16.html#session-16-classical-baselines-75-min",
-    "title": "16  Session 16",
+    "objectID": "lec16.html#session-16-classical-baselines",
+    "href": "lec16.html#session-16-classical-baselines",
+    "title": "16  Session 16 — Classical Baselines",
     "section": "",
     "text": "16.1.1 Learning goals\nBy the end of class, students can:\n\nFit a per‑ticker lags‑only linear regressor to predict next‑day log return \\(r_{t+1}\\).\nEvaluate models with MAE, sMAPE, MASE using the rolling‑origin splits (with embargo) from Session 15.\nLog results in a consistent table schema for per‑ticker and split‑level summaries.\nUnderstand ARIMA at a glance and its common pitfalls (optional demo).",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#agenda-75-min",
-    "href": "lec16.html#agenda-75-min",
-    "title": "16  Session 16",
-    "section": "16.2 Agenda (75 min)",
-    "text": "16.2 Agenda (75 min)\n\n(10 min) Slides: where classical models fit; pitfalls with ARIMA; cross‑sectional regressors\n(10 min) Slides: results table schema & comparison to baselines\n(35 min) In‑class lab: train per‑ticker Linear (lags‑only) → evaluate across 2 splits → compare to naive/seasonal‑naive → log CSVs\n(10 min) Wrap‑up + homework brief\n(10 min) Buffer",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#slides-talking-points",
-    "href": "lec16.html#slides-talking-points",
-    "title": "16  Session 16",
-    "section": "16.3 Slides / talking points",
-    "text": "16.3 Slides / talking points\n\n16.3.1 Why “classical” now?\n\nCreates a credible, strong baseline against naive that’s still transparent.\nSupports fast iteration and helps you debug feature definitions before deep models.\n\n\n\n16.3.2 Lags‑only linear regressor\n\nFeatures at time \\(t\\): lag1, lag2, lag3 (i.e., past returns), optionally a few stable stats (roll_std_20, zscore_20).\nTarget: r_1d (next‑day log return).\nFit per ticker to avoid cross‑sectional leakage for now.\n\n\n\n16.3.3 ARIMA 60‑second pitfall tour\n\nStationarity: fit on returns, not prices (unless differencing).\nEvaluation: re‑fit only on train; generate one‑step‑ahead forecasts on val, updating state without peeking.\nOver‑differencing & mis‑specified seasonal terms → bad bias.\nComputational cost grows with grid search; keep demo tiny.\n\n\n\n16.3.4 Results table schema (consistent across sessions)\n\nPer‑split summary: split, train_range, val_range, model, macro_mae, macro_smape, macro_mase, micro_mae, micro_smape, micro_mase\nPer‑ticker metrics: split, ticker, n, model, mae, smape, mase",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#inclass-lab-35-min-colabfriendly",
-    "href": "lec16.html#inclass-lab-35-min-colabfriendly",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.3 In‑class lab (35 min, Colab‑friendly)",
-    "text": "16.3 In‑class lab (35 min, Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME if needed.\n\n\n16.3.1 0) Setup & data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"reports\",\"models\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns; if missing, synthesize\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\"]:\n        eps = rng.normal(0,0.012, size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or derive minimal lags from returns if missing\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath)\nelse:\n    # Minimal lags derived just from returns\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats = feats.dropna(subset=[\"lag1\",\"lag2\",\"lag3\",\"r_1d\"]).reset_index(drop=True)\n\n# Harmonize\nfeats[\"date\"] = pd.to_datetime(feats[\"date\"])\nfeats[\"ticker\"] = feats[\"ticker\"].astype(\"category\")\nfeats = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats.head()\n\n\n16.3.2 1) Rolling‑origin date splits (reuse Session 15 logic)\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    splits=[]; i = train_min-1; n=len(u)\n    while True:\n        if i&gt;=n: break\n        a,b = u[0], u[i]; vs=i+embargo+1; ve=vs+val_size-1\n        if ve&gt;=n: break\n        splits.append((a,b,u[vs],u[ve])); i+=step\n    return splits\n\nsplits = make_rolling_origin_splits(feats[\"date\"], 252, 63, 63, 5)\nlen(splits), splits[:2]\n\n\n16.3.3 2) Metrics & baselines (from Session 15)\ndef mae(y, yhat): \n    y = np.asarray(y); yhat = np.asarray(yhat); \n    return float(np.mean(np.abs(y - yhat)))\n\ndef smape(y, yhat, eps=1e-8):\n    y = np.asarray(y); yhat = np.asarray(yhat)\n    return float(np.mean(2.0*np.abs(y - yhat)/(np.abs(y)+np.abs(yhat)+eps)))\n\ndef mase(y_true, y_pred, y_train_true, y_train_naive):\n    scale = mae(y_train_true, y_train_naive) + 1e-12\n    return float(mae(y_true, y_pred)/scale)\n\ndef add_baseline_preds(df: pd.DataFrame, seasonality:int=5) -&gt; pd.DataFrame:\n    out = df.copy()\n    out[\"yhat_naive\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s)\n    out[\"yhat_s\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s.shift(seasonality-1)) if seasonality&gt;1 else out[\"yhat_naive\"]\n    return out\n\n\n16.3.4 3) Per‑ticker lags‑only LinearRegression (fit only on each split’s TRAIN)\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.pipeline import Pipeline\n\n# Choose features (lags only for in-class lab)\nXCOLS = [c for c in [\"lag1\",\"lag2\",\"lag3\"] if c in feats.columns]\nassert XCOLS, \"No lag features found. Ensure features_v1 or fallback creation ran.\"\n\ndef fit_predict_lin_lags(train_df, val_df):\n    \"\"\"Fit per-ticker pipeline(StandardScaler, LinearRegression) on TRAIN; predict on VAL.\"\"\"\n    preds=[]\n    for tkr, tr in train_df.groupby(\"ticker\"):\n        va = val_df[val_df[\"ticker\"]==tkr]\n        if len(tr)==0 or len(va)==0: \n            continue\n        pipe = Pipeline([(\"scaler\", StandardScaler(with_mean=True, with_std=True)),\n                         (\"lr\", LinearRegression())])\n        pipe.fit(tr[XCOLS].values, tr[\"r_1d\"].values)\n        yhat = pipe.predict(va[XCOLS].values)\n        out = va[[\"date\",\"ticker\",\"r_1d\",\"log_return\"]].copy()\n        out[\"yhat_linlags\"] = yhat.astype(\"float32\")\n        preds.append(out)\n    return pd.concat(preds, ignore_index=True) if preds else pd.DataFrame(columns=[\"date\",\"ticker\",\"r_1d\",\"log_return\",\"yhat_linlags\"])\n\n\n16.3.5 4) Evaluate across the first 2 splits; compare to naive/seasonal‑naive\nseasonality = 5\nfeats_baseline = add_baseline_preds(feats, seasonality=seasonality)\n\ndef per_ticker_metrics(df_val_pred, df_train, method_col):\n    rows=[]\n    for tkr, gv in df_val_pred.groupby(\"ticker\"):\n        if method_col not in gv: \n            continue\n        gv = gv.dropna(subset=[\"r_1d\", method_col])\n        if len(gv)==0: \n            continue\n        # TRAIN scale for MASE\n        gt = df_train[df_train[\"ticker\"]==tkr].dropna(subset=[\"r_1d\"])\n        gt_naive = gt[\"log_return\"] if \"yhat_s\" not in method_col else gt[\"log_return\"].shift(seasonality-1)\n        gt_naive = gt_naive.loc[gt.index]\n        rows.append({\n            \"ticker\": tkr,\n            \"n\": int(len(gv)),\n            \"mae\": mae(gv[\"r_1d\"], gv[method_col]),\n            \"smape\": smape(gv[\"r_1d\"], gv[method_col]),\n            \"mase\": mase(gv[\"r_1d\"], gv[method_col], gt[\"r_1d\"], gt_naive),\n        })\n    return pd.DataFrame(rows)\n\ndef summarize_split(feats_frame, sid, split, save_prefix=\"linlags\"):\n    a,b,c,d = split\n    tr = feats_frame[(feats_frame[\"date\"]&gt;=a)&(feats_frame[\"date\"]&lt;=b)].copy()\n    va = feats_frame[(feats_frame[\"date\"]&gt;=c)&(feats_frame[\"date\"]&lt;=d)].copy()\n    # Predictions\n    val_pred = fit_predict_lin_lags(tr, va)\n    # Attach baseline preds on val slice\n    va_base = add_baseline_preds(va, seasonality=seasonality)\n    val_pred = val_pred.merge(va_base[[\"date\",\"ticker\",\"yhat_naive\",\"yhat_s\"]], on=[\"date\",\"ticker\"], how=\"left\")\n\n    # Per-ticker metrics\n    pt_lin = per_ticker_metrics(val_pred, tr, \"yhat_linlags\"); pt_lin[\"model\"] = \"lin_lags\"\n    pt_nav = per_ticker_metrics(val_pred.rename(columns={\"yhat_naive\":\"yhat_linlags\"}), tr, \"yhat_linlags\"); pt_nav[\"model\"]=\"naive\"\n    pt_sea = per_ticker_metrics(val_pred.rename(columns={\"yhat_s\":\"yhat_linlags\"}), tr, \"yhat_linlags\"); pt_sea[\"model\"]=f\"s{seasonality}\"\n\n    # Save per-ticker\n    out_pt = pd.concat([pt_lin.assign(split=sid), pt_nav.assign(split=sid), pt_sea.assign(split=sid)], ignore_index=True)\n    out_pt.to_csv(f\"reports/{save_prefix}_per_ticker_split{sid}.csv\", index=False)\n\n    # Aggregate\n    def agg(df):\n        if df.empty: \n            return {\"macro_mae\":np.nan,\"macro_smape\":np.nan,\"macro_mase\":np.nan,\"micro_mae\":np.nan,\"micro_smape\":np.nan,\"micro_mase\":np.nan}\n        macro = df[[\"mae\",\"smape\",\"mase\"]].mean().to_dict()\n        w = df[\"n\"].to_numpy()\n        micro = {\"micro_mae\": float(np.average(df[\"mae\"], weights=w)),\n                 \"micro_smape\": float(np.average(df[\"smape\"], weights=w)),\n                 \"micro_mase\": float(np.average(df[\"mase\"], weights=w))}\n        return {f\"macro_{k}\":float(v) for k,v in macro.items()} | micro\n\n    rows=[]\n    for name, pt in [(\"lin_lags\", pt_lin), (\"naive\", pt_nav), (f\"s{seasonality}\", pt_sea)]:\n        rows.append({\"split\":sid, \"train_range\": f\"{a.date()}→{b.date()}\",\n                     \"val_range\": f\"{c.date()}→{d.date()}\",\n                     \"model\":name, **agg(pt)})\n    return pd.DataFrame(rows)\n\n# Run on first 2 splits in class\nsummary_frames=[]\nfor sid, split in enumerate(splits[:2], start=1):\n    sf = summarize_split(feats_baseline, sid, split, save_prefix=\"linlags\")\n    summary_frames.append(sf)\n\nsummary = pd.concat(summary_frames, ignore_index=True)\nsummary.to_csv(\"reports/linlags_summary_splits12.csv\", index=False)\nsummary\n\n\n16.3.6 5) (Optional) Tiny ARIMA demo on one ticker for the first split\n# Optional: quick ARIMA(1,0,0) demo predicting r_{t+1} on val for a single ticker\ntry:\n    from statsmodels.tsa.arima.model import ARIMA\n    import warnings; warnings.filterwarnings(\"ignore\")\n    a,b,c,d = splits[0]\n    tkr = feats[\"ticker\"].cat.categories[0]\n    tr = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=a) & (feats[\"date\"]&lt;=b)]\n    va = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=c) & (feats[\"date\"]&lt;=d)]\n    # Fit on TRAIN returns only (endog = log_return). Predict one-step ahead for VAL dates.\n    model = ARIMA(tr[\"log_return\"].to_numpy(), order=(1,0,0))\n    res = model.fit()\n    # Forecast length = len(va), one-step-ahead with dynamic=False updates internally\n    # (For strict no-peek rolling one-step, loop and append val true values; here we keep demo simple.)\n    fc = res.forecast(steps=len(va))\n    arima_mae = mae(va[\"r_1d\"], fc)  # compare against next-day return\n    float(arima_mae)\nexcept Exception as e:\n    print(\"ARIMA demo skipped:\", e)\n\n⚠️ ARIMA is optional and slow on large loops. If you try it per ticker/per split, keep the dataset tiny.",
     "crumbs": [
       "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
     ]
   },
   {
-    "objectID": "lec16.html#wrapup-10-min",
-    "href": "lec16.html#wrapup-10-min",
-    "title": "16  Session 16",
-    "section": "16.5 Wrap‑up (10 min)",
-    "text": "16.5 Wrap‑up (10 min)\n\nYou trained a per‑ticker lags‑only linear model and compared it fairly to naive and seasonal‑naive using the same splits and MASE scale (from the train window).\nYou logged results in a stable schema that you’ll reuse for future models (LSTM / Transformer).\nARIMA can be illustrative but is often fragile + slower; treat it as optional for your project scale.",
+    "objectID": "lec16.html#agenda",
+    "href": "lec16.html#agenda",
+    "title": "16  Session 16 — Classical Baselines",
+    "section": "16.2 Agenda",
+    "text": "16.2 Agenda\n\nwhere classical models fit; pitfalls with ARIMA; cross‑sectional regressors\nresults table schema & comparison to baselines\nIn‑class lab: train per‑ticker Linear (lags‑only) → evaluate across 2 splits → compare to naive/seasonal‑naive → log CSVs\nWrap‑up + homework brief\n\n\n\n16.2.1 Why “classical” now?\n\nCreates a credible, strong baseline against naive that’s still transparent.\nSupports fast iteration and helps you debug feature definitions before deep models.\n\n\n\n16.2.2 Lags‑only linear regressor\n\nFeatures at time \\(t\\): lag1, lag2, lag3 (i.e., past returns), optionally a few stable stats (roll_std_20, zscore_20).\nTarget: r_1d (next‑day log return).\nFit per ticker to avoid cross‑sectional leakage for now.\n\n\n\n16.2.3 ARIMA 60‑second pitfall tour\n\nStationarity: fit on returns, not prices (unless differencing).\nEvaluation: re‑fit only on train; generate one‑step‑ahead forecasts on val, updating state without peeking.\nOver‑differencing & mis‑specified seasonal terms → bad bias.\nComputational cost grows with grid search; keep demo tiny.\n\n\n\n16.2.4 Results table schema (consistent across sessions)\n\nPer‑split summary: split, train_range, val_range, model, macro_mae, macro_smape, macro_mase, micro_mae, micro_smape, micro_mase\nPer‑ticker metrics: split, ticker, n, model, mae, smape, mase",
     "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
+    ]
+  },
+  {
+    "objectID": "lec16.html#inclass-lab-colabfriendly",
+    "href": "lec16.html#inclass-lab-colabfriendly",
+    "title": "16  Session 16 — Classical Baselines",
+    "section": "16.3 In‑class lab (Colab‑friendly)",
+    "text": "16.3 In‑class lab (Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME if needed.\n\n\n16.3.1 0) Setup & data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"reports\",\"models\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns; if missing, synthesize\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\"]:\n        eps = rng.normal(0,0.012, size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or derive minimal lags from returns if missing\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath)\nelse:\n    # Minimal lags derived just from returns\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats = feats.dropna(subset=[\"lag1\",\"lag2\",\"lag3\",\"r_1d\"]).reset_index(drop=True)\n\n# Harmonize\nfeats[\"date\"] = pd.to_datetime(feats[\"date\"])\nfeats[\"ticker\"] = feats[\"ticker\"].astype(\"category\")\nfeats = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats.head()\n\n\n16.3.2 1) Rolling‑origin date splits (reuse Session 15 logic)\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    splits=[]; i = train_min-1; n=len(u)\n    while True:\n        if i&gt;=n: break\n        a,b = u[0], u[i]; vs=i+embargo+1; ve=vs+val_size-1\n        if ve&gt;=n: break\n        splits.append((a,b,u[vs],u[ve])); i+=step\n    return splits\n\nsplits = make_rolling_origin_splits(feats[\"date\"], 252, 63, 63, 5)\nlen(splits), splits[:2]\n\n\n16.3.3 2) Metrics & baselines (from Session 15)\ndef mae(y, yhat): \n    y = np.asarray(y); yhat = np.asarray(yhat); \n    return float(np.mean(np.abs(y - yhat)))\n\ndef smape(y, yhat, eps=1e-8):\n    y = np.asarray(y); yhat = np.asarray(yhat)\n    return float(np.mean(2.0*np.abs(y - yhat)/(np.abs(y)+np.abs(yhat)+eps)))\n\ndef mase(y_true, y_pred, y_train_true, y_train_naive):\n    scale = mae(y_train_true, y_train_naive) + 1e-12\n    return float(mae(y_true, y_pred)/scale)\n\ndef add_baseline_preds(df: pd.DataFrame, seasonality:int=5) -&gt; pd.DataFrame:\n    out = df.copy()\n    out[\"yhat_naive\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s)\n    out[\"yhat_s\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s.shift(seasonality-1)) if seasonality&gt;1 else out[\"yhat_naive\"]\n    return out\n\n\n16.3.4 3) Per‑ticker lags‑only LinearRegression (fit only on each split’s TRAIN)\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.pipeline import Pipeline\n\n# Choose features (lags only for in-class lab)\nXCOLS = [c for c in [\"lag1\",\"lag2\",\"lag3\"] if c in feats.columns]\nassert XCOLS, \"No lag features found. Ensure features_v1 or fallback creation ran.\"\n\ndef fit_predict_lin_lags(train_df, val_df):\n    \"\"\"Fit per-ticker pipeline(StandardScaler, LinearRegression) on TRAIN; predict on VAL.\"\"\"\n    preds=[]\n    for tkr, tr in train_df.groupby(\"ticker\"):\n        va = val_df[val_df[\"ticker\"]==tkr]\n        if len(tr)==0 or len(va)==0: \n            continue\n        pipe = Pipeline([(\"scaler\", StandardScaler(with_mean=True, with_std=True)),\n                         (\"lr\", LinearRegression())])\n        pipe.fit(tr[XCOLS].values, tr[\"r_1d\"].values)\n        yhat = pipe.predict(va[XCOLS].values)\n        out = va[[\"date\",\"ticker\",\"r_1d\",\"log_return\"]].copy()\n        out[\"yhat_linlags\"] = yhat.astype(\"float32\")\n        preds.append(out)\n    return pd.concat(preds, ignore_index=True) if preds else pd.DataFrame(columns=[\"date\",\"ticker\",\"r_1d\",\"log_return\",\"yhat_linlags\"])\n\n\n16.3.5 4) Evaluate across the first 2 splits; compare to naive/seasonal‑naive\nseasonality = 5\nfeats_baseline = add_baseline_preds(feats, seasonality=seasonality)\n\ndef per_ticker_metrics(df_val_pred, df_train, method_col):\n    rows=[]\n    for tkr, gv in df_val_pred.groupby(\"ticker\"):\n        if method_col not in gv: \n            continue\n        gv = gv.dropna(subset=[\"r_1d\", method_col])\n        if len(gv)==0: \n            continue\n        # TRAIN scale for MASE\n        gt = df_train[df_train[\"ticker\"]==tkr].dropna(subset=[\"r_1d\"])\n        gt_naive = gt[\"log_return\"] if \"yhat_s\" not in method_col else gt[\"log_return\"].shift(seasonality-1)\n        gt_naive = gt_naive.loc[gt.index]\n        rows.append({\n            \"ticker\": tkr,\n            \"n\": int(len(gv)),\n            \"mae\": mae(gv[\"r_1d\"], gv[method_col]),\n            \"smape\": smape(gv[\"r_1d\"], gv[method_col]),\n            \"mase\": mase(gv[\"r_1d\"], gv[method_col], gt[\"r_1d\"], gt_naive),\n        })\n    return pd.DataFrame(rows)\n\ndef summarize_split(feats_frame, sid, split, save_prefix=\"linlags\"):\n    a,b,c,d = split\n    tr = feats_frame[(feats_frame[\"date\"]&gt;=a)&(feats_frame[\"date\"]&lt;=b)].copy()\n    va = feats_frame[(feats_frame[\"date\"]&gt;=c)&(feats_frame[\"date\"]&lt;=d)].copy()\n    # Predictions\n    val_pred = fit_predict_lin_lags(tr, va)\n    # Attach baseline preds on val slice\n    va_base = add_baseline_preds(va, seasonality=seasonality)\n    val_pred = val_pred.merge(va_base[[\"date\",\"ticker\",\"yhat_naive\",\"yhat_s\"]], on=[\"date\",\"ticker\"], how=\"left\")\n\n    # Per-ticker metrics\n    pt_lin = per_ticker_metrics(val_pred, tr, \"yhat_linlags\"); pt_lin[\"model\"] = \"lin_lags\"\n    \n    pt_nav = per_ticker_metrics(val_pred, tr, \"yhat_naive\");    pt_nav[\"model\"] = \"naive\"\n    pt_sea = per_ticker_metrics(val_pred, tr, \"yhat_s\");        pt_sea[\"model\"] = f\"s{seasonality}\"\n\n    # Save per-ticker\n    out_pt = pd.concat([pt_lin.assign(split=sid), pt_nav.assign(split=sid), pt_sea.assign(split=sid)], ignore_index=True)\n    out_pt.to_csv(f\"reports/{save_prefix}_per_ticker_split{sid}.csv\", index=False)\n\n    # Aggregate\n    def agg(df):\n        if df.empty: \n            return {\"macro_mae\":np.nan,\"macro_smape\":np.nan,\"macro_mase\":np.nan,\"micro_mae\":np.nan,\"micro_smape\":np.nan,\"micro_mase\":np.nan}\n        macro = df[[\"mae\",\"smape\",\"mase\"]].mean().to_dict()\n        w = df[\"n\"].to_numpy()\n        micro = {\"micro_mae\": float(np.average(df[\"mae\"], weights=w)),\n                 \"micro_smape\": float(np.average(df[\"smape\"], weights=w)),\n                 \"micro_mase\": float(np.average(df[\"mase\"], weights=w))}\n        return {f\"macro_{k}\":float(v) for k,v in macro.items()} | micro\n\n    rows=[]\n    for name, pt in [(\"lin_lags\", pt_lin), (\"naive\", pt_nav), (f\"s{seasonality}\", pt_sea)]:\n        rows.append({\"split\":sid, \"train_range\": f\"{a.date()}→{b.date()}\",\n                     \"val_range\": f\"{c.date()}→{d.date()}\",\n                     \"model\":name, **agg(pt)})\n    return pd.DataFrame(rows)\n\n# Run on first 2 splits in class\nsummary_frames=[]\nfor sid, split in enumerate(splits[:2], start=1):\n    sf = summarize_split(feats_baseline, sid, split, save_prefix=\"linlags\")\n    summary_frames.append(sf)\n\nsummary = pd.concat(summary_frames, ignore_index=True)\nsummary.to_csv(\"reports/linlags_summary_splits12.csv\", index=False)\nsummary\n\n\n16.3.6 5) (Optional) Tiny ARIMA demo on one ticker for the first split\n# Optional: quick ARIMA(1,0,0) demo predicting r_{t+1} on val for a single ticker\ntry:\n    from statsmodels.tsa.arima.model import ARIMA\n    import warnings; warnings.filterwarnings(\"ignore\")\n    a,b,c,d = splits[0]\n    tkr = feats[\"ticker\"].cat.categories[0]\n    tr = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=a) & (feats[\"date\"]&lt;=b)]\n    va = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=c) & (feats[\"date\"]&lt;=d)]\n    # Fit on TRAIN returns only (endog = log_return). Predict one-step ahead for VAL dates.\n    model = ARIMA(tr[\"log_return\"].to_numpy(), order=(1,0,0))\n    res = model.fit()\n    # Forecast length = len(va), one-step-ahead with dynamic=False updates internally\n    # (For strict no-peek rolling one-step, loop and append val true values; here we keep demo simple.)\n    fc = res.forecast(steps=len(va))\n    arima_mae = mae(va[\"r_1d\"], fc)  # compare against next-day return\n    float(arima_mae)\nexcept Exception as e:\n    print(\"ARIMA demo skipped:\", e)\n\n⚠️ ARIMA is optional and slow on large loops. If you try it per ticker/per split, keep the dataset tiny.",
+    "crumbs": [
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
+    ]
+  },
+  {
+    "objectID": "lec16.html#wrapup",
+    "href": "lec16.html#wrapup",
+    "title": "16  Session 16 — Classical Baselines",
+    "section": "16.4 Wrap‑up",
+    "text": "16.4 Wrap‑up\n\nYou trained a per‑ticker lags‑only linear model and compared it fairly to naive and seasonal‑naive using the same splits and MASE scale (from the train window).\nYou logged results in a stable schema that you’ll reuse for future models (LSTM / Transformer).\nARIMA can be illustrative but is often fragile + slower; treat it as optional for your project scale.",
+    "crumbs": [
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
     ]
   },
   {
@@ -1450,33 +1420,13 @@
     ]
   },
   {
-    "objectID": "lec16.html#discussion",
-    "href": "lec16.html#discussion",
+    "objectID": "lec16.html#key-points",
+    "href": "lec16.html#key-points",
     "title": "16  Session 16 — Classical Baselines",
-    "section": "16.6 Discussion",
-    "text": "16.6 Discussion\n\nAssumptions: Linear relation to recent returns; stationarity at return level.\nStrengths: Fast, interpretable, leakage‑resistant with proper splits.\nFailure modes: Regime shifts; volatility spikes; nonlinearity.\nEthics: Educational; not suitable for trading.\n\n\nRender (if Quarto is available):\n```bash\nquarto render docs/model_card_linear.qmd\n\n16.6.1 Part C — Quick test to safeguard results shape\n# tests/test_linlags_results.py\nimport pandas as pd, os\n\ndef test_linlags_summary_exists_and_columns():\n    assert os.path.exists(\"reports/linlags_summary.csv\")\n    df = pd.read_csv(\"reports/linlags_summary.csv\")\n    need = {\"split\",\"model\",\"macro_mae\",\"micro_mae\"}\n    assert need.issubset(df.columns)\n:::\nRun:\n%%bash\npytest -q -k linlags_results\n\n\n16.6.2 Part D — (Optional) Extend features or add Ridge\n\nTry --xcols lag1 lag2 lag3 roll_std_20 zscore_20 (if present in features_v1).\nSwap LinearRegression for Ridge(alpha=1.0); log and compare.",
+    "section": "16.6 Key Points",
+    "text": "16.6 Key Points\n\nKeep splits identical across models for fair comparison.\nMASE &lt; 1 ⇒ your model beats naive on train‑scale; report macro & micro.\nLinear lags are a transparent baseline—use them to validate your entire pipeline.",
     "crumbs": [
       "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#instructor-checklist-before-class",
-    "href": "lec16.html#instructor-checklist-before-class",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.7 Instructor checklist (before class)",
-    "text": "16.7 Instructor checklist (before class)\n\nVerify features_v1.parquet has lag1..lag3 or the fallback cell creates them.\nDry‑run the 2‑split demo; ensure total runtime &lt; 5–6 minutes.\nOptionally prepare an ARIMA demo on one ticker to illustrate pitfalls.",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#emphasize-while-teaching",
-    "href": "lec16.html#emphasize-while-teaching",
-    "title": "16  Session 16",
-    "section": "16.9 Emphasize while teaching",
-    "text": "16.9 Emphasize while teaching\n\nKeep splits identical across models for fair comparison.\nMASE &lt; 1 ⇒ your model beats naive on train‑scale; report macro & micro.\nLinear lags are a transparent baseline—use them to validate your entire pipeline.",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16</span>"
     ]
   },
   {
@@ -1500,8 +1450,8 @@
     ]
   },
   {
-    "objectID": "lec17.html#session-17-feature-timing-biases-leakage-75-min",
-    "href": "lec17.html#session-17-feature-timing-biases-leakage-75-min",
+    "objectID": "lec17.html#session-17-feature-timing-biases-leakage",
+    "href": "lec17.html#session-17-feature-timing-biases-leakage",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
     "section": "",
     "text": "17.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and avoid look‑ahead and survivorship biases.\nFreeze and use a static ticker universe chosen from the train window (not the whole history).\nDefine labels correctly (e.g., t+1 and t+5) and verify them with tests.\nAdd leakage tests that recompute trusted features and fail on any future‑peek.",
@@ -1510,41 +1460,31 @@
     ]
   },
   {
-    "objectID": "lec17.html#agenda-75-min",
-    "href": "lec17.html#agenda-75-min",
+    "objectID": "lec17.html#agenda",
+    "href": "lec17.html#agenda",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.2 Agenda (75 min)",
-    "text": "17.2 Agenda (75 min)\n\n(10 min) Slides: what leakage looks like; examples; how it sneaks in\n(10 min) Slides: survivorship bias (today’s constituents ≠ past reality); freezing a universe\n(10 min) Slides: label definitions (t+1, multi‑step) and alignment rules\n(35 min) In‑class lab:\n\nFreeze a static universe from the first split’s train window\nAdd leakage tests that recompute known‑good features\nAdd multi‑step labels (e.g., t+5) with tests\n\n(10 min) Wrap‑up & homework brief",
+    "section": "17.2 Agenda",
+    "text": "17.2 Agenda\n\nwhat leakage looks like; examples; how it sneaks in\nsurvivorship bias (today’s constituents ≠ past reality); freezing a universe\nlabel definitions (t+1, multi‑step) and alignment rules\nIn‑class lab:\n\nFreeze a static universe from the first split’s train window\nAdd leakage tests that recompute known‑good features\nAdd multi‑step labels (e.g., t+5) with tests\n\n(10 min) Wrap‑up & homework brief\n\n\n\n17.2.1 What is data leakage?\n\nLook‑ahead leakage: using any info from t+1 or later to compute features at t or to scale/normalize train and validation together.\nCommon culprits: shift(-1) in features, global scaling fit on full data, forward‑fill across split boundaries, using today’s close to predict today’s close.\n\n\n\n17.2.2 Survivorship bias\n\nUsing today’s index membership to pick tickers for the past ⇒ drops delisted/removed names ⇒ optimistically biased results.\nCure: freeze a static universe from the training window (e.g., all tickers with ≥ 252 observations by the end of the first train window). Save it and filter by it for all future experiments.\n\n\n\n17.2.3 Label definitions (be explicit)\n\nt+1 log return: r_1d = log_return.shift(-1) per ticker (your Session‑9 label).\nt+5 log return (multi‑step): r_5d = log_return.shift(-1) + … + log_return.shift(-5) per ticker.\nRules: labels come from future; features come from ≤ t. Splits with embargo reduce adjacency leakage.",
     "crumbs": [
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
   },
   {
-    "objectID": "lec17.html#slides-talking-points-drop-into-your-deck",
-    "href": "lec17.html#slides-talking-points-drop-into-your-deck",
+    "objectID": "lec17.html#inclass-lab-colabfriendly",
+    "href": "lec17.html#inclass-lab-colabfriendly",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.3 Slides / talking points (drop into your deck)",
-    "text": "17.3 Slides / talking points (drop into your deck)\n\n17.3.1 What is data leakage?\n\nLook‑ahead leakage: using any info from t+1 or later to compute features at t or to scale/normalize train and validation together.\nCommon culprits: shift(-1) in features, global scaling fit on full data, forward‑fill across split boundaries, using today’s close to predict today’s close.\n\n\n\n17.3.2 Survivorship bias\n\nUsing today’s index membership to pick tickers for the past ⇒ drops delisted/removed names ⇒ optimistically biased results.\nCure: freeze a static universe from the training window (e.g., all tickers with ≥ 252 observations by the end of the first train window). Save it and filter by it for all future experiments.\n\n\n\n17.3.3 Label definitions (be explicit)\n\nt+1 log return: r_1d = log_return.shift(-1) per ticker (your Session‑9 label).\nt+5 log return (multi‑step): r_5d = log_return.shift(-1) + … + log_return.shift(-5) per ticker.\nRules: labels come from future; features come from ≤ t. Splits with embargo reduce adjacency leakage.",
+    "section": "17.3 In‑class lab (Colab‑friendly)",
+    "text": "17.3 In‑class lab (Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME as needed.\n\n\n17.3.1 0) Setup & load data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"   # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"data/static\",\"reports\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns or synthesize a small fallback\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\",\"TSLA\",\"META\",\"NFLX\"]:\n        eps = rng.normal(0,0.012,size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or construct minimal lags for tests\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nelse:\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats[\"roll_mean_20\"] = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).mean().reset_index(level=0, drop=True)\n    feats[\"roll_std_20\"]  = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).std().reset_index(level=0, drop=True)\n    feats[\"zscore_20\"]    = (feats[\"log_return\"] - feats[\"roll_mean_20\"]) / (feats[\"roll_std_20\"] + 1e-8)\n    feats = feats.dropna().reset_index(drop=True)\n\n# Harmonize types\nreturns[\"date\"] = pd.to_datetime(returns[\"date\"])\nfeats[\"date\"]   = pd.to_datetime(feats[\"date\"])\nreturns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\nfeats[\"ticker\"]   = feats[\"ticker\"].astype(\"category\")\nreturns = returns.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats   = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nreturns.head(3), feats.head(3)\n\n\n17.3.2 1) Freeze a static universe from the first split’s train window\nimport numpy as np, pandas as pd\n\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    i = train_min - 1; splits=[]\n    while True:\n        if i &gt;= len(u): break\n        a,b = u[0], u[i]\n        vs = i + embargo + 1\n        ve = vs + val_size - 1\n        if ve &gt;= len(u): break\n        splits.append((a,b,u[vs],u[ve]))\n        i += step\n    return splits\n\nsplits = make_rolling_origin_splits(returns[\"date\"], train_min=252, val_size=63, step=63, embargo=5)\nassert len(splits) &gt;= 1, \"Not enough history for a first split.\"\na,b,c,d = splits[0]\nprint(\"First train window:\", a.date(), \"→\", b.date())\n\n# Eligible = tickers with at least train_min rows by train_end (b)\ntrain_slice = returns[(returns[\"date\"]&gt;=a) & (returns[\"date\"]&lt;=b)]\ncounts = train_slice.groupby(\"ticker\").size()\neligible = counts[counts &gt;= 252].index.sort_values()\nuniverse = pd.DataFrame({\"ticker\": eligible})\nuniv_name = f\"data/static/universe_{b.date()}.csv\"\nuniverse.to_csv(univ_name, index=False)\nprint(\"Saved static universe:\", univ_name, \"| tickers:\", len(universe))\nuniverse.head()\n\nFrom now on, filter your data to universe before modeling/evaluation.\n\n\n\n17.3.3 2) Apply the static universe to your features\nfeats_static = feats[feats[\"ticker\"].isin(set(universe[\"ticker\"]))].copy()\nfeats_static.to_parquet(\"data/processed/features_v1_static.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/features_v1_static.parquet\", feats_static.shape)\n\n\n17.3.4 3) Add leakage tests that recompute trusted features & compare\nCreate a high‑value test file that fails if any feature depends on future rows.\n# tests/test_leakage_features.py\nfrom __future__ import annotations\nimport numpy as np, pandas as pd\nimport pytest\n\nSAFE_ROLL = 20\n\n@pytest.fixture(scope=\"session\")\ndef df():\n    import pandas as pd\n    import pathlib\n    p = pathlib.Path(\"data/processed/features_v1_static.parquet\")\n    if not p.exists():\n        p = pathlib.Path(\"data/processed/features_v1.parquet\")\n    df = pd.read_parquet(p).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    df[\"date\"] = pd.to_datetime(df[\"date\"])\n    return df\n\ndef test_label_definition_r1d(df):\n    for tkr, g in df.groupby(\"ticker\"):\n        assert g[\"r_1d\"].iloc[:-1].equals(g[\"log_return\"].iloc[1:]), f\"r_1d mismatch for {tkr}\"\n\ndef _recompute_safe(g: pd.DataFrame) -&gt; pd.DataFrame:\n    # Recompute causal features using only &lt;= t information\n    out = pd.DataFrame(index=g.index)\n    s = g[\"log_return\"]\n    out[\"lag1\"] = s.shift(1)\n    out[\"lag2\"] = s.shift(2)\n    out[\"lag3\"] = s.shift(3)\n    rm = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).mean()\n    rs = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).std()\n    out[\"roll_mean_20\"] = rm\n    out[\"roll_std_20\"]  = rs\n    out[\"zscore_20\"]    = (s - rm) / (rs + 1e-8)\n    # EWM & expanding if present\n    out[\"exp_mean\"] = s.expanding(min_periods=SAFE_ROLL).mean()\n    out[\"exp_std\"]  = s.expanding(min_periods=SAFE_ROLL).std()\n    out[\"ewm_mean_20\"] = s.ewm(span=20, adjust=False).mean()\n    out[\"ewm_std_20\"]  = s.ewm(span=20, adjust=False).std()\n    # RSI(14) if adj_close present\n    if \"adj_close\" in g:\n        delta = g[\"adj_close\"].diff()\n        up = delta.clip(lower=0).ewm(alpha=1/14, adjust=False).mean()\n        dn = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False).mean()\n        rs = up / (dn + 1e-12)\n        out[\"rsi_14\"] = 100 - (100/(1+rs))\n    return out\n\n@pytest.mark.parametrize(\"col\", [\"lag1\",\"lag2\",\"lag3\",\"roll_mean_20\",\"roll_std_20\",\"zscore_20\",\"exp_mean\",\"exp_std\",\"ewm_mean_20\",\"ewm_std_20\",\"rsi_14\"])\ndef test_features_match_causal_recompute(df, col):\n    if col not in df.columns:\n        pytest.skip(f\"{col} not present\")\n    # Compare per ticker to avoid cross-group alignment issues\n    for tkr, g in df.groupby(\"ticker\", sort=False):\n        ref = _recompute_safe(g)\n        if col not in ref.columns: \n            continue\n        a = g[col].to_numpy()\n        b = ref[col].to_numpy()\n        # Allow NaNs at the start; compare where both finite\n        mask = np.isfinite(a) & np.isfinite(b)\n        if mask.sum() == 0: \n            continue\n        diff = np.nanmax(np.abs(a[mask] - b[mask]))\n        assert float(diff) &lt;= 1e-6, f\"{col} deviates from causal recompute for {tkr}: max |Δ|={diff}\"\n\ndef test_no_feature_equals_target(df):\n    y = df[\"r_1d\"].to_numpy()\n    for col in df.select_dtypes(include=[\"float32\",\"float64\"]).columns:\n        if col in {\"r_1d\",\"log_return\"}: \n            continue\n        x = df[col].to_numpy()\n        # Proportion of exact equality (within tiny tol) should not be high\n        eq = np.isfinite(x) & np.isfinite(y) & (np.abs(x - y) &lt; 1e-12)\n        assert eq.mean() &lt; 0.8, f\"Suspicious: feature {col} equals target too often\"\nRun tests now:\n!pytest -q tests/test_leakage_features.py\n\nIf a test fails, fix the pipeline, don’t weaken the test.\n\n\n\n17.3.5 4) Add multi‑step labels (e.g., t+5) and tests\n# scripts/make_multistep_labels.py\nfrom __future__ import annotations\nimport pandas as pd, numpy as np\nfrom pathlib import Path\n\ndef make_multistep(in_parquet=\"data/processed/returns.parquet\", horizons=(5,)):\n    df = pd.read_parquet(in_parquet).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    for H in horizons:\n        # r_Hd = sum of next H log returns: shift(-1) ... shift(-H)\n        s = df.groupby(\"ticker\")[\"log_return\"]\n        acc = None\n        for h in range(1, H+1):\n            sh = s.shift(-h)\n            acc = sh if acc is None else (acc + sh)\n        df[f\"r_{H}d\"] = acc\n    out = df\n    Path(\"data/processed\").mkdir(parents=True, exist_ok=True)\n    out.to_parquet(\"data/processed/returns_multistep.parquet\", compression=\"zstd\", index=False)\n    print(\"Wrote data/processed/returns_multistep.parquet\", out.shape)\n\nif __name__ == \"__main__\":\n    make_multistep()\nRun it:\n!python scripts/make_multistep_labels.py\nAdd a test for label correctness:\n# tests/test_labels_multistep.py\nimport pandas as pd, numpy as np\n\ndef test_r5d_definition():\n    df = pd.read_parquet(\"data/processed/returns_multistep.parquet\").sort_values([\"ticker\",\"date\"])\n    if \"r_5d\" not in df.columns:\n        return\n    for tkr, g in df.groupby(\"ticker\"):\n        lr = g[\"log_return\"]\n        r5 = sum(lr.shift(-h) for h in range(1,6))\n        diff = (g[\"r_5d\"] - r5).abs().max()\n        assert float(diff) &lt; 1e-10, f\"r_5d misdefined for {tkr} (max |Δ|={diff})\"\nRun:\n!pytest -q tests/test_labels_multistep.py",
     "crumbs": [
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
   },
   {
-    "objectID": "lec17.html#inclass-lab-35-min-colabfriendly",
-    "href": "lec17.html#inclass-lab-35-min-colabfriendly",
+    "objectID": "lec17.html#wrapup",
+    "href": "lec17.html#wrapup",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.4 In‑class lab (35 min, Colab‑friendly)",
-    "text": "17.4 In‑class lab (35 min, Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME as needed.\n\n\n17.4.1 0) Setup & load data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"   # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"data/static\",\"reports\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns or synthesize a small fallback\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\",\"TSLA\",\"META\",\"NFLX\"]:\n        eps = rng.normal(0,0.012,size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or construct minimal lags for tests\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nelse:\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats[\"roll_mean_20\"] = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).mean().reset_index(level=0, drop=True)\n    feats[\"roll_std_20\"]  = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).std().reset_index(level=0, drop=True)\n    feats[\"zscore_20\"]    = (feats[\"log_return\"] - feats[\"roll_mean_20\"]) / (feats[\"roll_std_20\"] + 1e-8)\n    feats = feats.dropna().reset_index(drop=True)\n\n# Harmonize types\nreturns[\"date\"] = pd.to_datetime(returns[\"date\"])\nfeats[\"date\"]   = pd.to_datetime(feats[\"date\"])\nreturns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\nfeats[\"ticker\"]   = feats[\"ticker\"].astype(\"category\")\nreturns = returns.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats   = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nreturns.head(3), feats.head(3)\n\n\n17.4.2 1) Freeze a static universe from the first split’s train window\nimport numpy as np, pandas as pd\n\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    i = train_min - 1; splits=[]\n    while True:\n        if i &gt;= len(u): break\n        a,b = u[0], u[i]\n        vs = i + embargo + 1\n        ve = vs + val_size - 1\n        if ve &gt;= len(u): break\n        splits.append((a,b,u[vs],u[ve]))\n        i += step\n    return splits\n\nsplits = make_rolling_origin_splits(returns[\"date\"], train_min=252, val_size=63, step=63, embargo=5)\nassert len(splits) &gt;= 1, \"Not enough history for a first split.\"\na,b,c,d = splits[0]\nprint(\"First train window:\", a.date(), \"→\", b.date())\n\n# Eligible = tickers with at least train_min rows by train_end (b)\ntrain_slice = returns[(returns[\"date\"]&gt;=a) & (returns[\"date\"]&lt;=b)]\ncounts = train_slice.groupby(\"ticker\").size()\neligible = counts[counts &gt;= 252].index.sort_values()\nuniverse = pd.DataFrame({\"ticker\": eligible})\nuniv_name = f\"data/static/universe_{b.date()}.csv\"\nuniverse.to_csv(univ_name, index=False)\nprint(\"Saved static universe:\", univ_name, \"| tickers:\", len(universe))\nuniverse.head()\n\nFrom now on, filter your data to universe before modeling/evaluation.\n\n\n\n17.4.3 2) Apply the static universe to your features\nfeats_static = feats[feats[\"ticker\"].isin(set(universe[\"ticker\"]))].copy()\nfeats_static.to_parquet(\"data/processed/features_v1_static.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/features_v1_static.parquet\", feats_static.shape)\n\n\n17.4.4 3) Add leakage tests that recompute trusted features & compare\nCreate a high‑value test file that fails if any feature depends on future rows.\n# tests/test_leakage_features.py\nfrom __future__ import annotations\nimport numpy as np, pandas as pd\nimport pytest\n\nSAFE_ROLL = 20\n\n@pytest.fixture(scope=\"session\")\ndef df():\n    import pandas as pd\n    import pathlib\n    p = pathlib.Path(\"data/processed/features_v1_static.parquet\")\n    if not p.exists():\n        p = pathlib.Path(\"data/processed/features_v1.parquet\")\n    df = pd.read_parquet(p).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    df[\"date\"] = pd.to_datetime(df[\"date\"])\n    return df\n\ndef test_label_definition_r1d(df):\n    for tkr, g in df.groupby(\"ticker\"):\n        assert g[\"r_1d\"].iloc[:-1].equals(g[\"log_return\"].iloc[1:]), f\"r_1d mismatch for {tkr}\"\n\ndef _recompute_safe(g: pd.DataFrame) -&gt; pd.DataFrame:\n    # Recompute causal features using only &lt;= t information\n    out = pd.DataFrame(index=g.index)\n    s = g[\"log_return\"]\n    out[\"lag1\"] = s.shift(1)\n    out[\"lag2\"] = s.shift(2)\n    out[\"lag3\"] = s.shift(3)\n    rm = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).mean()\n    rs = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).std()\n    out[\"roll_mean_20\"] = rm\n    out[\"roll_std_20\"]  = rs\n    out[\"zscore_20\"]    = (s - rm) / (rs + 1e-8)\n    # EWM & expanding if present\n    out[\"exp_mean\"] = s.expanding(min_periods=SAFE_ROLL).mean()\n    out[\"exp_std\"]  = s.expanding(min_periods=SAFE_ROLL).std()\n    out[\"ewm_mean_20\"] = s.ewm(span=20, adjust=False).mean()\n    out[\"ewm_std_20\"]  = s.ewm(span=20, adjust=False).std()\n    # RSI(14) if adj_close present\n    if \"adj_close\" in g:\n        delta = g[\"adj_close\"].diff()\n        up = delta.clip(lower=0).ewm(alpha=1/14, adjust=False).mean()\n        dn = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False).mean()\n        rs = up / (dn + 1e-12)\n        out[\"rsi_14\"] = 100 - (100/(1+rs))\n    return out\n\n@pytest.mark.parametrize(\"col\", [\"lag1\",\"lag2\",\"lag3\",\"roll_mean_20\",\"roll_std_20\",\"zscore_20\",\"exp_mean\",\"exp_std\",\"ewm_mean_20\",\"ewm_std_20\",\"rsi_14\"])\ndef test_features_match_causal_recompute(df, col):\n    if col not in df.columns:\n        pytest.skip(f\"{col} not present\")\n    # Compare per ticker to avoid cross-group alignment issues\n    for tkr, g in df.groupby(\"ticker\", sort=False):\n        ref = _recompute_safe(g)\n        if col not in ref.columns: \n            continue\n        a = g[col].to_numpy()\n        b = ref[col].to_numpy()\n        # Allow NaNs at the start; compare where both finite\n        mask = np.isfinite(a) & np.isfinite(b)\n        if mask.sum() == 0: \n            continue\n        diff = np.nanmax(np.abs(a[mask] - b[mask]))\n        assert float(diff) &lt;= 1e-6, f\"{col} deviates from causal recompute for {tkr}: max |Δ|={diff}\"\n\ndef test_no_feature_equals_target(df):\n    y = df[\"r_1d\"].to_numpy()\n    for col in df.select_dtypes(include=[\"float32\",\"float64\"]).columns:\n        if col in {\"r_1d\",\"log_return\"}: \n            continue\n        x = df[col].to_numpy()\n        # Proportion of exact equality (within tiny tol) should not be high\n        eq = np.isfinite(x) & np.isfinite(y) & (np.abs(x - y) &lt; 1e-12)\n        assert eq.mean() &lt; 0.8, f\"Suspicious: feature {col} equals target too often\"\nRun tests now:\n!pytest -q tests/test_leakage_features.py\n\nIf a test fails, fix the pipeline, don’t weaken the test.\n\n\n\n17.4.5 4) Add multi‑step labels (e.g., t+5) and tests\n# scripts/make_multistep_labels.py\nfrom __future__ import annotations\nimport pandas as pd, numpy as np\nfrom pathlib import Path\n\ndef make_multistep(in_parquet=\"data/processed/returns.parquet\", horizons=(5,)):\n    df = pd.read_parquet(in_parquet).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    for H in horizons:\n        # r_Hd = sum of next H log returns: shift(-1) ... shift(-H)\n        s = df.groupby(\"ticker\")[\"log_return\"]\n        acc = None\n        for h in range(1, H+1):\n            sh = s.shift(-h)\n            acc = sh if acc is None else (acc + sh)\n        df[f\"r_{H}d\"] = acc\n    out = df\n    Path(\"data/processed\").mkdir(parents=True, exist_ok=True)\n    out.to_parquet(\"data/processed/returns_multistep.parquet\", compression=\"zstd\", index=False)\n    print(\"Wrote data/processed/returns_multistep.parquet\", out.shape)\n\nif __name__ == \"__main__\":\n    make_multistep()\nRun it:\n!python scripts/make_multistep_labels.py\nAdd a test for label correctness:\n# tests/test_labels_multistep.py\nimport pandas as pd, numpy as np\n\ndef test_r5d_definition():\n    df = pd.read_parquet(\"data/processed/returns_multistep.parquet\").sort_values([\"ticker\",\"date\"])\n    if \"r_5d\" not in df.columns:\n        return\n    for tkr, g in df.groupby(\"ticker\"):\n        lr = g[\"log_return\"]\n        r5 = sum(lr.shift(-h) for h in range(1,6))\n        diff = (g[\"r_5d\"] - r5).abs().max()\n        assert float(diff) &lt; 1e-10, f\"r_5d misdefined for {tkr} (max |Δ|={diff})\"\nRun:\n!pytest -q tests/test_labels_multistep.py",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#wrapup-10-min",
-    "href": "lec17.html#wrapup-10-min",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.5 Wrap‑up (10 min)",
-    "text": "17.5 Wrap‑up (10 min)\n\nStatic universe removes survivorship bias: pick tickers with adequate history by train end and stick to them.\nLabel definitions must be explicit and tested (t+1, t+5).\nLeakage tests recompute causal features and compare—if you accidentally used shift(-1) or cross‑split fills, tests fail.",
+    "section": "17.4 Wrap‑up",
+    "text": "17.4 Wrap‑up\n\nStatic universe removes survivorship bias: pick tickers with adequate history by train end and stick to them.\nLabel definitions must be explicit and tested (t+1, t+5).\nLeakage tests recompute causal features and compare—if you accidentally used shift(-1) or cross‑split fills, tests fail.",
     "crumbs": [
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
@@ -1560,21 +1500,11 @@
     ]
   },
   {
-    "objectID": "lec17.html#instructor-checklist-before-class",
-    "href": "lec17.html#instructor-checklist-before-class",
+    "objectID": "lec17.html#key-points",
+    "href": "lec17.html#key-points",
     "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.7 Instructor checklist (before class)",
-    "text": "17.7 Instructor checklist (before class)\n\nEnsure returns.parquet and features_v1.parquet exist or fallback works.\n\nIntentionally create a leaked feature (e.g., lag1 = log_return.shift(-1)) on your copy to show tests failing, then fix.\n\nDecide an anchor date policy for universe freeze; today’s lab uses first split’s train end.",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#emphasize-while-teaching",
-    "href": "lec17.html#emphasize-while-teaching",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.8 Emphasize while teaching",
-    "text": "17.8 Emphasize while teaching\n\nDefine labels first, then prove features are causal (≤ t).\n\nFreezing the universe is small effort with big impact on credibility.\n\nTests are your guardrails—if they go red, don’t relax them; fix the pipeline.",
+    "section": "17.6 Key points",
+    "text": "17.6 Key points\n\nDefine labels first, then prove features are causal (≤ t).\n\nFreezing the universe is small effort with big impact on credibility.\n\nTests are your guardrails—if they go red, don’t relax them; fix the pipeline.",
     "crumbs": [
       "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
@@ -2607,346 +2537,6 @@
     "text": "Hyndman, Rob J., and George Athanasopoulos. 2021. Forecasting:\nPrinciples and Practice. 3rd ed. https://otexts.com/fpp3/.",
     "crumbs": [
       "References"
-    ]
-  },
-  {
-    "objectID": "lec8.html#slides",
-    "href": "lec8.html#slides",
-    "title": "8  Session 8 — SQL II: Window Functions & pandas.read_sql Workflows",
-    "section": "8.3 Slides",
-    "text": "8.3 Slides\nWhat’s a window?\n\nA window lets an aggregate or analytic function see a row + its neighbors without collapsing rows.\nTemplate:\nfunc(expr) OVER (\n   PARTITION BY key\n   ORDER BY time\n   ROWS BETWEEN N PRECEDING AND CURRENT ROW\n)\nPARTITION BY = per‑group window; ORDER BY = sequence; ROWS = how many rows to include.\n\nWindow vs GROUP BY\n\nGROUP BY returns one row per group; OVER (…) returns one row per input row with extra columns.\n\nTime‑series patterns\n\nLags: LAG(x, k) → previous k rows ⇒ features at t that use only info ≤ t.\nLeads: LEAD(x, k) → future k rows ⇒ labels (don’t leak into features).\nRolling stats: AVG(x) OVER (… ROWS BETWEEN w-1 PRECEDING AND CURRENT ROW); rolling variance via AVG(x*x) - AVG(x)^2.\nTop‑k per group: compute ROW_NUMBER() OVER (PARTITION BY key ORDER BY score DESC) and filter WHERE rn&lt;=k.\n\nROWS vs RANGE\n\nUse ROWS for fixed‑length windows on ordered rows (what we need).\nTime‑based windows (e.g., last 30 calendar days) require different techniques in SQLite (correlated subquery); we’ll note but not use today.",
-    "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Session 8 — SQL II: Window Functions & `pandas.read_sql` Workflows</span>"
-    ]
-  },
-  {
-    "objectID": "lec9.html#key-points",
-    "href": "lec9.html#key-points",
-    "title": "9  Session 9 — Cleaning, Joins, and Parquet",
-    "section": "9.7 Key Points",
-    "text": "9.7 Key Points\n\nNullable ints: astype(\"Int64\") keeps NAs; plain int64 will fail if NAs exist.\nCategoricals & partitions: When reading partitioned Parquet, ticker may come back as object. Re‑cast to category after read if needed.\nCompression choice: zstd gives good ratio/speed; snappy is more ubiquitous.\nPrecision: float32 is fine; for production finance, consider float64 and explicit rounding.\n\n\n\n9.7.1 Optional (for your Makefile later)\nAdd quick targets: (if directly editing Makefile in Colab: removing python, and indent all lines below the target by four spaces).\n.PHONY: prices-parquet returns-parquet\nprices-parquet:  ## Clean raw prices and save processed Parquet(s)\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, glob, pathlib, numpy as np, re, json\nfrom pathlib import Path\n# (Paste the functions from the lab: standardize_columns, clean_prices, join_meta)\n# Then read raw -&gt; clean -&gt; write parquet as in the lab\nPY\n\nreturns-parquet: ## Build returns.parquet with r_1d + calendar features\n\\tpython - &lt;&lt;'PY'\nimport pandas as pd, numpy as np\np=\"data/processed/prices.parquet\"; r=pd.read_parquet(p).sort_values([\"ticker\",\"date\"])\nr[\"log_return\"]=r.groupby(\"ticker\")[\"adj_close\"].apply(lambda s: np.log(s/s.shift(1))).reset_index(level=0, drop=True)\nr[\"r_1d\"]=r.groupby(\"ticker\")[\"log_return\"].shift(-1)\nr[\"weekday\"]=r[\"date\"].dt.weekday.astype(\"int8\"); r[\"month\"]=r[\"date\"].dt.month.astype(\"int8\")\nr[[\"date\",\"ticker\",\"log_return\",\"r_1d\",\"weekday\",\"month\"]].to_parquet(\"data/processed/returns.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/returns.parquet\")\nPY\nYou now have a clean, tidy Parquet foundation the later sessions (evaluation & modeling) can rely on.",
-    "crumbs": [
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
-    ]
-  },
-  {
-    "objectID": "lec9.html#slides",
-    "href": "lec9.html#slides",
-    "title": "9  Session 9 — Cleaning, Joins, and Parquet",
-    "section": "9.3 Slides",
-    "text": "9.3 Slides\n\n9.3.1 Tidy schema for price data\n\nOne row = one ticker‑day.\nMinimal columns (snake_case): date (datetime64[ns]), ticker (category), open/high/low/close/adj_close (float32/64), volume (Int64).\nOptional metadata (from a separate table): name (string), sector (category).\n\n\n\n9.3.2 Idiomatic pandas: merge, assign, pipe\n\nmerge: combine frames by keys (e.g., prices ⟵left join⟶ tickers).\nassign: add/transform columns without breaking the chain: df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close'])).\npipe: compose small, testable transforms: df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta)).\n\n\n\n9.3.3 Dtypes that help\n\nCategorical (category): compact & fast for low‑cardinality strings (ticker, sector).\nNullable integers (Int64, Int32): keep missing values and integer semantics (volume).\nString (string[python]): consistent string semantics (avoid object).\nFloats: float32 can halve memory, but consider numeric precision.\n\n\n\n9.3.4 Parquet: why & how\n\nColumnar, compressed, preserves schema better than CSV.\nFilters & projection: read only needed columns/rows (esp. with partitioned datasets).\nPartitioning by ticker/ yields fast reads of a subset (e.g., a single ticker).\nTypical settings: engine=pyarrow, compression=zstd or snappy.",
-    "crumbs": [
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Session 9 — Cleaning, Joins, and Parquet</span>"
-    ]
-  },
-  {
-    "objectID": "lec10.html#slide",
-    "href": "lec10.html#slide",
-    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
-    "section": "11.2 Slide",
-    "text": "11.2 Slide\nFeature timing = everything\n\nPredict \\(r_{t+1}\\) using info up to and including time t.\nRule: compute any rolling stat at \\(t\\) from data \\(\\le t\\), then shift by 1 if that stat includes the current target variable.\n\nCore pandas patterns\n\nLags: s.shift(k) (past), never negative shifts.\nRolling: s.rolling(W, min_periods=W).agg(...) and then no extra shift if the rolling window ends at \\(t\\).\nExpanding: long‑memory features (e.g., expanding mean).\nEWM: s.ewm(span=W, adjust=False).mean() for decayed memory.\n\nResampling safely\n\nUse groupby('ticker').resample('W-FRI', on='date') then aggregate:\n\nOHLC: first/open, max/high, min/low, last/adj_close\nVolume: sum\nReturns: compound via np.log(prod(1+r)) or sum of log returns.\n\n\nDtypes\n\nticker = category; calendar ints int8; features float32 (fine for class).",
-    "crumbs": [
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
-    ]
-  },
-  {
-    "objectID": "lec11.html#slide",
-    "href": "lec11.html#slide",
-    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
-    "section": "11.3 Slide",
-    "text": "11.3 Slide\nRequests pattern\n\nSession + HTTPAdapter + Retry → robust.\nValidate: status code, content type; guard against partial data.\n\nSecrets\n\n.env.template committed; .env untracked.\nLoad with dotenv.load_dotenv(). Access via os.getenv(\"FRED_API_KEY\").\n\nCaching\n\nFile cache: key by URL+params hash.\nDB cache: cache (key TEXT PRIMARY KEY, value BLOB, fetched_at).\n\nAlignment\n\nAfter download, normalize to date and join on date.\nStore to SQLite table with a composite key (series_id, date).",
-    "crumbs": [
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
-    ]
-  },
-  {
-    "objectID": "lec11.html#learning-goals",
-    "href": "lec11.html#learning-goals",
-    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
-    "section": "",
-    "text": "Call a REST API with requests + robust retry/backoff.\nManage secrets with .env and never commit keys.\nCache responses (file or SQLite) and align external series by date.\nSave enriched data to SQLite and Parquet.",
-    "crumbs": [
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
-    ]
-  },
-  {
-    "objectID": "lec10.html#key-points",
-    "href": "lec10.html#key-points",
-    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
-    "section": "11.5 Key points",
-    "text": "11.5 Key points\n\nKeep a one‑page “no leakage” checklist handy and point to it often.",
-    "crumbs": [
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
-    ]
-  },
-  {
-    "objectID": "lec11.html#key-points",
-    "href": "lec11.html#key-points",
-    "title": "11  Session 11 — APIs with requests: Secrets, Retries, and Caching",
-    "section": "11.7 Key points",
-    "text": "11.7 Key points\n\nHavehave a prepared .env with a working FRED key to avoid classroom delays.",
-    "crumbs": [
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Session 11 — APIs with `requests`: Secrets, Retries, and Caching</span>"
-    ]
-  },
-  {
-    "objectID": "lec12.html#slide",
-    "href": "lec12.html#slide",
-    "title": "12  Session 12 — HTML Scraping: Ethics & Resilience",
-    "section": "12.2 Slide",
-    "text": "12.2 Slide\nEthics + resilience\n\nCheck robots.txt; identify disallow rules.\nSet a clear User‑Agent and sleep between requests.\nCache HTML locally; don’t hammer sites.\nExpect structure to change; write defensive code.\n\nParsing patterns\n\nPrefer table selectors; use read_html for well‑formed tables.\nClean headers → snake_case; drop footnotes; trim whitespace.\nNormalize keys (e.g., ticker symbols: map . ↔︎ - if needed).\n\nProvenance\n\nSave source_url, fetched_at, and a checksum alongside the CSV.",
-    "crumbs": [
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Session 12 — HTML Scraping: Ethics & Resilience</span>"
-    ]
-  },
-  {
-    "objectID": "lec12.html#key-points",
-    "href": "lec12.html#key-points",
-    "title": "12  Session 12 — HTML Scraping: Ethics & Resilience",
-    "section": "12.6 Key points",
-    "text": "12.6 Key points\n\nIf Wikipedia blocks requests, switch to pandas.read_html (shown) or use a small pre‑saved HTML in data/static/ to demonstrate parsing.\n\nThe sessions 10-12 carry you from solid feature engineering → external data integration → web scraping with ethics, setting up a strong foundation for the testing/CI weeks that follow.",
-    "crumbs": [
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Session 12 — HTML Scraping: Ethics & Resilience</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#slides",
-    "href": "lec13.html#slides",
-    "title": "13  Session 13: pytest + Data Validation",
-    "section": "13.3 Slides",
-    "text": "13.3 Slides\n\n13.3.1 What to test (fast, crisp)\n\nContract tests for data:\n\nSchema: required columns exist; dtypes sane (ticker categorical, calendar ints).\nNulls: no NAs in training‑critical cols.\nSemantics: r_1d is lead of log_return; rolling features computed from past only.\nKeys: no duplicate (ticker, date); dates strictly increasing within ticker.\n\nKeep tests under ~5s total (CI budget). Avoid long recomputations; sample/take head.\n\n\n\n13.3.2 Pandera vs custom checks\n\nPandera: declarative schema; optional dependency; good for column existence + ranges.\nCustom: essential for domain logic (look‑ahead bans, exact rolling formulas).\n\n\n\n13.3.3 Logging basics\n\nUse logging.getLogger(__name__); set level via env (LOGLEVEL=INFO).\nLog counts, ranges, and any data drops inside build scripts.\nIn tests: use caplog to assert a warning is emitted for suspicious conditions.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#key-points",
-    "href": "lec13.html#key-points",
-    "title": "13  Session 13: pytest + Data Validation",
-    "section": "13.6 Key points:",
-    "text": "13.6 Key points:\n\nFast tests only for CI; keep heavy, long recomputations out.\nNo look‑ahead and unique (ticker,date) are non‑negotiable contracts.\nLogging is a first‑class tool—tests can assert on warnings you emit.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#session-13-pytest-data-validation",
-    "href": "lec13.html#session-13-pytest-data-validation",
-    "title": "13  Session 13: pytest + Data Validation",
-    "section": "",
-    "text": "13.1.1 Learning goals\nBy the end of class, students can:\n\nWrite fast, high‑signal tests for data pipelines (shapes, dtypes, nulls, no look‑ahead).\nValidate a DataFrame with Pandera (schema + value checks) or custom checks only.\nUse logging effectively and capture logs in tests.\nRun tests in Colab / locally and prepare for CI in Session 14.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
-    ]
-  },
-  {
-    "objectID": "lec13.html#agenda",
-    "href": "lec13.html#agenda",
-    "title": "13  Session 13: pytest + Data Validation",
-    "section": "13.2 Agenda",
-    "text": "13.2 Agenda\n\nWhat to test (and not), “data tests” vs unit tests, speed budget\nPandera schemas & custom checks; tolerance and stability\nLogging basics (logging, levels, handlers); testing logs with caplog\nIn‑class lab: add tests/test_features.py (+ optional Pandera test), fixtures, config; run & fix\nWrap‑up + homework briefing\n\n\n\n13.2.1 What to test (fast, crisp)\n\nContract tests for data:\n\nSchema: required columns exist; dtypes sane (ticker categorical, calendar ints).\nNulls: no NAs in training‑critical cols.\nSemantics: r_1d is lead of log_return; rolling features computed from past only.\nKeys: no duplicate (ticker, date); dates strictly increasing within ticker.\n\nKeep tests under ~5s total (CI budget). Avoid long recomputations; sample/take head.\n\n\n\n13.2.2 Pandera vs custom checks\n\nPandera: declarative schema; optional dependency; good for column existence + ranges.\nCustom: essential for domain logic (look‑ahead bans, exact rolling formulas).\n\n\n\n13.2.3 Logging basics\n\nUse logging.getLogger(__name__); set level via env (LOGLEVEL=INFO).\nLog counts, ranges, and any data drops inside build scripts.\nIn tests: use caplog to assert a warning is emitted for suspicious conditions.",
-    "crumbs": [
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Session 13: pytest + Data Validation</span>"
-    ]
-  },
-  {
-    "objectID": "lec14.html#session-14-precommit-github-actions-ci",
-    "href": "lec14.html#session-14-precommit-github-actions-ci",
-    "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "",
-    "text": "14.1.1 Learning goals\nStudents will be able to:\n\nConfigure pre‑commit to run Black, Ruff (lint + import sort), and nbstripout on every commit.\nKeep commits clean and notebook outputs stripped.\nAdd a fast GitHub Actions CI workflow that runs pre‑commit hooks and pytest on each PR (Pull Request).\nKeep CI runtime under ~3–4 minutes with caching and a lean dependency set.",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
-    ]
-  },
-  {
-    "objectID": "lec14.html#agenda",
-    "href": "lec14.html#agenda",
-    "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.2 Agenda",
-    "text": "14.2 Agenda\n\nwhy pre‑commit; the “quality gate”; anatomy of a fast CI\nBlack vs Ruff; when nbstripout matters; what belongs in CI\nIn‑class lab: configure pre‑commit (Black, Ruff, nbstripout) → run locally → add CI workflow → local dry‑run\nWrap‑up + homework briefing\nBuffer",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
-    ]
-  },
-  {
-    "objectID": "lec14.html#inclass-lab-colabfriendly",
-    "href": "lec14.html#inclass-lab-colabfriendly",
-    "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.4 In‑class lab (Colab‑friendly)",
-    "text": "14.4 In‑class lab (Colab‑friendly)\n\nRun each block as its own Colab cell. Update REPO_NAME to your repo. The cells create and modify files inside your repo.\n\n\n14.4.1 0) Mount Drive & go to repo\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\".github/workflows\",\"tests\",\"scripts\",\"reports\"]:\n    pathlib.Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n\n14.4.2 1) Install tools locally (for this Colab runtime)\n!pip -q install pre-commit black ruff nbstripout pytest\n\n\n14.4.3 2) Add tool config to pyproject.toml (Black + Ruff)\n\nIf you don’t have a pyproject.toml, this cell will create a minimal one; otherwise it appends/updates sections.\n\nfrom pathlib import Path\nimport textwrap, re\n\npyproj = Path(\"pyproject.toml\")\nexisting = pyproj.read_text() if pyproj.exists() else \"\"\n\ndef upsert(section_header, body):\n    global existing\n    pattern = rf\"(?ms)^\\[{re.escape(section_header)}\\]\\s*.*?(?=^\\[|\\Z)\"\n    if re.search(pattern, existing):\n        existing = re.sub(pattern, f\"[{section_header}]\\n{body}\\n\", existing)\n    else:\n        existing += f\"\\n[{section_header}]\\n{body}\\n\"\n\n# Black\nupsert(\"tool.black\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = [\"py311\"]\n\"\"\").strip())\n\n# Ruff (modern layout)\nupsert(\"tool.ruff\", textwrap.dedent(\"\"\"\nline-length = 88\ntarget-version = \"py311\"\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint\", textwrap.dedent(\"\"\"\nselect = [\"E\",\"F\",\"I\"]  # flake8 errors, pyflakes, import sort\nignore = [\"E501\"]       # let Black handle line length\n\"\"\").strip())\n\nupsert(\"tool.ruff.lint.isort\", textwrap.dedent(\"\"\"\nknown-first-party = [\"projectname\"]\n\"\"\").strip())\n\npyproj.write_text(existing.strip()+\"\\n\")\nprint(pyproj.read_text())\n\n\n14.4.4 3) Create .pre-commit-config.yaml with hooks (Black, Ruff, nbstripout)\n\nVersions below are stable at time of writing—feel free to bump later.\n\nfrom pathlib import Path\ncfg = Path(\".pre-commit-config.yaml\")\ncfg.write_text(\"\"\"repos:\n  - repo: https://github.com/psf/black\n    rev: 24.4.2\n    hooks:\n      - id: black\n        language_version: python3.12  #match the python version of your system or leave it blank\n\n  - repo: https://github.com/astral-sh/ruff-pre-commit\n    rev: v0.5.0\n    hooks:\n      - id: ruff\n        args: [--fix, --exit-non-zero-on-fix]\n      - id: ruff-format\n\n  - repo: https://github.com/kynan/nbstripout\n    rev: 0.7.1\n    hooks:\n      - id: nbstripout\n        files: \\\\.ipynb$\n\n  - repo: https://github.com/pre-commit/pre-commit-hooks\n    rev: v4.6.0\n    hooks:\n      - id: end-of-file-fixer\n      - id: trailing-whitespace\n      - id: check-yaml\n      - id: check-added-large-files\n\"\"\")\nprint(cfg.read_text())\n\n\n14.4.5 4) Install the local git hook & run on all files\n!pre-commit install\n!pre-commit run --all-files\n\nThe first run will download hook toolchains (Black, Ruff, etc.), format files, and strip notebook outputs. Commit changes after verifying.\n\n\n\n14.4.6 5) (Optional) Also install git filter for nbstripout\n\nThis is an extra layer; pre‑commit hook above already strips outputs. Use this to guarantee outputs are removed even when bypassing pre‑commit.\n\n!nbstripout --install --attributes .gitattributes\nprint(open(\".gitattributes\").read())\n\n\n14.4.7 6) Add a tiny “bad style” file to see hooks in action\nfrom pathlib import Path\np = Path(\"scripts/bad_style.py\")\np.write_text(\"import os,sys\\n\\n\\ndef add(a,b):\\n  return(a +  b)\\n\")\nprint(\"Wrote:\", p)\n\n# Run hooks just on this file\n!pre-commit run --files scripts/bad_style.py\nprint(open(\"scripts/bad_style.py\").read())\n\nYou should see Black and Ruff fix spacing/imports; trailing whitespace hooks may also fire.\n\n\n\n14.4.8 7) Add a fast GitHub Actions CI workflow (.github/workflows/ci.yml)\n\nThis runs pre‑commit and your tests on Ubuntu with Python 3.11, with pip caching.\n\nfrom pathlib import Path\nwf_dir = Path(\".github/workflows\")\nwf_dir.mkdir(parents=True, exist_ok=True)\n\nwf = wf_dir / \"ci.yml\"\nwf.write_text(\"\"\"name: CI\non:\n  push:\n    branches: [ main, master, develop ]\n  pull_request:\n    branches: [ main, master, develop ]\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\njobs:\n  build:\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - uses: actions/checkout@v4\n\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n          cache: 'pip'\n          cache-dependency-path: |\n            requirements.txt\n            pyproject.toml\n\n      - name: Install dependencies\n        run: |\n          python -m pip install --upgrade pip\n          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi\n          pip install pre-commit pytest\n\n      # Run pre-commit (Black, Ruff, nbstripout, etc.)\n      - name: pre-commit\n        uses: pre-commit/action@v3.0.1\n\n      # Run tests (fast only)\n      - name: pytest\n        run: pytest -q --maxfail=1\n\"\"\")\nprint(wf.read_text())\n\n\n14.4.9 8) Add a Makefile convenience (optional but nice)\nfrom pathlib import Path\nmk = Path(\"Makefile\")\ntext = mk.read_text() if mk.exists() else \"\"\nif \"lint\" not in text:\n    text += \"\"\"\n\n.PHONY: lint test ci-local\nlint: ## Run pre-commit hooks on all files\n\\tpre-commit run --all-files\n\ntest: ## Run fast tests\n\\tpytest -q --maxfail=1\n\nci-local: lint test ## Simulate CI locally\n\"\"\"\n    mk.write_text(text)\nprint(mk.read_text())",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
-    ]
-  },
-  {
-    "objectID": "lec14.html#wrapup",
-    "href": "lec14.html#wrapup",
-    "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.5 Wrap‑up",
-    "text": "14.5 Wrap‑up\n\nYou configured pre‑commit with Black, Ruff (lint + import sort), and nbstripout to keep the repo clean.\nYou added a fast CI that runs the same hooks plus pytest on every PR.\nCI time stays small due to caching and a lean dependency set; tests are fast by design (Session 13).",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
-    ]
-  },
-  {
-    "objectID": "lec14.html#key-points",
-    "href": "lec14.html#key-points",
-    "title": "14  pre‑commit & GitHub Actions CI",
-    "section": "14.8 Key points:",
-    "text": "14.8 Key points:\n\nIf pre‑commit says “no files to check” for nbstripout, ensure your file matcher files: \\.ipynb$ is correct and that notebooks are tracked.\nIf Ruff conflicts with Black on formatting: keep Black as the authority, disable E501 in Ruff, and let Ruff handle imports (I) and errors (E, F).\nCI failures from missing deps: ensure your requirements.txt (or pyproject.toml with [project.dependencies]) includes pandas, pyarrow, and pytest if your tests read Parquet.\nKeep CI lean: no data downloads or training; use fixtures and tiny synthetic datasets (Session 13 pattern).\n\nYou now have an automated quality gate—style, lint, and tests run locally and in CI—so your future PRs start green and stay green.",
-    "crumbs": [
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>pre‑commit & GitHub Actions CI</span>"
-    ]
-  },
-  {
-    "objectID": "lec10.html#agenda",
-    "href": "lec10.html#agenda",
-    "title": "10  Rolling Windows, Resampling, and Leakage‑Safe Features",
-    "section": "11.1 Agenda",
-    "text": "11.1 Agenda\n\nleakage‑free features; lags vs rolling; resampling patterns\ncommon pitfalls (min_periods, alignment, mixed frequencies)\nIn‑class lab: load returns → build features → (optional) weekly aggregates → write features_v1.parquet\nWrap‑up + homework brief\nBuffer\n\n\nFeature timing = everything\n\nPredict \\(r_{t+1}\\) using info up to and including time t.\nRule: compute any rolling stat at \\(t\\) from data \\(\\le t\\), then shift by 1 if that stat includes the current target variable.\n\nCore pandas patterns\n\nLags: s.shift(k) (past), never negative shifts.\nRolling: s.rolling(W, min_periods=W).agg(...) and then no extra shift if the rolling window ends at \\(t\\).\nExpanding: long‑memory features (e.g., expanding mean).\nEWM: s.ewm(span=W, adjust=False).mean() for decayed memory.\n\nResampling safely\n\nUse groupby('ticker').resample('W-FRI', on='date') then aggregate:\n\nOHLC: first/open, max/high, min/low, last/adj_close\nVolume: sum\nReturns: compound via np.log(prod(1+r)) or sum of log returns.\n\n\nDtypes\n\nticker = category; calendar ints int8; features float32 (fine for class).",
-    "crumbs": [
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Rolling Windows, Resampling, and Leakage‑Safe Features</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#session-15-framing-metrics",
-    "href": "lec15.html#session-15-framing-metrics",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "",
-    "text": "15.1.1 Learning goals\nBy the end of class, students can:\n\nSpecify forecast horizon \\(H\\), step (stride), and choose between expanding vs sliding rolling‑origin evaluation with an embargo gap.\nImplement a date‑based splitter that yields (train_idx, val_idx) for all tickers at once.\nCompute MAE, sMAPE, MASE (with a proper training‑window scale), and aggregate per‑ticker and across tickers (macro vs micro/weighted).\nProduce a tidy CSV of baseline results to serve as your course’s ground truth.",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#agenda",
-    "href": "lec15.html#agenda",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.2 Agenda",
-    "text": "15.2 Agenda\n\nforecasting setup — horizon \\(H\\), step, rolling‑origin (expanding vs sliding), embargo\nmetrics — MAE, sMAPE, MASE; aggregation across tickers (macro vs micro/weighted)\nIn‑class lab: implement a date‑based splitter → compute naive & seasonal‑naive baselines → MAE/sMAPE/MASE per split/ticker → save reports\nWrap‑up & homework brief\nBuffer\n\n\n\n15.2.1 Framing the forecast\n\nTarget: next‑day log return \\(r_{t+1}\\) (you built this as r_1d).\nHorizon \\(H\\): 1 business day.\nStep (stride): how far the origin moves forward each split (e.g., 63 trading days ≈ a quarter).\nRolling‑origin schemes\n\nExpanding: train start fixed; train grows over time.\nSliding (rolling): fixed‑length train window slides forward.\n\nEmbargo: small gap (e.g., 5 days) between train end and validation start to avoid adjacency leakage.\n\n\n\n15.2.2 Metrics (scalar, easy to compare)\n\nMAE: \\(\\frac{1}{n}\\sum |y - \\hat{y}|\\) — robust & interpretable.\nsMAPE: \\(\\frac{2}{n}\\sum \\frac{|y - \\hat{y}|}{(|y| + |\\hat{y}| + \\epsilon)}\\) — scale‑free, safe for near‑zero returns with \\(\\epsilon\\).\nMASE: \\(\\text{MASE}=\\frac{\\text{MAE}_\\text{model}}{\\text{MAE}_\\text{naive (train)}}\\) — &lt;1 means better than naive.\n\nFor seasonality \\(s\\), the naive comparator predicts \\(y_{t+1} \\approx y_{t+1-s}\\) (we’ll use \\(s=5\\) for day‑of‑week seasonality on business days).\nScale is computed on the training window only, per ticker.\n\n\n\n\n15.2.3 Aggregation across tickers\n\nPer‑ticker metrics first → then aggregate.\nMacro average: mean of per‑ticker metrics (each ticker equal weight).\nMicro/weighted: pool all rows (or weight tickers by sample count); for MAE, pooled MAE equals sample‑count weighted average of per‑ticker MAEs.",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#wrapup",
-    "href": "lec15.html#wrapup",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.4 Wrap‑up",
-    "text": "15.4 Wrap‑up\n\nYou now have a date‑based rolling‑origin splitter with an embargo, and baseline metrics that set a credible reference.\nMASE uses a training‑window naive as scale (per ticker), so you can read “&lt;1 is better than naive” at a glance.\nAggregation: report both macro (per‑ticker average) and micro/weighted (pooled).",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec15.html#key-points",
-    "href": "lec15.html#key-points",
-    "title": "15  Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)",
-    "section": "15.6 Key points",
-    "text": "15.6 Key points\n\nDefine the problem first (H, step, splits); metrics only make sense after framing.\nMASE &lt; 1 ⇒ better than naïve; report both macro & micro.\nEmbargo helps mitigate adjacency leakage; keep it small but nonzero.",
-    "crumbs": [
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Session 15 — Framing & Metrics (Rolling‑Origin Evaluation)</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#session-16-classical-baselines",
-    "href": "lec16.html#session-16-classical-baselines",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "",
-    "text": "16.1.1 Learning goals\nBy the end of class, students can:\n\nFit a per‑ticker lags‑only linear regressor to predict next‑day log return \\(r_{t+1}\\).\nEvaluate models with MAE, sMAPE, MASE using the rolling‑origin splits (with embargo) from Session 15.\nLog results in a consistent table schema for per‑ticker and split‑level summaries.\nUnderstand ARIMA at a glance and its common pitfalls (optional demo).",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#agenda",
-    "href": "lec16.html#agenda",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.2 Agenda",
-    "text": "16.2 Agenda\n\nwhere classical models fit; pitfalls with ARIMA; cross‑sectional regressors\nresults table schema & comparison to baselines\nIn‑class lab: train per‑ticker Linear (lags‑only) → evaluate across 2 splits → compare to naive/seasonal‑naive → log CSVs\nWrap‑up + homework brief\n\n\n\n16.2.1 Why “classical” now?\n\nCreates a credible, strong baseline against naive that’s still transparent.\nSupports fast iteration and helps you debug feature definitions before deep models.\n\n\n\n16.2.2 Lags‑only linear regressor\n\nFeatures at time \\(t\\): lag1, lag2, lag3 (i.e., past returns), optionally a few stable stats (roll_std_20, zscore_20).\nTarget: r_1d (next‑day log return).\nFit per ticker to avoid cross‑sectional leakage for now.\n\n\n\n16.2.3 ARIMA 60‑second pitfall tour\n\nStationarity: fit on returns, not prices (unless differencing).\nEvaluation: re‑fit only on train; generate one‑step‑ahead forecasts on val, updating state without peeking.\nOver‑differencing & mis‑specified seasonal terms → bad bias.\nComputational cost grows with grid search; keep demo tiny.\n\n\n\n16.2.4 Results table schema (consistent across sessions)\n\nPer‑split summary: split, train_range, val_range, model, macro_mae, macro_smape, macro_mase, micro_mae, micro_smape, micro_mase\nPer‑ticker metrics: split, ticker, n, model, mae, smape, mase",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#wrapup",
-    "href": "lec16.html#wrapup",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.4 Wrap‑up",
-    "text": "16.4 Wrap‑up\n\nYou trained a per‑ticker lags‑only linear model and compared it fairly to naive and seasonal‑naive using the same splits and MASE scale (from the train window).\nYou logged results in a stable schema that you’ll reuse for future models (LSTM / Transformer).\nARIMA can be illustrative but is often fragile + slower; treat it as optional for your project scale.",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#key-points",
-    "href": "lec16.html#key-points",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.6 Key Points",
-    "text": "16.6 Key Points\n\nKeep splits identical across models for fair comparison.\nMASE &lt; 1 ⇒ your model beats naive on train‑scale; report macro & micro.\nLinear lags are a transparent baseline—use them to validate your entire pipeline.",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec16.html#inclass-lab-colabfriendly",
-    "href": "lec16.html#inclass-lab-colabfriendly",
-    "title": "16  Session 16 — Classical Baselines",
-    "section": "16.3 In‑class lab (Colab‑friendly)",
-    "text": "16.3 In‑class lab (Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME if needed.\n\n\n16.3.1 0) Setup & data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"  # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"reports\",\"models\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns; if missing, synthesize\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\"]:\n        eps = rng.normal(0,0.012, size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or derive minimal lags from returns if missing\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath)\nelse:\n    # Minimal lags derived just from returns\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats = feats.dropna(subset=[\"lag1\",\"lag2\",\"lag3\",\"r_1d\"]).reset_index(drop=True)\n\n# Harmonize\nfeats[\"date\"] = pd.to_datetime(feats[\"date\"])\nfeats[\"ticker\"] = feats[\"ticker\"].astype(\"category\")\nfeats = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats.head()\n\n\n16.3.2 1) Rolling‑origin date splits (reuse Session 15 logic)\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    splits=[]; i = train_min-1; n=len(u)\n    while True:\n        if i&gt;=n: break\n        a,b = u[0], u[i]; vs=i+embargo+1; ve=vs+val_size-1\n        if ve&gt;=n: break\n        splits.append((a,b,u[vs],u[ve])); i+=step\n    return splits\n\nsplits = make_rolling_origin_splits(feats[\"date\"], 252, 63, 63, 5)\nlen(splits), splits[:2]\n\n\n16.3.3 2) Metrics & baselines (from Session 15)\ndef mae(y, yhat): \n    y = np.asarray(y); yhat = np.asarray(yhat); \n    return float(np.mean(np.abs(y - yhat)))\n\ndef smape(y, yhat, eps=1e-8):\n    y = np.asarray(y); yhat = np.asarray(yhat)\n    return float(np.mean(2.0*np.abs(y - yhat)/(np.abs(y)+np.abs(yhat)+eps)))\n\ndef mase(y_true, y_pred, y_train_true, y_train_naive):\n    scale = mae(y_train_true, y_train_naive) + 1e-12\n    return float(mae(y_true, y_pred)/scale)\n\ndef add_baseline_preds(df: pd.DataFrame, seasonality:int=5) -&gt; pd.DataFrame:\n    out = df.copy()\n    out[\"yhat_naive\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s)\n    out[\"yhat_s\"] = out.groupby(\"ticker\")[\"log_return\"].transform(lambda s: s.shift(seasonality-1)) if seasonality&gt;1 else out[\"yhat_naive\"]\n    return out\n\n\n16.3.4 3) Per‑ticker lags‑only LinearRegression (fit only on each split’s TRAIN)\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.pipeline import Pipeline\n\n# Choose features (lags only for in-class lab)\nXCOLS = [c for c in [\"lag1\",\"lag2\",\"lag3\"] if c in feats.columns]\nassert XCOLS, \"No lag features found. Ensure features_v1 or fallback creation ran.\"\n\ndef fit_predict_lin_lags(train_df, val_df):\n    \"\"\"Fit per-ticker pipeline(StandardScaler, LinearRegression) on TRAIN; predict on VAL.\"\"\"\n    preds=[]\n    for tkr, tr in train_df.groupby(\"ticker\"):\n        va = val_df[val_df[\"ticker\"]==tkr]\n        if len(tr)==0 or len(va)==0: \n            continue\n        pipe = Pipeline([(\"scaler\", StandardScaler(with_mean=True, with_std=True)),\n                         (\"lr\", LinearRegression())])\n        pipe.fit(tr[XCOLS].values, tr[\"r_1d\"].values)\n        yhat = pipe.predict(va[XCOLS].values)\n        out = va[[\"date\",\"ticker\",\"r_1d\",\"log_return\"]].copy()\n        out[\"yhat_linlags\"] = yhat.astype(\"float32\")\n        preds.append(out)\n    return pd.concat(preds, ignore_index=True) if preds else pd.DataFrame(columns=[\"date\",\"ticker\",\"r_1d\",\"log_return\",\"yhat_linlags\"])\n\n\n16.3.5 4) Evaluate across the first 2 splits; compare to naive/seasonal‑naive\nseasonality = 5\nfeats_baseline = add_baseline_preds(feats, seasonality=seasonality)\n\ndef per_ticker_metrics(df_val_pred, df_train, method_col):\n    rows=[]\n    for tkr, gv in df_val_pred.groupby(\"ticker\"):\n        if method_col not in gv: \n            continue\n        gv = gv.dropna(subset=[\"r_1d\", method_col])\n        if len(gv)==0: \n            continue\n        # TRAIN scale for MASE\n        gt = df_train[df_train[\"ticker\"]==tkr].dropna(subset=[\"r_1d\"])\n        gt_naive = gt[\"log_return\"] if \"yhat_s\" not in method_col else gt[\"log_return\"].shift(seasonality-1)\n        gt_naive = gt_naive.loc[gt.index]\n        rows.append({\n            \"ticker\": tkr,\n            \"n\": int(len(gv)),\n            \"mae\": mae(gv[\"r_1d\"], gv[method_col]),\n            \"smape\": smape(gv[\"r_1d\"], gv[method_col]),\n            \"mase\": mase(gv[\"r_1d\"], gv[method_col], gt[\"r_1d\"], gt_naive),\n        })\n    return pd.DataFrame(rows)\n\ndef summarize_split(feats_frame, sid, split, save_prefix=\"linlags\"):\n    a,b,c,d = split\n    tr = feats_frame[(feats_frame[\"date\"]&gt;=a)&(feats_frame[\"date\"]&lt;=b)].copy()\n    va = feats_frame[(feats_frame[\"date\"]&gt;=c)&(feats_frame[\"date\"]&lt;=d)].copy()\n    # Predictions\n    val_pred = fit_predict_lin_lags(tr, va)\n    # Attach baseline preds on val slice\n    va_base = add_baseline_preds(va, seasonality=seasonality)\n    val_pred = val_pred.merge(va_base[[\"date\",\"ticker\",\"yhat_naive\",\"yhat_s\"]], on=[\"date\",\"ticker\"], how=\"left\")\n\n    # Per-ticker metrics\n    pt_lin = per_ticker_metrics(val_pred, tr, \"yhat_linlags\"); pt_lin[\"model\"] = \"lin_lags\"\n    \n    pt_nav = per_ticker_metrics(val_pred, tr, \"yhat_naive\");    pt_nav[\"model\"] = \"naive\"\n    pt_sea = per_ticker_metrics(val_pred, tr, \"yhat_s\");        pt_sea[\"model\"] = f\"s{seasonality}\"\n\n    # Save per-ticker\n    out_pt = pd.concat([pt_lin.assign(split=sid), pt_nav.assign(split=sid), pt_sea.assign(split=sid)], ignore_index=True)\n    out_pt.to_csv(f\"reports/{save_prefix}_per_ticker_split{sid}.csv\", index=False)\n\n    # Aggregate\n    def agg(df):\n        if df.empty: \n            return {\"macro_mae\":np.nan,\"macro_smape\":np.nan,\"macro_mase\":np.nan,\"micro_mae\":np.nan,\"micro_smape\":np.nan,\"micro_mase\":np.nan}\n        macro = df[[\"mae\",\"smape\",\"mase\"]].mean().to_dict()\n        w = df[\"n\"].to_numpy()\n        micro = {\"micro_mae\": float(np.average(df[\"mae\"], weights=w)),\n                 \"micro_smape\": float(np.average(df[\"smape\"], weights=w)),\n                 \"micro_mase\": float(np.average(df[\"mase\"], weights=w))}\n        return {f\"macro_{k}\":float(v) for k,v in macro.items()} | micro\n\n    rows=[]\n    for name, pt in [(\"lin_lags\", pt_lin), (\"naive\", pt_nav), (f\"s{seasonality}\", pt_sea)]:\n        rows.append({\"split\":sid, \"train_range\": f\"{a.date()}→{b.date()}\",\n                     \"val_range\": f\"{c.date()}→{d.date()}\",\n                     \"model\":name, **agg(pt)})\n    return pd.DataFrame(rows)\n\n# Run on first 2 splits in class\nsummary_frames=[]\nfor sid, split in enumerate(splits[:2], start=1):\n    sf = summarize_split(feats_baseline, sid, split, save_prefix=\"linlags\")\n    summary_frames.append(sf)\n\nsummary = pd.concat(summary_frames, ignore_index=True)\nsummary.to_csv(\"reports/linlags_summary_splits12.csv\", index=False)\nsummary\n\n\n16.3.6 5) (Optional) Tiny ARIMA demo on one ticker for the first split\n# Optional: quick ARIMA(1,0,0) demo predicting r_{t+1} on val for a single ticker\ntry:\n    from statsmodels.tsa.arima.model import ARIMA\n    import warnings; warnings.filterwarnings(\"ignore\")\n    a,b,c,d = splits[0]\n    tkr = feats[\"ticker\"].cat.categories[0]\n    tr = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=a) & (feats[\"date\"]&lt;=b)]\n    va = feats[(feats[\"ticker\"]==tkr) & (feats[\"date\"]&gt;=c) & (feats[\"date\"]&lt;=d)]\n    # Fit on TRAIN returns only (endog = log_return). Predict one-step ahead for VAL dates.\n    model = ARIMA(tr[\"log_return\"].to_numpy(), order=(1,0,0))\n    res = model.fit()\n    # Forecast length = len(va), one-step-ahead with dynamic=False updates internally\n    # (For strict no-peek rolling one-step, loop and append val true values; here we keep demo simple.)\n    fc = res.forecast(steps=len(va))\n    arima_mae = mae(va[\"r_1d\"], fc)  # compare against next-day return\n    float(arima_mae)\nexcept Exception as e:\n    print(\"ARIMA demo skipped:\", e)\n\n⚠️ ARIMA is optional and slow on large loops. If you try it per ticker/per split, keep the dataset tiny.",
-    "crumbs": [
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Session 16 — Classical Baselines</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#session-17-feature-timing-biases-leakage",
-    "href": "lec17.html#session-17-feature-timing-biases-leakage",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "",
-    "text": "17.1.1 Learning goals\nBy the end of class, students can:\n\nExplain and avoid look‑ahead and survivorship biases.\nFreeze and use a static ticker universe chosen from the train window (not the whole history).\nDefine labels correctly (e.g., t+1 and t+5) and verify them with tests.\nAdd leakage tests that recompute trusted features and fail on any future‑peek.",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#agenda",
-    "href": "lec17.html#agenda",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.2 Agenda",
-    "text": "17.2 Agenda\n\nwhat leakage looks like; examples; how it sneaks in\nsurvivorship bias (today’s constituents ≠ past reality); freezing a universe\nlabel definitions (t+1, multi‑step) and alignment rules\nIn‑class lab:\n\nFreeze a static universe from the first split’s train window\nAdd leakage tests that recompute known‑good features\nAdd multi‑step labels (e.g., t+5) with tests\n\n(10 min) Wrap‑up & homework brief\n\n\n\n17.2.1 What is data leakage?\n\nLook‑ahead leakage: using any info from t+1 or later to compute features at t or to scale/normalize train and validation together.\nCommon culprits: shift(-1) in features, global scaling fit on full data, forward‑fill across split boundaries, using today’s close to predict today’s close.\n\n\n\n17.2.2 Survivorship bias\n\nUsing today’s index membership to pick tickers for the past ⇒ drops delisted/removed names ⇒ optimistically biased results.\nCure: freeze a static universe from the training window (e.g., all tickers with ≥ 252 observations by the end of the first train window). Save it and filter by it for all future experiments.\n\n\n\n17.2.3 Label definitions (be explicit)\n\nt+1 log return: r_1d = log_return.shift(-1) per ticker (your Session‑9 label).\nt+5 log return (multi‑step): r_5d = log_return.shift(-1) + … + log_return.shift(-5) per ticker.\nRules: labels come from future; features come from ≤ t. Splits with embargo reduce adjacency leakage.",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#inclass-lab-colabfriendly",
-    "href": "lec17.html#inclass-lab-colabfriendly",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.3 In‑class lab (Colab‑friendly)",
-    "text": "17.3 In‑class lab (Colab‑friendly)\n\nRun each block as its own cell. Update REPO_NAME as needed.\n\n\n17.3.1 0) Setup & load data (with fallbacks)\nfrom google.colab import drive\ndrive.mount('/content/drive', force_remount=True)\n\nREPO_NAME  = \"unified-stocks-teamX\"   # &lt;- change if needed\nBASE_DIR   = \"/content/drive/MyDrive/dspt25\"\nREPO_DIR   = f\"{BASE_DIR}/{REPO_NAME}\"\n\nimport os, pathlib, numpy as np, pandas as pd\nfrom pathlib import Path\npathlib.Path(REPO_DIR).mkdir(parents=True, exist_ok=True)\nos.chdir(REPO_DIR)\nfor p in [\"data/raw\",\"data/processed\",\"data/static\",\"reports\",\"scripts\",\"tests\"]:\n    Path(p).mkdir(parents=True, exist_ok=True)\nprint(\"Working dir:\", os.getcwd())\n\n# Load returns or synthesize a small fallback\nrpath = Path(\"data/processed/returns.parquet\")\nif rpath.exists():\n    returns = pd.read_parquet(rpath)\nelse:\n    rng = np.random.default_rng(0)\n    dates = pd.bdate_range(\"2022-01-03\", periods=360)\n    rows=[]\n    for t in [\"AAPL\",\"MSFT\",\"GOOGL\",\"AMZN\",\"NVDA\",\"TSLA\",\"META\",\"NFLX\"]:\n        eps = rng.normal(0,0.012,size=len(dates)).astype(\"float32\")\n        adj = 100*np.exp(np.cumsum(eps))\n        df = pd.DataFrame({\n            \"date\": dates, \"ticker\": t,\n            \"adj_close\": adj.astype(\"float32\"),\n            \"log_return\": np.r_[np.nan, np.diff(np.log(adj))].astype(\"float32\")\n        })\n        df[\"r_1d\"] = df[\"log_return\"].shift(-1)\n        df[\"weekday\"] = df[\"date\"].dt.weekday.astype(\"int8\")\n        df[\"month\"]   = df[\"date\"].dt.month.astype(\"int8\")\n        rows.append(df)\n    returns = pd.concat(rows, ignore_index=True).dropna().reset_index(drop=True)\n    returns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\n    returns.to_parquet(rpath, index=False)\n\n# Load features_v1 or construct minimal lags for tests\nfpath = Path(\"data/processed/features_v1.parquet\")\nif fpath.exists():\n    feats = pd.read_parquet(fpath).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nelse:\n    feats = returns.sort_values([\"ticker\",\"date\"]).copy()\n    for k in [1,2,3]:\n        feats[f\"lag{k}\"] = feats.groupby(\"ticker\")[\"log_return\"].shift(k)\n    feats[\"roll_mean_20\"] = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).mean().reset_index(level=0, drop=True)\n    feats[\"roll_std_20\"]  = feats.groupby(\"ticker\")[\"log_return\"].rolling(20, min_periods=20).std().reset_index(level=0, drop=True)\n    feats[\"zscore_20\"]    = (feats[\"log_return\"] - feats[\"roll_mean_20\"]) / (feats[\"roll_std_20\"] + 1e-8)\n    feats = feats.dropna().reset_index(drop=True)\n\n# Harmonize types\nreturns[\"date\"] = pd.to_datetime(returns[\"date\"])\nfeats[\"date\"]   = pd.to_datetime(feats[\"date\"])\nreturns[\"ticker\"] = returns[\"ticker\"].astype(\"category\")\nfeats[\"ticker\"]   = feats[\"ticker\"].astype(\"category\")\nreturns = returns.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nfeats   = feats.sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\nreturns.head(3), feats.head(3)\n\n\n17.3.2 1) Freeze a static universe from the first split’s train window\nimport numpy as np, pandas as pd\n\ndef make_rolling_origin_splits(dates, train_min=252, val_size=63, step=63, embargo=5):\n    u = np.array(sorted(pd.to_datetime(pd.Series(dates).unique())))\n    i = train_min - 1; splits=[]\n    while True:\n        if i &gt;= len(u): break\n        a,b = u[0], u[i]\n        vs = i + embargo + 1\n        ve = vs + val_size - 1\n        if ve &gt;= len(u): break\n        splits.append((a,b,u[vs],u[ve]))\n        i += step\n    return splits\n\nsplits = make_rolling_origin_splits(returns[\"date\"], train_min=252, val_size=63, step=63, embargo=5)\nassert len(splits) &gt;= 1, \"Not enough history for a first split.\"\na,b,c,d = splits[0]\nprint(\"First train window:\", a.date(), \"→\", b.date())\n\n# Eligible = tickers with at least train_min rows by train_end (b)\ntrain_slice = returns[(returns[\"date\"]&gt;=a) & (returns[\"date\"]&lt;=b)]\ncounts = train_slice.groupby(\"ticker\").size()\neligible = counts[counts &gt;= 252].index.sort_values()\nuniverse = pd.DataFrame({\"ticker\": eligible})\nuniv_name = f\"data/static/universe_{b.date()}.csv\"\nuniverse.to_csv(univ_name, index=False)\nprint(\"Saved static universe:\", univ_name, \"| tickers:\", len(universe))\nuniverse.head()\n\nFrom now on, filter your data to universe before modeling/evaluation.\n\n\n\n17.3.3 2) Apply the static universe to your features\nfeats_static = feats[feats[\"ticker\"].isin(set(universe[\"ticker\"]))].copy()\nfeats_static.to_parquet(\"data/processed/features_v1_static.parquet\", compression=\"zstd\", index=False)\nprint(\"Wrote data/processed/features_v1_static.parquet\", feats_static.shape)\n\n\n17.3.4 3) Add leakage tests that recompute trusted features & compare\nCreate a high‑value test file that fails if any feature depends on future rows.\n# tests/test_leakage_features.py\nfrom __future__ import annotations\nimport numpy as np, pandas as pd\nimport pytest\n\nSAFE_ROLL = 20\n\n@pytest.fixture(scope=\"session\")\ndef df():\n    import pandas as pd\n    import pathlib\n    p = pathlib.Path(\"data/processed/features_v1_static.parquet\")\n    if not p.exists():\n        p = pathlib.Path(\"data/processed/features_v1.parquet\")\n    df = pd.read_parquet(p).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    df[\"date\"] = pd.to_datetime(df[\"date\"])\n    return df\n\ndef test_label_definition_r1d(df):\n    for tkr, g in df.groupby(\"ticker\"):\n        assert g[\"r_1d\"].iloc[:-1].equals(g[\"log_return\"].iloc[1:]), f\"r_1d mismatch for {tkr}\"\n\ndef _recompute_safe(g: pd.DataFrame) -&gt; pd.DataFrame:\n    # Recompute causal features using only &lt;= t information\n    out = pd.DataFrame(index=g.index)\n    s = g[\"log_return\"]\n    out[\"lag1\"] = s.shift(1)\n    out[\"lag2\"] = s.shift(2)\n    out[\"lag3\"] = s.shift(3)\n    rm = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).mean()\n    rs = s.rolling(SAFE_ROLL, min_periods=SAFE_ROLL).std()\n    out[\"roll_mean_20\"] = rm\n    out[\"roll_std_20\"]  = rs\n    out[\"zscore_20\"]    = (s - rm) / (rs + 1e-8)\n    # EWM & expanding if present\n    out[\"exp_mean\"] = s.expanding(min_periods=SAFE_ROLL).mean()\n    out[\"exp_std\"]  = s.expanding(min_periods=SAFE_ROLL).std()\n    out[\"ewm_mean_20\"] = s.ewm(span=20, adjust=False).mean()\n    out[\"ewm_std_20\"]  = s.ewm(span=20, adjust=False).std()\n    # RSI(14) if adj_close present\n    if \"adj_close\" in g:\n        delta = g[\"adj_close\"].diff()\n        up = delta.clip(lower=0).ewm(alpha=1/14, adjust=False).mean()\n        dn = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False).mean()\n        rs = up / (dn + 1e-12)\n        out[\"rsi_14\"] = 100 - (100/(1+rs))\n    return out\n\n@pytest.mark.parametrize(\"col\", [\"lag1\",\"lag2\",\"lag3\",\"roll_mean_20\",\"roll_std_20\",\"zscore_20\",\"exp_mean\",\"exp_std\",\"ewm_mean_20\",\"ewm_std_20\",\"rsi_14\"])\ndef test_features_match_causal_recompute(df, col):\n    if col not in df.columns:\n        pytest.skip(f\"{col} not present\")\n    # Compare per ticker to avoid cross-group alignment issues\n    for tkr, g in df.groupby(\"ticker\", sort=False):\n        ref = _recompute_safe(g)\n        if col not in ref.columns: \n            continue\n        a = g[col].to_numpy()\n        b = ref[col].to_numpy()\n        # Allow NaNs at the start; compare where both finite\n        mask = np.isfinite(a) & np.isfinite(b)\n        if mask.sum() == 0: \n            continue\n        diff = np.nanmax(np.abs(a[mask] - b[mask]))\n        assert float(diff) &lt;= 1e-6, f\"{col} deviates from causal recompute for {tkr}: max |Δ|={diff}\"\n\ndef test_no_feature_equals_target(df):\n    y = df[\"r_1d\"].to_numpy()\n    for col in df.select_dtypes(include=[\"float32\",\"float64\"]).columns:\n        if col in {\"r_1d\",\"log_return\"}: \n            continue\n        x = df[col].to_numpy()\n        # Proportion of exact equality (within tiny tol) should not be high\n        eq = np.isfinite(x) & np.isfinite(y) & (np.abs(x - y) &lt; 1e-12)\n        assert eq.mean() &lt; 0.8, f\"Suspicious: feature {col} equals target too often\"\nRun tests now:\n!pytest -q tests/test_leakage_features.py\n\nIf a test fails, fix the pipeline, don’t weaken the test.\n\n\n\n17.3.5 4) Add multi‑step labels (e.g., t+5) and tests\n# scripts/make_multistep_labels.py\nfrom __future__ import annotations\nimport pandas as pd, numpy as np\nfrom pathlib import Path\n\ndef make_multistep(in_parquet=\"data/processed/returns.parquet\", horizons=(5,)):\n    df = pd.read_parquet(in_parquet).sort_values([\"ticker\",\"date\"]).reset_index(drop=True)\n    for H in horizons:\n        # r_Hd = sum of next H log returns: shift(-1) ... shift(-H)\n        s = df.groupby(\"ticker\")[\"log_return\"]\n        acc = None\n        for h in range(1, H+1):\n            sh = s.shift(-h)\n            acc = sh if acc is None else (acc + sh)\n        df[f\"r_{H}d\"] = acc\n    out = df\n    Path(\"data/processed\").mkdir(parents=True, exist_ok=True)\n    out.to_parquet(\"data/processed/returns_multistep.parquet\", compression=\"zstd\", index=False)\n    print(\"Wrote data/processed/returns_multistep.parquet\", out.shape)\n\nif __name__ == \"__main__\":\n    make_multistep()\nRun it:\n!python scripts/make_multistep_labels.py\nAdd a test for label correctness:\n# tests/test_labels_multistep.py\nimport pandas as pd, numpy as np\n\ndef test_r5d_definition():\n    df = pd.read_parquet(\"data/processed/returns_multistep.parquet\").sort_values([\"ticker\",\"date\"])\n    if \"r_5d\" not in df.columns:\n        return\n    for tkr, g in df.groupby(\"ticker\"):\n        lr = g[\"log_return\"]\n        r5 = sum(lr.shift(-h) for h in range(1,6))\n        diff = (g[\"r_5d\"] - r5).abs().max()\n        assert float(diff) &lt; 1e-10, f\"r_5d misdefined for {tkr} (max |Δ|={diff})\"\nRun:\n!pytest -q tests/test_labels_multistep.py",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#wrapup",
-    "href": "lec17.html#wrapup",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.4 Wrap‑up",
-    "text": "17.4 Wrap‑up\n\nStatic universe removes survivorship bias: pick tickers with adequate history by train end and stick to them.\nLabel definitions must be explicit and tested (t+1, t+5).\nLeakage tests recompute causal features and compare—if you accidentally used shift(-1) or cross‑split fills, tests fail.",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
-    ]
-  },
-  {
-    "objectID": "lec17.html#key-points",
-    "href": "lec17.html#key-points",
-    "title": "17  Session 17 — Feature Timing, Biases & Leakage",
-    "section": "17.6 Key points",
-    "text": "17.6 Key points\n\nDefine labels first, then prove features are causal (≤ t).\n\nFreezing the universe is small effort with big impact on credibility.\n\nTests are your guardrails—if they go red, don’t relax them; fix the pipeline.",
-    "crumbs": [
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Session 17 — Feature Timing, Biases & Leakage</span>"
     ]
   }
 ]
