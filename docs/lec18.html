@@ -370,8 +370,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#a.-script-scriptsregime_eval.py-run-across-all-splits" id="toc-a.-script-scriptsregime_eval.py-run-across-all-splits" class="nav-link" data-scroll-target="#a.-script-scriptsregime_eval.py-run-across-all-splits"><span class="header-section-number">18.5.1</span> A. Script: <code>scripts/regime_eval.py</code> — run across all splits</a></li>
   <li><a href="#b.-plot-summary-figures-for-your-report" id="toc-b.-plot-summary-figures-for-your-report" class="nav-link" data-scroll-target="#b.-plot-summary-figures-for-your-report"><span class="header-section-number">18.5.2</span> B. Plot summary figures for your report</a></li>
   <li><a href="#c.-add-to-quarto-report" id="toc-c.-add-to-quarto-report" class="nav-link" data-scroll-target="#c.-add-to-quarto-report"><span class="header-section-number">18.5.3</span> C. Add to Quarto report</a></li>
+  <li><a href="#d.-quick-test-to-protect-trainonly-thresholds" id="toc-d.-quick-test-to-protect-trainonly-thresholds" class="nav-link" data-scroll-target="#d.-quick-test-to-protect-trainonly-thresholds"><span class="header-section-number">18.5.4</span> D. Quick test to protect <strong>train‑only</strong> thresholds</a></li>
   </ul></li>
-  <li><a href="#keep-points" id="toc-keep-points" class="nav-link" data-scroll-target="#keep-points"><span class="header-section-number">18.6</span> Keep points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">18.6</span> Key points</a></li>
   <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">18.7</span> Grading (pass/revise)</a></li>
   </ul>
 </nav>
@@ -637,48 +638,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(mae(y_true,y_pred)<span class="op">/</span>scale)</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> per_regime_metrics(val_df, train_df, pred_col):</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> reg, g <span class="kw">in</span> val_df.groupby(<span class="st">"regime"</span>):</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> reg <span class="op">==</span> <span class="st">"unknown"</span> <span class="kw">or</span> <span class="bu">len</span>(g)<span class="op">==</span><span class="dv">0</span>: </span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># build per-ticker MASE scales from TRAIN</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> []</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, gv <span class="kw">in</span> g.groupby(<span class="st">"ticker"</span>):</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            gt <span class="op">=</span> train_df[train_df[<span class="st">"ticker"</span>]<span class="op">==</span>tkr].dropna(subset<span class="op">=</span>[<span class="st">"r_1d"</span>])</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(gt)<span class="op">==</span><span class="dv">0</span>: <span class="cf">continue</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> {</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                <span class="st">"ticker"</span>: tkr,</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                <span class="st">"n"</span>: <span class="bu">int</span>(gv[<span class="st">"r_1d"</span>].notna().<span class="bu">sum</span>()),</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mae"</span>: mae(gv[<span class="st">"r_1d"</span>], gv[pred_col]),</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                <span class="st">"smape"</span>: smape(gv[<span class="st">"r_1d"</span>], gv[pred_col]),</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mase"</span>: mase(gv[<span class="st">"r_1d"</span>], gv[pred_col], gt[<span class="st">"r_1d"</span>], gt[<span class="st">"log_return"</span>]),</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>                <span class="st">"regime"</span>: reg</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            per_t.append(m)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> pd.DataFrame(per_t)</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> per_t.empty: </span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># macro (mean of per-ticker)</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> per_t[[<span class="st">"mae"</span>,<span class="st">"smape"</span>,<span class="st">"mase"</span>]].mean().to_dict()</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># micro (weighted by n)</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> per_t[<span class="st">"n"</span>].to_numpy()</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        micro <span class="op">=</span> {</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>            <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mase"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"regime"</span>:reg, <span class="op">**</span>{<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>:<span class="bu">float</span>(v) <span class="cf">for</span> k,v <span class="kw">in</span> macro.items()}, <span class="op">**</span>micro})</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>met_naive <span class="op">=</span> per_regime_metrics(val, tr_lab2, <span class="st">"yhat_naive"</span>)</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>met_lin   <span class="op">=</span> per_regime_metrics(val.dropna(subset<span class="op">=</span>[<span class="st">"yhat_lin"</span>]), tr_lab2, <span class="st">"yhat_lin"</span>)</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NAIVE by regime:</span><span class="ch">\n</span><span class="st">"</span>, met_naive)</span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">LIN-LAGS by regime:</span><span class="ch">\n</span><span class="st">"</span>, met_lin)</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Save</span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>pd.concat([</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    met_naive.assign(model<span class="op">=</span><span class="st">"naive"</span>),</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    met_lin.assign(model<span class="op">=</span><span class="st">"lin_lags"</span>)</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>], ignore_index<span class="op">=</span><span class="va">True</span>).to_csv(<span class="st">"reports/regime_metrics_split1.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pre-group training by ticker once (faster)</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    train_by_ticker <span class="op">=</span> {</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        tkr: g.dropna(subset<span class="op">=</span>[<span class="st">"r_1d"</span>])</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, g <span class="kw">in</span> train_df.groupby(<span class="st">"ticker"</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> reg, g <span class="kw">in</span> val_df.groupby(<span class="st">"regime"</span>):</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> reg <span class="op">==</span> <span class="st">"unknown"</span> <span class="kw">or</span> <span class="bu">len</span>(g) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> []</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, gv <span class="kw">in</span> g.groupby(<span class="st">"ticker"</span>):</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>            gt <span class="op">=</span> train_by_ticker.get(tkr)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> gt <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> gt.empty:</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Align &amp; drop NaNs in y / yhat</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> gv[<span class="st">"r_1d"</span>]</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>            yhat <span class="op">=</span> gv[pred_col]</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> y.notna() <span class="op">&amp;</span> yhat.notna()</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> mask.<span class="bu">any</span>():</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> y[mask]</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>            yhat <span class="op">=</span> yhat[mask]</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>            <span class="co"># If mase needs clean scaling inputs, align/drop there too</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> {</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>                <span class="st">"ticker"</span>: tkr,</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>                <span class="st">"n"</span>: <span class="bu">int</span>(mask.<span class="bu">sum</span>()),</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mae"</span>: <span class="bu">float</span>(mae(y, yhat)),</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>                <span class="st">"smape"</span>: <span class="bu">float</span>(smape(y, yhat)),</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mase"</span>: <span class="bu">float</span>(mase(y, yhat, gt[<span class="st">"r_1d"</span>], gt[<span class="st">"log_return"</span>])),</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>                <span class="st">"regime"</span>: reg,</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>            per_t.append(m)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> pd.DataFrame(per_t)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> per_t.empty:</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> per_t[[<span class="st">"mae"</span>, <span class="st">"smape"</span>, <span class="st">"mase"</span>]].mean().to_dict()</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> per_t[<span class="st">"n"</span>].to_numpy()</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        wsum <span class="op">=</span> w.<span class="bu">sum</span>()</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> wsum <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>            <span class="co"># fall back to macro if no weights</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>            micro <span class="op">=</span> {</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mae"</span>: <span class="bu">float</span>(per_t[<span class="st">"mae"</span>].mean()),</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_smape"</span>: <span class="bu">float</span>(per_t[<span class="st">"smape"</span>].mean()),</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mase"</span>: <span class="bu">float</span>(per_t[<span class="st">"mase"</span>].mean()),</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>            micro <span class="op">=</span> {</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mase"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>        rows.append({</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>            <span class="st">"regime"</span>: reg,</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>{<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>: <span class="bu">float</span>(v) <span class="cf">for</span> k, v <span class="kw">in</span> macro.items()},</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>micro</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>met_naive <span class="op">=</span> per_regime_metrics(val, tr_lab2, <span class="st">"yhat_naive"</span>)</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>met_lin   <span class="op">=</span> per_regime_metrics(val.dropna(subset<span class="op">=</span>[<span class="st">"yhat_lin"</span>]), tr_lab2, <span class="st">"yhat_lin"</span>)</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NAIVE by regime:</span><span class="ch">\n</span><span class="st">"</span>, met_naive)</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">LIN-LAGS by regime:</span><span class="ch">\n</span><span class="st">"</span>, met_lin)</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Save</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>pd.concat([</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>    met_naive.assign(model<span class="op">=</span><span class="st">"naive"</span>),</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>    met_lin.assign(model<span class="op">=</span><span class="st">"lin_lags"</span>)</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>], ignore_index<span class="op">=</span><span class="va">True</span>).to_csv(<span class="st">"reports/regime_metrics_split1.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="calibration-plots-overall-and-by-regime-binned" class="level3" data-number="18.3.6">
 <h3 data-number="18.3.6" class="anchored" data-anchor-id="calibration-plots-overall-and-by-regime-binned"><span class="header-section-number">18.3.6</span> 5) <strong>Calibration plots</strong> overall and by regime (binned)</h3>
@@ -804,83 +841,130 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(mae(y_true, y_pred)<span class="op">/</span>(mae(y_train_true, y_train_naive)<span class="op">+</span><span class="fl">1e-12</span>))</span>
 <span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> per_regime_metrics(val_df, train_df, pred_col):</span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> reg, g <span class="kw">in</span> val_df.groupby(<span class="st">"regime"</span>):</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> reg<span class="op">==</span><span class="st">"unknown"</span> <span class="kw">or</span> <span class="bu">len</span>(g)<span class="op">==</span><span class="dv">0</span>: <span class="cf">continue</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>        per<span class="op">=</span>[]</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, gv <span class="kw">in</span> g.groupby(<span class="st">"ticker"</span>):</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>            gt <span class="op">=</span> train_df[train_df[<span class="st">"ticker"</span>]<span class="op">==</span>tkr].dropna(subset<span class="op">=</span>[<span class="st">"r_1d"</span>])</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(gt)<span class="op">==</span><span class="dv">0</span>: <span class="cf">continue</span></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>            per.append({<span class="st">"ticker"</span>:tkr,<span class="st">"n"</span>:<span class="bu">int</span>(gv[<span class="st">"r_1d"</span>].notna().<span class="bu">sum</span>()),</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"mae"</span>: mae(gv[<span class="st">"r_1d"</span>], gv[pred_col]),</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"smape"</span>: smape(gv[<span class="st">"r_1d"</span>], gv[pred_col]),</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"mase"</span>: mase(gv[<span class="st">"r_1d"</span>], gv[pred_col], gt[<span class="st">"r_1d"</span>], gt[<span class="st">"log_return"</span>]),</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"regime"</span>: reg})</span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>        pt <span class="op">=</span> pd.DataFrame(per)</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pt.empty: <span class="cf">continue</span></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> pt[[<span class="st">"mae"</span>,<span class="st">"smape"</span>,<span class="st">"mase"</span>]].mean().to_dict()</span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> pt[<span class="st">"n"</span>].to_numpy()</span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>        micro <span class="op">=</span> {<span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(pt[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(pt[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(pt[<span class="st">"mase"</span>], weights<span class="op">=</span>w))}</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"regime"</span>:reg, <span class="op">**</span>{<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>:<span class="bu">float</span>(v) <span class="cf">for</span> k,v <span class="kw">in</span> macro.items()}, <span class="op">**</span>micro})</span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    ap <span class="op">=</span> argparse.ArgumentParser()</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--features"</span>, default<span class="op">=</span><span class="st">"data/processed/features_v1.parquet"</span>)</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--train-min"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">252</span>)</span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--val-size"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">63</span>)</span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--step"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">63</span>)</span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--embargo"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--vol-col"</span>, default<span class="op">=</span><span class="st">"roll_std_20"</span>)</span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--xcols"</span>, nargs<span class="op">=</span><span class="st">"+"</span>, default<span class="op">=</span>[<span class="st">"lag1"</span>,<span class="st">"lag2"</span>,<span class="st">"lag3"</span>])</span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--out-summary"</span>, default<span class="op">=</span><span class="st">"reports/regime_summary.csv"</span>)</span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> ap.parse_args()</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_parquet(args.features).sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure vol col exists</span></span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> args.vol_col <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>        df[args.vol_col] <span class="op">=</span> df.groupby(<span class="st">"ticker"</span>)[<span class="st">"log_return"</span>].rolling(<span class="dv">20</span>, min_periods<span class="op">=</span><span class="dv">20</span>).std().reset_index(level<span class="op">=</span><span class="dv">0</span>, drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pre-group training by ticker once (faster)</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    train_by_ticker <span class="op">=</span> {</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>        tkr: g.dropna(subset<span class="op">=</span>[<span class="st">"r_1d"</span>])</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, g <span class="kw">in</span> train_df.groupby(<span class="st">"ticker"</span>)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> reg, g <span class="kw">in</span> val_df.groupby(<span class="st">"regime"</span>):</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> reg <span class="op">==</span> <span class="st">"unknown"</span> <span class="kw">or</span> <span class="bu">len</span>(g) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> []</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tkr, gv <span class="kw">in</span> g.groupby(<span class="st">"ticker"</span>):</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>            gt <span class="op">=</span> train_by_ticker.get(tkr)</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> gt <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> gt.empty:</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Align &amp; drop NaNs in y / yhat</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> gv[<span class="st">"r_1d"</span>]</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>            yhat <span class="op">=</span> gv[pred_col]</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> y.notna() <span class="op">&amp;</span> yhat.notna()</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> mask.<span class="bu">any</span>():</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> y[mask]</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>            yhat <span class="op">=</span> yhat[mask]</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>            <span class="co"># If mase needs clean scaling inputs, align/drop there too</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>            m <span class="op">=</span> {</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>                <span class="st">"ticker"</span>: tkr,</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>                <span class="st">"n"</span>: <span class="bu">int</span>(mask.<span class="bu">sum</span>()),</span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mae"</span>: <span class="bu">float</span>(mae(y, yhat)),</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>                <span class="st">"smape"</span>: <span class="bu">float</span>(smape(y, yhat)),</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>                <span class="st">"mase"</span>: <span class="bu">float</span>(mase(y, yhat, gt[<span class="st">"r_1d"</span>], gt[<span class="st">"log_return"</span>])),</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>                <span class="st">"regime"</span>: reg,</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>            per_t.append(m) <span class="co"># per_t is a list of dict of the same structure</span></span>
 <span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build lags if missing</span></span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]:</span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>        col <span class="op">=</span> <span class="ss">f"lag</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>            df[col] <span class="op">=</span> df.groupby(<span class="st">"ticker"</span>)[<span class="st">"log_return"</span>].shift(k)</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>        per_t <span class="op">=</span> pd.DataFrame(per_t) <span class="co"># convert a list of dict into a dataframe</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> per_t.empty:</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>        macro <span class="op">=</span> per_t[[<span class="st">"mae"</span>, <span class="st">"smape"</span>, <span class="st">"mase"</span>]].mean().to_dict()</span>
 <span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>    splits <span class="op">=</span> make_splits(df[<span class="st">"date"</span>], args.train_min, args.val_size, args.step, args.embargo)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>    Path(<span class="st">"reports"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>    thresh_rec <span class="op">=</span> {}</span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> sid,(a,b,c,d) <span class="kw">in</span> <span class="bu">enumerate</span>(splits, start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>        tr <span class="op">=</span> df[(df[<span class="st">"date"</span>]<span class="op">&gt;=</span>a)<span class="op">&amp;</span>(df[<span class="st">"date"</span>]<span class="op">&lt;=</span>b)]</span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        va <span class="op">=</span> df[(df[<span class="st">"date"</span>]<span class="op">&gt;=</span>c)<span class="op">&amp;</span>(df[<span class="st">"date"</span>]<span class="op">&lt;=</span>d)]</span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        lo, hi <span class="op">=</span> regime_thresholds(tr, args.vol_col)</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        thresh_rec[sid] <span class="op">=</span> {<span class="st">"lo"</span>:lo, <span class="st">"hi"</span>:hi, <span class="st">"train_range"</span>:<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>b<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>}</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>        trL <span class="op">=</span> label_regime(tr, args.vol_col, lo, hi)</span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>        vaL <span class="op">=</span> label_regime(va, args.vol_col, lo, hi)</span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>        <span class="co"># predictions</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>        trN, vaN <span class="op">=</span> add_naive(trL), add_naive(vaL)</span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>        val_lin <span class="op">=</span> fit_lin(trN, vaN, args.xcols)</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>        vaN <span class="op">=</span> vaN.merge(val_lin[[<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"yhat_lin"</span>]], on<span class="op">=</span>[<span class="st">"date"</span>,<span class="st">"ticker"</span>], how<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>        <span class="co"># metrics</span></span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>        m_naive <span class="op">=</span> per_regime_metrics(vaN, trN, <span class="st">"yhat_naive"</span>).assign(split<span class="op">=</span>sid, model<span class="op">=</span><span class="st">"naive"</span>)</span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>        m_lin   <span class="op">=</span> per_regime_metrics(vaN.dropna(subset<span class="op">=</span>[<span class="st">"yhat_lin"</span>]), trN, <span class="st">"yhat_lin"</span>).assign(split<span class="op">=</span>sid, model<span class="op">=</span><span class="st">"lin_lags"</span>)</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> per_t[<span class="st">"n"</span>].to_numpy()</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        wsum <span class="op">=</span> w.<span class="bu">sum</span>()</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> wsum <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>            <span class="co"># fall back to macro if no weights</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>            micro <span class="op">=</span> {</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mae"</span>: <span class="bu">float</span>(per_t[<span class="st">"mae"</span>].mean()),</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_smape"</span>: <span class="bu">float</span>(per_t[<span class="st">"smape"</span>].mean()),</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mase"</span>: <span class="bu">float</span>(per_t[<span class="st">"mase"</span>].mean()),</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>            micro <span class="op">=</span> {</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mae"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mae"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_smape"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"smape"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>                <span class="st">"micro_mase"</span>: <span class="bu">float</span>(np.average(per_t[<span class="st">"mase"</span>], weights<span class="op">=</span>w)),</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>        rows.append({ <span class="co"># build a new dict by adding new fields.</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>            <span class="st">"regime"</span>: reg,</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>{<span class="ss">f"macro_</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>: <span class="bu">float</span>(v) <span class="cf">for</span> k, v <span class="kw">in</span> macro.items()},</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>micro <span class="co"># unpacking an existing dict into key-value pairs inline</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>        })</span>
 <span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> pd.concat([m_naive, m_lin], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>        out.to_csv(<span class="ss">f"reports/regime_metrics_split</span><span class="sc">{</span>sid<span class="sc">}</span><span class="ss">.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>        rows.append(out)</span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    pd.concat(rows, ignore_index<span class="op">=</span><span class="va">True</span>).to_csv(args.out_summary, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>    Path(<span class="st">"reports/regime_thresholds.json"</span>).write_text(json.dumps(thresh_rec, indent<span class="op">=</span><span class="dv">2</span>))</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Wrote"</span>, args.out_summary, <span class="st">"and per-split CSVs; thresholds saved to reports/regime_thresholds.json"</span>)</span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>    ap <span class="op">=</span> argparse.ArgumentParser()</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--features"</span>, default<span class="op">=</span><span class="st">"data/processed/features_v1.parquet"</span>)</span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--train-min"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">252</span>)</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--val-size"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">63</span>)</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--step"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">63</span>)</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--embargo"</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>, default<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--vol-col"</span>, default<span class="op">=</span><span class="st">"roll_std_20"</span>)</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--xcols"</span>, nargs<span class="op">=</span><span class="st">"+"</span>, default<span class="op">=</span>[<span class="st">"lag1"</span>,<span class="st">"lag2"</span>,<span class="st">"lag3"</span>])</span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    ap.add_argument(<span class="st">"--out-summary"</span>, default<span class="op">=</span><span class="st">"reports/regime_summary.csv"</span>)</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> ap.parse_args()</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_parquet(args.features).sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure vol col exists</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> args.vol_col <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>        df[args.vol_col] <span class="op">=</span> df.groupby(<span class="st">"ticker"</span>)[<span class="st">"log_return"</span>].rolling(<span class="dv">20</span>, min_periods<span class="op">=</span><span class="dv">20</span>).std().reset_index(level<span class="op">=</span><span class="dv">0</span>, drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build lags if missing</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]:</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>        col <span class="op">=</span> <span class="ss">f"lag</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>            df[col] <span class="op">=</span> df.groupby(<span class="st">"ticker"</span>)[<span class="st">"log_return"</span>].shift(k)</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>    splits <span class="op">=</span> make_splits(df[<span class="st">"date"</span>], args.train_min, args.val_size, args.step, args.embargo)</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>    Path(<span class="st">"reports"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>    thresh_rec <span class="op">=</span> {}</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">=</span>[]</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> sid,(a,b,c,d) <span class="kw">in</span> <span class="bu">enumerate</span>(splits, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>        tr <span class="op">=</span> df[(df[<span class="st">"date"</span>]<span class="op">&gt;=</span>a)<span class="op">&amp;</span>(df[<span class="st">"date"</span>]<span class="op">&lt;=</span>b)]</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>        va <span class="op">=</span> df[(df[<span class="st">"date"</span>]<span class="op">&gt;=</span>c)<span class="op">&amp;</span>(df[<span class="st">"date"</span>]<span class="op">&lt;=</span>d)]</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>        lo, hi <span class="op">=</span> regime_thresholds(tr, args.vol_col)</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>        thresh_rec[sid] <span class="op">=</span> {<span class="st">"lo"</span>:lo, <span class="st">"hi"</span>:hi, <span class="st">"train_range"</span>:<span class="ss">f"</span><span class="sc">{</span>a<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">→</span><span class="sc">{</span>b<span class="sc">.</span>date()<span class="sc">}</span><span class="ss">"</span>}</span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>        trL <span class="op">=</span> label_regime(tr, args.vol_col, lo, hi)</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>        vaL <span class="op">=</span> label_regime(va, args.vol_col, lo, hi)</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>        <span class="co"># predictions</span></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>        trN, vaN <span class="op">=</span> add_naive(trL), add_naive(vaL)</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>        val_lin <span class="op">=</span> fit_lin(trN, vaN, args.xcols)</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>        vaN <span class="op">=</span> vaN.merge(val_lin[[<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"yhat_lin"</span>]], on<span class="op">=</span>[<span class="st">"date"</span>,<span class="st">"ticker"</span>], how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>        <span class="co"># metrics</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>        m_naive <span class="op">=</span> per_regime_metrics(vaN, trN, <span class="st">"yhat_naive"</span>).assign(split<span class="op">=</span>sid, model<span class="op">=</span><span class="st">"naive"</span>)</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>        m_lin   <span class="op">=</span> per_regime_metrics(vaN.dropna(subset<span class="op">=</span>[<span class="st">"yhat_lin"</span>]), trN, <span class="st">"yhat_lin"</span>).assign(split<span class="op">=</span>sid, model<span class="op">=</span><span class="st">"lin_lags"</span>)</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> pd.concat([m_naive, m_lin], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>        out.to_csv(<span class="ss">f"reports/regime_metrics_split</span><span class="sc">{</span>sid<span class="sc">}</span><span class="ss">.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>        rows.append(out)</span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>    pd.concat(rows, ignore_index<span class="op">=</span><span class="va">True</span>).to_csv(args.out_summary, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>    Path(<span class="st">"reports/regime_thresholds.json"</span>).write_text(json.dumps(thresh_rec, indent<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Wrote"</span>, args.out_summary, <span class="st">"and per-split CSVs; thresholds saved to reports/regime_thresholds.json"</span>)</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Run:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/regime_eval.py</span>
@@ -907,43 +991,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="c.-add-to-quarto-report" class="level3" data-number="18.5.3">
 <h3 data-number="18.5.3" class="anchored" data-anchor-id="c.-add-to-quarto-report"><span class="header-section-number">18.5.3</span> C. Add to Quarto report</h3>
 <p>In <code>reports/eda.qmd</code> (or a new <code>reports/regime.qmd</code>), include:</p>
-<p>````markdown ## Regime‑aware Results</p>
-<div id="e843ac94" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"reports/regime_summary.csv"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df.sort_values([<span class="st">"split"</span>,<span class="st">"model"</span>,<span class="st">"regime"</span>]).head(<span class="dv">12</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>regime_micro_mae.png)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>calibration_overall_lin.png)</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="sc">\#\#</span> Regime‑aware Results</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>::: {#421c3e3e .cell execution_count=1}</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="in">````` {.python .cell-code}</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"reports/regime_summary.csv"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df.sort_values([<span class="st">"split"</span>,<span class="st">"model"</span>,<span class="st">"regime"</span>]).head(<span class="dv">12</span>)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>calibration_by_regime_lin.png)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>regime_micro_mae.png)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>Render:</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>quarto render reports<span class="op">/</span>eda.qmd</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">### D. Quick test to protect **train‑only** thresholds</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_regime_thresholds.py</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, pandas <span class="im">as</span> pd</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_thresholds_exist_and_train_range():</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> json.load(<span class="bu">open</span>(<span class="st">"reports/regime_thresholds.json"</span>))</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(data) <span class="op">&gt;=</span> <span class="dv">1</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># basic sanity: low &lt; high</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> sid, rec <span class="kw">in</span> data.items():</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">float</span>(rec[<span class="st">"lo"</span>]) <span class="op">&lt;</span> <span class="bu">float</span>(rec[<span class="st">"hi"</span>])</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="st">"→"</span> <span class="kw">in</span> rec[<span class="st">"train_range"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>calibration_overall_lin.png)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>[](..<span class="op">/</span>docs<span class="op">/</span>figs<span class="op">/</span>calibration_by_regime_lin.png)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Render: quarto render reports/eda.qmd</p>
+</section>
+<section id="d.-quick-test-to-protect-trainonly-thresholds" class="level3" data-number="18.5.4">
+<h3 data-number="18.5.4" class="anchored" data-anchor-id="d.-quick-test-to-protect-trainonly-thresholds"><span class="header-section-number">18.5.4</span> D. Quick test to protect <strong>train‑only</strong> thresholds</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_regime_thresholds.py</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, pandas <span class="im">as</span> pd</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_thresholds_exist_and_train_range():</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> json.load(<span class="bu">open</span>(<span class="st">"reports/regime_thresholds.json"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(data) <span class="op">&gt;=</span> <span class="dv">1</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># basic sanity: low &lt; high</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> sid, rec <span class="kw">in</span> data.items():</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">float</span>(rec[<span class="st">"lo"</span>]) <span class="op">&lt;</span> <span class="bu">float</span>(rec[<span class="st">"hi"</span>])</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="st">"→"</span> <span class="kw">in</span> rec[<span class="st">"train_range"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>:::</p>
 <p>Run:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> regime_thresholds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-k</span> regime_thresholds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 </section>
-<section id="keep-points" class="level2" data-number="18.6">
-<h2 data-number="18.6" class="anchored" data-anchor-id="keep-points"><span class="header-section-number">18.6</span> Keep points</h2>
+<section id="key-points" class="level2" data-number="18.6">
+<h2 data-number="18.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">18.6</span> Key points</h2>
 <ul>
 <li>Regime thresholds are <strong>part of your training‑time state</strong>—store them (JSON) and <strong>do not recompute from validation/test</strong>.</li>
 <li>Report both <strong>macro</strong> and <strong>micro</strong> metrics <strong>by regime</strong> so small/large tickers don’t dominate silently.</li>
