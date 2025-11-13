@@ -781,11 +781,15 @@ leakage-audit: ## Run leakage &amp; label tests; write eval protocol
 <section id="part-d-optional-quarto-inclusion" class="level3" data-number="17.5.4">
 <h3 data-number="17.5.4" class="anchored" data-anchor-id="part-d-optional-quarto-inclusion"><span class="header-section-number">17.5.4</span> Part D — (Optional) Quarto inclusion</h3>
 <p>Add this to your Quarto report:</p>
-<p>````markdown ## Evaluation Protocol (Leakage‑Aware)</p>
-<div id="f7625b03" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Path(<span class="st">"reports/eval_protocol.md"</span>).read_text())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="sc">\#\#</span> Evaluation Protocol (Leakage‑Aware)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>::: {#95dc17fc .cell execution_count=1}</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="in">``` {.python .cell-code}</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Path(<span class="st">"reports/eval_protocol.md"</span>).read_text())</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 </section>
@@ -810,7 +814,7 @@ leakage-audit: ## Run leakage &amp; label tests; write eval protocol
 </li>
 <li><code>make leakage-audit</code> runs without errors.</li>
 </ul>
-<p>You now have a <strong>credibility layer</strong> on top of your data pipeline—ready to analyze regimes and calibration next (Session 18). ```</p>
+<p>You now have a <strong>credibility layer</strong> on top of your data pipeline—ready to analyze regimes and calibration next (Session 18).</p>
 
 
 </section>
