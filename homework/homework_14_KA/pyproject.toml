@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E","F","I"]  # flake8 errors, pyflakes, import sort
+ignore = ["E501"]       # let Black handle line length
+
+[tool.ruff.lint.isort]
+known-first-party = ["projectname"]
