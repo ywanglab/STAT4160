@@ -371,7 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#part-c-report" id="toc-part-c-report" class="nav-link" data-scroll-target="#part-c-report"><span class="header-section-number">19.5.3</span> Part C — Report</a></li>
   </ul></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">19.6</span> ````</a></li>
-  <li><a href="#emphasize-while-teaching" id="toc-emphasize-while-teaching" class="nav-link" data-scroll-target="#emphasize-while-teaching"><span class="header-section-number">19.7</span> Emphasize while teaching</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">19.7</span> Key points</a></li>
   <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">19.8</span> Grading (pass/revise)</a></li>
   </ul>
 </nav>
@@ -996,7 +996,7 @@ train-lstm: ## Train LSTM baseline on split 1 (subset of tickers)
 <h3 data-number="19.5.3" class="anchored" data-anchor-id="part-c-report"><span class="header-section-number">19.5.3</span> Part C — Report</h3>
 <p>Add to your Quarto report (e.g., <code>reports/eda.qmd</code>):</p>
 <p>````markdown ## PyTorch Baselines</p>
-<div id="17a36bab" class="cell" data-execution_count="1">
+<div id="20b6b577" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.read_csv(<span class="st">"reports/gru_split1_metrics.csv"</span>))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
@@ -1009,8 +1009,8 @@ train-lstm: ## Train LSTM baseline on split 1 (subset of tickers)
 <section id="section" class="level2" data-number="19.6">
 <h2 data-number="19.6" class="anchored" data-anchor-id="section"><span class="header-section-number">19.6</span> ````</h2>
 </section>
-<section id="emphasize-while-teaching" class="level2" data-number="19.7">
-<h2 data-number="19.7" class="anchored" data-anchor-id="emphasize-while-teaching"><span class="header-section-number">19.7</span> Emphasize while teaching</h2>
+<section id="key-points" class="level2" data-number="19.7">
+<h2 data-number="19.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">19.7</span> Key points</h2>
 <ul>
 <li><strong>Causality:</strong> windows contain only information up to time <code>t</code>; the label is <code>t+1</code>.<br>
 </li>
