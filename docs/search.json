@@ -2648,5 +2648,15 @@
     "crumbs": [
       "<span class='chapter-number'>19</span>  <span class='chapter-title'>Session 19 — Tensors, Datasets, Training Loop</span>"
     ]
+  },
+  {
+    "objectID": "lec19.html#key-points",
+    "href": "lec19.html#key-points",
+    "title": "19  Session 19 — Tensors, Datasets, Training Loop",
+    "section": "19.7 Key points",
+    "text": "19.7 Key points\n\nCausality: windows contain only information up to time t; the label is t+1.\n\nNo leakage: scaler fit on train only; reuse for val/test.\n\nReproducibility: seeds, deterministic flags, and saving checkpoints.\n\nEfficiency: pin memory, small batch size, AMP on CUDA.",
+    "crumbs": [
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Session 19 — Tensors, Datasets, Training Loop</span>"
+    ]
   }
 ]
