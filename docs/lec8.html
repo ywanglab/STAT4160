@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -344,23 +350,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-8-sql-ii-window-functions-pandas.read_sql-75-min" id="toc-session-8-sql-ii-window-functions-pandas.read_sql-75-min" class="nav-link active" data-scroll-target="#session-8-sql-ii-window-functions-pandas.read_sql-75-min"><span class="header-section-number">8.1</span> Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> (75 min)</a>
+  <li><a href="#session-8-sql-ii-window-functions-pandas.read_sql" id="toc-session-8-sql-ii-window-functions-pandas.read_sql" class="nav-link active" data-scroll-target="#session-8-sql-ii-window-functions-pandas.read_sql"><span class="header-section-number">8.1</span> Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code></a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">8.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">8.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">8.3</span> Slides</a></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">8.4</span> In‑class lab (35 min)</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">8.2</span> Agenda</a></li>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">8.3</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#mount-drive-open-db-and-ensure-it-exists" id="toc-mount-drive-open-db-and-ensure-it-exists" class="nav-link" data-scroll-target="#mount-drive-open-db-and-ensure-it-exists"><span class="header-section-number">8.4.1</span> 0) Mount Drive, open DB, and ensure it exists</a></li>
-  <li><a href="#lag-lead-no-leakage-in-features" id="toc-lag-lead-no-leakage-in-features" class="nav-link" data-scroll-target="#lag-lead-no-leakage-in-features"><span class="header-section-number">8.4.2</span> 1) LAG &amp; LEAD (no leakage in features)</a></li>
-  <li><a href="#named-window-rolling-meanvariance-20row-window" id="toc-named-window-rolling-meanvariance-20row-window" class="nav-link" data-scroll-target="#named-window-rolling-meanvariance-20row-window"><span class="header-section-number">8.4.3</span> 2) Named <code>WINDOW</code> + rolling mean/variance (20‑row window)</a></li>
-  <li><a href="#topk-absolute-moves-per-ticker-with-row_number" id="toc-topk-absolute-moves-per-ticker-with-row_number" class="nav-link" data-scroll-target="#topk-absolute-moves-per-ticker-with-row_number"><span class="header-section-number">8.4.4</span> 3) Top‑k absolute moves <strong>per ticker</strong> with <code>ROW_NUMBER</code></a></li>
-  <li><a href="#build-a-features-dataframe-directly-from-sql-and-save-to-parquet" id="toc-build-a-features-dataframe-directly-from-sql-and-save-to-parquet" class="nav-link" data-scroll-target="#build-a-features-dataframe-directly-from-sql-and-save-to-parquet"><span class="header-section-number">8.4.5</span> 4) Build a <strong>features</strong> DataFrame directly from SQL and save to Parquet</a></li>
-  <li><a href="#explain-query-plan-sanity-index-usage" id="toc-explain-query-plan-sanity-index-usage" class="nav-link" data-scroll-target="#explain-query-plan-sanity-index-usage"><span class="header-section-number">8.4.6</span> 5) <code>EXPLAIN QUERY PLAN</code> sanity &amp; index usage</a></li>
-  <li><a href="#save-lab-outputs" id="toc-save-lab-outputs" class="nav-link" data-scroll-target="#save-lab-outputs"><span class="header-section-number">8.4.7</span> 6) Save lab outputs</a></li>
+  <li><a href="#mount-drive-open-db-and-ensure-it-exists" id="toc-mount-drive-open-db-and-ensure-it-exists" class="nav-link" data-scroll-target="#mount-drive-open-db-and-ensure-it-exists"><span class="header-section-number">8.3.1</span> 0) Mount Drive, open DB, and ensure it exists</a></li>
+  <li><a href="#lag-lead-no-leakage-in-features" id="toc-lag-lead-no-leakage-in-features" class="nav-link" data-scroll-target="#lag-lead-no-leakage-in-features"><span class="header-section-number">8.3.2</span> 1) LAG &amp; LEAD (no leakage in features)</a></li>
+  <li><a href="#named-window-rolling-meanvariance-20row-window" id="toc-named-window-rolling-meanvariance-20row-window" class="nav-link" data-scroll-target="#named-window-rolling-meanvariance-20row-window"><span class="header-section-number">8.3.3</span> 2) Named <code>WINDOW</code> + rolling mean/variance (20‑row window)</a></li>
+  <li><a href="#topk-absolute-moves-per-ticker-with-row_number" id="toc-topk-absolute-moves-per-ticker-with-row_number" class="nav-link" data-scroll-target="#topk-absolute-moves-per-ticker-with-row_number"><span class="header-section-number">8.3.4</span> 3) Top‑k absolute moves <strong>per ticker</strong> with <code>ROW_NUMBER</code></a></li>
+  <li><a href="#build-a-features-dataframe-directly-from-sql-and-save-to-parquet" id="toc-build-a-features-dataframe-directly-from-sql-and-save-to-parquet" class="nav-link" data-scroll-target="#build-a-features-dataframe-directly-from-sql-and-save-to-parquet"><span class="header-section-number">8.3.5</span> 4) Build a <strong>features</strong> DataFrame directly from SQL and save to Parquet</a></li>
+  <li><a href="#explain-query-plan-sanity-index-usage" id="toc-explain-query-plan-sanity-index-usage" class="nav-link" data-scroll-target="#explain-query-plan-sanity-index-usage"><span class="header-section-number">8.3.6</span> 5) <code>EXPLAIN QUERY PLAN</code> sanity &amp; index usage</a></li>
+  <li><a href="#save-lab-outputs" id="toc-save-lab-outputs" class="nav-link" data-scroll-target="#save-lab-outputs"><span class="header-section-number">8.3.7</span> 6) Save lab outputs</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">8.5</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">8.4</span> Wrap‑up</a></li>
+  <li><a href="#window-functions-perrow-context-lags-rolling-stats-topk-per-group-with-no-row-collapse." id="toc-window-functions-perrow-context-lags-rolling-stats-topk-per-group-with-no-row-collapse." class="nav-link" data-scroll-target="#window-functions-perrow-context-lags-rolling-stats-topk-per-group-with-no-row-collapse."><span class="header-section-number">8.5</span> Window functions = <strong>per‑row context</strong> (lags, rolling stats, top‑k per group) with <strong>no row collapse</strong>.</a></li>
   <li><a href="#homework-due-before-session-9" id="toc-homework-due-before-session-9" class="nav-link" data-scroll-target="#homework-due-before-session-9"><span class="header-section-number">8.6</span> Homework (due before Session 9)</a>
   <ul class="collapse">
   <li><a href="#part-a-sqlfeatures_window.sql-reusable" id="toc-part-a-sqlfeatures_window.sql-reusable" class="nav-link" data-scroll-target="#part-a-sqlfeatures_window.sql-reusable"><span class="header-section-number">8.6.1</span> Part A — <code>sql/features_window.sql</code> (reusable)</a></li>
@@ -406,8 +412,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </blockquote>
 <hr>
-<section id="session-8-sql-ii-window-functions-pandas.read_sql-75-min" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="session-8-sql-ii-window-functions-pandas.read_sql-75-min"><span class="header-section-number">8.1</span> Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code> (75 min)</h2>
+<section id="session-8-sql-ii-window-functions-pandas.read_sql" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="session-8-sql-ii-window-functions-pandas.read_sql"><span class="header-section-number">8.1</span> Session 8 — SQL II: Window Functions &amp; <code>pandas.read_sql</code></h2>
 <section id="learning-goals" class="level3" data-number="8.1.1">
 <h3 data-number="8.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">8.1.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
@@ -421,19 +427,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="agenda-75-min" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">8.2</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">8.2</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Window functions: mental model &amp; syntax (<code>PARTITION BY</code>, <code>ORDER BY</code>, <code>ROWS</code> frames)</li>
-<li><strong>(10 min)</strong> Patterns for time series: lags, leads, rolling stats, top‑k per group</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong> (Colab): lags/leads → rolling mean/variance → z‑scores → top days per ticker → pull into pandas and save features</li>
-<li><strong>(10 min)</strong> Wrap‑up, performance notes (<code>EXPLAIN QUERY PLAN</code>), homework briefing</li>
-<li><strong>(10 min)</strong> Buffer</li>
+<li>Window functions: mental model &amp; syntax (<code>PARTITION BY</code>, <code>ORDER BY</code>, <code>ROWS</code> frames)</li>
+<li>Patterns for time series: lags, leads, rolling stats, top‑k per group</li>
+<li><strong>In‑class lab</strong> (Colab): lags/leads → rolling mean/variance → z‑scores → top days per ticker → pull into pandas and save features</li>
+<li>Wrap‑up, performance notes (<code>EXPLAIN QUERY PLAN</code>), homework briefing</li>
 </ul>
 <hr>
-</section>
-<section id="slides" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">8.3</span> Slides</h2>
 <p><strong>What’s a window?</strong></p>
 <ul>
 <li><p>A <strong>window</strong> lets an aggregate or analytic function see a <strong>row + its neighbors</strong> without collapsing rows.</p></li>
@@ -463,13 +465,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">8.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">8.3</span> In‑class lab</h2>
 <blockquote class="blockquote">
 <p>Run each block as its own Colab cell. Adjust <code>REPO_OWNER/REPO_NAME</code> first.</p>
 </blockquote>
-<section id="mount-drive-open-db-and-ensure-it-exists" class="level3" data-number="8.4.1">
-<h3 data-number="8.4.1" class="anchored" data-anchor-id="mount-drive-open-db-and-ensure-it-exists"><span class="header-section-number">8.4.1</span> 0) Mount Drive, open DB, and ensure it exists</h3>
+<section id="mount-drive-open-db-and-ensure-it-exists" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="mount-drive-open-db-and-ensure-it-exists"><span class="header-section-number">8.3.1</span> 0) Mount Drive, open DB, and ensure it exists</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -544,8 +546,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>con.create_function(<span class="st">"SQRT"</span>, <span class="dv">1</span>, <span class="kw">lambda</span> x: math.sqrt(x) <span class="cf">if</span> x <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> x<span class="op">&gt;=</span><span class="dv">0</span> <span class="cf">else</span> <span class="va">None</span>)</span>
 <span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SQLite version:"</span>, sqlite3.sqlite_version)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="lag-lead-no-leakage-in-features" class="level3" data-number="8.4.2">
-<h3 data-number="8.4.2" class="anchored" data-anchor-id="lag-lead-no-leakage-in-features"><span class="header-section-number">8.4.2</span> 1) LAG &amp; LEAD (no leakage in features)</h3>
+<section id="lag-lead-no-leakage-in-features" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="lag-lead-no-leakage-in-features"><span class="header-section-number">8.3.2</span> 1) LAG &amp; LEAD (no leakage in features)</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -569,8 +571,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </blockquote>
 </section>
-<section id="named-window-rolling-meanvariance-20row-window" class="level3" data-number="8.4.3">
-<h3 data-number="8.4.3" class="anchored" data-anchor-id="named-window-rolling-meanvariance-20row-window"><span class="header-section-number">8.4.3</span> 2) Named <code>WINDOW</code> + rolling mean/variance (20‑row window)</h3>
+<section id="named-window-rolling-meanvariance-20row-window" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="named-window-rolling-meanvariance-20row-window"><span class="header-section-number">8.3.3</span> 2) Named <code>WINDOW</code> + rolling mean/variance (20‑row window)</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">  ticker, date, log_return AS r,</span></span>
@@ -595,8 +597,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>roll[<span class="st">"zscore_20"</span>] <span class="op">=</span> (roll[<span class="st">"r"</span>] <span class="op">-</span> roll[<span class="st">"roll_mean_20"</span>]) <span class="op">/</span> roll[<span class="st">"roll_std_20"</span>].replace(<span class="dv">0</span>, pd.NA)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>roll.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="topk-absolute-moves-per-ticker-with-row_number" class="level3" data-number="8.4.4">
-<h3 data-number="8.4.4" class="anchored" data-anchor-id="topk-absolute-moves-per-ticker-with-row_number"><span class="header-section-number">8.4.4</span> 3) Top‑k absolute moves <strong>per ticker</strong> with <code>ROW_NUMBER</code></h3>
+<section id="topk-absolute-moves-per-ticker-with-row_number" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="topk-absolute-moves-per-ticker-with-row_number"><span class="header-section-number">8.3.4</span> 3) Top‑k absolute moves <strong>per ticker</strong> with <code>ROW_NUMBER</code></h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">WITH ranked AS (</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT</span></span>
@@ -615,8 +617,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>topk <span class="op">=</span> pd.read_sql_query(sql, con, params<span class="op">=</span>[<span class="st">"2022-01-01"</span>,<span class="st">"2025-08-01"</span>])</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>topk.head(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="build-a-features-dataframe-directly-from-sql-and-save-to-parquet" class="level3" data-number="8.4.5">
-<h3 data-number="8.4.5" class="anchored" data-anchor-id="build-a-features-dataframe-directly-from-sql-and-save-to-parquet"><span class="header-section-number">8.4.5</span> 4) Build a <strong>features</strong> DataFrame directly from SQL and save to Parquet</h3>
+<section id="build-a-features-dataframe-directly-from-sql-and-save-to-parquet" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="build-a-features-dataframe-directly-from-sql-and-save-to-parquet"><span class="header-section-number">8.3.5</span> 4) Build a <strong>features</strong> DataFrame directly from SQL and save to Parquet</h3>
 <p>We’ll assemble lags and rolling stats in one query using a named window <code>w20</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT</span></span>
@@ -652,8 +654,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>features_sql.to_parquet(<span class="st">"data/processed/features_sql.parquet"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>features_sql.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="explain-query-plan-sanity-index-usage" class="level3" data-number="8.4.6">
-<h3 data-number="8.4.6" class="anchored" data-anchor-id="explain-query-plan-sanity-index-usage"><span class="header-section-number">8.4.6</span> 5) <code>EXPLAIN QUERY PLAN</code> sanity &amp; index usage</h3>
+<section id="explain-query-plan-sanity-index-usage" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="explain-query-plan-sanity-index-usage"><span class="header-section-number">8.3.6</span> 5) <code>EXPLAIN QUERY PLAN</code> sanity &amp; index usage</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plan <span class="op">=</span> pd.read_sql_query(<span class="st">"""</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">EXPLAIN QUERY PLAN</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT ticker, date,</span></span>
@@ -667,8 +669,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Interpretation tip:</strong> You should see use of the <code>idx_prices_date</code> or <code>PRIMARY KEY</code> (depending on the optimizer). If you often filter by <code>(ticker, date)</code>, consider a composite index: <code>CREATE INDEX IF NOT EXISTS idx_prices_ticker_date ON prices(ticker, date);</code> (We’ll include that in homework.)</p>
 </blockquote>
 </section>
-<section id="save-lab-outputs" class="level3" data-number="8.4.7">
-<h3 data-number="8.4.7" class="anchored" data-anchor-id="save-lab-outputs"><span class="header-section-number">8.4.7</span> 6) Save lab outputs</h3>
+<section id="save-lab-outputs" class="level3" data-number="8.3.7">
+<h3 data-number="8.3.7" class="anchored" data-anchor-id="save-lab-outputs"><span class="header-section-number">8.3.7</span> 6) Save lab outputs</h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"reports"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>features_sql.head(<span class="dv">100</span>).to_csv(<span class="st">"reports/sql_window_demo.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>topk.to_csv(<span class="st">"reports/top3_abs_moves_per_ticker.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
@@ -677,10 +679,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">8.5</span> Wrap‑up (10 min)</h2>
+<section id="wrapup" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">8.4</span> Wrap‑up</h2>
+</section>
+<section id="window-functions-perrow-context-lags-rolling-stats-topk-per-group-with-no-row-collapse." class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="window-functions-perrow-context-lags-rolling-stats-topk-per-group-with-no-row-collapse."><span class="header-section-number">8.5</span> Window functions = <strong>per‑row context</strong> (lags, rolling stats, top‑k per group) with <strong>no row collapse</strong>.</h2>
 <ul>
-<li>Window functions = <strong>per‑row context</strong> (lags, rolling stats, top‑k per group) with <strong>no row collapse</strong>.</li>
 <li>Prefer <strong><code>ROWS BETWEEN N PRECEDING AND CURRENT ROW</code></strong> to express true rolling windows.</li>
 <li><strong>No leakage</strong>: only use <code>LAG</code> for features; <code>LEAD</code> is for labels.</li>
 <li>Use <code>pandas.read_sql_query</code> to <strong>push computation into SQL</strong> and bring back tidy frames.</li>

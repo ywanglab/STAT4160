@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -344,16 +350,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-7-sql-i-sqlite-schemas-joins-75-min" id="toc-session-7-sql-i-sqlite-schemas-joins-75-min" class="nav-link active" data-scroll-target="#session-7-sql-i-sqlite-schemas-joins-75-min"><span class="header-section-number">7.1</span> Session 7 — SQL I: SQLite Schemas &amp; Joins (75 min)</a>
+  <li><a href="#session-7-sql-i-sqlite-schemas-joins" id="toc-session-7-sql-i-sqlite-schemas-joins" class="nav-link active" data-scroll-target="#session-7-sql-i-sqlite-schemas-joins"><span class="header-section-number">7.1</span> Session 7 — SQL I: SQLite Schemas &amp; Joins</a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">7.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-minutes" id="toc-agenda-75-minutes" class="nav-link" data-scroll-target="#agenda-75-minutes"><span class="header-section-number">7.2</span> Agenda (75 minutes)</a></li>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">7.2</span> Agenda</a></li>
   <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">7.3</span> Slides</a>
   <ul class="collapse">
   <li><a href="#when-youd-use-each" id="toc-when-youd-use-each" class="nav-link" data-scroll-target="#when-youd-use-each"><span class="header-section-number">7.3.1</span> When you’d use each</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">7.4</span> In‑class lab (35 min)</a>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">7.4</span> In‑class lab</a>
   <ul class="collapse">
   <li><a href="#mount-drive-enter-repo" id="toc-mount-drive-enter-repo" class="nav-link" data-scroll-target="#mount-drive-enter-repo"><span class="header-section-number">7.4.1</span> 0) Mount Drive &amp; enter repo</a></li>
   <li><a href="#ensure-prerequisites-create-a-small-prices.csv-if-missing" id="toc-ensure-prerequisites-create-a-small-prices.csv-if-missing" class="nav-link" data-scroll-target="#ensure-prerequisites-create-a-small-prices.csv-if-missing"><span class="header-section-number">7.4.2</span> 1) Ensure prerequisites &amp; create a small <code>prices.csv</code> if missing</a></li>
@@ -365,7 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#create-a-view-for-convenience-test-uniqueness-constraint" id="toc-create-a-view-for-convenience-test-uniqueness-constraint" class="nav-link" data-scroll-target="#create-a-view-for-convenience-test-uniqueness-constraint"><span class="header-section-number">7.4.8</span> 7) Create a <strong>view</strong> for convenience &amp; test uniqueness constraint</a></li>
   <li><a href="#a-tiny-sql-io-helper-for-your-project" id="toc-a-tiny-sql-io-helper-for-your-project" class="nav-link" data-scroll-target="#a-tiny-sql-io-helper-for-your-project"><span class="header-section-number">7.4.9</span> 8) A tiny <strong>SQL I/O helper</strong> for your project</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">7.5</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">7.5</span> Wrap‑up</a></li>
   <li><a href="#homework-due-before-session-8" id="toc-homework-due-before-session-8" class="nav-link" data-scroll-target="#homework-due-before-session-8"><span class="header-section-number">7.6</span> Homework (due before Session 8)</a>
   <ul class="collapse">
   <li><a href="#part-a-script-to-rebuild-the-db" id="toc-part-a-script-to-rebuild-the-db" class="nav-link" data-scroll-target="#part-a-script-to-rebuild-the-db"><span class="header-section-number">7.6.1</span> Part A — Script to (re)build the DB</a></li>
@@ -403,8 +409,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p><strong>Assumptions:</strong> You’re continuing in the same Drive‑mounted repo (e.g., <code>unified-stocks-teamX</code>). You have <code>data/raw/prices.csv</code> from prior sessions. If not, the lab includes a fallback generator.</p>
 <hr>
-<section id="session-7-sql-i-sqlite-schemas-joins-75-min" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="session-7-sql-i-sqlite-schemas-joins-75-min"><span class="header-section-number">7.1</span> Session 7 — SQL I: SQLite Schemas &amp; Joins (75 min)</h2>
+<section id="session-7-sql-i-sqlite-schemas-joins" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="session-7-sql-i-sqlite-schemas-joins"><span class="header-section-number">7.1</span> Session 7 — SQL I: SQLite Schemas &amp; Joins</h2>
 <section id="learning-goals" class="level3" data-number="7.1.1">
 <h3 data-number="7.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">7.1.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
@@ -418,14 +424,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="agenda-75-minutes" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="agenda-75-minutes"><span class="header-section-number">7.2</span> Agenda (75 minutes)</h2>
+<section id="agenda" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">7.2</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Why relational databases for DS; SQLite types; PK (Primary Key)/constraints; indexes</li>
-<li><strong>(10 min)</strong> DDL (Data Definition Language) overview (CREATE TABLE/INDEX); transactions; parameterized queries</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong> (Colab): create <code>prices.db</code> → load <code>prices</code> + <code>meta</code> → write joins</li>
-<li><strong>(10 min)</strong> Wrap‑up &amp; homework briefing</li>
-<li><strong>(10 min)</strong> Buffer</li>
+<li>Why relational databases for DS; SQLite types; PK (Primary Key)/constraints; indexes</li>
+<li>DDL (Data Definition Language) overview (CREATE TABLE/INDEX); transactions; parameterized queries</li>
+<li><strong>In‑class lab</strong> (Colab): create <code>prices.db</code> → load <code>prices</code> + <code>meta</code> → write joins</li>
+<li>Wrap‑up &amp; homework briefing</li>
+<li>Buffer</li>
 </ul>
 <hr>
 </section>
@@ -470,8 +476,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">7.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">7.4</span> In‑class lab</h2>
 <section id="mount-drive-enter-repo" class="level3" data-number="7.4.1">
 <h3 data-number="7.4.1" class="anchored" data-anchor-id="mount-drive-enter-repo"><span class="header-section-number">7.4.1</span> 0) Mount Drive &amp; enter repo</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
@@ -757,8 +763,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">7.5</span> Wrap‑up (10 min)</h2>
+<section id="wrapup" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">7.5</span> Wrap‑up</h2>
 <ul>
 <li>You now have a <strong>relational core</strong> for the project.</li>
 <li>Use <strong>PK + constraints</strong> to prevent silent data corruption.</li>

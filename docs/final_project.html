@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.34">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>29&nbsp; Assignment: Tools-in-Action Book (Quarto + GitHub Pages) – STAT 4160: Data Science Productivity Tools</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./summary.html" rel="next">
+<link href="./lec_5_pre.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./final_project.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">STAT 4160: Data Science Productivity Tools</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Session 1 — Dev environment &amp; Colab workflow</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Session 2 — Git essentials &amp; Git‑LFS</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Session 3 — Quarto Reports (Python)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Session 4 — RStudio Quarto cameo + Report Hygiene</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Session 5 — Unix/Shell Essentials for Data Work</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Session 6 — Make/Automation + rsync + ssh/tmux (survey)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Session 7 — SQL I: SQLite Schemas &amp; Joins</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Session 8 — SQL II: Window Functions &amp; `pandas.read_sql` Workflows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Session 9 — Cleaning, Joins, and Parquet</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Rolling Windows, Resampling, and Leakage‑Safe Features</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Session 11 — APIs with <code>requests</code>: Secrets, Retries, and Caching</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Session 12 — HTML Scraping: Ethics &amp; Resilience</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">pre‑commit &amp; GitHub Actions CI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Session 15 — Framing &amp; Metrics (Rolling‑Origin Evaluation)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Session 17 — Feature Timing, Biases &amp; Leakage</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Session 18 — Walk‑forward + Regime Analysi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Session 19 — Tensors, Datasets, Training Loop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Session 20 — Multi‑asset training (unified model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec21.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Session 21 — Attention &amp; Tiny GPT on Toy Data</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec22.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Session 22 — Adapting GPT to Time Series</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec23.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Session 23 — Packaging &amp; CLI (Typer)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec24.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Session 24 — Reproducibility audit &amp; optional FastAPI</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec25.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Session 25 — Poster + Abstract Workshop</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec26.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Session 26 — In‑class Presentations &amp; Continuation Pla</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./homework/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">README.html</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lec_5_pre.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 5 (Pre) — Linux Basics</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link active" data-scroll-target="#learning-outcomes"><span class="header-section-number">29.1</span> Learning outcomes</a></li>
+  <li><a href="#deliverables-what-you-must-submit" id="toc-deliverables-what-you-must-submit" class="nav-link" data-scroll-target="#deliverables-what-you-must-submit"><span class="header-section-number">29.2</span> Deliverables (what you must submit)</a></li>
+  <li><a href="#evaluation-rubric-100-pts" id="toc-evaluation-rubric-100-pts" class="nav-link" data-scroll-target="#evaluation-rubric-100-pts"><span class="header-section-number">29.3</span> Evaluation rubric (100 pts)</a></li>
+  <li><a href="#recommended-repo-scaffold" id="toc-recommended-repo-scaffold" class="nav-link" data-scroll-target="#recommended-repo-scaffold"><span class="header-section-number">29.4</span> Recommended repo scaffold</a></li>
+  <li><a href="#quick-bootstrap-copypaste" id="toc-quick-bootstrap-copypaste" class="nav-link" data-scroll-target="#quick-bootstrap-copypaste"><span class="header-section-number">29.5</span> Quick bootstrap (copy/paste)</a>
+  <ul class="collapse">
+  <li><a href="#requirements.txt-pin-versions-you-actually-use" id="toc-requirements.txt-pin-versions-you-actually-use" class="nav-link" data-scroll-target="#requirements.txt-pin-versions-you-actually-use"><span class="header-section-number">29.5.1</span> 1) <code>requirements.txt</code> (pin versions you actually use)</a></li>
+  <li><a href="#makefile-run-everything-from-one-place" id="toc-makefile-run-everything-from-one-place" class="nav-link" data-scroll-target="#makefile-run-everything-from-one-place"><span class="header-section-number">29.5.2</span> 2) <code>Makefile</code> (run everything from one place)</a></li>
+  <li><a href="#quarto-book-config-book_quarto.yml" id="toc-quarto-book-config-book_quarto.yml" class="nav-link" data-scroll-target="#quarto-book-config-book_quarto.yml"><span class="header-section-number">29.5.3</span> 3) Quarto book config: <code>book/_quarto.yml</code></a></li>
+  </ul></li>
+  <li><a href="#chapter-by-chapter-code-samples-students-can-paste-adapt" id="toc-chapter-by-chapter-code-samples-students-can-paste-adapt" class="nav-link" data-scroll-target="#chapter-by-chapter-code-samples-students-can-paste-adapt"><span class="header-section-number">29.6</span> Chapter-by-chapter <strong>code samples</strong> (students can paste &amp; adapt)</a>
+  <ul class="collapse">
+  <li><a href="#git-github-sessions-12" id="toc-git-github-sessions-12" class="nav-link" data-scroll-target="#git-github-sessions-12"><span class="header-section-number">29.6.1</span> 01 — Git &amp; GitHub (Sessions 1–2)</a></li>
+  <li><a href="#linux-basics-lecture-5-pre-03-shell-essentials-session-5" id="toc-linux-basics-lecture-5-pre-03-shell-essentials-session-5" class="nav-link" data-scroll-target="#linux-basics-lecture-5-pre-03-shell-essentials-session-5"><span class="header-section-number">29.6.2</span> 02 — Linux Basics (Lecture 5 pre) &amp; 03 — Shell Essentials (Session 5)</a></li>
+  <li><a href="#makefile-session-6" id="toc-makefile-session-6" class="nav-link" data-scroll-target="#makefile-session-6"><span class="header-section-number">29.6.3</span> 04 — Makefile (Session 6)</a></li>
+  <li><a href="#sql-with-sqlite-session-7-06-joins-parquet-with-pandas-sessions-910" id="toc-sql-with-sqlite-session-7-06-joins-parquet-with-pandas-sessions-910" class="nav-link" data-scroll-target="#sql-with-sqlite-session-7-06-joins-parquet-with-pandas-sessions-910"><span class="header-section-number">29.6.4</span> 05 — SQL with SQLite (Session 7) + 06 — Joins &amp; Parquet with pandas (Sessions 9–10)</a></li>
+  <li><a href="#html-scraping-parsing-session-12" id="toc-html-scraping-parsing-session-12" class="nav-link" data-scroll-target="#html-scraping-parsing-session-12"><span class="header-section-number">29.6.5</span> 07 — HTML Scraping &amp; Parsing (Session 12)</a></li>
+  <li><a href="#pytest-data-validation-session-13" id="toc-pytest-data-validation-session-13" class="nav-link" data-scroll-target="#pytest-data-validation-session-13"><span class="header-section-number">29.6.6</span> 08 — pytest + Data Validation (Session 13)</a></li>
+  <li><a href="#pytorch-tiny-training-loop-session-19" id="toc-pytorch-tiny-training-loop-session-19" class="nav-link" data-scroll-target="#pytorch-tiny-training-loop-session-19"><span class="header-section-number">29.6.7</span> 09 — PyTorch: tiny training loop (Session 19)</a></li>
+  <li><a href="#quarto-itself-session-34-book-authoring-tips" id="toc-quarto-itself-session-34-book-authoring-tips" class="nav-link" data-scroll-target="#quarto-itself-session-34-book-authoring-tips"><span class="header-section-number">29.6.8</span> 10 — Quarto itself (Session 3/4): book authoring tips</a></li>
+  </ul></li>
+  <li><a href="#suggested-milestones" id="toc-suggested-milestones" class="nav-link" data-scroll-target="#suggested-milestones"><span class="header-section-number">29.7</span> Suggested milestones</a></li>
+  <li><a href="#freshclone-test-students-must-include-in-readme" id="toc-freshclone-test-students-must-include-in-readme" class="nav-link" data-scroll-target="#freshclone-test-students-must-include-in-readme"><span class="header-section-number">29.8</span> Fresh‑clone test (students must include in README)</a></li>
+  <li><a href="#academic-honesty-data-policy" id="toc-academic-honesty-data-policy" class="nav-link" data-scroll-target="#academic-honesty-data-policy"><span class="header-section-number">29.9</span> Academic honesty &amp; data policy</a>
+  <ul class="collapse">
+  <li><a href="#optional-starter-scripts-students-may-create" id="toc-optional-starter-scripts-students-may-create" class="nav-link" data-scroll-target="#optional-starter-scripts-students-may-create"><span class="header-section-number">29.9.1</span> (Optional) Starter scripts students may create</a></li>
+  <li><a href="#pointers-to-the-course-notes" id="toc-pointers-to-the-course-notes" class="nav-link" data-scroll-target="#pointers-to-the-course-notes"><span class="header-section-number">29.9.2</span> Pointers to the course notes</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This <strong>capstone presentation assignment</strong> asks students to <strong>demonstrate every tool</strong> covered in the course <strong>Sessions 1–19</strong> (plus the <strong>pre‑Linux lecture</strong>) by authoring a <strong>Quarto “book”</strong> and publishing it on GitHub Pages. This document includes a structured outline, a repo scaffold, copy‑pasteable <strong>code examples for each tool</strong>, deliverables, and a point‑based rubric aligned to the course topics and notes. The relevant lecture pages are cited from the lecture notes (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+<p><strong>Goal.</strong> Create a <strong>public Quarto book</strong> that <strong>teaches by doing</strong>: each chapter focuses on one tool you learned and includes <strong>explanations + runnable code examples</strong> that reproduce a tiny end‑to‑end workflow (data → features → tests → model → report). You’ll publish the book using <strong>GitHub Pages</strong> and tag a release (see lec 26 how to tag a release ).</p>
+<p><strong>Scope &amp; coverage:</strong> Sessions <strong>1–19</strong> (Dev env, Git/GitHub, Quarto, RStudio cameo, Shell/Unix, Make, SQL I/II, pandas cleaning/joins/Parquet, rolling features, APIs, HTML scraping, pytest, PyTorch training loop) <strong>+</strong> Lecture 5 (Pre) Linux Basics. Use the course notes to refresh details. (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+<section id="learning-outcomes" class="level2" data-number="29.1">
+<h2 data-number="29.1" class="anchored" data-anchor-id="learning-outcomes"><span class="header-section-number">29.1</span> Learning outcomes</h2>
+<p>By completing this assignment, you will be able to:</p>
+<ol type="1">
+<li><strong>Demonstrate</strong> core DS productivity tools with concise, correct <strong>code examples</strong>.</li>
+<li>Assemble a <strong>Quarto book</strong> (book‑format site) and <strong>publish</strong> it from GitHub.</li>
+<li>Make a <strong>reproducible</strong> mini‑pipeline (data → SQL/joins → features → tests → model → report).</li>
+<li>Explain trade‑offs and <strong>best practices</strong> (ethics, leakage, CI, determinism).</li>
+</ol>
+<hr>
+</section>
+<section id="deliverables-what-you-must-submit" class="level2" data-number="29.2">
+<h2 data-number="29.2" class="anchored" data-anchor-id="deliverables-what-you-must-submit"><span class="header-section-number">29.2</span> Deliverables (what you must submit)</h2>
+<ol type="1">
+<li><p><strong>Public GitHub repository</strong> named <code>tools-in-action-&lt;yourlastname&gt;</code> with:</p>
+<ul>
+<li><code>book/</code> folder (Quarto project).</li>
+<li>Reproducible code &amp; data assets (small/synthetic OK).</li>
+<li><code>requirements.txt</code> (pinned), <code>Makefile</code>, and <code>README.md</code> with fresh‑clone steps.</li>
+</ul></li>
+<li><p><strong>Published book URL (GitHub Pages)</strong> — place at top of README.</p></li>
+<li><p><strong>Release tag</strong> <code>v1.0-tools-in-action</code> (Git tag pushed, see lec 26 for how to tag a version)</p></li>
+<li><p><strong>Evidence</strong> the code runs: <code>reports/</code> or <code>_freeze/</code> artifacts (Quarto’s cached results), and a notebook that shows all the code and results.</p></li>
+</ol>
+<hr>
+</section>
+<section id="evaluation-rubric-100-pts" class="level2" data-number="29.3">
+<h2 data-number="29.3" class="anchored" data-anchor-id="evaluation-rubric-100-pts"><span class="header-section-number">29.3</span> Evaluation rubric (100 pts)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 25%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th style="text-align: right;">Pts</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Quarto book structure &amp; publishing</strong></td>
+<td style="text-align: right;">15</td>
+<td>Builds locally; Pages site online with working nav &amp; chapters</td>
+</tr>
+<tr class="even">
+<td><strong>Git/GitHub proficiency</strong></td>
+<td style="text-align: right;">10</td>
+<td>Clean history, branch/PR flow screenshot or transcript, <code>.gitignore</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Linux/Shell essentials</strong></td>
+<td style="text-align: right;">10</td>
+<td>Correct pipelines (grep/sed/awk/find/xargs), safe flags, outputs</td>
+</tr>
+<tr class="even">
+<td><strong>Makefile automation</strong></td>
+<td style="text-align: right;">8</td>
+<td>Useful targets (<code>env</code>, <code>data</code>, <code>features</code>, <code>book</code>, <code>test</code>, <code>clean</code>)</td>
+</tr>
+<tr class="odd">
+<td><strong>SQL + joins + pandas joins</strong></td>
+<td style="text-align: right;">12</td>
+<td>SQLite schema + queries + equivalent pandas <code>.merge</code></td>
+</tr>
+<tr class="even">
+<td><strong>HTML scraping &amp; parsing</strong> (ethics)</td>
+<td style="text-align: right;">10</td>
+<td>Respect robots.txt; caching; BeautifulSoup parsing with selectors</td>
+</tr>
+<tr class="odd">
+<td><strong>pytest + data validation</strong></td>
+<td style="text-align: right;">10</td>
+<td>At least 3 tests (unit + data checks); green test run</td>
+</tr>
+<tr class="even">
+<td><strong>PyTorch</strong> (Session 19)</td>
+<td style="text-align: right;">15</td>
+<td>Tiny dataset + DataLoader + training loop + saved metrics</td>
+</tr>
+<tr class="odd">
+<td><strong>Reproducibility</strong></td>
+<td style="text-align: right;">5</td>
+<td><code>requirements.txt</code> pinned; seed setting; deterministic notes</td>
+</tr>
+<tr class="even">
+<td><strong>Clarity &amp; pedagogy</strong></td>
+<td style="text-align: right;">5</td>
+<td>Each chapter has clear “What/Why/How” and concise explanations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pass/Revise bar:</strong> Book renders + Pages live; all chapters present with at least one working code example per tool.</p>
+<hr>
+</section>
+<section id="recommended-repo-scaffold" class="level2" data-number="29.4">
+<h2 data-number="29.4" class="anchored" data-anchor-id="recommended-repo-scaffold"><span class="header-section-number">29.4</span> Recommended repo scaffold</h2>
+<pre class="text"><code>tools-in-action-yourlastname/
+├── Makefile
+├── requirements.txt
+├── README.md
+├── data/
+│   ├── raw/            # tiny CSV(s) or saved HTML for offline parsing
+│   └── processed/
+├── db/                 # SQLite DB
+├── reports/
+└── book/
+    ├── _quarto.yml
+    ├── index.qmd
+    ├── 01_git.qmd
+    ├── 02_linux_basics.qmd
+    ├── 03_shell_essentials.qmd
+    ├── 04_makefile.qmd
+    ├── 05_sql_sqlite.qmd
+    ├── 06_pandas_joins_parquet.qmd
+    ├── 07_html_scraping.qmd
+    ├── 08_pytest.qmd
+    ├── 09_pytorch_miniloop.qmd
+    └── 10_quarto_book.qmd</code></pre>
+<hr>
+</section>
+<section id="quick-bootstrap-copypaste" class="level2" data-number="29.5">
+<h2 data-number="29.5" class="anchored" data-anchor-id="quick-bootstrap-copypaste"><span class="header-section-number">29.5</span> Quick bootstrap (copy/paste)</h2>
+<section id="requirements.txt-pin-versions-you-actually-use" class="level3" data-number="29.5.1">
+<h3 data-number="29.5.1" class="anchored" data-anchor-id="requirements.txt-pin-versions-you-actually-use"><span class="header-section-number">29.5.1</span> 1) <code>requirements.txt</code> (pin versions you actually use)</h3>
+<pre><code>pandas==2.2.3
+numpy==1.26.4
+pyarrow==16.1.0
+beautifulsoup4==4.12.3
+requests==2.32.2
+lxml==5.2.2
+sqlalchemy==2.0.36
+duckdb==1.1.3          # optional (nice for SQL-in-Python)
+pytest==8.3.2
+torch==2.4.0
+typer==0.12.3          # optional CLI</code></pre>
+</section>
+<section id="makefile-run-everything-from-one-place" class="level3" data-number="29.5.2">
+<h3 data-number="29.5.2" class="anchored" data-anchor-id="makefile-run-everything-from-one-place"><span class="header-section-number">29.5.2</span> 2) <code>Makefile</code> (run everything from one place)</h3>
+<pre class="make"><code>.PHONY: env data db features book test clean
+env:
+    pip install -r requirements.txt
+data:
+    python scripts/make_synth_data.py
+db:
+    python scripts/make_sqlite.py
+features:
+    python scripts/build_features.py
+book:
+    quarto render book
+test:
+    pytest -q
+clean:
+    rm -rf db/*.db data/processed/* book/_site book/_freeze</code></pre>
+</section>
+<section id="quarto-book-config-book_quarto.yml" class="level3" data-number="29.5.3">
+<h3 data-number="29.5.3" class="anchored" data-anchor-id="quarto-book-config-book_quarto.yml"><span class="header-section-number">29.5.3</span> 3) Quarto book config: <code>book/_quarto.yml</code></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> book</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> docs</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">book</span><span class="kw">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Tools-in-Action"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Your Name"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">chapters</span><span class="kw">:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> index.qmd</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 01_git.qmd</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 02_linux_basics.qmd</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 03_shell_essentials.qmd</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 04_makefile.qmd</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 05_sql_sqlite.qmd</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 06_pandas_joins_parquet.qmd</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 07_html_scraping.qmd</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 08_pytest.qmd</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 09_pytorch_miniloop.qmd</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> 10_quarto_book.qmd</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> cosmo</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">execute</span><span class="kw">:</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">echo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span><span class="co">     # cache results so GH Pages builds fast</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p><strong>Publish</strong>: enable GitHub Pages (from <code>gh-pages</code> branch) or run <code>quarto publish gh-pages</code> from the <code>book/</code> folder. Your course notes also show how you render Quarto documents. (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="chapter-by-chapter-code-samples-students-can-paste-adapt" class="level2" data-number="29.6">
+<h2 data-number="29.6" class="anchored" data-anchor-id="chapter-by-chapter-code-samples-students-can-paste-adapt"><span class="header-section-number">29.6</span> Chapter-by-chapter <strong>code samples</strong> (students can paste &amp; adapt)</h2>
+<blockquote class="blockquote">
+<p>Each chapter must include a <strong>short intro</strong>, the <strong>code block(s)</strong> below, <strong>output or figure</strong>, and <strong>1–2 sentences</strong> explaining what the code demonstrates.</p>
+</blockquote>
+<section id="git-github-sessions-12" class="level3" data-number="29.6.1">
+<h3 data-number="29.6.1" class="anchored" data-anchor-id="git-github-sessions-12"><span class="header-section-number">29.6.1</span> 01 — Git &amp; GitHub (Sessions 1–2)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize repo (if starting fresh on local computer)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin https://github.com/<span class="op">&lt;</span>you<span class="op">&gt;</span>/tools-in-action-yourlastname.git</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># For privacy (on local computer)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.name <span class="st">"your_chosen_nick_name"</span>  <span class="co"># this nick name will appear as the author to each commit</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.email <span class="st">"12345678+your_github_name@users.noreply.github.com"</span> <span class="co">#get your private email from GitHub-&gt;Settings-&gt;Emails-&gt;"Keep my email private"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"chore: scaffold Quarto book"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a feature branch, make a change, commit, push, open PR</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feat/sql-chapter</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add book/05_sql_sqlite.qmd    <span class="co"># you can simply `git add .`</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"docs(sql): first join examples"</span>  <span class="co">#change messages accordingly</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin feat/sql-chapter  <span class="co"># you can simply `git push`</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Then open a PR in the GitHub UI (screenshot in your book chapter).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add a small <code>.gitignore</code>: (for the purpose of assignment, comment all lines off, so effectively all files will be pushed to GitHub. )</p>
+<pre><code># _freeze/
+# *.db
+# data/processed/</code></pre>
+<p><em>(See Sessions 1–2 on branching, PR etiquette, and LFS when needed.)</em> (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="linux-basics-lecture-5-pre-03-shell-essentials-session-5" class="level3" data-number="29.6.2">
+<h3 data-number="29.6.2" class="anchored" data-anchor-id="linux-basics-lecture-5-pre-03-shell-essentials-session-5"><span class="header-section-number">29.6.2</span> 02 — Linux Basics (Lecture 5 pre) &amp; 03 — Shell Essentials (Session 5)</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/raw data/processed</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">"ticker,date,adj_close\nAAPL,2023-01-02,125.0\nAAPL,2023-01-03,126.5\n"</span> <span class="op">&gt;</span> data/raw/prices.csv</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect, count, sample</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> data/raw/prices.csv</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 3 data/raw/prices.csv</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter rows (AAPL only) with grep (extended regex)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="st">'^AAPL,'</span> data/raw/prices.csv</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform: append a synthetic volume column with awk</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F,</span> <span class="st">'BEGIN{OFS=","} NR==1{print $0,"volume";next} {print $0,100000+NR*10}'</span> <span class="dt">\</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  data/raw/prices.csv <span class="op">&gt;</span> data/processed/prices_with_vol.csv</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Find CSVs and show their sizes (safe null-terminators)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> data <span class="at">-type</span> f <span class="at">-name</span> <span class="st">"*.csv"</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> ls <span class="at">-lh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>(Reinforces Session 5 patterns: pipelines, quoting, <code>grep/sed/awk</code>, <code>find/xargs</code>.)</em> (<a href="https://ywanglab.github.io/STAT4160/lec5.html" title="5 Session 5 — Unix/Shell Essentials for Data Work – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="makefile-session-6" class="level3" data-number="29.6.3">
+<h3 data-number="29.6.3" class="anchored" data-anchor-id="makefile-session-6"><span class="header-section-number">29.6.3</span> 04 — Makefile (Session 6)</h3>
+<pre class="make"><code># book/04_makefile.qmd should show and explain something like:
+.PHONY: qa
+qa:
+    @echo "Rows:" &amp;&amp; wc -l data/processed/prices_with_vol.csv
+    @echo "Sample:" &amp;&amp; head -n 5 data/processed/prices_with_vol.csv</code></pre>
+<p>Call from terminal: <code>make qa</code>. <em>(From your automation session.)</em> (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="sql-with-sqlite-session-7-06-joins-parquet-with-pandas-sessions-910" class="level3" data-number="29.6.4">
+<h3 data-number="29.6.4" class="anchored" data-anchor-id="sql-with-sqlite-session-7-06-joins-parquet-with-pandas-sessions-910"><span class="header-section-number">29.6.4</span> 05 — SQL with SQLite (Session 7) + 06 — Joins &amp; Parquet with pandas (Sessions 9–10)</h3>
+<p><strong>Create SQLite DB</strong>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scripts/make_sqlite.py (show in chapter)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3, pandas <span class="im">as</span> pd, pathlib</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"db"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"db/prices.db"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">"data/processed/prices_with_vol.csv"</span>).to_sql(<span class="st">"prices"</span>, con, if_exists<span class="op">=</span><span class="st">"replace"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> pd.DataFrame({<span class="st">"ticker"</span>:[<span class="st">"AAPL"</span>,<span class="st">"MSFT"</span>], <span class="st">"sector"</span>:[<span class="st">"InfoTech"</span>,<span class="st">"InfoTech"</span>]})</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>meta.to_sql(<span class="st">"meta"</span>, con, if_exists<span class="op">=</span><span class="st">"replace"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple inner join</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT p.ticker, p.date, p.adj_close, p.volume, m.sector</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">FROM prices p JOIN meta m USING(ticker)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY date LIMIT 5;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.read_sql(q, con))</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>con.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Equivalent pandas join + write Parquet</strong>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, pyarrow.parquet <span class="im">as</span> pq, pyarrow <span class="im">as</span> pa</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>prices <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/prices_with_vol.csv"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> pd.DataFrame({<span class="st">"ticker"</span>:[<span class="st">"AAPL"</span>,<span class="st">"MSFT"</span>], <span class="st">"sector"</span>:[<span class="st">"InfoTech"</span>,<span class="st">"InfoTech"</span>]})</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> prices.merge(meta, on<span class="op">=</span><span class="st">"ticker"</span>, how<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"ticker"</span>] <span class="op">=</span> df[<span class="st">"ticker"</span>].astype(<span class="st">"category"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pa.Table.from_pandas(df)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>pq.write_table(table, <span class="st">"data/processed/prices.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>(lectures on schema &amp; joins; later sessions use Parquet + dtypes.)</em> (<a href="https://ywanglab.github.io/STAT4160/lec7.html" title="7 Session 7 — SQL I: SQLite Schemas &amp; Joins – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="html-scraping-parsing-session-12" class="level3" data-number="29.6.5">
+<h3 data-number="29.6.5" class="anchored" data-anchor-id="html-scraping-parsing-session-12"><span class="header-section-number">29.6.5</span> 07 — HTML Scraping &amp; Parsing (Session 12)</h3>
+<p><strong>Ethics:</strong> check <code>robots.txt</code>, throttle requests, and <strong>cache</strong> raw HTML. Then parse with <strong>BeautifulSoup</strong>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests, time, pathlib</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">"https://example.com"</span>  <span class="co"># keep it simple or save a local copy to data/raw/page.html</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>RAW <span class="op">=</span> pathlib.Path(<span class="st">"data/raw/page.html"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cache-first</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> RAW.exists():</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    html <span class="op">=</span> RAW.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># In practice: read robots.txt first; throttle; identify yourself.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> requests.get(URL, headers<span class="op">=</span>{<span class="st">"User-Agent"</span>:<span class="st">"STAT4160-student/1.0"</span>}, timeout<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    res.raise_for_status()</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    html <span class="op">=</span> res.text</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    RAW.write_text(html, encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>soup <span class="op">=</span> BeautifulSoup(html, <span class="st">"lxml"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> soup.find(<span class="st">"title"</span>).get_text(strip<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Page title:"</span>, title)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: parse all links</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>links <span class="op">=</span> [(a.get_text(strip<span class="op">=</span><span class="va">True</span>), a.get(<span class="st">"href"</span>)) <span class="cf">for</span> a <span class="kw">in</span> soup.select(<span class="st">"a[href]"</span>)]</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"First 5 links:"</span>, links[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>(See HTML/ethics lecture for selectors, caching every request) .)</em> (<a href="https://ywanglab.github.io/STAT4160/lec12.html" title="12 Session 12 — HTML Scraping: Ethics &amp; Resilience – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="pytest-data-validation-session-13" class="level3" data-number="29.6.6">
+<h3 data-number="29.6.6" class="anchored" data-anchor-id="pytest-data-validation-session-13"><span class="header-section-number">29.6.6</span> 08 — pytest + Data Validation (Session 13)</h3>
+<p>Create <code>tests/test_data_health.py</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_prices_has_volume_and_no_nans():</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/prices_with_vol.csv"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="st">"volume"</span> <span class="kw">in</span> df.columns</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> df[<span class="st">"adj_close"</span>].isna().<span class="bu">sum</span>() <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_no_lookahead_in_join():</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/prices.parquet"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Example data test: date is non-decreasing per ticker</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> df.sort_values([<span class="st">"ticker"</span>,<span class="st">"date"</span>]).groupby(<span class="st">"ticker"</span>)[<span class="st">"date"</span>].diff().dt.days</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> (g.fillna(<span class="dv">1</span>) <span class="op">&gt;=</span> <span class="dv">0</span>).<span class="bu">all</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Run <code>pytest -q</code>. <em>(Matches your high‑value tests and data‑frame validation focus.)</em> (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="pytorch-tiny-training-loop-session-19" class="level3" data-number="29.6.7">
+<h3 data-number="29.6.7" class="anchored" data-anchor-id="pytorch-tiny-training-loop-session-19"><span class="header-section-number">29.6.7</span> 09 — PyTorch: tiny training loop (Session 19)</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Minimal sequence regressor on synthetic returns</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch, torch.nn <span class="im">as</span> nn, numpy <span class="im">as</span> np</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Make tiny dataset: (B,T,F) windows → next-step return</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>T, F, N <span class="op">=</span> <span class="dv">16</span>, <span class="dv">3</span>, <span class="dv">512</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, size<span class="op">=</span>(N, T, F)).astype(<span class="st">"float32"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.2</span>, size<span class="op">=</span>(F,)).astype(<span class="st">"float32"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> (X[:, <span class="op">-</span><span class="dv">1</span>, :] <span class="op">@</span> w <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="fl">0.1</span>, size<span class="op">=</span>(N,))).astype(<span class="st">"float32"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> torch.utils.data.TensorDataset(torch.from_numpy(X), torch.from_numpy(y))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>dl <span class="op">=</span> torch.utils.data.DataLoader(ds, batch_size<span class="op">=</span><span class="dv">64</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SmallGRU(nn.Module):</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, F, H<span class="op">=</span><span class="dv">32</span>):</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gru <span class="op">=</span> nn.GRU(F, H, batch_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.head <span class="op">=</span> nn.Linear(H, <span class="dv">1</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        _, h <span class="op">=</span> <span class="va">self</span>.gru(x)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.head(h[<span class="op">-</span><span class="dv">1</span>]).squeeze(<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> SmallGRU(F).to(device)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>opt <span class="op">=</span> torch.optim.AdamW(net.parameters(), lr<span class="op">=</span><span class="fl">3e-3</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> nn.L1Loss()</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ep <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>):</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    net.train()<span class="op">;</span> tot<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> xb, yb <span class="kw">in</span> dl:</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        xb, yb <span class="op">=</span> xb.to(device), yb.to(device)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>        opt.zero_grad(set_to_none<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        yhat <span class="op">=</span> net(xb)</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(yhat, yb)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>        loss.backward()<span class="op">;</span> nn.utils.clip_grad_norm_(net.parameters(), <span class="fl">1.0</span>)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>        opt.step()<span class="op">;</span> tot <span class="op">+=</span> loss.item()<span class="op">*</span>xb.size(<span class="dv">0</span>)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"epoch </span><span class="sc">{</span>ep<span class="sc">:02d}</span><span class="ss"> | train_mae=</span><span class="sc">{</span>tot<span class="op">/</span><span class="bu">len</span>(ds)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>(Session 19 focus: Dataset/DataLoader + small training loop.)</em> (<a href="https://ywanglab.github.io/STAT4160/lec19.html" title="STAT 4160: Data Science Productivity Tools - 19 Session 19 — Tensors, Datasets, Training Loop">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+<section id="quarto-itself-session-34-book-authoring-tips" class="level3" data-number="29.6.8">
+<h3 data-number="29.6.8" class="anchored" data-anchor-id="quarto-itself-session-34-book-authoring-tips"><span class="header-section-number">29.6.8</span> 10 — Quarto itself (Session 3/4): book authoring tips</h3>
+<ul>
+<li>Add <strong>figures</strong> from earlier chapters; use fenced code blocks (triple back ticks) with outputs.</li>
+<li>Cross‑reference: <code>see @sec-sql</code> by adding <code>{#sec-sql}</code> to a heading.</li>
+<li>Turn on <strong>freeze</strong> (already in <code>_quarto.yml</code>) for reproducible builds.</li>
+<li>Optional: add a tiny <strong>bibliography</strong> or references section.</li>
+</ul>
+<p><em>(Quarto sessions and RStudio cameo.)</em> (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</p>
+<hr>
+</section>
+</section>
+<section id="suggested-milestones" class="level2" data-number="29.7">
+<h2 data-number="29.7" class="anchored" data-anchor-id="suggested-milestones"><span class="header-section-number">29.7</span> Suggested milestones</h2>
+<ul>
+<li><strong>M1:</strong> repo scaffold + Quarto book builds locally.</li>
+<li><strong>M2:</strong> Shell + Make + SQL + pandas joins chapters complete.</li>
+<li><strong>M3:</strong> Scraping + pytest chapters complete.</li>
+<li><strong>M4:</strong> PyTorch chapter + final polish; publish Pages; tag release.</li>
+</ul>
+<hr>
+</section>
+<section id="freshclone-test-students-must-include-in-readme" class="level2" data-number="29.8">
+<h2 data-number="29.8" class="anchored" data-anchor-id="freshclone-test-students-must-include-in-readme"><span class="header-section-number">29.8</span> Fresh‑clone test (students must include in README)</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/<span class="op">&lt;</span>you<span class="op">&gt;</span>/tools-in-action-yourlastname</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tools-in-action-yourlastname</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> env</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> data db features</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render book</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="academic-honesty-data-policy" class="level2" data-number="29.9">
+<h2 data-number="29.9" class="anchored" data-anchor-id="academic-honesty-data-policy"><span class="header-section-number">29.9</span> Academic honesty &amp; data policy</h2>
+<ul>
+<li>Use <strong>small/synthetic</strong> or clearly licensed public data.</li>
+<li>Cite sources. For scraping, <strong>respect robots.txt</strong> and cache. <em>(Session 12 ethics.)</em> (<a href="https://ywanglab.github.io/STAT4160/lec12.html" title="12 Session 12 — HTML Scraping: Ethics &amp; Resilience – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+</ul>
+<hr>
+<section id="optional-starter-scripts-students-may-create" class="level3" data-number="29.9.1">
+<h3 data-number="29.9.1" class="anchored" data-anchor-id="optional-starter-scripts-students-may-create"><span class="header-section-number">29.9.1</span> (Optional) Starter scripts students may create</h3>
+<p><code>scripts/make_synth_data.py</code> (1 CSV with tiny returns) and <code>scripts/build_features.py</code> (e.g., add <code>log_return</code>, <code>weekday</code>); these mirror patterns used across the course so the examples stay consistent with your notes.</p>
+<hr>
+</section>
+<section id="pointers-to-the-course-notes" class="level3" data-number="29.9.2">
+<h3 data-number="29.9.2" class="anchored" data-anchor-id="pointers-to-the-course-notes"><span class="header-section-number">29.9.2</span> Pointers to the course notes</h3>
+<ul>
+<li><strong>Linux basics</strong> (pre‑Linux 5): shell navigation &amp; file ops. (<a href="https://ywanglab.github.io/STAT4160/lec_5_pre.html" title="28 Lecture 5 (Pre) — Linux Basics – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+<li><strong>Shell essentials</strong>: pipes, <code>grep/sed/awk</code>, <code>find|xargs</code>, defensive scripts. (<a href="https://ywanglab.github.io/STAT4160/lec5.html" title="5 Session 5 — Unix/Shell Essentials for Data Work – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+<li><strong>SQL I/II</strong>: SQLite schema, joins, windows &amp; <code>pandas.read_sql</code>. (<a href="https://ywanglab.github.io/STAT4160/lec7.html" title="7 Session 7 — SQL I: SQLite Schemas &amp; Joins – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+<li><strong>HTML scraping &amp; ethics</strong>: selectors, caching, robots.txt. (<a href="https://ywanglab.github.io/STAT4160/lec12.html" title="12 Session 12 — HTML Scraping: Ethics &amp; Resilience – STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+<li><strong>pytest &amp; data validation</strong>: fast, high‑value tests. (<a href="https://ywanglab.github.io/STAT4160" title="STAT 4160: Data Science Productivity Tools">ywanglab.github.io</a>)</li>
+<li><strong>PyTorch training loop</strong>: datasets, loaders, checkpoints. (<a href="https://ywanglab.github.io/STAT4160/lec19.html" title="STAT 4160: Data Science Productivity Tools - 19 Session 19 — Tensors, Datasets, Training Loop">ywanglab.github.io</a>)</li>
+</ul>
+<hr>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./lec_5_pre.html" class="pagination-link" aria-label="Lecture 5 (Pre) — Linux Basics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Lecture 5 (Pre) — Linux Basics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
