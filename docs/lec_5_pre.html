@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./final_project.html" rel="next">
 <link href="./homework/README.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -344,18 +350,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#linux-basics-75minute-lecture-colab-edition-using-vim" id="toc-linux-basics-75minute-lecture-colab-edition-using-vim" class="nav-link active" data-scroll-target="#linux-basics-75minute-lecture-colab-edition-using-vim"><span class="header-section-number">29</span> Linux Basics — 75‑Minute Lecture (Colab Edition, using <strong>vim</strong>)</a>
+  <li><a href="#linux-basics-lecture-colab-edition-using-vim" id="toc-linux-basics-lecture-colab-edition-using-vim" class="nav-link active" data-scroll-target="#linux-basics-lecture-colab-edition-using-vim"><span class="header-section-number">29</span> Linux Basics — Lecture (Colab Edition, using <strong>vim</strong>)</a>
   <ul class="collapse">
   <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes"><span class="header-section-number">29.1</span> Learning Outcomes</a></li>
-  <li><a href="#colab-setup-23-min" id="toc-colab-setup-23-min" class="nav-link" data-scroll-target="#colab-setup-23-min"><span class="header-section-number">29.2</span> Colab Setup (2–3 min)</a></li>
-  <li><a href="#agenda-timeboxed" id="toc-agenda-timeboxed" class="nav-link" data-scroll-target="#agenda-timeboxed"><span class="header-section-number">29.3</span> Agenda (timeboxed)</a></li>
-  <li><a href="#what-is-linux-010-min" id="toc-what-is-linux-010-min" class="nav-link" data-scroll-target="#what-is-linux-010-min"><span class="header-section-number">29.4</span> 1) What is Linux? (0–10 min)</a></li>
-  <li><a href="#navigation-basic-file-operations-1025-min" id="toc-navigation-basic-file-operations-1025-min" class="nav-link" data-scroll-target="#navigation-basic-file-operations-1025-min"><span class="header-section-number">29.5</span> 2) Navigation &amp; Basic File Operations (10–25 min)</a></li>
-  <li><a href="#permissions-ownership-2535-min" id="toc-permissions-ownership-2535-min" class="nav-link" data-scroll-target="#permissions-ownership-2535-min"><span class="header-section-number">29.6</span> 3) Permissions &amp; Ownership (25–35 min)</a></li>
-  <li><a href="#redirection-pipes-essential-text-tools-3550-min" id="toc-redirection-pipes-essential-text-tools-3550-min" class="nav-link" data-scroll-target="#redirection-pipes-essential-text-tools-3550-min"><span class="header-section-number">29.7</span> 4) Redirection, Pipes, &amp; Essential Text Tools (35–50 min)</a></li>
-  <li><a href="#vim-crash-course-5060-min" id="toc-vim-crash-course-5060-min" class="nav-link" data-scroll-target="#vim-crash-course-5060-min"><span class="header-section-number">29.8</span> 5) <strong>vim</strong> Crash Course (50–60 min)</a></li>
-  <li><a href="#shell-scripts-variables-path-6070-min" id="toc-shell-scripts-variables-path-6070-min" class="nav-link" data-scroll-target="#shell-scripts-variables-path-6070-min"><span class="header-section-number">29.9</span> 6) Shell Scripts, Variables, PATH (60–70 min)</a></li>
-  <li><a href="#packages-help-7075-min" id="toc-packages-help-7075-min" class="nav-link" data-scroll-target="#packages-help-7075-min"><span class="header-section-number">29.10</span> 7) Packages &amp; Help (70–75 min)</a></li>
+  <li><a href="#colab-setup" id="toc-colab-setup" class="nav-link" data-scroll-target="#colab-setup"><span class="header-section-number">29.2</span> Colab Setup</a></li>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">29.3</span> Agenda</a></li>
+  <li><a href="#what-is-linux" id="toc-what-is-linux" class="nav-link" data-scroll-target="#what-is-linux"><span class="header-section-number">29.4</span> 1) What is Linux?</a></li>
+  <li><a href="#navigation-basic-file-operations" id="toc-navigation-basic-file-operations" class="nav-link" data-scroll-target="#navigation-basic-file-operations"><span class="header-section-number">29.5</span> 2) Navigation &amp; Basic File Operations</a></li>
+  <li><a href="#permissions-ownership" id="toc-permissions-ownership" class="nav-link" data-scroll-target="#permissions-ownership"><span class="header-section-number">29.6</span> 3) Permissions &amp; Ownership</a></li>
+  <li><a href="#redirection-pipes-essential-text-tools" id="toc-redirection-pipes-essential-text-tools" class="nav-link" data-scroll-target="#redirection-pipes-essential-text-tools"><span class="header-section-number">29.7</span> 4) Redirection, Pipes, &amp; Essential Text Tools</a></li>
+  <li><a href="#vim-crash-course" id="toc-vim-crash-course" class="nav-link" data-scroll-target="#vim-crash-course"><span class="header-section-number">29.8</span> 5) <strong>vim</strong> Crash Course</a></li>
+  <li><a href="#shell-scripts-variables-path" id="toc-shell-scripts-variables-path" class="nav-link" data-scroll-target="#shell-scripts-variables-path"><span class="header-section-number">29.9</span> 6) Shell Scripts, Variables, PATH</a></li>
+  <li><a href="#packages-help" id="toc-packages-help" class="nav-link" data-scroll-target="#packages-help"><span class="header-section-number">29.10</span> 7) Packages &amp; Help</a></li>
   <li><a href="#minilabs-for-practice-homework" id="toc-minilabs-for-practice-homework" class="nav-link" data-scroll-target="#minilabs-for-practice-homework"><span class="header-section-number">29.11</span> Mini‑Labs (for practice / homework)</a></li>
   <li><a href="#onepage-cheat-sheet" id="toc-onepage-cheat-sheet" class="nav-link" data-scroll-target="#onepage-cheat-sheet"><span class="header-section-number">29.12</span> One‑Page Cheat Sheet</a></li>
   </ul></li>
@@ -384,8 +390,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="linux-basics-75minute-lecture-colab-edition-using-vim" class="level1" data-number="29">
-<h1 data-number="29"><span class="header-section-number">29</span> Linux Basics — 75‑Minute Lecture (Colab Edition, using <strong>vim</strong>)</h1>
+<section id="linux-basics-lecture-colab-edition-using-vim" class="level1" data-number="29">
+<h1 data-number="29"><span class="header-section-number">29</span> Linux Basics — Lecture (Colab Edition, using <strong>vim</strong>)</h1>
 <p><strong>Audience:</strong> Absolute beginners to Linux</p>
 <p><strong>Format:</strong> using <code>!</code> (line) or <code>%%bash</code> (cell) magics. Editing demo uses <strong>vim</strong></p>
 <hr>
@@ -403,8 +409,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="colab-setup-23-min" class="level2" data-number="29.2">
-<h2 data-number="29.2" class="anchored" data-anchor-id="colab-setup-23-min"><span class="header-section-number">29.2</span> Colab Setup (2–3 min)</h2>
+<section id="colab-setup" class="level2" data-number="29.2">
+<h2 data-number="29.2" class="anchored" data-anchor-id="colab-setup"><span class="header-section-number">29.2</span> Colab Setup</h2>
 <p>Colab uses a Linux VM with a working directory at <code>/content</code>. To run shell commands in Colab:</p>
 <ul>
 <li><strong>One‑liner:</strong> prefix with <code>!</code></li>
@@ -424,21 +430,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>ls <span class="op">-</span>lah <span class="op">/</span>content<span class="op">/</span>drive<span class="op">/</span>MyDrive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
-<section id="agenda-timeboxed" class="level2" data-number="29.3">
-<h2 data-number="29.3" class="anchored" data-anchor-id="agenda-timeboxed"><span class="header-section-number">29.3</span> Agenda (timeboxed)</h2>
+<section id="agenda" class="level2" data-number="29.3">
+<h2 data-number="29.3" class="anchored" data-anchor-id="agenda"><span class="header-section-number">29.3</span> Agenda</h2>
 <ul>
-<li>(0–10) What is Linux? Shell vs kernel. Filesystem anatomy.</li>
-<li>(10–25) Navigation + basic file ops</li>
-<li>(25–35) Permissions &amp; ownership (Colab nuances)</li>
-<li>(35–50) Redirection, pipes, text tools (grep, sort, wc, cut)</li>
-<li>(50–60) <strong>vim</strong> crash course (editing in a real terminal)</li>
-<li>(60–70) Shell scripts, variables, PATH</li>
-<li>(70–75) Packages (apt/pip) + help/man + wrap‑up</li>
+<li>What is Linux? Shell vs kernel. Filesystem anatomy.</li>
+<li>Navigation + basic file ops</li>
+<li>Permissions &amp; ownership (Colab nuances)</li>
+<li>Redirection, pipes, text tools (grep, sort, wc, cut)</li>
+<li><strong>vim</strong> crash course (editing in a real terminal)</li>
+<li>Shell scripts, variables, PATH</li>
+<li>Packages (apt/pip) + help/man + wrap‑up</li>
 </ul>
 <hr>
 </section>
-<section id="what-is-linux-010-min" class="level2" data-number="29.4">
-<h2 data-number="29.4" class="anchored" data-anchor-id="what-is-linux-010-min"><span class="header-section-number">29.4</span> 1) What is Linux? (0–10 min)</h2>
+<section id="what-is-linux" class="level2" data-number="29.4">
+<h2 data-number="29.4" class="anchored" data-anchor-id="what-is-linux"><span class="header-section-number">29.4</span> 1) What is Linux?</h2>
 <ul>
 <li><strong>Kernel</strong>: talks to hardware; <strong>Userland</strong>: tools (<code>bash</code>, <code>ls</code>, <code>vim</code>, etc.)</li>
 <li><strong>Shell</strong>: the program that reads your commands (default in Colab: <code>bash</code>).</li>
@@ -452,8 +458,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>ls <span class="op">-</span>lah <span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
-<section id="navigation-basic-file-operations-1025-min" class="level2" data-number="29.5">
-<h2 data-number="29.5" class="anchored" data-anchor-id="navigation-basic-file-operations-1025-min"><span class="header-section-number">29.5</span> 2) Navigation &amp; Basic File Operations (10–25 min)</h2>
+<section id="navigation-basic-file-operations" class="level2" data-number="29.5">
+<h2 data-number="29.5" class="anchored" data-anchor-id="navigation-basic-file-operations"><span class="header-section-number">29.5</span> 2) Navigation &amp; Basic File Operations</h2>
 <p><strong>Commands</strong></p>
 <ul>
 <li><code>pwd</code> (print working directory)</li>
@@ -485,8 +491,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="permissions-ownership-2535-min" class="level2" data-number="29.6">
-<h2 data-number="29.6" class="anchored" data-anchor-id="permissions-ownership-2535-min"><span class="header-section-number">29.6</span> 3) Permissions &amp; Ownership (25–35 min)</h2>
+<section id="permissions-ownership" class="level2" data-number="29.6">
+<h2 data-number="29.6" class="anchored" data-anchor-id="permissions-ownership"><span class="header-section-number">29.6</span> 3) Permissions &amp; Ownership</h2>
 <p><strong><code>ls -l</code> output:</strong> <code>-rwxr-xr--  1 owner group size date name</code></p>
 <ul>
 <li>First char <code>-</code> file / <code>d</code> directory</li>
@@ -508,8 +514,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>.<span class="op">/</span>hello.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
-<section id="redirection-pipes-essential-text-tools-3550-min" class="level2" data-number="29.7">
-<h2 data-number="29.7" class="anchored" data-anchor-id="redirection-pipes-essential-text-tools-3550-min"><span class="header-section-number">29.7</span> 4) Redirection, Pipes, &amp; Essential Text Tools (35–50 min)</h2>
+<section id="redirection-pipes-essential-text-tools" class="level2" data-number="29.7">
+<h2 data-number="29.7" class="anchored" data-anchor-id="redirection-pipes-essential-text-tools"><span class="header-section-number">29.7</span> 4) Redirection, Pipes, &amp; Essential Text Tools</h2>
 <p><strong>Redirection</strong></p>
 <ul>
 <li><code>&gt;</code> overwrite, <code>&gt;&gt;</code> append, <code>2&gt;</code> stderr, <code>&amp;&gt;</code> stdout+stderr</li>
@@ -539,8 +545,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>grep <span class="st">'^AAPL,'</span> stocks.csv <span class="op">|</span> tail <span class="op">-</span>n <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
-<section id="vim-crash-course-5060-min" class="level2" data-number="29.8">
-<h2 data-number="29.8" class="anchored" data-anchor-id="vim-crash-course-5060-min"><span class="header-section-number">29.8</span> 5) <strong>vim</strong> Crash Course (50–60 min)</h2>
+<section id="vim-crash-course" class="level2" data-number="29.8">
+<h2 data-number="29.8" class="anchored" data-anchor-id="vim-crash-course"><span class="header-section-number">29.8</span> 5) <strong>vim</strong> Crash Course</h2>
 <p><strong>Goal:</strong> basic edits: open → insert → save → quit.</p>
 <p><strong>Install (if needed):</strong></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get update <span class="op">-</span>qq <span class="op">&amp;&amp;</span> apt<span class="op">-</span>get install <span class="op">-</span>y <span class="op">-</span>qq vim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -565,8 +571,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="shell-scripts-variables-path-6070-min" class="level2" data-number="29.9">
-<h2 data-number="29.9" class="anchored" data-anchor-id="shell-scripts-variables-path-6070-min"><span class="header-section-number">29.9</span> 6) Shell Scripts, Variables, PATH (60–70 min)</h2>
+<section id="shell-scripts-variables-path" class="level2" data-number="29.9">
+<h2 data-number="29.9" class="anchored" data-anchor-id="shell-scripts-variables-path"><span class="header-section-number">29.9</span> 6) Shell Scripts, Variables, PATH</h2>
 <p><strong>Variables</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">NAME</span><span class="op">=</span>Alice</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Hi </span><span class="va">$NAME</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -598,8 +604,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="packages-help-7075-min" class="level2" data-number="29.10">
-<h2 data-number="29.10" class="anchored" data-anchor-id="packages-help-7075-min"><span class="header-section-number">29.10</span> 7) Packages &amp; Help (70–75 min)</h2>
+<section id="packages-help" class="level2" data-number="29.10">
+<h2 data-number="29.10" class="anchored" data-anchor-id="packages-help"><span class="header-section-number">29.10</span> 7) Packages &amp; Help</h2>
 <p><strong>System packages (apt)</strong></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get update <span class="op">-</span>qq</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>apt<span class="op">-</span>get install <span class="op">-</span>y <span class="op">-</span>qq tree  <span class="co"># example</span></span>
@@ -1054,8 +1060,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./final_project.html" class="pagination-link" aria-label="Assignment: Tools-in-Action Book (Quarto + GitHub Pages)">
+        <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
