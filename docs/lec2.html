@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -344,15 +350,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-2-git-essentials-gitlfs-75-min" id="toc-session-2-git-essentials-gitlfs-75-min" class="nav-link active" data-scroll-target="#session-2-git-essentials-gitlfs-75-min"><span class="header-section-number">2.1</span> Session 2 — Git essentials &amp; Git‑LFS (75 min)</a>
+  <li><a href="#session-2-git-essentials-gitlfs" id="toc-session-2-git-essentials-gitlfs" class="nav-link active" data-scroll-target="#session-2-git-essentials-gitlfs"><span class="header-section-number">2.1</span> Session 2 — Git essentials &amp; Git‑LFS</a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">2.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-minutes" id="toc-agenda-75-minutes" class="nav-link" data-scroll-target="#agenda-75-minutes"><span class="header-section-number">2.2</span> Agenda (75 minutes)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">2.3</span> Slides</a>
-  <ul class="collapse">
-  <li><a href="#git-mental-model" id="toc-git-mental-model" class="nav-link" data-scroll-target="#git-mental-model"><span class="header-section-number">2.3.1</span> Git mental model</a></li>
-  </ul></li>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">2.2</span> Agenda</a></li>
+  <li><a href="#git-mental-model" id="toc-git-mental-model" class="nav-link" data-scroll-target="#git-mental-model"><span class="header-section-number">2.3</span> Git mental model</a></li>
   <li><a href="#the-simple-definition" id="toc-the-simple-definition" class="nav-link" data-scroll-target="#the-simple-definition"><span class="header-section-number">2.4</span> <strong>1. The simple definition</strong></a></li>
   <li><a href="#visual-example" id="toc-visual-example" class="nav-link" data-scroll-target="#visual-example"><span class="header-section-number">2.5</span> <strong>2. Visual example</strong></a></li>
   <li><a href="#head-and-active-branch" id="toc-head-and-active-branch" class="nav-link" data-scroll-target="#head-and-active-branch"><span class="header-section-number">2.6</span> <strong>3. HEAD and active branch</strong></a></li>
@@ -368,7 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#gitlfs" id="toc-gitlfs" class="nav-link" data-scroll-target="#gitlfs"><span class="header-section-number">2.9.6</span> Git‑LFS</a></li>
   <li><a href="#safe-pushes-from-colab" id="toc-safe-pushes-from-colab" class="nav-link" data-scroll-target="#safe-pushes-from-colab"><span class="header-section-number">2.9.7</span> Safe pushes from Colab</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">2.10</span> In‑class lab (35 min)</a>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">2.10</span> In‑class lab</a>
   <ul class="collapse">
   <li><a href="#mount-google-drive-and-set-variables" id="toc-mount-google-drive-and-set-variables" class="nav-link" data-scroll-target="#mount-google-drive-and-set-variables"><span class="header-section-number">2.10.1</span> 0) Mount Google Drive and set variables</a></li>
   <li><a href="#clone-the-repo-or-pull-latest-if-already-cloned" id="toc-clone-the-repo-or-pull-latest-if-already-cloned" class="nav-link" data-scroll-target="#clone-the-repo-or-pull-latest-if-already-cloned"><span class="header-section-number">2.10.2</span> 1) Clone the repo (or pull latest if already cloned)</a></li>
@@ -430,8 +433,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Security note:</strong> Today we’ll push from Colab using a <strong>short‑lived GitHub personal access token (PAT)</strong> entered interactively. <strong>Never</strong> hard‑code or commit tokens.</p>
 </blockquote>
 <hr>
-<section id="session-2-git-essentials-gitlfs-75-min" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="session-2-git-essentials-gitlfs-75-min"><span class="header-section-number">2.1</span> Session 2 — Git essentials &amp; Git‑LFS (75 min)</h2>
+<section id="session-2-git-essentials-gitlfs" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="session-2-git-essentials-gitlfs"><span class="header-section-number">2.1</span> Session 2 — Git essentials &amp; Git‑LFS</h2>
 <section id="learning-goals" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">2.1.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
@@ -445,21 +448,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="agenda-75-minutes" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="agenda-75-minutes"><span class="header-section-number">2.2</span> Agenda (75 minutes)</h2>
+<section id="agenda" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">2.2</span> Agenda</h2>
 <ul>
-<li><strong>(8 min)</strong> Recap &amp; goals; overview of today’s workflow</li>
-<li><strong>(12 min)</strong> Slides: Git mental model; branches; remotes; commit hygiene</li>
-<li><strong>(10 min)</strong> Slides: <code>.gitignore</code> must‑haves; Git‑LFS (when/why); LFS quotas &amp; pitfalls</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: clone → config → branch → <code>.gitignore</code> → LFS → sample Parquet → push → PR</li>
-<li><strong>(10 min)</strong> Wrap‑up; troubleshooting; homework briefing</li>
+<li>Recap &amp; goals; overview of today’s workflow</li>
+<li>Slides: Git mental model; branches; remotes; commit hygiene</li>
+<li>Slides: <code>.gitignore</code> must‑haves; Git‑LFS (when/why); LFS quotas &amp; pitfalls</li>
+<li><strong>In‑class lab</strong>: clone → config → branch → <code>.gitignore</code> → LFS → sample Parquet → push → PR</li>
+<li>Wrap‑up; troubleshooting; homework briefing</li>
 </ul>
 <hr>
 </section>
-<section id="slides" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">2.3</span> Slides</h2>
-<section id="git-mental-model" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="git-mental-model"><span class="header-section-number">2.3.1</span> Git mental model</h3>
+<section id="git-mental-model" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="git-mental-model"><span class="header-section-number">2.3</span> Git mental model</h2>
 <ul>
 <li><strong>Working directory</strong> (your files) → <code>git add</code> → <strong>staging</strong> → <code>git commit</code> → <strong>local history</strong></li>
 <li><strong>Remote</strong>: GitHub hosts a copy. <code>git push</code> publishes commits; <code>git pull</code> brings others’ changes.</li>
@@ -467,7 +468,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>In Git, a <strong>branch</strong> is essentially just a <strong>movable pointer</strong> to a commit.</p>
 <hr>
-</section>
 </section>
 <section id="the-simple-definition" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="the-simple-definition"><span class="header-section-number">2.4</span> <strong>1. The simple definition</strong></h2>
@@ -603,8 +603,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="2.10">
-<h2 data-number="2.10" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">2.10</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">2.10</span> In‑class lab</h2>
 <blockquote class="blockquote">
 <p><strong>Instructor tip:</strong> Students should have created a repo on GitHub before this lab (e.g., <code>unified-stocks-teamX</code>). If not, give them 3 minutes to do so and add their partner as a collaborator.</p>
 </blockquote>

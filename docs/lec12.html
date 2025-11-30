@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -345,24 +351,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals"><span class="header-section-number">12.0.1</span> Learning goals</a></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">12.1</span> Agenda (75 min)</a></li>
-  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">12.2</span> Slide</a></li>
-  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">12.3</span> In‑class lab</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">12.1</span> Agenda</a></li>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">12.2</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#setup-robots-check-html-caching" id="toc-setup-robots-check-html-caching" class="nav-link" data-scroll-target="#setup-robots-check-html-caching"><span class="header-section-number">12.3.1</span> 0) Setup + robots check + HTML caching</a></li>
-  <li><a href="#download-with-cache-and-parse-the-first-big-table" id="toc-download-with-cache-and-parse-the-first-big-table" class="nav-link" data-scroll-target="#download-with-cache-and-parse-the-first-big-table"><span class="header-section-number">12.3.2</span> 1) Download (with cache) and parse the first big table</a></li>
-  <li><a href="#clean-normalize-keep-only-ticker-sector" id="toc-clean-normalize-keep-only-ticker-sector" class="nav-link" data-scroll-target="#clean-normalize-keep-only-ticker-sector"><span class="header-section-number">12.3.3</span> 2) Clean + normalize + keep only ticker ↔︎ sector</a></li>
-  <li><a href="#merge-sector-mapping-into-prices-if-missing-sector" id="toc-merge-sector-mapping-into-prices-if-missing-sector" class="nav-link" data-scroll-target="#merge-sector-mapping-into-prices-if-missing-sector"><span class="header-section-number">12.3.4</span> 3) Merge sector mapping into prices if missing sector</a></li>
+  <li><a href="#setup-robots-check-html-caching" id="toc-setup-robots-check-html-caching" class="nav-link" data-scroll-target="#setup-robots-check-html-caching"><span class="header-section-number">12.2.1</span> 0) Setup + robots check + HTML caching</a></li>
+  <li><a href="#download-with-cache-and-parse-the-first-big-table" id="toc-download-with-cache-and-parse-the-first-big-table" class="nav-link" data-scroll-target="#download-with-cache-and-parse-the-first-big-table"><span class="header-section-number">12.2.2</span> 1) Download (with cache) and parse the first big table</a></li>
+  <li><a href="#clean-normalize-keep-only-ticker-sector" id="toc-clean-normalize-keep-only-ticker-sector" class="nav-link" data-scroll-target="#clean-normalize-keep-only-ticker-sector"><span class="header-section-number">12.2.3</span> 2) Clean + normalize + keep only ticker ↔︎ sector</a></li>
+  <li><a href="#merge-sector-mapping-into-prices-if-missing-sector" id="toc-merge-sector-mapping-into-prices-if-missing-sector" class="nav-link" data-scroll-target="#merge-sector-mapping-into-prices-if-missing-sector"><span class="header-section-number">12.2.4</span> 3) Merge sector mapping into prices if missing sector</a></li>
   </ul></li>
-  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">12.4</span> Wrap‑up</a></li>
-  <li><a href="#homework-due-next-week" id="toc-homework-due-next-week" class="nav-link" data-scroll-target="#homework-due-next-week"><span class="header-section-number">12.5</span> Homework (due next week)</a>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">12.3</span> Wrap‑up</a></li>
+  <li><a href="#homework-due-next-week" id="toc-homework-due-next-week" class="nav-link" data-scroll-target="#homework-due-next-week"><span class="header-section-number">12.4</span> Homework (due next week)</a>
   <ul class="collapse">
-  <li><a href="#a.-provenance-section-script-that-composes-a-markdown-file" id="toc-a.-provenance-section-script-that-composes-a-markdown-file" class="nav-link" data-scroll-target="#a.-provenance-section-script-that-composes-a-markdown-file"><span class="header-section-number">12.5.1</span> A. Provenance section (script that composes a Markdown file)</a></li>
-  <li><a href="#b.-data-dictionary-generator" id="toc-b.-data-dictionary-generator" class="nav-link" data-scroll-target="#b.-data-dictionary-generator"><span class="header-section-number">12.5.2</span> B. Data dictionary generator</a></li>
-  <li><a href="#c.-optional-add-a-short-quarto-page-that-includes-both-files" id="toc-c.-optional-add-a-short-quarto-page-that-includes-both-files" class="nav-link" data-scroll-target="#c.-optional-add-a-short-quarto-page-that-includes-both-files"><span class="header-section-number">12.5.3</span> C. (Optional) Add a short <strong>Quarto</strong> page that includes both files</a></li>
-  <li><a href="#d.-quick-tests" id="toc-d.-quick-tests" class="nav-link" data-scroll-target="#d.-quick-tests"><span class="header-section-number">12.5.4</span> D. Quick tests</a></li>
+  <li><a href="#a.-provenance-section-script-that-composes-a-markdown-file" id="toc-a.-provenance-section-script-that-composes-a-markdown-file" class="nav-link" data-scroll-target="#a.-provenance-section-script-that-composes-a-markdown-file"><span class="header-section-number">12.4.1</span> A. Provenance section (script that composes a Markdown file)</a></li>
+  <li><a href="#b.-data-dictionary-generator" id="toc-b.-data-dictionary-generator" class="nav-link" data-scroll-target="#b.-data-dictionary-generator"><span class="header-section-number">12.4.2</span> B. Data dictionary generator</a></li>
+  <li><a href="#c.-optional-add-a-short-quarto-page-that-includes-both-files" id="toc-c.-optional-add-a-short-quarto-page-that-includes-both-files" class="nav-link" data-scroll-target="#c.-optional-add-a-short-quarto-page-that-includes-both-files"><span class="header-section-number">12.4.3</span> C. (Optional) Add a short <strong>Quarto</strong> page that includes both files</a></li>
+  <li><a href="#d.-quick-tests" id="toc-d.-quick-tests" class="nav-link" data-scroll-target="#d.-quick-tests"><span class="header-section-number">12.4.4</span> D. Quick tests</a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">12.6</span> Key points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">12.5</span> Key points</a></li>
   </ul>
 </nav>
     </div>
@@ -399,19 +404,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="agenda-75-min" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">12.1</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="agenda"><span class="header-section-number">12.1</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Slides: ethics, robots, terms; caching, rate limits</li>
-<li><strong>(10 min)</strong> Slides: stable selectors (ids, table headers), text cleanup, date parsing</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: scrape a static sector table (Wikipedia S&amp;P 500 components), map to your tickers, save <code>data/static/sector_map.csv</code>; merge into <code>prices.parquet</code> if missing</li>
-<li><strong>(10 min)</strong> Wrap‑up + homework brief</li>
-<li><strong>(10 min)</strong> Buffer</li>
+<li>ethics, robots, terms; caching, rate limits</li>
+<li>stable selectors (ids, table headers), text cleanup, date parsing</li>
+<li><strong>In‑class lab</strong>: scrape a static sector table (Wikipedia S&amp;P 500 components), map to your tickers, save <code>data/static/sector_map.csv</code>; merge into <code>prices.parquet</code> if missing</li>
+<li>Wrap‑up + homework brief</li>
 </ul>
 <hr>
-</section>
-<section id="slide" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="slide"><span class="header-section-number">12.2</span> Slide</h2>
 <p><strong>Ethics + resilience</strong></p>
 <ul>
 <li><strong>Check robots.txt</strong>; identify disallow rules.</li>
@@ -431,13 +432,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">12.3</span> In‑class lab</h2>
+<section id="inclass-lab" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">12.2</span> In‑class lab</h2>
 <blockquote class="blockquote">
 <p>We’ll scrape <strong>Wikipedia: List of S&amp;P 500 companies</strong> (static table). If blocked, we fall back to <code>pandas.read_html</code> or a small local stub.</p>
 </blockquote>
-<section id="setup-robots-check-html-caching" class="level3" data-number="12.3.1">
-<h3 data-number="12.3.1" class="anchored" data-anchor-id="setup-robots-check-html-caching"><span class="header-section-number">12.3.1</span> 0) Setup + robots check + HTML caching</h3>
+<section id="setup-robots-check-html-caching" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="setup-robots-check-html-caching"><span class="header-section-number">12.2.1</span> 0) Setup + robots check + HTML caching</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -466,8 +467,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Robots allows /wiki/?"</span>, allowed_by_robots(<span class="st">"https://en.wikipedia.org"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="download-with-cache-and-parse-the-first-big-table" class="level3" data-number="12.3.2">
-<h3 data-number="12.3.2" class="anchored" data-anchor-id="download-with-cache-and-parse-the-first-big-table"><span class="header-section-number">12.3.2</span> 1) Download (with cache) and parse the first big table</h3>
+<section id="download-with-cache-and-parse-the-first-big-table" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="download-with-cache-and-parse-the-first-big-table"><span class="header-section-number">12.2.2</span> 1) Download (with cache) and parse the first big table</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_html_cached(url, ttl_hours<span class="op">=</span><span class="dv">24</span>):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> hashlib.sha1(url.encode()).hexdigest()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> pathlib.Path(<span class="ss">f".cache/html/</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">.html"</span>)</span>
@@ -497,8 +498,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>sp.head(<span class="dv">3</span>), sp.columns.tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="clean-normalize-keep-only-ticker-sector" class="level3" data-number="12.3.3">
-<h3 data-number="12.3.3" class="anchored" data-anchor-id="clean-normalize-keep-only-ticker-sector"><span class="header-section-number">12.3.3</span> 2) Clean + normalize + keep only ticker ↔︎ sector</h3>
+<section id="clean-normalize-keep-only-ticker-sector" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="clean-normalize-keep-only-ticker-sector"><span class="header-section-number">12.2.3</span> 2) Clean + normalize + keep only ticker ↔︎ sector</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> snake(s): </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> re.sub(<span class="vs">r"</span><span class="pp">[^</span><span class="dv">\w\s</span><span class="pp">]</span><span class="vs">"</span>, <span class="st">"_"</span>, s)</span>
@@ -523,8 +524,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote data/static/sector_map.csv"</span>, sp.shape)</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>sp.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="merge-sector-mapping-into-prices-if-missing-sector" class="level3" data-number="12.3.4">
-<h3 data-number="12.3.4" class="anchored" data-anchor-id="merge-sector-mapping-into-prices-if-missing-sector"><span class="header-section-number">12.3.4</span> 3) Merge sector mapping into prices if missing sector</h3>
+<section id="merge-sector-mapping-into-prices-if-missing-sector" class="level3" data-number="12.2.4">
+<h3 data-number="12.2.4" class="anchored" data-anchor-id="merge-sector-mapping-into-prices-if-missing-sector"><span class="header-section-number">12.2.4</span> 3) Merge sector mapping into prices if missing sector</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> Path(<span class="st">"data/processed/prices.parquet"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> pp.exists():</span>
@@ -541,8 +542,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup" class="level2" data-number="12.4">
-<h2 data-number="12.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">12.4</span> Wrap‑up</h2>
+<section id="wrapup" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">12.3</span> Wrap‑up</h2>
 <ul>
 <li>You scraped a static table <strong>politely</strong> (robots, throttle, cache) and extracted a tidy map.</li>
 <li>You persisted <strong>provenance</strong> and used it to enrich your dataset.</li>
@@ -550,11 +551,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-next-week" class="level2" data-number="12.5">
-<h2 data-number="12.5" class="anchored" data-anchor-id="homework-due-next-week"><span class="header-section-number">12.5</span> Homework (due next week)</h2>
+<section id="homework-due-next-week" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="homework-due-next-week"><span class="header-section-number">12.4</span> Homework (due next week)</h2>
 <p><strong>Goal:</strong> Document your web data provenance and generate a minimal <strong>data dictionary</strong> for the project.</p>
-<section id="a.-provenance-section-script-that-composes-a-markdown-file" class="level3" data-number="12.5.1">
-<h3 data-number="12.5.1" class="anchored" data-anchor-id="a.-provenance-section-script-that-composes-a-markdown-file"><span class="header-section-number">12.5.1</span> A. Provenance section (script that composes a Markdown file)</h3>
+<section id="a.-provenance-section-script-that-composes-a-markdown-file" class="level3" data-number="12.4.1">
+<h3 data-number="12.4.1" class="anchored" data-anchor-id="a.-provenance-section-script-that-composes-a-markdown-file"><span class="header-section-number">12.4.1</span> A. Provenance section (script that composes a Markdown file)</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scripts/write_provenance.py</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, pandas <span class="im">as</span> pd</span>
@@ -583,8 +584,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/write_provenance.py</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/write_provenance.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="b.-data-dictionary-generator" class="level3" data-number="12.5.2">
-<h3 data-number="12.5.2" class="anchored" data-anchor-id="b.-data-dictionary-generator"><span class="header-section-number">12.5.2</span> B. Data dictionary generator</h3>
+<section id="b.-data-dictionary-generator" class="level3" data-number="12.4.2">
+<h3 data-number="12.4.2" class="anchored" data-anchor-id="b.-data-dictionary-generator"><span class="header-section-number">12.4.2</span> B. Data dictionary generator</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scripts/data_dictionary.py</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -618,12 +619,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/data_dictionary.py</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/data_dictionary.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="c.-optional-add-a-short-quarto-page-that-includes-both-files" class="level3" data-number="12.5.3">
-<h3 data-number="12.5.3" class="anchored" data-anchor-id="c.-optional-add-a-short-quarto-page-that-includes-both-files"><span class="header-section-number">12.5.3</span> C. (Optional) Add a short <strong>Quarto</strong> page that includes both files</h3>
+<section id="c.-optional-add-a-short-quarto-page-that-includes-both-files" class="level3" data-number="12.4.3">
+<h3 data-number="12.4.3" class="anchored" data-anchor-id="c.-optional-add-a-short-quarto-page-that-includes-both-files"><span class="header-section-number">12.4.3</span> C. (Optional) Add a short <strong>Quarto</strong> page that includes both files</h3>
 <p>Create <code>reports/data_overview.qmd</code> and render in your next report.</p>
 </section>
-<section id="d.-quick-tests" class="level3" data-number="12.5.4">
-<h3 data-number="12.5.4" class="anchored" data-anchor-id="d.-quick-tests"><span class="header-section-number">12.5.4</span> D. Quick tests</h3>
+<section id="d.-quick-tests" class="level3" data-number="12.4.4">
+<h3 data-number="12.4.4" class="anchored" data-anchor-id="d.-quick-tests"><span class="header-section-number">12.4.4</span> D. Quick tests</h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tests/test_dictionary_provenance.py</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, pandas <span class="im">as</span> pd</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_provenance_and_dict():</span>
@@ -637,8 +638,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="12.6">
-<h2 data-number="12.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">12.6</span> Key points</h2>
+<section id="key-points" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="key-points"><span class="header-section-number">12.5</span> Key points</h2>
 <ul>
 <li>If Wikipedia blocks requests, switch to <code>pandas.read_html</code> (shown) or use a small pre‑saved HTML in <code>data/static/</code> to demonstrate parsing.</li>
 </ul>
@@ -1054,8 +1055,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./lec13.html" class="pagination-link" aria-label="Session 13">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./lec13.html" class="pagination-link" aria-label="Session 13: pytest + Data Validation">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

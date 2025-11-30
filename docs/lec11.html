@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -345,23 +351,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals"><span class="header-section-number">11.1</span> Learning goals</a></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">11.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slide" id="toc-slide" class="nav-link" data-scroll-target="#slide"><span class="header-section-number">11.3</span> Slide</a></li>
-  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">11.4</span> In‑class lab</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">11.2</span> Agenda</a></li>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">11.3</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#setup-folders-and-templates" id="toc-setup-folders-and-templates" class="nav-link" data-scroll-target="#setup-folders-and-templates"><span class="header-section-number">11.4.1</span> 0) Setup, folders, and templates</a></li>
-  <li><a href="#robust-get-with-retry-file-cache" id="toc-robust-get-with-retry-file-cache" class="nav-link" data-scroll-target="#robust-get-with-retry-file-cache"><span class="header-section-number">11.4.2</span> 1) Robust GET with retry + file cache</a></li>
-  <li><a href="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" id="toc-fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="nav-link" data-scroll-target="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.4.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</a></li>
-  <li><a href="#join-macro-series-to-daily-returnsfeatures-by-date" id="toc-join-macro-series-to-daily-returnsfeatures-by-date" class="nav-link" data-scroll-target="#join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.4.4</span> 3) Join macro series to daily returns/features by <code>date</code></a></li>
+  <li><a href="#setup-folders-and-templates" id="toc-setup-folders-and-templates" class="nav-link" data-scroll-target="#setup-folders-and-templates"><span class="header-section-number">11.3.1</span> 0) Setup, folders, and templates</a></li>
+  <li><a href="#robust-get-with-retry-file-cache" id="toc-robust-get-with-retry-file-cache" class="nav-link" data-scroll-target="#robust-get-with-retry-file-cache"><span class="header-section-number">11.3.2</span> 1) Robust GET with retry + file cache</a></li>
+  <li><a href="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" id="toc-fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="nav-link" data-scroll-target="#fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.3.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</a></li>
+  <li><a href="#join-macro-series-to-daily-returnsfeatures-by-date" id="toc-join-macro-series-to-daily-returnsfeatures-by-date" class="nav-link" data-scroll-target="#join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.3.4</span> 3) Join macro series to daily returns/features by <code>date</code></a></li>
   </ul></li>
-  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">11.5</span> Wrap‑up</a></li>
-  <li><a href="#homework-due-before-session-12" id="toc-homework-due-before-session-12" class="nav-link" data-scroll-target="#homework-due-before-session-12"><span class="header-section-number">11.6</span> Homework (due before Session 12)</a>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">11.4</span> Wrap‑up</a></li>
+  <li><a href="#homework-due-before-session-12" id="toc-homework-due-before-session-12" class="nav-link" data-scroll-target="#homework-due-before-session-12"><span class="header-section-number">11.5</span> Homework (due before Session 12)</a>
   <ul class="collapse">
-  <li><a href="#a.-script-scriptsget_macro.py" id="toc-a.-script-scriptsget_macro.py" class="nav-link" data-scroll-target="#a.-script-scriptsget_macro.py"><span class="header-section-number">11.6.1</span> A. Script: <code>scripts/get_macro.py</code></a></li>
-  <li><a href="#b.-enrich-features-with-your-new-series" id="toc-b.-enrich-features-with-your-new-series" class="nav-link" data-scroll-target="#b.-enrich-features-with-your-new-series"><span class="header-section-number">11.6.2</span> B. Enrich features with your new series</a></li>
-  <li><a href="#c.-short-test-teststest_macro_join.py" id="toc-c.-short-test-teststest_macro_join.py" class="nav-link" data-scroll-target="#c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.6.3</span> C. Short test: <code>tests/test_macro_join.py</code></a></li>
+  <li><a href="#a.-script-scriptsget_macro.py" id="toc-a.-script-scriptsget_macro.py" class="nav-link" data-scroll-target="#a.-script-scriptsget_macro.py"><span class="header-section-number">11.5.1</span> A. Script: <code>scripts/get_macro.py</code></a></li>
+  <li><a href="#b.-enrich-features-with-your-new-series" id="toc-b.-enrich-features-with-your-new-series" class="nav-link" data-scroll-target="#b.-enrich-features-with-your-new-series"><span class="header-section-number">11.5.2</span> B. Enrich features with your new series</a></li>
+  <li><a href="#c.-short-test-teststest_macro_join.py" id="toc-c.-short-test-teststest_macro_join.py" class="nav-link" data-scroll-target="#c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.5.3</span> C. Short test: <code>tests/test_macro_join.py</code></a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">11.7</span> Key points</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">11.6</span> Key points</a></li>
   </ul>
 </nav>
     </div>
@@ -398,19 +403,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="agenda-75-min" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">11.2</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">11.2</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Slides: anatomy of a GET; query params; JSON; status codes</li>
-<li><strong>(10 min)</strong> Slides: secrets (<code>python-dotenv</code>), file layout (<code>.env</code>, <code>.env.template</code>), <code>.gitignore</code></li>
-<li><strong>(10 min)</strong> Slides: retries and caching patterns; idempotent design</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: fetch <strong>FRED VIX (VIXCLS)</strong> + optional <strong>FEDFUNDS</strong> → cache → store in SQLite → join to daily features</li>
-<li><strong>(10 min)</strong> Wrap‑up + homework</li>
+<li>anatomy of a GET; query params; JSON; status codes</li>
+<li>secrets (<code>python-dotenv</code>), file layout (<code>.env</code>, <code>.env.template</code>), <code>.gitignore</code></li>
+<li>retries and caching patterns; idempotent design</li>
+<li><strong>In‑class lab</strong>: fetch <strong>FRED VIX (VIXCLS)</strong> + optional <strong>FEDFUNDS</strong> → cache → store in SQLite → join to daily features</li>
+<li>Wrap‑up + homework</li>
 </ul>
 <hr>
-</section>
-<section id="slide" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="slide"><span class="header-section-number">11.3</span> Slide</h2>
 <p><strong>Requests pattern</strong></p>
 <ul>
 <li><code>Session</code> + <code>HTTPAdapter</code> + <code>Retry</code> → robust.</li>
@@ -433,10 +435,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">11.4</span> In‑class lab</h2>
-<section id="setup-folders-and-templates" class="level3" data-number="11.4.1">
-<h3 data-number="11.4.1" class="anchored" data-anchor-id="setup-folders-and-templates"><span class="header-section-number">11.4.1</span> 0) Setup, folders, and templates</h3>
+<section id="inclass-lab" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">11.3</span> In‑class lab</h2>
+<section id="setup-folders-and-templates" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="setup-folders-and-templates"><span class="header-section-number">11.3.1</span> 0) Setup, folders, and templates</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -465,8 +467,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>gi.write_text(gi_txt)</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ready. Fill your FRED key in a local .env (do not commit)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="robust-get-with-retry-file-cache" class="level3" data-number="11.4.2">
-<h3 data-number="11.4.2" class="anchored" data-anchor-id="robust-get-with-retry-file-cache"><span class="header-section-number">11.4.2</span> 1) Robust GET with retry + file cache</h3>
+<section id="robust-get-with-retry-file-cache" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="robust-get-with-retry-file-cache"><span class="header-section-number">11.3.2</span> 1) Robust GET with retry + file cache</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, requests</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib3.util.retry <span class="im">import</span> Retry</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> requests.adapters <span class="im">import</span> HTTPAdapter</span>
@@ -497,8 +499,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    path.write_text(json.dumps(data))</span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="level3" data-number="11.4.3">
-<h3 data-number="11.4.3" class="anchored" data-anchor-id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.4.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</h3>
+<section id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="fetch-vix-vixcls-and-fedfunds-from-fred-store-to-sqlite"><span class="header-section-number">11.3.3</span> 2) Fetch <strong>VIX (VIXCLS)</strong> and <strong>FEDFUNDS</strong> from FRED; store to SQLite</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>API_KEY <span class="op">=</span> os.getenv(<span class="st">"FRED_API_KEY"</span>, <span class="st">""</span>).strip()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> API_KEY:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"WARNING: No FRED_API_KEY in .env; continuing with unauthenticated request may fail on FRED. Add your key to use in class."</span>)</span>
@@ -531,8 +533,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>vix.head(), fed.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="join-macro-series-to-daily-returnsfeatures-by-date" class="level3" data-number="11.4.4">
-<h3 data-number="11.4.4" class="anchored" data-anchor-id="join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.4.4</span> 3) Join macro series to daily returns/features by <code>date</code></h3>
+<section id="join-macro-series-to-daily-returnsfeatures-by-date" class="level3" data-number="11.3.4">
+<h3 data-number="11.3.4" class="anchored" data-anchor-id="join-macro-series-to-daily-returnsfeatures-by-date"><span class="header-section-number">11.3.4</span> 3) Join macro series to daily returns/features by <code>date</code></h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load features (build if missing)</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fvpath <span class="op">=</span> Path(<span class="st">"data/processed/features_v1.parquet"</span>)</span>
@@ -556,8 +558,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">11.5</span> Wrap‑up</h2>
+<section id="wrapup" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">11.4</span> Wrap‑up</h2>
 <ul>
 <li>You built a <strong>retrying, cached</strong> API client, stored macro data in <strong>SQLite</strong>, and aligned it by date.</li>
 <li>Secrets live in <strong><code>.env</code></strong> (never committed).</li>
@@ -565,11 +567,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-12" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="homework-due-before-session-12"><span class="header-section-number">11.6</span> Homework (due before Session 12)</h2>
+<section id="homework-due-before-session-12" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="homework-due-before-session-12"><span class="header-section-number">11.5</span> Homework (due before Session 12)</h2>
 <p><strong>Goal:</strong> Add <strong>one more external series</strong> (your choice) via FRED and keep everything cached and reproducible.</p>
-<section id="a.-script-scriptsget_macro.py" class="level3" data-number="11.6.1">
-<h3 data-number="11.6.1" class="anchored" data-anchor-id="a.-script-scriptsget_macro.py"><span class="header-section-number">11.6.1</span> A. Script: <code>scripts/get_macro.py</code></h3>
+<section id="a.-script-scriptsget_macro.py" class="level3" data-number="11.5.1">
+<h3 data-number="11.5.1" class="anchored" data-anchor-id="a.-script-scriptsget_macro.py"><span class="header-section-number">11.5.1</span> A. Script: <code>scripts/get_macro.py</code></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, json, time, hashlib, pandas <span class="im">as</span> pd, sqlite3</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -656,8 +658,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x scripts/get_macro.py</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/get_macro.py <span class="at">--series-id</span> DGS10   <span class="co"># 10‑Year Treasury Constant Maturity Rate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="b.-enrich-features-with-your-new-series" class="level3" data-number="11.6.2">
-<h3 data-number="11.6.2" class="anchored" data-anchor-id="b.-enrich-features-with-your-new-series"><span class="header-section-number">11.6.2</span> B. Enrich features with your new series</h3>
+<section id="b.-enrich-features-with-your-new-series" class="level3" data-number="11.5.2">
+<h3 data-number="11.5.2" class="anchored" data-anchor-id="b.-enrich-features-with-your-new-series"><span class="header-section-number">11.5.2</span> B. Enrich features with your new series</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, sqlite3</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fv <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/features_v1.parquet"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"data/prices.db"</span>)</span>
@@ -668,8 +670,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>out.to_parquet(<span class="st">"data/processed/features_v1_ext.parquet"</span>, compression<span class="op">=</span><span class="st">"zstd"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wrote features_v1_ext.parquet with extra series:"</span>, out.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="c.-short-test-teststest_macro_join.py" class="level3" data-number="11.6.3">
-<h3 data-number="11.6.3" class="anchored" data-anchor-id="c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.6.3</span> C. Short test: <code>tests/test_macro_join.py</code></h3>
+<section id="c.-short-test-teststest_macro_join.py" class="level3" data-number="11.5.3">
+<h3 data-number="11.5.3" class="anchored" data-anchor-id="c.-short-test-teststest_macro_join.py"><span class="header-section-number">11.5.3</span> C. Short test: <code>tests/test_macro_join.py</code></h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_enriched_has_macro():</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/features_v1_ext.parquet"</span>)</span>
@@ -681,8 +683,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="11.7">
-<h2 data-number="11.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">11.7</span> Key points</h2>
+<section id="key-points" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">11.6</span> Key points</h2>
 <ul>
 <li>Havehave a prepared <code>.env</code> with a working FRED key to avoid classroom delays.</li>
 </ul>

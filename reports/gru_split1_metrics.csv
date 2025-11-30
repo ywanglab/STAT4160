@@ -1,0 +1,2 @@
+split,context_len,feats,val_mae,val_smape,best_epoch,params_M
+1,16,"log_return,lag1,lag2,lag3,zscore_20,roll_std_20",0.007809180611123641,1.4615657329559326,3,0.043

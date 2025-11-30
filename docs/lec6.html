@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -344,40 +350,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-6-makeautomation-rsync-sshtmux-75-min" id="toc-session-6-makeautomation-rsync-sshtmux-75-min" class="nav-link active" data-scroll-target="#session-6-makeautomation-rsync-sshtmux-75-min"><span class="header-section-number">6.1</span> Session 6 — Make/Automation + rsync + ssh/tmux (75 min)</a>
+  <li><a href="#session-6-makeautomation-rsync-sshtmux" id="toc-session-6-makeautomation-rsync-sshtmux" class="nav-link active" data-scroll-target="#session-6-makeautomation-rsync-sshtmux"><span class="header-section-number">6.1</span> Session 6 — Make/Automation + rsync + ssh/tmux</a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">6.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">6.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">6.3</span> Slides</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">6.2</span> Agenda</a>
   <ul class="collapse">
-  <li><a href="#why-make-for-ds-pipelines" id="toc-why-make-for-ds-pipelines" class="nav-link" data-scroll-target="#why-make-for-ds-pipelines"><span class="header-section-number">6.3.1</span> Why Make for DS pipelines?</a></li>
-  <li><a href="#rsync-basics" id="toc-rsync-basics" class="nav-link" data-scroll-target="#rsync-basics"><span class="header-section-number">6.3.2</span> rsync basics</a></li>
-  <li><a href="#ssh-keys-tmux-survey" id="toc-ssh-keys-tmux-survey" class="nav-link" data-scroll-target="#ssh-keys-tmux-survey"><span class="header-section-number">6.3.3</span> ssh keys &amp; tmux (survey)</a></li>
+  <li><a href="#why-make-for-ds-pipelines" id="toc-why-make-for-ds-pipelines" class="nav-link" data-scroll-target="#why-make-for-ds-pipelines"><span class="header-section-number">6.2.1</span> Why Make for DS pipelines?</a></li>
+  <li><a href="#rsync-basics" id="toc-rsync-basics" class="nav-link" data-scroll-target="#rsync-basics"><span class="header-section-number">6.2.2</span> rsync basics</a></li>
+  <li><a href="#ssh-keys-tmux-survey" id="toc-ssh-keys-tmux-survey" class="nav-link" data-scroll-target="#ssh-keys-tmux-survey"><span class="header-section-number">6.2.3</span> ssh keys &amp; tmux (survey)</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-33-min" id="toc-inclass-lab-33-min" class="nav-link" data-scroll-target="#inclass-lab-33-min"><span class="header-section-number">6.4</span> In‑class lab (33 min)</a>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">6.3</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#mount-drive-and-set-repo-path" id="toc-mount-drive-and-set-repo-path" class="nav-link" data-scroll-target="#mount-drive-and-set-repo-path"><span class="header-section-number">6.4.1</span> 0) Mount Drive and set repo path</a></li>
-  <li><a href="#quick-tool-checks-make-rsync-quarto" id="toc-quick-tool-checks-make-rsync-quarto" class="nav-link" data-scroll-target="#quick-tool-checks-make-rsync-quarto"><span class="header-section-number">6.4.2</span> 1) Quick tool checks (Make, rsync, Quarto)</a></li>
-  <li><a href="#script-scriptsget_prices.py" id="toc-script-scriptsget_prices.py" class="nav-link" data-scroll-target="#script-scriptsget_prices.py"><span class="header-section-number">6.4.3</span> 2) Script: <code>scripts/get_prices.py</code></a></li>
-  <li><a href="#script-scriptsbuild_features.py" id="toc-script-scriptsbuild_features.py" class="nav-link" data-scroll-target="#script-scriptsbuild_features.py"><span class="header-section-number">6.4.4</span> 3) Script: <code>scripts/build_features.py</code></a></li>
-  <li><a href="#script-scriptsbackup.sh-rsync" id="toc-script-scriptsbackup.sh-rsync" class="nav-link" data-scroll-target="#script-scriptsbackup.sh-rsync"><span class="header-section-number">6.4.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</a></li>
-  <li><a href="#makefile-robust-with-variables-and-help" id="toc-makefile-robust-with-variables-and-help" class="nav-link" data-scroll-target="#makefile-robust-with-variables-and-help"><span class="header-section-number">6.4.6</span> 5) Makefile (robust, with variables and <code>help</code>)</a></li>
-  <li><a href="#try-the-pipeline" id="toc-try-the-pipeline" class="nav-link" data-scroll-target="#try-the-pipeline"><span class="header-section-number">6.4.7</span> 6) Try the pipeline</a></li>
-  <li><a href="#optional-just-commandrunner" id="toc-optional-just-commandrunner" class="nav-link" data-scroll-target="#optional-just-commandrunner"><span class="header-section-number">6.4.8</span> 7) (Optional) <code>just</code> command‑runner</a></li>
-  <li><a href="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab" id="toc-ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="nav-link" data-scroll-target="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">6.4.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</a></li>
+  <li><a href="#mount-drive-and-set-repo-path" id="toc-mount-drive-and-set-repo-path" class="nav-link" data-scroll-target="#mount-drive-and-set-repo-path"><span class="header-section-number">6.3.1</span> 0) Mount Drive and set repo path</a></li>
+  <li><a href="#quick-tool-checks-make-rsync-quarto" id="toc-quick-tool-checks-make-rsync-quarto" class="nav-link" data-scroll-target="#quick-tool-checks-make-rsync-quarto"><span class="header-section-number">6.3.2</span> 1) Quick tool checks (Make, rsync, Quarto)</a></li>
+  <li><a href="#script-scriptsget_prices.py" id="toc-script-scriptsget_prices.py" class="nav-link" data-scroll-target="#script-scriptsget_prices.py"><span class="header-section-number">6.3.3</span> 2) Script: <code>scripts/get_prices.py</code></a></li>
+  <li><a href="#script-scriptsbuild_features.py" id="toc-script-scriptsbuild_features.py" class="nav-link" data-scroll-target="#script-scriptsbuild_features.py"><span class="header-section-number">6.3.4</span> 3) Script: <code>scripts/build_features.py</code></a></li>
+  <li><a href="#script-scriptsbackup.sh-rsync" id="toc-script-scriptsbackup.sh-rsync" class="nav-link" data-scroll-target="#script-scriptsbackup.sh-rsync"><span class="header-section-number">6.3.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</a></li>
+  <li><a href="#makefile-robust-with-variables-and-help" id="toc-makefile-robust-with-variables-and-help" class="nav-link" data-scroll-target="#makefile-robust-with-variables-and-help"><span class="header-section-number">6.3.6</span> 5) Makefile (robust, with variables and <code>help</code>)</a></li>
+  <li><a href="#try-the-pipeline" id="toc-try-the-pipeline" class="nav-link" data-scroll-target="#try-the-pipeline"><span class="header-section-number">6.3.7</span> 6) Try the pipeline</a></li>
+  <li><a href="#optional-just-commandrunner" id="toc-optional-just-commandrunner" class="nav-link" data-scroll-target="#optional-just-commandrunner"><span class="header-section-number">6.3.8</span> 7) (Optional) <code>just</code> command‑runner</a></li>
+  <li><a href="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab" id="toc-ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="nav-link" data-scroll-target="#ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">6.3.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">6.5</span> Wrap‑up (10 min)</a></li>
-  <li><a href="#homework-due-before-session-7" id="toc-homework-due-before-session-7" class="nav-link" data-scroll-target="#homework-due-before-session-7"><span class="header-section-number">6.6</span> Homework (due before Session 7)</a>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">6.4</span> Wrap‑up</a></li>
+  <li><a href="#homework-due-before-session-7" id="toc-homework-due-before-session-7" class="nav-link" data-scroll-target="#homework-due-before-session-7"><span class="header-section-number">6.5</span> Homework (due before Session 7)</a>
   <ul class="collapse">
-  <li><a href="#part-a-add-a-minimal-baseline-trainer" id="toc-part-a-add-a-minimal-baseline-trainer" class="nav-link" data-scroll-target="#part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">6.6.1</span> Part A — Add a minimal baseline trainer</a></li>
-  <li><a href="#part-b-extend-your-makefile-with-train-and-all" id="toc-part-b-extend-your-makefile-with-train-and-all" class="nav-link" data-scroll-target="#part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">6.6.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></a></li>
-  <li><a href="#part-c-add-a-help-description-to-every-target-and-verify-make-help" id="toc-part-c-add-a-help-description-to-every-target-and-verify-make-help" class="nav-link" data-scroll-target="#part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">6.6.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></a></li>
-  <li><a href="#part-d-optional-track-small-modelsmetrics-with-gitlfs" id="toc-part-d-optional-track-small-modelsmetrics-with-gitlfs" class="nav-link" data-scroll-target="#part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">6.6.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</a></li>
-  <li><a href="#part-e-commit-push" id="toc-part-e-commit-push" class="nav-link" data-scroll-target="#part-e-commit-push"><span class="header-section-number">6.6.5</span> Part E — Commit &amp; push</a></li>
-  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">6.6.6</span> Grading (pass/revise)</a></li>
+  <li><a href="#part-a-add-a-minimal-baseline-trainer" id="toc-part-a-add-a-minimal-baseline-trainer" class="nav-link" data-scroll-target="#part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">6.5.1</span> Part A — Add a minimal baseline trainer</a></li>
+  <li><a href="#part-b-extend-your-makefile-with-train-and-all" id="toc-part-b-extend-your-makefile-with-train-and-all" class="nav-link" data-scroll-target="#part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">6.5.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></a></li>
+  <li><a href="#part-c-add-a-help-description-to-every-target-and-verify-make-help" id="toc-part-c-add-a-help-description-to-every-target-and-verify-make-help" class="nav-link" data-scroll-target="#part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">6.5.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></a></li>
+  <li><a href="#part-d-optional-track-small-modelsmetrics-with-gitlfs" id="toc-part-d-optional-track-small-modelsmetrics-with-gitlfs" class="nav-link" data-scroll-target="#part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">6.5.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</a></li>
+  <li><a href="#part-e-commit-push" id="toc-part-e-commit-push" class="nav-link" data-scroll-target="#part-e-commit-push"><span class="header-section-number">6.5.5</span> Part E — Commit &amp; push</a></li>
+  <li><a href="#grading-passrevise" id="toc-grading-passrevise" class="nav-link" data-scroll-target="#grading-passrevise"><span class="header-section-number">6.5.6</span> Grading (pass/revise)</a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">6.7</span> Key points:</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">6.6</span> Key points:</a></li>
   </ul>
 </nav>
     </div>
@@ -405,8 +410,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p><strong>Assumptions:</strong> You’re using the same Drive‑mounted repo from prior sessions (e.g., <code>unified-stocks-teamX</code>). No trading advice—this is educational.</p>
 <hr>
-<section id="session-6-makeautomation-rsync-sshtmux-75-min" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="session-6-makeautomation-rsync-sshtmux-75-min"><span class="header-section-number">6.1</span> Session 6 — Make/Automation + rsync + ssh/tmux (75 min)</h2>
+<section id="session-6-makeautomation-rsync-sshtmux" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="session-6-makeautomation-rsync-sshtmux"><span class="header-section-number">6.1</span> Session 6 — Make/Automation + rsync + ssh/tmux</h2>
 <section id="learning-goals" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">6.1.1</span> Learning goals</h3>
 <p>Students will be able to:</p>
@@ -419,21 +424,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="agenda-75-min" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">6.2</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">6.2</span> Agenda</h2>
 <ul>
-<li><strong>(12 min)</strong> Slides: Why automation? How Make models dependencies &amp; incremental builds; best practices</li>
-<li><strong>(10 min)</strong> Slides: rsync fundamentals; <code>ssh</code> keys &amp; config; <code>tmux</code> workflow (survey)</li>
-<li><strong>(33 min)</strong> <strong>In‑class lab</strong> (Colab): create scripts → author Makefile → run <code>make all</code> → rsync backup</li>
-<li><strong>(10 min)</strong> Wrap‑up &amp; troubleshooting</li>
-<li><strong>(10 min)</strong> Buffer</li>
+<li>Why automation? How Make models dependencies &amp; incremental builds; best practices</li>
+<li>rsync fundamentals; <code>ssh</code> keys &amp; config; <code>tmux</code> workflow (survey)</li>
+<li><strong>In‑class lab</strong> (Colab): create scripts → author Makefile → run <code>make all</code> → rsync backup</li>
+<li>Wrap‑up &amp; troubleshooting</li>
 </ul>
 <hr>
-</section>
-<section id="slides" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">6.3</span> Slides</h2>
-<section id="why-make-for-ds-pipelines" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="why-make-for-ds-pipelines"><span class="header-section-number">6.3.1</span> Why Make for DS pipelines?</h3>
+<section id="why-make-for-ds-pipelines" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="why-make-for-ds-pipelines"><span class="header-section-number">6.2.1</span> Why Make for DS pipelines?</h3>
 <ul>
 <li>Encodes your workflow as <strong>targets</strong> that depend on <strong>files</strong> or other targets.</li>
 <li><strong>Incremental</strong>: only rebuilds what changed.</li>
@@ -449,8 +450,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Prefer <strong>deterministic</strong> outputs: fixed seeds, pinned versions, stable paths.</li>
 </ul>
 </section>
-<section id="rsync-basics" class="level3" data-number="6.3.2">
-<h3 data-number="6.3.2" class="anchored" data-anchor-id="rsync-basics"><span class="header-section-number">6.3.2</span> rsync basics</h3>
+<section id="rsync-basics" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="rsync-basics"><span class="header-section-number">6.2.2</span> rsync basics</h3>
 <ul>
 <li><code>rsync -avh SRC/ DST/</code> → syncs directory trees, preserving metadata.</li>
 <li><code>--delete</code> makes DST exactly match SRC (removes files not in SRC).</li>
@@ -458,8 +459,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Remote with SSH: <code>rsync -avz -e ssh SRC/ user@host:/path/</code>.</li>
 </ul>
 </section>
-<section id="ssh-keys-tmux-survey" class="level3" data-number="6.3.3">
-<h3 data-number="6.3.3" class="anchored" data-anchor-id="ssh-keys-tmux-survey"><span class="header-section-number">6.3.3</span> ssh keys &amp; tmux (survey)</h3>
+<section id="ssh-keys-tmux-survey" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="ssh-keys-tmux-survey"><span class="header-section-number">6.2.3</span> ssh keys &amp; tmux (survey)</h3>
 <ul>
 <li><strong>Keys</strong>: <code>ssh-keygen -t ed25519 -C "you@school.edu"</code>; add the <strong>public</strong> key to servers/GitHub; keep private key private.</li>
 <li><code>~/.ssh/config</code> holds named hosts; <code>ssh myhpc</code> uses that stanza.</li>
@@ -468,8 +469,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="inclass-lab-33-min" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="inclass-lab-33-min"><span class="header-section-number">6.4</span> In‑class lab (33 min)</h2>
+<section id="inclass-lab" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">6.3</span> In‑class lab</h2>
 <p>We’ll create <strong>three tiny scripts</strong> and a <strong>Makefile</strong> that ties them together:</p>
 <ul>
 <li><p><code>scripts/get_prices.py</code> → <code>data/raw/prices.csv</code> (Yahoo via <code>yfinance</code>, with synthetic fallback)</p></li>
@@ -477,8 +478,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><code>scripts/backup.sh</code> → rsync your artifacts to <code>backups/&lt;timestamp&gt;/</code></p></li>
 <li><p><code>Makefile</code> → <code>make all</code> runs end‑to‑end; <code>make report</code> renders Quarto; <code>make backup</code> syncs artifacts.</p></li>
 </ul>
-<section id="mount-drive-and-set-repo-path" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="mount-drive-and-set-repo-path"><span class="header-section-number">6.4.1</span> 0) Mount Drive and set repo path</h3>
+<section id="mount-drive-and-set-repo-path" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="mount-drive-and-set-repo-path"><span class="header-section-number">6.3.1</span> 0) Mount Drive and set repo path</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -494,8 +495,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>os.chdir(REPO_DIR)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="quick-tool-checks-make-rsync-quarto" class="level3" data-number="6.4.2">
-<h3 data-number="6.4.2" class="anchored" data-anchor-id="quick-tool-checks-make-rsync-quarto"><span class="header-section-number">6.4.2</span> 1) Quick tool checks (Make, rsync, Quarto)</h3>
+<section id="quick-tool-checks-make-rsync-quarto" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="quick-tool-checks-make-rsync-quarto"><span class="header-section-number">6.3.2</span> 1) Quick tool checks (Make, rsync, Quarto)</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, shutil</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(cmd):</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
@@ -508,8 +509,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>check([<span class="st">"quarto"</span>, <span class="st">"--version"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If Quarto is missing, re-run the installer from Session 3 before <code>make report</code>.</p>
 </section>
-<section id="script-scriptsget_prices.py" class="level3" data-number="6.4.3">
-<h3 data-number="6.4.3" class="anchored" data-anchor-id="script-scriptsget_prices.py"><span class="header-section-number">6.4.3</span> 2) Script: <code>scripts/get_prices.py</code></h3>
+<section id="script-scriptsget_prices.py" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="script-scriptsget_prices.py"><span class="header-section-number">6.3.3</span> 2) Script: <code>scripts/get_prices.py</code></h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">"scripts"</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -572,8 +573,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/get_prices.py"</span>, os.stat(<span class="st">"scripts/get_prices.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
 <span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/get_prices.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="script-scriptsbuild_features.py" class="level3" data-number="6.4.4">
-<h3 data-number="6.4.4" class="anchored" data-anchor-id="script-scriptsbuild_features.py"><span class="header-section-number">6.4.4</span> 3) Script: <code>scripts/build_features.py</code></h3>
+<section id="script-scriptsbuild_features.py" class="level3" data-number="6.3.4">
+<h3 data-number="6.3.4" class="anchored" data-anchor-id="script-scriptsbuild_features.py"><span class="header-section-number">6.3.4</span> 3) Script: <code>scripts/build_features.py</code></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>feat_py <span class="op">=</span> <span class="vs">r"""</span><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="vs">import argparse</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="vs">from pathlib import Path</span></span>
@@ -612,8 +613,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/build_features.py"</span>, os.stat(<span class="st">"scripts/build_features.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/build_features.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="script-scriptsbackup.sh-rsync" class="level3" data-number="6.4.5">
-<h3 data-number="6.4.5" class="anchored" data-anchor-id="script-scriptsbackup.sh-rsync"><span class="header-section-number">6.4.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</h3>
+<section id="script-scriptsbackup.sh-rsync" class="level3" data-number="6.3.5">
+<h3 data-number="6.3.5" class="anchored" data-anchor-id="script-scriptsbackup.sh-rsync"><span class="header-section-number">6.3.5</span> 4) Script: <code>scripts/backup.sh</code> (rsync)</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>backup_sh <span class="op">=</span> <span class="vs">r"""</span><span class="co">#!/usr/bin/env bash</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync selected artifacts to backups/&lt;timestamp&gt; using rsync.</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usage: scripts/backup.sh [DEST_ROOT]</span></span>
@@ -640,8 +641,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/backup.sh"</span>, os.stat(<span class="st">"scripts/backup.sh"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/backup.sh"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="makefile-robust-with-variables-and-help" class="level3" data-number="6.4.6">
-<h3 data-number="6.4.6" class="anchored" data-anchor-id="makefile-robust-with-variables-and-help"><span class="header-section-number">6.4.6</span> 5) Makefile (robust, with variables and <code>help</code>)</h3>
+<section id="makefile-robust-with-variables-and-help" class="level3" data-number="6.3.6">
+<h3 data-number="6.3.6" class="anchored" data-anchor-id="makefile-robust-with-variables-and-help"><span class="header-section-number">6.3.6</span> 5) Makefile (robust, with variables and <code>help</code>)</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>makefile <span class="op">=</span> <span class="vs">r"""</span><span class="co"># Makefile — unified-stocks</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="vs">SHELL := /bin/bash</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dv">.</span><span class="vs">SHELLFLAGS := -eu -o pipefail -c</span></span>
@@ -697,8 +698,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Note: The Makefile expects <code>scripts/qa_csv.sh</code> from Session 5. If a student missed it, set <code>scripts/qa_csv.sh</code> to a no‑op or remove that dependency temporarily.</p>
 </blockquote>
 </section>
-<section id="try-the-pipeline" class="level3" data-number="6.4.7">
-<h3 data-number="6.4.7" class="anchored" data-anchor-id="try-the-pipeline"><span class="header-section-number">6.4.7</span> 6) Try the pipeline</h3>
+<section id="try-the-pipeline" class="level3" data-number="6.3.7">
+<h3 data-number="6.3.7" class="anchored" data-anchor-id="try-the-pipeline"><span class="header-section-number">6.3.7</span> 6) Try the pipeline</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, os, textwrap, sys</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(subprocess.check_output([<span class="st">"make"</span>, <span class="st">"help"</span>], text<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch raw, build features, render report, back up artifacts</span></span>
@@ -712,8 +713,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>backups/run-&lt;timestamp&gt;/</code> contains synced folders</li>
 </ul>
 </section>
-<section id="optional-just-commandrunner" class="level3" data-number="6.4.8">
-<h3 data-number="6.4.8" class="anchored" data-anchor-id="optional-just-commandrunner"><span class="header-section-number">6.4.8</span> 7) (Optional) <code>just</code> command‑runner</h3>
+<section id="optional-just-commandrunner" class="level3" data-number="6.3.8">
+<h3 data-number="6.3.8" class="anchored" data-anchor-id="optional-just-commandrunner"><span class="header-section-number">6.3.8</span> 7) (Optional) <code>just</code> command‑runner</h3>
 <blockquote class="blockquote">
 <p><strong>Optional</strong>: If <code>just</code> is available on your system, create a <code>justfile</code> that mirrors common Make targets. On Colab, installation may or may not be available; this is just for reference.</p>
 </blockquote>
@@ -751,8 +752,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Wrote justfile (optional)."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="level3" data-number="6.4.9">
-<h3 data-number="6.4.9" class="anchored" data-anchor-id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">6.4.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</h3>
+<section id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab" class="level3" data-number="6.3.9">
+<h3 data-number="6.3.9" class="anchored" data-anchor-id="ssh-tmux-quickstarts-survey-run-locally-not-in-colab"><span class="header-section-number">6.3.9</span> 8) ssh &amp; tmux quickstarts (survey, run <strong>locally</strong>, not in Colab)</h3>
 <p><strong>ssh key generation (local terminal):</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"you@school.edu"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Press enter to accept default path (~/.ssh/id_ed25519), set a passphrase (recommended)</span></span>
@@ -781,8 +782,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">6.5</span> Wrap‑up (10 min)</h2>
+<section id="wrapup" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">6.4</span> Wrap‑up</h2>
 <ul>
 <li><strong>Make</strong> codifies your pipeline; the file graph serves as your dependency DAG.</li>
 <li><strong>Incremental</strong> builds save time: edit one script → only downstream targets rebuild.</li>
@@ -791,11 +792,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-7" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="homework-due-before-session-7"><span class="header-section-number">6.6</span> Homework (due before Session 7)</h2>
+<section id="homework-due-before-session-7" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="homework-due-before-session-7"><span class="header-section-number">6.5</span> Homework (due before Session 7)</h2>
 <p><strong>Goal:</strong> Extend your automation with a tiny baseline training &amp; evaluation step and polish your Makefile.</p>
-<section id="part-a-add-a-minimal-baseline-trainer" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">6.6.1</span> Part A — Add a minimal baseline trainer</h3>
+<section id="part-a-add-a-minimal-baseline-trainer" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="part-a-add-a-minimal-baseline-trainer"><span class="header-section-number">6.5.1</span> Part A — Add a minimal baseline trainer</h3>
 <p>Create <code>scripts/train_baseline.py</code> that learns a <strong>linear regression</strong> on lagged returns (toy baseline) and writes metrics.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>train_py <span class="op">=</span> <span class="vs">r"""</span><span class="co">#!/usr/bin/env python</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="vs">import argparse, json</span></span>
@@ -837,8 +838,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>os.chmod(<span class="st">"scripts/train_baseline.py"</span>, os.stat(<span class="st">"scripts/train_baseline.py"</span>).st_mode <span class="op">|</span> stat.S_IEXEC)</span>
 <span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Created scripts/train_baseline.py"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-b-extend-your-makefile-with-train-and-all" class="level3" data-number="6.6.2">
-<h3 data-number="6.6.2" class="anchored" data-anchor-id="part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">6.6.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></h3>
+<section id="part-b-extend-your-makefile-with-train-and-all" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="part-b-extend-your-makefile-with-train-and-all"><span class="header-section-number">6.5.2</span> Part B — Extend your Makefile with <code>train</code> and <code>all</code></h3>
 <p>Append these to your <code>Makefile</code>:</p>
 <pre class="make"><code># --- add after FEATS definition, near other targets ---
 
@@ -861,16 +862,16 @@ $(TRAIN_METRICS): scripts/train_baseline.py $(FEATS)
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> train</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> reports/baseline_metrics.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-c-add-a-help-description-to-every-target-and-verify-make-help" class="level3" data-number="6.6.3">
-<h3 data-number="6.6.3" class="anchored" data-anchor-id="part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">6.6.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></h3>
+<section id="part-c-add-a-help-description-to-every-target-and-verify-make-help" class="level3" data-number="6.5.3">
+<h3 data-number="6.5.3" class="anchored" data-anchor-id="part-c-add-a-help-description-to-every-target-and-verify-make-help"><span class="header-section-number">6.5.3</span> Part C — Add a <code>help</code> description to every target and verify <code>make help</code></h3>
 <p>Ensure each target in your <code>Makefile</code> has a <code>##</code> comment. Run:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> help</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="part-d-optional-track-small-modelsmetrics-with-gitlfs" class="level3" data-number="6.6.4">
-<h3 data-number="6.6.4" class="anchored" data-anchor-id="part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">6.6.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</h3>
+<section id="part-d-optional-track-small-modelsmetrics-with-gitlfs" class="level3" data-number="6.5.4">
+<h3 data-number="6.5.4" class="anchored" data-anchor-id="part-d-optional-track-small-modelsmetrics-with-gitlfs"><span class="header-section-number">6.5.4</span> Part D — (Optional) Track small models/metrics with Git‑LFS</h3>
 <p>If you decide to save model artifacts (e.g., <code>models/baseline.pkl</code>), track them:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -880,8 +881,8 @@ $(TRAIN_METRICS): scripts/train_baseline.py $(FEATS)
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"chore: track small model files via LFS"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><em>(You can extend <code>train_baseline.py</code> to save <code>models/baseline.pkl</code> using <code>joblib</code>.)</em></p>
 </section>
-<section id="part-e-commit-push" class="level3" data-number="6.6.5">
-<h3 data-number="6.6.5" class="anchored" data-anchor-id="part-e-commit-push"><span class="header-section-number">6.6.5</span> Part E — Commit &amp; push</h3>
+<section id="part-e-commit-push" class="level3" data-number="6.5.5">
+<h3 data-number="6.5.5" class="anchored" data-anchor-id="part-e-commit-push"><span class="header-section-number">6.5.5</span> Part E — Commit &amp; push</h3>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">%%bash</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"/content/drive/MyDrive/dspt25/unified-stocks-teamX"</span></span>
@@ -897,8 +898,8 @@ $(TRAIN_METRICS): scripts/train_baseline.py $(FEATS)
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>subprocess.run([<span class="st">"git"</span>, <span class="st">"push"</span>, push_url, <span class="st">"HEAD:main"</span>], check<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="grading-passrevise" class="level3" data-number="6.6.6">
-<h3 data-number="6.6.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">6.6.6</span> Grading (pass/revise)</h3>
+<section id="grading-passrevise" class="level3" data-number="6.5.6">
+<h3 data-number="6.5.6" class="anchored" data-anchor-id="grading-passrevise"><span class="header-section-number">6.5.6</span> Grading (pass/revise)</h3>
 <ul>
 <li><code>make all</code> runs from a fresh clone (with minimal edits for tokens/Quarto install) and produces: <code>data/raw/prices.csv</code>, <code>data/processed/features.parquet</code>, <code>docs/reports/eda.html</code>, <code>reports/baseline_metrics.json</code>, and a <code>backups/run-*/</code> snapshot.</li>
 <li><code>Makefile</code> has <strong>helpful <code>help</code> output</strong> and <strong>variables</strong> (<code>START</code>, <code>END</code>, <code>ROLL</code>).</li>
@@ -908,8 +909,8 @@ $(TRAIN_METRICS): scripts/train_baseline.py $(FEATS)
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">6.7</span> Key points:</h2>
+<section id="key-points" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">6.6</span> Key points:</h2>
 <ul>
 <li><strong>Make</strong> is a thin layer over shell commands—it doesn’t replace Python; it orchestrates it.</li>
 <li>Keep targets <strong>idempotent</strong>: running twice shouldn’t break; only rebuild on changes.</li>

@@ -105,13 +105,5 @@ returns-parquet: ## Build returns.parquet with r_1d + calendar features
 	print("Wrote data/processed/returns.parquet")
 	PY
 
-
-.PHONY: health test
-health:
-	python scripts/health.py
-
-pytest:
-	pytest -q
-
-test: pytest
-
+ health.json and health.md from the current features parquet
+	python scripts/heal

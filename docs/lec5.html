@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -324,8 +324,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -345,9 +351,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals"><span class="header-section-number">5.0.1</span> Learning goals</a></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">5.1</span> Agenda (75 min)</a></li>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">5.1</span> Agenda</a></li>
   <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">5.2</span> Slides</a></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">5.3</span> In‑class lab (35 min)</a>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">5.3</span> In‑class lab</a>
   <ul class="collapse">
   <li><a href="#mount-drive-set-repo-paths-and-cd-into-the-repo" id="toc-mount-drive-set-repo-paths-and-cd-into-the-repo" class="nav-link" data-scroll-target="#mount-drive-set-repo-paths-and-cd-into-the-repo"><span class="header-section-number">5.3.1</span> 0) Mount Drive, set repo paths, and cd into the repo</a></li>
   <li><a href="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" id="toc-create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible" class="nav-link" data-scroll-target="#create-a-small-synthetic-prices-csv-to-work-with-safe-reproducible"><span class="header-section-number">5.3.2</span> 1) Create a small <strong>synthetic</strong> prices CSV to work with (safe &amp; reproducible)</a></li>
@@ -359,7 +365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#find-and-xargs-safe-nullterminated" id="toc-find-and-xargs-safe-nullterminated" class="nav-link" data-scroll-target="#find-and-xargs-safe-nullterminated"><span class="header-section-number">5.3.8</span> 7) <strong><code>find</code></strong> and <strong><code>xargs</code></strong> (safe, null‑terminated)</a></li>
   <li><a href="#build-a-defensive-csv-qa-script-and-run-it" id="toc-build-a-defensive-csv-qa-script-and-run-it" class="nav-link" data-scroll-target="#build-a-defensive-csv-qa-script-and-run-it"><span class="header-section-number">5.3.9</span> 8) Build a <strong>defensive CSV QA script</strong> and run it</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min" id="toc-wrapup-10-min" class="nav-link" data-scroll-target="#wrapup-10-min"><span class="header-section-number">5.4</span> Wrap‑up (10 min)</a></li>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="header-section-number">5.4</span> Wrap‑up</a></li>
   <li><a href="#homework-due-before-session-6" id="toc-homework-due-before-session-6" class="nav-link" data-scroll-target="#homework-due-before-session-6"><span class="header-section-number">5.5</span> Homework (due before Session 6)</a>
   <ul class="collapse">
   <li><a href="#part-a-data-stats-pipeline-oneliners-saved-to-files" id="toc-part-a-data-stats-pipeline-oneliners-saved-to-files" class="nav-link" data-scroll-target="#part-a-data-stats-pipeline-oneliners-saved-to-files"><span class="header-section-number">5.5.1</span> Part A — Data stats pipeline (one‑liners saved to files)</a></li>
@@ -411,14 +417,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="agenda-75-min" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">5.1</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="agenda"><span class="header-section-number">5.1</span> Agenda</h2>
 <ul>
-<li><strong>(8 min)</strong> Why shell for data science; mental model of pipelines</li>
-<li><strong>(12 min)</strong> Core commands &amp; patterns: pipes/redirects, quoting, regex, <code>grep</code>/<code>sed</code>/<code>awk</code></li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong> (Colab): filesystem → CSV pipelines → find/xargs → QA shell script</li>
-<li><strong>(10 min)</strong> Wrap‑up, troubleshooting, and homework briefing</li>
-<li><strong>(10 min)</strong> Buffer for slow installs / student issues</li>
+<li>Why shell for data science; mental model of pipelines</li>
+<li>Core commands &amp; patterns: pipes/redirects, quoting, regex, <code>grep</code>/<code>sed</code>/<code>awk</code></li>
+<li><strong>In‑class lab</strong> (Colab): filesystem → CSV pipelines → find/xargs → QA shell script</li>
+<li>Wrap‑up, troubleshooting, and homework briefing</li>
+<li>Buffer for slow installs / student issues</li>
 </ul>
 <hr>
 </section>
@@ -454,8 +460,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">5.3</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">5.3</span> In‑class lab</h2>
 <blockquote class="blockquote">
 <p><strong>Instructor tip:</strong> run these <em>as separate Colab cells</em>. Cells labeled “Bash” use <code>%%bash</code>. Cells labeled “Python” are only used to <strong>generate a small synthetic CSV</strong> we can play with offline (no API keys needed).</p>
 </blockquote>
@@ -680,8 +686,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="wrapup-10-min"><span class="header-section-number">5.4</span> Wrap‑up (10 min)</h2>
+<section id="wrapup" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">5.4</span> Wrap‑up</h2>
 <ul>
 <li>Shell is about <strong>composable building blocks</strong>. Learn 15 commands deeply; combine them fluently.</li>
 <li>Prefer <strong>null‑safe</strong> <code>find … -print0 | xargs -0</code> patterns; always quote variables: <code>"$FILE"</code>.</li>

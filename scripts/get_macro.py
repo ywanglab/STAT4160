@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 import os, json, time, hashlib, pandas as pd, sqlite3
 from pathlib import Path
@@ -34,9 +35,10 @@ def fetch_series(series_id, start="2015-01-01"):
     params = {"series_id":series_id, "api_key":API_KEY, "file_type":"json", "observation_start":start}
     data = cached_get(BASE, params)
     df = pd.DataFrame(data["observations"])[["date","value"]]
-    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")  # store as TEXT YYYY-MM-DD
     df["value"] = pd.to_numeric(df["value"], errors="coerce")
     df["series_id"] = series_id
+    # df = df.drop_duplicates(subset=["series_id","date"])
     return df.dropna(subset=["value"])
 
 def ensure_schema(con):
@@ -48,6 +50,7 @@ def ensure_schema(con):
             PRIMARY KEY(series_id, date)
         )
     """)
+    # Optional: index on date for faster slicing across all series
     con.execute("CREATE INDEX IF NOT EXISTS idx_macro_series_date ON macro_series(date)")
 
 def upsert_dataframe(con, df):
@@ -55,7 +58,7 @@ def upsert_dataframe(con, df):
         INSERT INTO macro_series(series_id, date, value)
         VALUES (?, ?, ?)
         ON CONFLICT(series_id, date) DO UPDATE SET
-            value = excluded.value
+            value = excluded.value  --replace teh existing row's value with the incoming row's value
     """
     rows = list(df[["series_id","date","value"]].itertuples(index=False, name=None))
     con.executemany(sql, rows)

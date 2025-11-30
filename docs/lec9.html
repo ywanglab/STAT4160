@@ -258,7 +258,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec13.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Session 13: pytest + Data Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -276,7 +276,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./lec16.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Session 16 — Classical Baselines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -353,8 +353,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./final_project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Assignment: Tools-in-Action Book (Quarto + GitHub Pages)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -373,40 +379,39 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#session-9-cleaning-joins-parquet-75-min" id="toc-session-9-cleaning-joins-parquet-75-min" class="nav-link active" data-scroll-target="#session-9-cleaning-joins-parquet-75-min"><span class="header-section-number">9.1</span> Session 9 — Cleaning, Joins, Parquet (75 min)</a>
+  <li><a href="#session-9-cleaning-joins-parquet" id="toc-session-9-cleaning-joins-parquet" class="nav-link active" data-scroll-target="#session-9-cleaning-joins-parquet"><span class="header-section-number">9.1</span> Session 9 — Cleaning, Joins, Parquet</a>
   <ul class="collapse">
   <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">9.1.1</span> Learning goals</a></li>
   </ul></li>
-  <li><a href="#agenda-75-min" id="toc-agenda-75-min" class="nav-link" data-scroll-target="#agenda-75-min"><span class="header-section-number">9.2</span> Agenda (75 min)</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides"><span class="header-section-number">9.3</span> Slides</a>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda"><span class="header-section-number">9.2</span> Agenda</a>
   <ul class="collapse">
-  <li><a href="#tidy-schema-for-price-data" id="toc-tidy-schema-for-price-data" class="nav-link" data-scroll-target="#tidy-schema-for-price-data"><span class="header-section-number">9.3.1</span> Tidy schema for price data</a></li>
-  <li><a href="#idiomatic-pandas-merge-assign-pipe" id="toc-idiomatic-pandas-merge-assign-pipe" class="nav-link" data-scroll-target="#idiomatic-pandas-merge-assign-pipe"><span class="header-section-number">9.3.2</span> Idiomatic pandas: <code>merge</code>, <code>assign</code>, <code>pipe</code></a></li>
-  <li><a href="#dtypes-that-help" id="toc-dtypes-that-help" class="nav-link" data-scroll-target="#dtypes-that-help"><span class="header-section-number">9.3.3</span> Dtypes that help</a></li>
-  <li><a href="#parquet-why-how" id="toc-parquet-why-how" class="nav-link" data-scroll-target="#parquet-why-how"><span class="header-section-number">9.3.4</span> Parquet: why &amp; how</a></li>
+  <li><a href="#tidy-schema-for-price-data" id="toc-tidy-schema-for-price-data" class="nav-link" data-scroll-target="#tidy-schema-for-price-data"><span class="header-section-number">9.2.1</span> Tidy schema for price data</a></li>
+  <li><a href="#idiomatic-pandas-merge-assign-pipe" id="toc-idiomatic-pandas-merge-assign-pipe" class="nav-link" data-scroll-target="#idiomatic-pandas-merge-assign-pipe"><span class="header-section-number">9.2.2</span> Idiomatic pandas: <code>merge</code>, <code>assign</code>, <code>pipe</code></a></li>
+  <li><a href="#dtypes-that-help" id="toc-dtypes-that-help" class="nav-link" data-scroll-target="#dtypes-that-help"><span class="header-section-number">9.2.3</span> Dtypes that help</a></li>
+  <li><a href="#parquet-why-how" id="toc-parquet-why-how" class="nav-link" data-scroll-target="#parquet-why-how"><span class="header-section-number">9.2.4</span> Parquet: why &amp; how</a></li>
   </ul></li>
-  <li><a href="#inclass-lab-35-min" id="toc-inclass-lab-35-min" class="nav-link" data-scroll-target="#inclass-lab-35-min"><span class="header-section-number">9.4</span> In‑class lab (35 min)</a>
+  <li><a href="#inclass-lab" id="toc-inclass-lab" class="nav-link" data-scroll-target="#inclass-lab"><span class="header-section-number">9.3</span> In‑class lab</a>
   <ul class="collapse">
-  <li><a href="#setup-mount-drive-cd-into-repo-ensure-folders" id="toc-setup-mount-drive-cd-into-repo-ensure-folders" class="nav-link" data-scroll-target="#setup-mount-drive-cd-into-repo-ensure-folders"><span class="header-section-number">9.4.1</span> 0) Setup: mount Drive, cd into repo, ensure folders</a></li>
-  <li><a href="#locate-raw-price-files-csv-or-create-a-fallback" id="toc-locate-raw-price-files-csv-or-create-a-fallback" class="nav-link" data-scroll-target="#locate-raw-price-files-csv-or-create-a-fallback"><span class="header-section-number">9.4.2</span> 1) Locate raw price files (CSV) or create a fallback</a></li>
-  <li><a href="#optional-metadata-tickers-table-or-create-a-minimal-one" id="toc-optional-metadata-tickers-table-or-create-a-minimal-one" class="nav-link" data-scroll-target="#optional-metadata-tickers-table-or-create-a-minimal-one"><span class="header-section-number">9.4.3</span> 2) Optional metadata (tickers table), or create a minimal one</a></li>
-  <li><a href="#helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" id="toc-helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" class="nav-link" data-scroll-target="#helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe"><span class="header-section-number">9.4.4</span> 3) Helpers: <code>standardize_columns</code>, <code>clean_prices</code>, <code>join_meta</code> (showing <code>merge</code>/<code>assign</code>/<code>pipe</code>)</a></li>
-  <li><a href="#read-clean-and-join-all-raw-files-using-a-pipeline" id="toc-read-clean-and-join-all-raw-files-using-a-pipeline" class="nav-link" data-scroll-target="#read-clean-and-join-all-raw-files-using-a-pipeline"><span class="header-section-number">9.4.5</span> 4) Read, clean, and join all raw files using a <strong>pipeline</strong></a></li>
-  <li><a href="#save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" id="toc-save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" class="nav-link" data-scroll-target="#save-clean-data-to-parquet-single-file-and-partitioned-by-ticker"><span class="header-section-number">9.4.6</span> 5) Save clean data to <strong>Parquet</strong> (single file) and <strong>partitioned by ticker</strong></a></li>
-  <li><a href="#read-back-efficiently-projection-simple-filters" id="toc-read-back-efficiently-projection-simple-filters" class="nav-link" data-scroll-target="#read-back-efficiently-projection-simple-filters"><span class="header-section-number">9.4.7</span> 6) Read back efficiently: projection + simple filters</a></li>
-  <li><a href="#persist-a-simple-schema-record-for-reproducibility" id="toc-persist-a-simple-schema-record-for-reproducibility" class="nav-link" data-scroll-target="#persist-a-simple-schema-record-for-reproducibility"><span class="header-section-number">9.4.8</span> 7) Persist a simple <strong>schema record</strong> for reproducibility</a></li>
+  <li><a href="#setup-mount-drive-cd-into-repo-ensure-folders" id="toc-setup-mount-drive-cd-into-repo-ensure-folders" class="nav-link" data-scroll-target="#setup-mount-drive-cd-into-repo-ensure-folders"><span class="header-section-number">9.3.1</span> 0) Setup: mount Drive, cd into repo, ensure folders</a></li>
+  <li><a href="#locate-raw-price-files-csv-or-create-a-fallback" id="toc-locate-raw-price-files-csv-or-create-a-fallback" class="nav-link" data-scroll-target="#locate-raw-price-files-csv-or-create-a-fallback"><span class="header-section-number">9.3.2</span> 1) Locate raw price files (CSV) or create a fallback</a></li>
+  <li><a href="#optional-metadata-tickers-table-or-create-a-minimal-one" id="toc-optional-metadata-tickers-table-or-create-a-minimal-one" class="nav-link" data-scroll-target="#optional-metadata-tickers-table-or-create-a-minimal-one"><span class="header-section-number">9.3.3</span> 2) Optional metadata (tickers table), or create a minimal one</a></li>
+  <li><a href="#helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" id="toc-helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" class="nav-link" data-scroll-target="#helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe"><span class="header-section-number">9.3.4</span> 3) Helpers: <code>standardize_columns</code>, <code>clean_prices</code>, <code>join_meta</code> (showing <code>merge</code>/<code>assign</code>/<code>pipe</code>)</a></li>
+  <li><a href="#read-clean-and-join-all-raw-files-using-a-pipeline" id="toc-read-clean-and-join-all-raw-files-using-a-pipeline" class="nav-link" data-scroll-target="#read-clean-and-join-all-raw-files-using-a-pipeline"><span class="header-section-number">9.3.5</span> 4) Read, clean, and join all raw files using a <strong>pipeline</strong></a></li>
+  <li><a href="#save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" id="toc-save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" class="nav-link" data-scroll-target="#save-clean-data-to-parquet-single-file-and-partitioned-by-ticker"><span class="header-section-number">9.3.6</span> 5) Save clean data to <strong>Parquet</strong> (single file) and <strong>partitioned by ticker</strong></a></li>
+  <li><a href="#read-back-efficiently-projection-simple-filters" id="toc-read-back-efficiently-projection-simple-filters" class="nav-link" data-scroll-target="#read-back-efficiently-projection-simple-filters"><span class="header-section-number">9.3.7</span> 6) Read back efficiently: projection + simple filters</a></li>
+  <li><a href="#persist-a-simple-schema-record-for-reproducibility" id="toc-persist-a-simple-schema-record-for-reproducibility" class="nav-link" data-scroll-target="#persist-a-simple-schema-record-for-reproducibility"><span class="header-section-number">9.3.8</span> 7) Persist a simple <strong>schema record</strong> for reproducibility</a></li>
   </ul></li>
-  <li><a href="#wrapup-10-min-points-to-emphasize" id="toc-wrapup-10-min-points-to-emphasize" class="nav-link" data-scroll-target="#wrapup-10-min-points-to-emphasize"><span class="header-section-number">9.5</span> Wrap‑up (10 min) — points to emphasize</a></li>
-  <li><a href="#homework-due-before-session-10" id="toc-homework-due-before-session-10" class="nav-link" data-scroll-target="#homework-due-before-session-10"><span class="header-section-number">9.6</span> Homework (due before Session 10)</a>
+  <li><a href="#wrapup-10-min-points-to-emphasize" id="toc-wrapup-10-min-points-to-emphasize" class="nav-link" data-scroll-target="#wrapup-10-min-points-to-emphasize"><span class="header-section-number">9.4</span> Wrap‑up (10 min) — points to emphasize</a></li>
+  <li><a href="#homework-due-before-session-10" id="toc-homework-due-before-session-10" class="nav-link" data-scroll-target="#homework-due-before-session-10"><span class="header-section-number">9.5</span> Homework (due before Session 10)</a>
   <ul class="collapse">
-  <li><a href="#stepbystep-code-colabfriendly" id="toc-stepbystep-code-colabfriendly" class="nav-link" data-scroll-target="#stepbystep-code-colabfriendly"><span class="header-section-number">9.6.1</span> Step‑by‑step code (Colab‑friendly)</a></li>
-  <li><a href="#quick-selfcheck-run-after-saving" id="toc-quick-selfcheck-run-after-saving" class="nav-link" data-scroll-target="#quick-selfcheck-run-after-saving"><span class="header-section-number">9.6.2</span> Quick self‑check (run after saving)</a></li>
-  <li><a href="#optional" id="toc-optional" class="nav-link" data-scroll-target="#optional"><span class="header-section-number">9.6.3</span> (Optional)</a></li>
-  <li><a href="#submission-checklist-passrevise" id="toc-submission-checklist-passrevise" class="nav-link" data-scroll-target="#submission-checklist-passrevise"><span class="header-section-number">9.6.4</span> Submission checklist (pass/revise)</a></li>
+  <li><a href="#stepbystep-code-colabfriendly" id="toc-stepbystep-code-colabfriendly" class="nav-link" data-scroll-target="#stepbystep-code-colabfriendly"><span class="header-section-number">9.5.1</span> Step‑by‑step code (Colab‑friendly)</a></li>
+  <li><a href="#quick-selfcheck-run-after-saving" id="toc-quick-selfcheck-run-after-saving" class="nav-link" data-scroll-target="#quick-selfcheck-run-after-saving"><span class="header-section-number">9.5.2</span> Quick self‑check (run after saving)</a></li>
+  <li><a href="#optional" id="toc-optional" class="nav-link" data-scroll-target="#optional"><span class="header-section-number">9.5.3</span> (Optional)</a></li>
+  <li><a href="#submission-checklist-passrevise" id="toc-submission-checklist-passrevise" class="nav-link" data-scroll-target="#submission-checklist-passrevise"><span class="header-section-number">9.5.4</span> Submission checklist (pass/revise)</a></li>
   </ul></li>
-  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">9.7</span> Key Points</a>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points"><span class="header-section-number">9.6</span> Key Points</a>
   <ul class="collapse">
-  <li><a href="#optional-for-your-makefile-later" id="toc-optional-for-your-makefile-later" class="nav-link" data-scroll-target="#optional-for-your-makefile-later"><span class="header-section-number">9.7.1</span> Optional (for your Makefile later)</a></li>
+  <li><a href="#optional-for-your-makefile-later" id="toc-optional-for-your-makefile-later" class="nav-link" data-scroll-target="#optional-for-your-makefile-later"><span class="header-section-number">9.6.1</span> Optional (for your Makefile later)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -435,8 +440,8 @@ window.Quarto = {
 
 <p><strong>Assumptions:</strong> Same Drive‑mounted repo (e.g., <code>unified-stocks-teamX</code>) as prior sessions. Your raw prices live under <code>data/raw/</code> (either a single <code>prices.csv</code> or multiple CSVs). The lab includes a safe fallback (small synthetic dataset) if raw files are missing.</p>
 <hr>
-<section id="session-9-cleaning-joins-parquet-75-min" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="session-9-cleaning-joins-parquet-75-min"><span class="header-section-number">9.1</span> Session 9 — Cleaning, Joins, Parquet (75 min)</h2>
+<section id="session-9-cleaning-joins-parquet" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="session-9-cleaning-joins-parquet"><span class="header-section-number">9.1</span> Session 9 — Cleaning, Joins, Parquet</h2>
 <section id="learning-goals" class="level3" data-number="9.1.1">
 <h3 data-number="9.1.1" class="anchored" data-anchor-id="learning-goals"><span class="header-section-number">9.1.1</span> Learning goals</h3>
 <p>By the end of class, students can:</p>
@@ -448,37 +453,34 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="agenda-75-min" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="agenda-75-min"><span class="header-section-number">9.2</span> Agenda (75 min)</h2>
+<section id="agenda" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="agenda"><span class="header-section-number">9.2</span> Agenda</h2>
 <ul>
-<li><strong>(10 min)</strong> Slides: tidy schema; joins (<code>merge</code>), <code>assign</code>, <code>pipe</code> patterns</li>
-<li><strong>(10 min)</strong> Slides: dtypes—<code>category</code>, <code>string</code>, <strong>nullable ints</strong> (<code>Int64</code>), <code>float32</code> vs <code>float64</code></li>
-<li><strong>(10 min)</strong> Slides: Parquet vs CSV; compression; partitioning; schema preservation</li>
-<li><strong>(35 min)</strong> <strong>In‑class lab</strong>: clean &amp; join → set dtypes → write <code>data/processed/prices.parquet</code> and <strong>partitioned</strong> dataset by ticker</li>
-<li><strong>(10 min)</strong> Wrap‑up &amp; homework briefing</li>
+<li>tidy schema; joins (<code>merge</code>), <code>assign</code>, <code>pipe</code> patterns</li>
+<li>dtypes—<code>category</code>, <code>string</code>, <strong>nullable ints</strong> (<code>Int64</code>), <code>float32</code> vs <code>float64</code></li>
+<li>Parquet vs CSV; compression; partitioning; schema preservation</li>
+<li><strong>In‑class lab</strong>: clean &amp; join → set dtypes → write <code>data/processed/prices.parquet</code> and <strong>partitioned</strong> dataset by ticker</li>
+<li>Wrap‑up &amp; homework briefing</li>
 </ul>
 <hr>
-</section>
-<section id="slides" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="slides"><span class="header-section-number">9.3</span> Slides</h2>
-<section id="tidy-schema-for-price-data" class="level3" data-number="9.3.1">
-<h3 data-number="9.3.1" class="anchored" data-anchor-id="tidy-schema-for-price-data"><span class="header-section-number">9.3.1</span> Tidy schema for price data</h3>
+<section id="tidy-schema-for-price-data" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="tidy-schema-for-price-data"><span class="header-section-number">9.2.1</span> Tidy schema for price data</h3>
 <ul>
 <li><strong>One row = one ticker‑day</strong>.</li>
 <li>Minimal columns (snake_case): <code>date (datetime64[ns])</code>, <code>ticker (category)</code>, <code>open/high/low/close/adj_close (float32/64)</code>, <code>volume (Int64)</code>.</li>
 <li>Optional metadata (from a separate table): <code>name (string)</code>, <code>sector (category)</code>.</li>
 </ul>
 </section>
-<section id="idiomatic-pandas-merge-assign-pipe" class="level3" data-number="9.3.2">
-<h3 data-number="9.3.2" class="anchored" data-anchor-id="idiomatic-pandas-merge-assign-pipe"><span class="header-section-number">9.3.2</span> Idiomatic pandas: <code>merge</code>, <code>assign</code>, <code>pipe</code></h3>
+<section id="idiomatic-pandas-merge-assign-pipe" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="idiomatic-pandas-merge-assign-pipe"><span class="header-section-number">9.2.2</span> Idiomatic pandas: <code>merge</code>, <code>assign</code>, <code>pipe</code></h3>
 <ul>
 <li><strong><code>merge</code></strong>: combine frames by keys (e.g., <code>prices</code> ⟵left join⟶ <code>tickers</code>).</li>
 <li><strong><code>assign</code></strong>: add/transform columns without breaking the chain: <code>df = df.assign(adj_close=lambda d: d['adj_close'].fillna(d['close']))</code>.</li>
 <li><strong><code>pipe</code></strong>: compose small, testable transforms: <code>df = (raw.pipe(standardize_columns).pipe(clean_prices).pipe(join_meta, meta=meta))</code>.</li>
 </ul>
 </section>
-<section id="dtypes-that-help" class="level3" data-number="9.3.3">
-<h3 data-number="9.3.3" class="anchored" data-anchor-id="dtypes-that-help"><span class="header-section-number">9.3.3</span> Dtypes that help</h3>
+<section id="dtypes-that-help" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="dtypes-that-help"><span class="header-section-number">9.2.3</span> Dtypes that help</h3>
 <ul>
 <li><strong>Categorical</strong> (<code>category</code>): compact &amp; fast for low‑cardinality strings (<code>ticker</code>, <code>sector</code>).</li>
 <li><strong>Nullable integers</strong> (<code>Int64</code>, <code>Int32</code>): keep <strong>missing values</strong> and integer semantics (<code>volume</code>).</li>
@@ -486,8 +488,8 @@ window.Quarto = {
 <li><strong>Floats</strong>: <code>float32</code> can halve memory, but consider numeric precision.</li>
 </ul>
 </section>
-<section id="parquet-why-how" class="level3" data-number="9.3.4">
-<h3 data-number="9.3.4" class="anchored" data-anchor-id="parquet-why-how"><span class="header-section-number">9.3.4</span> Parquet: why &amp; how</h3>
+<section id="parquet-why-how" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="parquet-why-how"><span class="header-section-number">9.2.4</span> Parquet: why &amp; how</h3>
 <ul>
 <li><strong>Columnar</strong>, compressed, preserves schema better than CSV.</li>
 <li><strong>Filters &amp; projection</strong>: read only needed columns/rows (esp.&nbsp;with <strong>partitioned datasets</strong>).</li>
@@ -497,13 +499,13 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="inclass-lab-35-min" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="inclass-lab-35-min"><span class="header-section-number">9.4</span> In‑class lab (35 min)</h2>
+<section id="inclass-lab" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="inclass-lab"><span class="header-section-number">9.3</span> In‑class lab</h2>
 <blockquote class="blockquote">
 <p>Run each block as its <strong>own Colab cell</strong>. Replace <code>REPO_NAME</code> to match your repo.</p>
 </blockquote>
-<section id="setup-mount-drive-cd-into-repo-ensure-folders" class="level3" data-number="9.4.1">
-<h3 data-number="9.4.1" class="anchored" data-anchor-id="setup-mount-drive-cd-into-repo-ensure-folders"><span class="header-section-number">9.4.1</span> 0) Setup: mount Drive, cd into repo, ensure folders</h3>
+<section id="setup-mount-drive-cd-into-repo-ensure-folders" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="setup-mount-drive-cd-into-repo-ensure-folders"><span class="header-section-number">9.3.1</span> 0) Setup: mount Drive, cd into repo, ensure folders</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>drive.mount(<span class="st">'/content/drive'</span>, force_remount<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -520,8 +522,8 @@ window.Quarto = {
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    pathlib.Path(p).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Working dir:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="locate-raw-price-files-csv-or-create-a-fallback" class="level3" data-number="9.4.2">
-<h3 data-number="9.4.2" class="anchored" data-anchor-id="locate-raw-price-files-csv-or-create-a-fallback"><span class="header-section-number">9.4.2</span> 1) Locate raw price files (CSV) or create a fallback</h3>
+<section id="locate-raw-price-files-csv-or-create-a-fallback" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="locate-raw-price-files-csv-or-create-a-fallback"><span class="header-section-number">9.3.2</span> 1) Locate raw price files (CSV) or create a fallback</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd, numpy <span class="im">as</span> np, datetime <span class="im">as</span> dt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -563,8 +565,8 @@ window.Quarto = {
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>raw_candidates</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="optional-metadata-tickers-table-or-create-a-minimal-one" class="level3" data-number="9.4.3">
-<h3 data-number="9.4.3" class="anchored" data-anchor-id="optional-metadata-tickers-table-or-create-a-minimal-one"><span class="header-section-number">9.4.3</span> 2) Optional metadata (tickers table), or create a minimal one</h3>
+<section id="optional-metadata-tickers-table-or-create-a-minimal-one" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="optional-metadata-tickers-table-or-create-a-minimal-one"><span class="header-section-number">9.3.3</span> 2) Optional metadata (tickers table), or create a minimal one</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>meta_path <span class="op">=</span> Path(<span class="st">"data/static/tickers.csv"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> meta_path.exists():</span>
@@ -580,8 +582,8 @@ window.Quarto = {
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    meta.to_csv(meta_path, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>meta.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" class="level3" data-number="9.4.4">
-<h3 data-number="9.4.4" class="anchored" data-anchor-id="helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe"><span class="header-section-number">9.4.4</span> 3) Helpers: <code>standardize_columns</code>, <code>clean_prices</code>, <code>join_meta</code> (showing <code>merge</code>/<code>assign</code>/<code>pipe</code>)</h3>
+<section id="helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="helpers-standardize_columns-clean_prices-join_meta-showing-mergeassignpipe"><span class="header-section-number">9.3.4</span> 3) Helpers: <code>standardize_columns</code>, <code>clean_prices</code>, <code>join_meta</code> (showing <code>merge</code>/<code>assign</code>/<code>pipe</code>)</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> standardize_columns(df: pd.DataFrame) <span class="op">-&gt;</span> pd.DataFrame:</span>
@@ -647,8 +649,8 @@ window.Quarto = {
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> prices.merge(meta2, on<span class="op">=</span><span class="st">"ticker"</span>, how<span class="op">=</span><span class="st">"left"</span>, validate<span class="op">=</span><span class="st">"many_to_one"</span>)</span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="read-clean-and-join-all-raw-files-using-a-pipeline" class="level3" data-number="9.4.5">
-<h3 data-number="9.4.5" class="anchored" data-anchor-id="read-clean-and-join-all-raw-files-using-a-pipeline"><span class="header-section-number">9.4.5</span> 4) Read, clean, and join all raw files using a <strong>pipeline</strong></h3>
+<section id="read-clean-and-join-all-raw-files-using-a-pipeline" class="level3" data-number="9.3.5">
+<h3 data-number="9.3.5" class="anchored" data-anchor-id="read-clean-and-join-all-raw-files-using-a-pipeline"><span class="header-section-number">9.3.5</span> 4) Read, clean, and join all raw files using a <strong>pipeline</strong></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dfs <span class="op">=</span> []</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> path <span class="kw">in</span> raw_candidates:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    raw <span class="op">=</span> pd.read_csv(path)</span>
@@ -665,8 +667,8 @@ window.Quarto = {
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Info:"</span>)</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prices.info(memory_usage<span class="op">=</span><span class="st">"deep"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" class="level3" data-number="9.4.6">
-<h3 data-number="9.4.6" class="anchored" data-anchor-id="save-clean-data-to-parquet-single-file-and-partitioned-by-ticker"><span class="header-section-number">9.4.6</span> 5) Save clean data to <strong>Parquet</strong> (single file) and <strong>partitioned by ticker</strong></h3>
+<section id="save-clean-data-to-parquet-single-file-and-partitioned-by-ticker" class="level3" data-number="9.3.6">
+<h3 data-number="9.3.6" class="anchored" data-anchor-id="save-clean-data-to-parquet-single-file-and-partitioned-by-ticker"><span class="header-section-number">9.3.6</span> 5) Save clean data to <strong>Parquet</strong> (single file) and <strong>partitioned by ticker</strong></h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single-file Parquet</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>single_path <span class="op">=</span> <span class="st">"data/processed/prices.parquet"</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>prices.to_parquet(single_path, engine<span class="op">=</span><span class="st">"pyarrow"</span>, compression<span class="op">=</span><span class="st">"zstd"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
@@ -686,8 +688,8 @@ window.Quarto = {
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    pq.write_to_dataset(pa_tbl, root_path<span class="op">=</span>part_dir, partition_cols<span class="op">=</span>[<span class="st">"ticker"</span>], compression<span class="op">=</span><span class="st">"zstd"</span>)</span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Wrote (fallback) partitioned dataset:"</span>, part_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="read-back-efficiently-projection-simple-filters" class="level3" data-number="9.4.7">
-<h3 data-number="9.4.7" class="anchored" data-anchor-id="read-back-efficiently-projection-simple-filters"><span class="header-section-number">9.4.7</span> 6) Read back efficiently: projection + simple filters</h3>
+<section id="read-back-efficiently-projection-simple-filters" class="level3" data-number="9.3.7">
+<h3 data-number="9.3.7" class="anchored" data-anchor-id="read-back-efficiently-projection-simple-filters"><span class="header-section-number">9.3.7</span> 6) Read back efficiently: projection + simple filters</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 6a) Read a few columns from single-file Parquet</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"ticker"</span>,<span class="st">"date"</span>,<span class="st">"adj_close"</span>,<span class="st">"volume"</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df_small <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/prices.parquet"</span>, columns<span class="op">=</span>cols)</span>
@@ -703,8 +705,8 @@ window.Quarto = {
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>df_one <span class="op">=</span> tbl.to_pandas()</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>df_one.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="persist-a-simple-schema-record-for-reproducibility" class="level3" data-number="9.4.8">
-<h3 data-number="9.4.8" class="anchored" data-anchor-id="persist-a-simple-schema-record-for-reproducibility"><span class="header-section-number">9.4.8</span> 7) Persist a simple <strong>schema record</strong> for reproducibility</h3>
+<section id="persist-a-simple-schema-record-for-reproducibility" class="level3" data-number="9.3.8">
+<h3 data-number="9.3.8" class="anchored" data-anchor-id="persist-a-simple-schema-record-for-reproducibility"><span class="header-section-number">9.3.8</span> 7) Persist a simple <strong>schema record</strong> for reproducibility</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, pathlib</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>schema <span class="op">=</span> {c: <span class="bu">str</span>(t) <span class="cf">for</span> c,t <span class="kw">in</span> prices.dtypes.items()}</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pathlib.Path(<span class="st">"data/processed"</span>).mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -714,8 +716,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="wrapup-10-min-points-to-emphasize" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="wrapup-10-min-points-to-emphasize"><span class="header-section-number">9.5</span> Wrap‑up (10 min) — points to emphasize</h2>
+<section id="wrapup-10-min-points-to-emphasize" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="wrapup-10-min-points-to-emphasize"><span class="header-section-number">9.4</span> Wrap‑up (10 min) — points to emphasize</h2>
 <ul>
 <li>A <strong>tidy schema</strong> makes life easier downstream.</li>
 <li>Prefer <strong><code>category</code></strong> for <code>ticker</code>, <strong>nullable ints</strong> for <code>volume</code>.</li>
@@ -724,8 +726,8 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="homework-due-before-session-10" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="homework-due-before-session-10"><span class="header-section-number">9.6</span> Homework (due before Session 10)</h2>
+<section id="homework-due-before-session-10" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="homework-due-before-session-10"><span class="header-section-number">9.5</span> Homework (due before Session 10)</h2>
 <p><strong>Deliverable:</strong> <code>data/processed/returns.parquet</code> (and optionally partitioned by ticker) containing:</p>
 <ul>
 <li><code>date</code>, <code>ticker</code></li>
@@ -733,8 +735,8 @@ window.Quarto = {
 <li><code>r_1d</code> — <strong>next‑day</strong> log return (lead of <code>log_return</code>)</li>
 <li><code>weekday</code> (0=Mon..6=Sun), <code>month</code> (1..12) — choose compact dtypes</li>
 </ul>
-<section id="stepbystep-code-colabfriendly" class="level3" data-number="9.6.1">
-<h3 data-number="9.6.1" class="anchored" data-anchor-id="stepbystep-code-colabfriendly"><span class="header-section-number">9.6.1</span> Step‑by‑step code (Colab‑friendly)</h3>
+<section id="stepbystep-code-colabfriendly" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="stepbystep-code-colabfriendly"><span class="header-section-number">9.5.1</span> Step‑by‑step code (Colab‑friendly)</h3>
 <blockquote class="blockquote">
 <p>Run in your repo root after finishing the in‑class lab.</p>
 </blockquote>
@@ -785,8 +787,8 @@ window.Quarto = {
 <span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>                        root_path<span class="op">=</span>part_dir, partition_cols<span class="op">=</span>[<span class="st">"ticker"</span>], compression<span class="op">=</span><span class="st">"zstd"</span>)</span>
 <span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Wrote (fallback) partitioned dataset:"</span>, part_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="quick-selfcheck-run-after-saving" class="level3" data-number="9.6.2">
-<h3 data-number="9.6.2" class="anchored" data-anchor-id="quick-selfcheck-run-after-saving"><span class="header-section-number">9.6.2</span> Quick self‑check (run after saving)</h3>
+<section id="quick-selfcheck-run-after-saving" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="quick-selfcheck-run-after-saving"><span class="header-section-number">9.5.2</span> Quick self‑check (run after saving)</h3>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> pd.read_parquet(<span class="st">"data/processed/returns.parquet"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> {<span class="st">"date"</span>,<span class="st">"ticker"</span>,<span class="st">"log_return"</span>,<span class="st">"r_1d"</span>,<span class="st">"weekday"</span>,<span class="st">"month"</span>}.issubset(r.columns)</span>
@@ -794,15 +796,15 @@ window.Quarto = {
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"rows:"</span>, <span class="bu">len</span>(r), <span class="st">"| tickers:"</span>, r[<span class="st">"ticker"</span>].nunique())</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>r.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="optional" class="level3" data-number="9.6.3">
-<h3 data-number="9.6.3" class="anchored" data-anchor-id="optional"><span class="header-section-number">9.6.3</span> (Optional)</h3>
+<section id="optional" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="optional"><span class="header-section-number">9.5.3</span> (Optional)</h3>
 <ul>
 <li>Add <strong><code>year</code></strong> (Int16) and <strong><code>is_month_end</code></strong> (BooleanDtype): <code>r["year"] = r["date"].dt.year.astype("Int16")</code> <code>r["is_month_end"] = r["date"].dt.is_month_end.astype("boolean")</code></li>
 <li>Compare file sizes: CSV vs Parquet vs Parquet (<code>zstd</code> vs <code>snappy</code>).</li>
 </ul>
 </section>
-<section id="submission-checklist-passrevise" class="level3" data-number="9.6.4">
-<h3 data-number="9.6.4" class="anchored" data-anchor-id="submission-checklist-passrevise"><span class="header-section-number">9.6.4</span> Submission checklist (pass/revise)</h3>
+<section id="submission-checklist-passrevise" class="level3" data-number="9.5.4">
+<h3 data-number="9.5.4" class="anchored" data-anchor-id="submission-checklist-passrevise"><span class="header-section-number">9.5.4</span> Submission checklist (pass/revise)</h3>
 <ul>
 <li><code>data/processed/returns.parquet</code> exists and contains the required columns.</li>
 <li><code>ticker</code> is <strong>categorical</strong>; <code>weekday</code>/<code>month</code> are compact ints.</li>
@@ -812,8 +814,8 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="key-points" class="level2" data-number="9.7">
-<h2 data-number="9.7" class="anchored" data-anchor-id="key-points"><span class="header-section-number">9.7</span> Key Points</h2>
+<section id="key-points" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="key-points"><span class="header-section-number">9.6</span> Key Points</h2>
 <ul>
 <li><strong>Nullable ints</strong>: <code>astype("Int64")</code> keeps NAs; plain <code>int64</code> will fail if NAs exist.</li>
 <li><strong>Categoricals &amp; partitions</strong>: When reading partitioned Parquet, <code>ticker</code> may come back as <code>object</code>. Re‑cast to <code>category</code> after read if needed.</li>
@@ -821,8 +823,8 @@ window.Quarto = {
 <li><strong>Precision</strong>: <code>float32</code> is fine; for production finance, consider <code>float64</code> and explicit rounding.</li>
 </ul>
 <hr>
-<section id="optional-for-your-makefile-later" class="level3" data-number="9.7.1">
-<h3 data-number="9.7.1" class="anchored" data-anchor-id="optional-for-your-makefile-later"><span class="header-section-number">9.7.1</span> Optional (for your Makefile later)</h3>
+<section id="optional-for-your-makefile-later" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="optional-for-your-makefile-later"><span class="header-section-number">9.6.1</span> Optional (for your Makefile later)</h3>
 <p>Add quick targets: (if directly editing Makefile in Colab: removing python, and indent all lines below the target by four spaces).</p>
 <pre class="make"><code>.PHONY: prices-parquet returns-parquet
 prices-parquet:  ## Clean raw prices and save processed Parquet(s)
