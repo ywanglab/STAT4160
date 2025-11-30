@@ -105,33 +105,5 @@ returns-parquet: ## Build returns.parquet with r_1d + calendar features
 	print("Wrote data/processed/returns.parquet")
 	PY
 
-.PHONY: health test
-health: ## Generate health.json and health.md from the current features parquet
-	python scripts/health.py
-
-pytest:
-	pytest tests/test_logging.py -q
-test: pytest
-
-
-
-
-.PHONY: lint test ci-local
-lint: ## Run pre-commit hooks on all files
-	pre-commit run --all-files
-
-test: ## Run fast tests
-	pytest -q --maxfail=1
-
-ci-local: lint test ## Simulate CI locally
-
-
-.PHONY: baselines
-baselines: ## Evaluate naive & seasonal-naive baselines across all splits
-	python scripts/baselines_eval.py --seasonality 5
-
-
-.PHONY: leakage-audit
-leakage-audit: ## Run leakage & label tests; write eval protocol
-	pytest -q tests/test_leakage_features.py tests/test_labels_multistep.py
-	python scripts/write_eval_protocol.py
+ health.json and health.md from the current features parquet
+	python scripts/heal
